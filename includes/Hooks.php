@@ -33,5 +33,23 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 			$out->addHTML( \Html::element( 'p', [], 'MeilisearchForMediaWiki was here' ) );
 		}
 	}
+	public static function onPageSaveComplete( $wikiPage ) {
+		$job = new MeilisearchForMediaWikiFeederSendJob($wikiPage->getTitle());
+		\JobQueueGroup::singleton()->lazyPush($job);
+	}
+
+	public static function onPageDeleteComplete( $wikiPage, $user, $reason, $id ) {
+		\MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed::deleteFromDatastore($id);
+	}
+
+	public static function onPageMoveComplete( $title, $newTitle, $user, $oldid, $newid ) {
+		\MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed::deleteFromDatastore($oldid);
+		$job = new MeilisearchForMediaWikiFeederSendJob($newTitle);
+		\JobQueueGroup::singleton()->lazyPush($job);
+		if($newid == 0) {
+			// LEX2006041158
+			// $newid = database page_id of the created redirect, or 0 if the redirect was suppressed
+		}
+	}
 
 }

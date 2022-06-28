@@ -14,16 +14,6 @@
   "SpecialPages": {
     "Meilisearch": "SpecialMeilisearch"
   },
-  "config": {
-    "BoilerPlateEnableFoo": {
-      "description": "Enable the Foo feature.",
-      "value": true
-    },
-    "BoilerPlateVandalizeEachPage": {
-      "description": "Write 'MeilisearchForMediaWiki was here' on each page",
-      "value": false
-    }
-  },
   "HookHandlers": {
     "MeilisearchForMediaWikiHooks": {
       "class": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks"
@@ -33,7 +23,9 @@
     "SpecialMeilisearch": "includes/specials/SpecialMeilisearch.php"
   },
   "Hooks": {
-    "BeforePageDisplay": "MeilisearchForMediaWikiHooks"
+    "PageSaveComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::ononPageSaveComplete",
+    "PageDeleteComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::onPageDeleteComplete",
+    "PageMoveComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::onPageMoveComplete"
   },
   "MessagesDirs": {
     "MeilisearchForMediaWiki": ["i18n"]
@@ -52,6 +44,9 @@
       ],
       "messages": []
     }
+  },
+  "JobClasses": {
+    "MeilisearchForMediaWikiSendJob": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\MeilisearchForMediaWikiSendJob"
   },
   "manifest_version": 2
 }
