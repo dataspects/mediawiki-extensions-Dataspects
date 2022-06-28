@@ -22,7 +22,7 @@ class DMFFeedOne extends Maintenance {
 
 	private function feedOne($title) {
 		$dmwf = new \MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed($title);
-		// $dmwf->sendToDatastore();
+		$dmwf->sendToDatastore();
 	}
 
 }

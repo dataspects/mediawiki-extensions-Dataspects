@@ -11,8 +11,6 @@ class MeilisearchForMediaWikiFeed {
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     $meiliClient = new \MeiliSearch\Client('http://192.168.1.36:7700', 'masterKey');
     $this->index = $meiliClient->index('movies');
-    $hits = $this->index->search('wondre woman')->getHits();
-    print_r($hits);
   }
 
   static function deleteFromDatastore($id) {
@@ -37,28 +35,6 @@ class MeilisearchForMediaWikiFeed {
 	}
 
   public function sendToDatastore() {
-    // Check if the page exists in the datastore
-    // $req = \MWHttpRequest::factory(
-    //   $this->url."?rawUrl=".$this->title->getFullURL(),
-    //   [
-    //     "method" => "get"
-    //   ],
-    //   __METHOD__
-    // );
-    // $req->setHeader("Authorization", "Bearer ".$GLOBALS['wgDataspectsApiKey']);
-    // $req->setHeader("content-type", "application/json");
-    // $req->setHeader("accept", "application/json");
-    // $status = $req->execute();
-    // if($status->isOK()) {
-    //   echo $this->title->getFullURL()." checked\n";
-    //   $content = json_decode($req->getContent());
-    //   if($content->pages[0]->id) {
-    //     $this->updatePage($content->pages[0]->id);
-    //   } else {
-    //   }     
-    // } else {
-    //   echo $status;
-    // }
     $this->annotations = array();
     $this->wikiPage = \WikiPage::factory($this->title);
     /*
@@ -72,39 +48,34 @@ class MeilisearchForMediaWikiFeed {
     switch($this->title->mNamespace) {
       case 0:
         $this->getCategories();
-	$this->getWikitext();
-	$this->getParse();
+        $this->getWikitext();
+        $this->getParse();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/pages";
         $this->mediaWikiPage = $this->getMediaWikiPage();
-	break;
+	    break;
       case 4:
         $this->getCategories();
         $this->getWikitext();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/pages";
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 10:
         $this->getCategories();
         $this->getWikitext();
-        $this->url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/pages";
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 106:
         $this->getCategories();
         $this->getWikitext();
-        $this->url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/pages";
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 102:
         $this->getCategories();
         $this->getPredicateAnnotations();
-        $this->url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/predicates";
         $this->mediaWikiPage = $this->predicateMongodoc();
         break;
       case 6: // File LEX2006041204
@@ -161,19 +132,20 @@ class MeilisearchForMediaWikiFeed {
     $api->execute();
     $data = $api->getResult()->getResultData();
     foreach($data["parse"]["sections"] as $i => $section) {
-	if(is_numeric($i)) {
-	    	$this->sections[] = $section;
-	}
+      if(is_numeric($i)) {
+            $this->sections[] = $section;
+      }
     }
     foreach($data["parse"]["templates"] as $template) {
-	if(is_array($template)) {
-		$this->templates[] = $template;
-	}
+      if(is_array($template)) {
+        $this->templates[] = $template;
+      }
     }
+    $this->images = array();
     foreach($data["parse"]["images"] as $i => $image) {
     	if(is_numeric($i)) {
-		$this->images[] = $image;
-	}
+        $this->images[] = $image;
+      }
     }
     foreach($data["parse"]["externallinks"] as $i => $externalLink) {
 	    if(is_numeric($i)) {
@@ -238,8 +210,7 @@ class MeilisearchForMediaWikiFeed {
   # LEX200122141600
   private function getMediaWikiPage() {
     $mediaWikiPage = array(
-      "ds0__resourceSiloURI" => $GLOBALS['wgDS0ResourceSiloURI'],
-      "mw0__pagename" => $this->title->mTextform,
+      "title" => $this->title->mTextform,
       // Do we want the index.php?title= form here?
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__shortUrl" => $this->title->getFullURL(),
@@ -253,10 +224,8 @@ class MeilisearchForMediaWikiFeed {
       "outgoingLinks" => $this->outgoingLinks,
       "incomingLinks" => $this->incomingLinks,
       "images" => $this->images,
-      "ds0__indexingJob" => $GLOBALS['wgDS0IndexingJob'],
-      "ds0__defaultNamespace" => $GLOBALS['wgDS0DefaultNamespace'],
     );
-    return json_encode($mediaWikiPage);
+    return $mediaWikiPage;
   }
 
   private function predicateMongodoc() {
@@ -293,24 +262,25 @@ class MeilisearchForMediaWikiFeed {
   // }  
 
   private function addPage() {
-    $req = \MWHttpRequest::factory(
-      $this->url,
-      [
-        "method" => "post",
-        "postData" => $this->mediaWikiPage
-      ],
-      __METHOD__
-    );
-    $req->setHeader("Authorization", "Bearer ".$GLOBALS['wgDataspectsApiKey']);
-    $req->setHeader("content-type", "application/json");
-    $req->setHeader("accept", "application/json");
-    $status = $req->execute();
-    if($status->isOK()) {
-      echo "DATASPECTS: page JSON ".$this->title->getFullURL()." created\n";
-      echo "DATASPECTS: page sent to ".$this->url."\n";
-    } else {
-      echo "DATASPECTS: ".$status;
-    }
+    $this->index->addDocuments([$this->mediaWikiPage]);
+    // $req = \MWHttpRequest::factory(
+    //   $this->url,
+    //   [
+    //     "method" => "post",
+    //     "postData" => $this->mediaWikiPage
+    //   ],
+    //   __METHOD__
+    // );
+    // $req->setHeader("Authorization", "Bearer ".$GLOBALS['wgDataspectsApiKey']);
+    // $req->setHeader("content-type", "application/json");
+    // $req->setHeader("accept", "application/json");
+    // $status = $req->execute();
+    // if($status->isOK()) {
+    //   echo "DATASPECTS: page JSON ".$this->title->getFullURL()." created\n";
+    //   echo "DATASPECTS: page sent to ".$this->url."\n";
+    // } else {
+    //   echo "DATASPECTS: ".$status;
+    // }
   }
 
   private function getNamespace($index) {
