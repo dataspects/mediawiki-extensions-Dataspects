@@ -2,11 +2,17 @@
 
 namespace MediaWiki\Extension\MeilisearchForMediaWiki;
 
+use MeiliSearch\Client;
+
 class MeilisearchForMediaWikiFeed {
 
   public function __construct(\Title $title) {
 	  $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
+    $meiliClient = new \MeiliSearch\Client('http://192.168.1.36:7700', 'masterKey');
+    $this->index = $meiliClient->index('movies');
+    $hits = $this->index->search('wondre woman')->getHits();
+    print_r($hits);
   }
 
   static function deleteFromDatastore($id) {
