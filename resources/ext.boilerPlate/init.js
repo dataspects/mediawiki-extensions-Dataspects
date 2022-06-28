@@ -1,6 +1,5 @@
 /**
- * @class mw.boilerPlate
+ * @class mw.meilisearchForMediaWiki
  * @singleton
  */
-mw.boilerPlate = {
-};
+mw.meilisearchForMediaWiki = {};

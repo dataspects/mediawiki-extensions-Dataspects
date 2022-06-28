@@ -17,7 +17,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\BoilerPlate;
+namespace MediaWiki\Extension\MeilisearchForMediaWiki;
 
 class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 
@@ -30,7 +30,7 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 		$config = $out->getConfig();
 		if ( $config->get( 'BoilerPlateVandalizeEachPage' ) ) {
 			$out->addModules( 'oojs-ui-core' );
-			$out->addHTML( \Html::element( 'p', [], 'BoilerPlate was here' ) );
+			$out->addHTML( \Html::element( 'p', [], 'MeilisearchForMediaWiki was here' ) );
 		}
 	}
 

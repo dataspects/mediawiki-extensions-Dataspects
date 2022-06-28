@@ -1,11 +1,11 @@
 <?php
 
-namespace MediaWiki\Extension\BoilerPlate\Tests;
+namespace MediaWiki\Extension\MeilisearchForMediaWiki\Tests;
 
-use MediaWiki\Extension\BoilerPlate\Hooks;
+use MediaWiki\Extension\MeilisearchForMediaWiki\Hooks;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\BoilerPlate\Hooks
+ * @coversDefaultClass \MediaWiki\Extension\MeilisearchForMediaWiki\Hooks
  */
 class HooksTest extends \MediaWikiUnitTestCase {
 
@@ -24,7 +24,7 @@ class HooksTest extends \MediaWikiUnitTestCase {
 
 		$outputPageMock->expects( $this->once() )
 			->method( 'addHTML' )
-			->with( '<p>BoilerPlate was here</p>' );
+			->with( '<p>MeilisearchForMediaWiki was here</p>' );
 		$outputPageMock->expects( $this->once() )
 			->method( 'addModules' )
 			->with( 'oojs-ui-core' );
