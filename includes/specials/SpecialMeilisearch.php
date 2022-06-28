@@ -38,6 +38,9 @@ $hits = $index->search('wondre woman')->getHits();
 		# Do stuff
 		# ...
 		$wikitext = 'Hello world!';
-		$output->addWikiTextAsInterface( $hits[2]["genres"][0] );
+		$output->addWikiTextAsInterface( '<h1>test</h1><div id="searchbox">A</div>' );
+		$output->addModules( 'ext.meilisearchForMediaWiki' );
+
+		// return $output;
 	}
 }

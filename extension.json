@@ -44,11 +44,13 @@
       "remoteExtPath": "MeilisearchForMediaWiki/resources/ext.meilisearchForMediaWiki",
       "dependencies": [],
       "styles": [],
-      "packageFiles": ["init.js"],
+      "packageFiles": [
+        "instant-meilisearch.umd.min.js",
+        "instantsearch.js@4",
+        "index.js",
+        "init.js"
+      ],
       "messages": []
-    },
-    "ext.meilisearchForMediaWiki.special": {
-      "scripts": ["resources/init.js"]
     }
   },
   "manifest_version": 2
