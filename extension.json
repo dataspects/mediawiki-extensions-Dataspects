@@ -46,6 +46,9 @@
       "styles": [],
       "packageFiles": ["init.js"],
       "messages": []
+    },
+    "ext.meilisearchForMediaWiki.special": {
+      "scripts": ["resources/init.js"]
     }
   },
   "manifest_version": 2

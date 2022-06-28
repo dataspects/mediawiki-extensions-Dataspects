@@ -14,5 +14,8 @@
   },
   "eslintIgnore": [
     "vendor/**"
-  ]
+  ],
+  "dependencies": {
+    "@meilisearch/instant-meilisearch": "^0.7.1"
+  }
 }
