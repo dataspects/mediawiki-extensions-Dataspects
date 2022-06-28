@@ -1,8 +1,7 @@
 {
-	"@metadata": {
-		"authors": [
-			"Your Name"
-		]
-	},
-	"boilerplate-desc": "This is an example extension"
+  "@metadata": {
+    "authors": ["Lex Sulzer"]
+  },
+  "meilisearch": "Meilisearch",
+  "meilisearch-desc": "Meilisearch interface for MediaWiki"
 }

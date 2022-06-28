@@ -1,15 +1,18 @@
 {
   "name": "MeilisearchForMediaWiki",
-  "author": ["Your Name"],
+  "author": ["Lex Sulzer"],
   "url": "https://www.mediawiki.org/wiki/Extension:MeilisearchForMediaWiki",
-  "descriptionmsg": "boilerplate-desc",
   "license-name": "GPL-2.0-or-later",
+  "descriptionmsg": "meilisearch-desc",
   "type": "other",
   "requires": {
     "MediaWiki": ">= 1.35.0"
   },
   "AutoloadNamespaces": {
     "MediaWiki\\Extension\\MeilisearchForMediaWiki\\": "src/"
+  },
+  "SpecialPages": {
+    "Meilisearch": "SpecialMeilisearch"
   },
   "config": {
     "BoilerPlateEnableFoo": {
@@ -22,12 +25,15 @@
     }
   },
   "HookHandlers": {
-    "BoilerPlateHooks": {
+    "MeilisearchForMediaWikiHooks": {
       "class": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks"
     }
   },
+  "AutoloadClasses": {
+    "SpecialMeilisearch": "includes/specials/SpecialMeilisearch.php"
+  },
   "Hooks": {
-    "BeforePageDisplay": "BoilerPlateHooks"
+    "BeforePageDisplay": "MeilisearchForMediaWikiHooks"
   },
   "MessagesDirs": {
     "MeilisearchForMediaWiki": ["i18n"]
