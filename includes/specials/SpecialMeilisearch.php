@@ -6,21 +6,11 @@ class SpecialMeilisearch extends SpecialPage {
 	}
 
 	function execute( $par ) {
-
-		echo $par["a"];
-
-
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-
-		# Get request data from, e.g.
 		$param = $request->getText( 'param' );
-
-		# Do stuff
-		# ...
-		
-		$output->addWikiTextAsInterface( '<div id="searchbox"></div><div id="hits"></div>' );
+		$output->addWikiTextAsInterface( '<div id="searchbox"></div><div id="refinementList"></div><div id="hits"></div>' );
 		$output->addModules( 'ext.meilisearchForMediaWiki' );
 	}
 }

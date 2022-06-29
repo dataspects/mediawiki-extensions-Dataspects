@@ -7,10 +7,10 @@ use MeiliSearch\Client;
 class MeilisearchForMediaWikiFeed {
 
   public function __construct(\Title $title) {
-	  $this->title = $title;
+    $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \MeiliSearch\Client('http://192.168.1.36:7700', 'masterKey');
-    $this->index = $meiliClient->index('movies');
+    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgMeilisearchURL'], $GLOBALS['wgMeilisearchKey']);
+    $this->index = $meiliClient->index($GLOBALS['wgMeilisearchIndex']);
   }
 
   static function deleteFromDatastore($id) {
@@ -207,26 +207,7 @@ class MeilisearchForMediaWikiFeed {
     }
   }
 
-  # LEX200122141600
-  private function getMediaWikiPage() {
-    $mediaWikiPage = array(
-      "title" => $this->title->mTextform,
-      // Do we want the index.php?title= form here?
-      "mw0__rawUrl" => $this->title->getInternalURL(),
-      "mw0__shortUrl" => $this->title->getFullURL(),
-      "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
-      "mw0__wikiText" => trim($this->wikitext),
-      "mw0__html" => trim($this->parsedWikitext),
-      "categories" => $this->categories,
-      "sections" => $this->sections,
-      "annotations" => $this->annotations,
-      "templates" => $this->templates,
-      "outgoingLinks" => $this->outgoingLinks,
-      "incomingLinks" => $this->incomingLinks,
-      "images" => $this->images,
-    );
-    return $mediaWikiPage;
-  }
+  
 
   private function predicateMongodoc() {
     $predicateMongodoc = array(
@@ -261,8 +242,32 @@ class MeilisearchForMediaWikiFeed {
   //   }
   // }  
 
+  # LEX200122141600
+  private function getMediaWikiPage() {
+    print_r($this->title);
+    $mediaWikiPage = [
+      "id"=> $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "title" => $this->title->mTextform,
+      // "mw0__rawUrl" => $this->title->getInternalURL(),
+      // "mw0__shortUrl" => $this->title->getFullURL(),
+      // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
+      // "mw0__wikiText" => trim($this->wikitext),
+      // "mw0__html" => trim($this->parsedWikitext),
+      // "categories" => $this->categories,
+      // "sections" => $this->sections,
+      "annotations" => $this->annotations,
+      // "templates" => $this->templates,
+      // "outgoingLinks" => $this->outgoingLinks,
+      // "incomingLinks" => $this->incomingLinks,
+      // "images" => $this->images,
+    ];
+    return $mediaWikiPage;
+  }
+
   private function addPage() {
-    $this->index->addDocuments([$this->mediaWikiPage]);
+    print_r($this->mediaWikiPage);
+    $result = $this->index->addDocuments([$this->mediaWikiPage]);
+    // echo $result["uid"];
     // $req = \MWHttpRequest::factory(
     //   $this->url,
     //   [
