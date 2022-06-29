@@ -37,10 +37,9 @@
       "dependencies": [],
       "styles": [],
       "packageFiles": [
-        "instant-meilisearch.umd.min.js",
-        "instantsearch.js@4",
         "index.js",
-        "init.js"
+        "instant-meilisearch.umd.min.js",
+        "instantsearch.js@4"
       ],
       "messages": []
     }
