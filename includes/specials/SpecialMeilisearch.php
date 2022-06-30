@@ -13,8 +13,8 @@ class SpecialMeilisearch extends SpecialPage {
 		$output->addWikiTextAsInterface( '{|class="layout_table_0"
 			|colspan=2|<div id="searchbox"></div>
 			|-
-			|<div id="hierarchical-menu">
-			|</div><div id="hits"></div>
+			|<div id="hits"></div>
+			|<div id="hierarchical-menu"></div>
 		|}' );
 		$output->addModules( 'ext.meilisearchForMediaWiki' );
 	}

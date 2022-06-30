@@ -209,16 +209,7 @@ class MeilisearchForMediaWikiFeed {
 
   
 
-  private function annotationsByPredicate($predicate) {
-    $annotations = [];
-    foreach($this->annotations as $annotation) {
-      if($annotation['predicate'] == $predicate){
-        print_r($annotation);
-        $annotations[] = $annotation;
-      }
-    }
-    return $annotations;
-  }
+  
 
   
 
@@ -246,12 +237,12 @@ class MeilisearchForMediaWikiFeed {
   private function getMediaWikiPage() {
     $mediaWikiPage = [
       "id" => $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
-      "title" => $this->title->mTextform,
+      "eppo0__hasEntityTitle" => $this->title->mTextform,
       // "mw0__rawUrl" => $this->title->getInternalURL(),
       // "mw0__shortUrl" => $this->title->getFullURL(),
       // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       // "mw0__wikiText" => trim($this->wikitext),
-      // "mw0__html" => trim($this->parsedWikitext),
+      "mw0__text" => trim(strip_tags($this->parsedWikitext)),
       // "categories" => $this->categories,
       // "sections" => $this->sections,
       "annotations" => $this->annotations,
@@ -260,17 +251,34 @@ class MeilisearchForMediaWikiFeed {
       // "incomingLinks" => $this->incomingLinks,
       // "images" => $this->images,
     ];
-    $mediaWikiPage = $this->handleHierarchies($mediaWikiPage, "Eppo0:hasEntityType");
+    $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     return $mediaWikiPage;
   }
 
-  private function handleHierarchies($mediaWikiPage, $predicate) {
-    # FIXME: handle $predicate
-    if($this->annotationsByPredicate("Eppo0:hasEntityType")[0]) {
-      $eppo0__hasEntityType = $this->annotationsByPredicate("Eppo0:hasEntityType")[0]["objectLiteral"];
+  private function processAnnotations($mediaWikiPage) {
+    $eppo0__hasEntityTitle = array();
+    foreach ($this->annotations as $annotation) {
+      switch ($annotation["predicate"]) {
+        case "Eppo0:hasEntityType":
+          $mediaWikiPage = array_merge($mediaWikiPage, [
+            "eppo0__hasEntityType.1v10" => "Type",
+            "eppo0__hasEntityType.1v11" => "Type > ".$annotation["objectLiteral"],
+          ]);
+          $eppo0__hasEntityTitle["0"] = $annotation["objectLiteral"]; 
+          break;
+        case "Eppo0:hasEntityTitle":
+          $eppo0__hasEntityTitle["1"] = '"'.$annotation["objectLiteral"].'"';
+          break;
+        default:
+          
+          break;
+      }
+    }
+    if(!empty($eppo0__hasEntityTitle)) {
+      // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
+      ksort($eppo0__hasEntityTitle);
       $mediaWikiPage = array_merge($mediaWikiPage, [
-        "eppo0__hasEntityType.1v10" => "Type",
-        "eppo0__hasEntityType.1v11" => "Type > ".$eppo0__hasEntityType,
+        "eppo0__hasEntityTitle" => join(" ", $eppo0__hasEntityTitle),
       ]);
     }
     return $mediaWikiPage;

@@ -7,6 +7,9 @@ $(function () {
     searchClient: instantMeiliSearch("http://localhost:7700", "masterKey"),
   });
   search.addWidgets([
+    instantsearch.widgets.configure({
+      attributesToSnippet: ["mw0__text"],
+    }),
     instantsearch.widgets.searchBox({
       container: "#searchbox",
     }),
@@ -28,11 +31,14 @@ $(function () {
       container: "#hits",
       templates: {
         item: `
-        <h2>
-            {{#helpers.highlight}}{ "attribute": "title" }{{/helpers.highlight}}
-        </h2>
-        <p>{{ description }}</p>
-      `,
+          <article>
+            <h3>
+                {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle", "highlightedTagName": "mark" }{{/helpers.highlight}}
+            </h3>
+            <p>{{#helpers.snippet}}{ "attribute": "mw0__text", "highlightedTagName": "mark" }{{/helpers.snippet}}</p>
+          </article>
+        `,
+        empty: "No results for <q>{{ query }}</q>",
       },
     }),
   ]);
