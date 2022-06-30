@@ -36,7 +36,9 @@ $(function () {
         item: `
           <article>
             <p>
-            <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span> <span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
+            <a href="{{name}}">
+              <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span> <span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
+            </a>
             </p>
             <p><span class="eppo0__categories">{{ eppo0__categories }}</span></p>
             <p>{{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}</p>

@@ -237,6 +237,7 @@ class MeilisearchForMediaWikiFeed {
   private function getMediaWikiPage() {
     $mediaWikiPage = [
       "id" => $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "name" => $this->title->mTextform,
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       // "mw0__rawUrl" => $this->title->getInternalURL(),
       // "mw0__shortUrl" => $this->title->getFullURL(),
