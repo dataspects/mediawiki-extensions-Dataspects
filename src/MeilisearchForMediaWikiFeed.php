@@ -243,7 +243,6 @@ class MeilisearchForMediaWikiFeed {
       // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       // "mw0__wikiText" => trim($this->wikitext),
       "mw0__text" => trim(strip_tags($this->parsedWikitext)),
-      // "categories" => $this->categories,
       // "sections" => $this->sections,
       "annotations" => $this->annotations,
       // "templates" => $this->templates,
@@ -252,6 +251,22 @@ class MeilisearchForMediaWikiFeed {
       // "images" => $this->images,
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
+    $mediaWikiPage = $this->processCategories($mediaWikiPage);
+    return $mediaWikiPage;
+  }
+
+  private function processCategories($mediaWikiPage) {
+    $eppo0__categories = array();
+    foreach ($this->categories as $category) {
+      if(!in_array(basename($category), [$mediaWikiPage["eppo0__hasEntityType"], "Pages using DynamicPageList3 parser function"])) {
+        $eppo0__categories[] = basename($category);
+      }
+    }
+    if(!empty($eppo0__categories)) {
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        "eppo0__categories" => join(" ", $eppo0__categories),
+      ]);
+    }
     return $mediaWikiPage;
   }
 
@@ -261,6 +276,7 @@ class MeilisearchForMediaWikiFeed {
       switch ($annotation["predicate"]) {
         case "Eppo0:hasEntityType":
           $mediaWikiPage = array_merge($mediaWikiPage, [
+            "eppo0__hasEntityType" => $annotation["objectLiteral"],
             "eppo0__hasEntityType.1v10" => "Type",
             "eppo0__hasEntityType.1v11" => "Type > ".$annotation["objectLiteral"],
           ]);

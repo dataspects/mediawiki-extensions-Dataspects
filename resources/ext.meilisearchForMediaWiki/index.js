@@ -20,22 +20,24 @@ $(function () {
         item: `
           <a class="{{cssClasses.link}}" href="{{url}}">
             <span class="{{cssClasses.label}}">{{label}}</span>
-            <span class="{{cssClasses.count}}">
+            <span class="ms-count">
               {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
             </span>
           </a>
         `,
       },
+      // Using cssClasses: { list: ["count"] } with <span class="{{cssClasses.count}}"> causes
+      // Uncaught (in promise) Error: Nesting error: helpers.highlight vs. helpers.highlight
     }),
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
         item: `
           <article>
-            <h3>
-                {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle", "highlightedTagName": "mark" }{{/helpers.highlight}}
-            </h3>
-            <p>{{#helpers.snippet}}{ "attribute": "mw0__text", "highlightedTagName": "mark" }{{/helpers.snippet}}</p>
+            <p>
+            <b>{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</b> ({{ eppo0__categories }})
+            </p>
+            <p>{{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}</p>
           </article>
         `,
         empty: "No results for <q>{{ query }}</q>",
