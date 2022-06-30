@@ -19,7 +19,7 @@ $(function () {
       templates: {
         item: `
           <a class="{{cssClasses.link}}" href="{{url}}">
-            <span class="{{cssClasses.label}}">{{label}}</span>
+            <span class="eppo0__hasEntityType">{{label}}</span>
             <span class="ms-count">
               {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
             </span>
@@ -29,14 +29,16 @@ $(function () {
       // Using cssClasses: { list: ["count"] } with <span class="{{cssClasses.count}}"> causes
       // Uncaught (in promise) Error: Nesting error: helpers.highlight vs. helpers.highlight
     }),
+    // FIXME: solve conditional display of eppo0__hasEntityType?
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
         item: `
           <article>
             <p>
-            <b>{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</b> ({{ eppo0__categories }})
+            <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span> <span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
             </p>
+            <p><span class="eppo0__categories">{{ eppo0__categories }}</span></p>
             <p>{{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}</p>
           </article>
         `,

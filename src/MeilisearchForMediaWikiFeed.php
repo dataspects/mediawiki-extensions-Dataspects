@@ -271,7 +271,6 @@ class MeilisearchForMediaWikiFeed {
   }
 
   private function processAnnotations($mediaWikiPage) {
-    $eppo0__hasEntityTitle = array();
     foreach ($this->annotations as $annotation) {
       switch ($annotation["predicate"]) {
         case "Eppo0:hasEntityType":
@@ -280,22 +279,16 @@ class MeilisearchForMediaWikiFeed {
             "eppo0__hasEntityType.1v10" => "Type",
             "eppo0__hasEntityType.1v11" => "Type > ".$annotation["objectLiteral"],
           ]);
-          $eppo0__hasEntityTitle["0"] = $annotation["objectLiteral"]; 
           break;
         case "Eppo0:hasEntityTitle":
-          $eppo0__hasEntityTitle["1"] = '"'.$annotation["objectLiteral"].'"';
+          // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
+          $mediaWikiPage = array_merge($mediaWikiPage, [
+            "eppo0__hasEntityTitle" => $annotation["objectLiteral"],
+          ]);
           break;
         default:
-          
           break;
       }
-    }
-    if(!empty($eppo0__hasEntityTitle)) {
-      // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
-      ksort($eppo0__hasEntityTitle);
-      $mediaWikiPage = array_merge($mediaWikiPage, [
-        "eppo0__hasEntityTitle" => join(" ", $eppo0__hasEntityTitle),
-      ]);
     }
     return $mediaWikiPage;
   }
