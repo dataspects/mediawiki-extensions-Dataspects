@@ -15,13 +15,13 @@ $(function () {
       attributes: ["eppo0__hasEntityType.1v10", "eppo0__hasEntityType.1v11"],
       templates: {
         item: `
-      <a class="{{cssClasses.link}}" href="{{url}}">
-        <span class="{{cssClasses.label}}">{{label}}</span>
-        <span class="{{cssClasses.count}}">
-          {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
-        </span>
-      </a>
-    `,
+          <a class="{{cssClasses.link}}" href="{{url}}">
+            <span class="{{cssClasses.label}}">{{label}}</span>
+            <span class="{{cssClasses.count}}">
+              {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
+            </span>
+          </a>
+        `,
       },
     }),
     instantsearch.widgets.hits({

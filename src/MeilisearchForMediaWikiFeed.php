@@ -244,12 +244,9 @@ class MeilisearchForMediaWikiFeed {
 
   # LEX200122141600
   private function getMediaWikiPage() {
-    $eppo0__hasEntityType = $this->annotationsByPredicate("Eppo0:hasEntityType")[0]["objectLiteral"];
     $mediaWikiPage = [
       "id" => $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "title" => $this->title->mTextform,
-      "eppo0__hasEntityType.1v10" => "Type",
-      "eppo0__hasEntityType.1v11" => "Type > ".$eppo0__hasEntityType,
       // "mw0__rawUrl" => $this->title->getInternalURL(),
       // "mw0__shortUrl" => $this->title->getFullURL(),
       // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
@@ -263,6 +260,19 @@ class MeilisearchForMediaWikiFeed {
       // "incomingLinks" => $this->incomingLinks,
       // "images" => $this->images,
     ];
+    $mediaWikiPage = $this->handleHierarchies($mediaWikiPage, "Eppo0:hasEntityType");
+    return $mediaWikiPage;
+  }
+
+  private function handleHierarchies($mediaWikiPage, $predicate) {
+    # FIXME: handle $predicate
+    if($this->annotationsByPredicate("Eppo0:hasEntityType")[0]) {
+      $eppo0__hasEntityType = $this->annotationsByPredicate("Eppo0:hasEntityType")[0]["objectLiteral"];
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        "eppo0__hasEntityType.1v10" => "Type",
+        "eppo0__hasEntityType.1v11" => "Type > ".$eppo0__hasEntityType,
+      ]);
+    }
     return $mediaWikiPage;
   }
 
