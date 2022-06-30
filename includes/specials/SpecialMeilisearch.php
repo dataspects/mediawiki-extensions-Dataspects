@@ -10,7 +10,12 @@ class SpecialMeilisearch extends SpecialPage {
 		$output = $this->getOutput();
 		$this->setHeaders();
 		$param = $request->getText( 'param' );
-		$output->addWikiTextAsInterface( '<div id="searchbox"></div><div id="refinementList"></div><div id="hits"></div>' );
+		$output->addWikiTextAsInterface( '{|class="layout_table_0"
+			|colspan=2|<div id="searchbox"></div>
+			|-
+			|<div id="hierarchical-menu">
+			|</div><div id="hits"></div>
+		|}' );
 		$output->addModules( 'ext.meilisearchForMediaWiki' );
 	}
 }

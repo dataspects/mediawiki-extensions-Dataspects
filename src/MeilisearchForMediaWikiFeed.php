@@ -209,15 +209,15 @@ class MeilisearchForMediaWikiFeed {
 
   
 
-  private function predicateMongodoc() {
-    $predicateMongodoc = array(
-      "predicate" => $this->title->mTextform,
-      "predicateType" => $this->annotations['_TYPE']['object'],
-      "predicateClass" => $this->annotations['HasPredicateClass']['object'],
-      "predicateNamespace" => $this->getNamespace($this->title->mNamespace),
-      "predicateCategories" => $this->categories
-    );
-    return json_encode($predicateMongodoc);
+  private function annotationsByPredicate($predicate) {
+    $annotations = [];
+    foreach($this->annotations as $annotation) {
+      if($annotation['predicate'] == $predicate){
+        print_r($annotation);
+        $annotations[] = $annotation;
+      }
+    }
+    return $annotations;
   }
 
   
@@ -244,10 +244,12 @@ class MeilisearchForMediaWikiFeed {
 
   # LEX200122141600
   private function getMediaWikiPage() {
-    print_r($this->title);
+    $eppo0__hasEntityType = $this->annotationsByPredicate("Eppo0:hasEntityType")[0]["objectLiteral"];
     $mediaWikiPage = [
-      "id"=> $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "id" => $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "title" => $this->title->mTextform,
+      "eppo0__hasEntityType.1v10" => "Type",
+      "eppo0__hasEntityType.1v11" => "Type > ".$eppo0__hasEntityType,
       // "mw0__rawUrl" => $this->title->getInternalURL(),
       // "mw0__shortUrl" => $this->title->getFullURL(),
       // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
@@ -265,7 +267,6 @@ class MeilisearchForMediaWikiFeed {
   }
 
   private function addPage() {
-    print_r($this->mediaWikiPage);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
     // echo $result["uid"];
     // $req = \MWHttpRequest::factory(

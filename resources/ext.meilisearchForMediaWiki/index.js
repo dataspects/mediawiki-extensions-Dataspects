@@ -10,30 +10,18 @@ $(function () {
     instantsearch.widgets.searchBox({
       container: "#searchbox",
     }),
-    instantsearch.widgets.refinementList({
-      container: "#refinementList",
-      attribute: "annotations.objectLiteral", // LEX2206291735: this is a dummy
-      transformItems(items, { results }) {
-        console.debug(JSON.stringify(items, null, 2));
-        items = [];
-        results.hits.forEach((hit) => {
-          hit.annotations.forEach((annotation) => {
-            if (annotation.predicate === "Eppo0:hasEntityType") {
-              if (Object.keys(items).includes(annotation.objectLiteral)) {
-                items[annotation.objectLiteral].count += 1;
-              } else {
-                items[annotation.objectLiteral] = {
-                  count: 1,
-                  isRefined: false,
-                  value: annotation.objectLiteral,
-                  label: annotation.objectLiteral,
-                  highlighted: annotation.objectLiteral,
-                };
-              }
-            }
-          });
-        });
-        return Object.values(items);
+    instantsearch.widgets.hierarchicalMenu({
+      container: "#hierarchical-menu",
+      attributes: ["eppo0__hasEntityType.1v10", "eppo0__hasEntityType.1v11"],
+      templates: {
+        item: `
+      <a class="{{cssClasses.link}}" href="{{url}}">
+        <span class="{{cssClasses.label}}">{{label}}</span>
+        <span class="{{cssClasses.count}}">
+          {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
+        </span>
+      </a>
+    `,
       },
     }),
     instantsearch.widgets.hits({
