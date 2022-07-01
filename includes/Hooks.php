@@ -26,14 +26,8 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 	 * @param \OutputPage $out
 	 * @param \Skin $skin
 	 */
-	public function onBeforePageDisplay( $out, $skin ): void {
-		$config = $out->getConfig();
-		if ( $config->get( 'BoilerPlateVandalizeEachPage' ) ) {
-			$out->addModules( 'oojs-ui-core' );
-			$out->addHTML( \Html::element( 'p', [], 'DataspectsSearch was here' ) );
-		}
-	}
-	public static function onPageSaveComplete( $wikiPage ) {
+	
+	 public static function onPageSaveComplete( $wikiPage ) {
 		$job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
 		\JobQueueGroup::singleton()->lazyPush($job);
 	}

@@ -63,8 +63,8 @@ $(function () {
         item: `
           <article>
             <p>
-            <a href="{{name}}">
-              <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span> <span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
+            <a href="{{eppo0__hasEntityType}}">
+              <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span></a>&nbsp;<a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
             </a>
             </p>
             <p><span class="eppo0__categories">{{ eppo0__categories }}</span></p>

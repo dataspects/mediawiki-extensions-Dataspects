@@ -2,14 +2,18 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
-use DataspectsSearch\Client;
+use MeiliSearch\Client;
+use MediaWiki\Logger\LoggerFactory;
+
 
 class DataspectsSearchFeed {
 
   public function __construct(\Title $title) {
+    $logger = LoggerFactory::getInstance( 'dataspects' );
+    $logger->debug("test");
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \DataspectsSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
+    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
   }
 
