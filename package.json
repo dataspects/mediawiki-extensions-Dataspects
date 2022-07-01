@@ -1,5 +1,5 @@
 {
-  "name": "MeilisearchForMediaWiki",
+  "name": "DataspectsSearch",
   "private": true,
   "scripts": {
     "test": "grunt test"

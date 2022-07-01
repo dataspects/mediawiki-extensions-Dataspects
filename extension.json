@@ -1,9 +1,9 @@
 {
-  "name": "MeilisearchForMediaWiki",
+  "name": "DataspectsSearch",
   "author": ["Lex Sulzer"],
-  "url": "https://www.mediawiki.org/wiki/Extension:MeilisearchForMediaWiki",
+  "url": "https://www.mediawiki.org/wiki/Extension:DataspectsSearch",
   "license-name": "GPL-2.0-or-later",
-  "descriptionmsg": "meilisearch-desc",
+  "descriptionmsg": "dataspectssearch-desc",
   "type": "other",
   "requires": {
     "MediaWiki": ">= 1.35.0"
@@ -12,7 +12,7 @@
     "MediaWiki\\Extension\\MeilisearchForMediaWiki\\": "src/"
   },
   "SpecialPages": {
-    "Meilisearch": "SpecialMeilisearch"
+    "DataspectsSearch": "SpecialDataspectsSearch"
   },
   "HookHandlers": {
     "MeilisearchForMediaWikiHooks": {
@@ -20,7 +20,7 @@
     }
   },
   "AutoloadClasses": {
-    "SpecialMeilisearch": "includes/specials/SpecialMeilisearch.php"
+    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
   },
   "Hooks": {
     "PageSaveComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::ononPageSaveComplete",

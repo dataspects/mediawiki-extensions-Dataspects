@@ -2,6 +2,6 @@
   "@metadata": {
     "authors": ["Lex Sulzer"]
   },
-  "meilisearch": "Meilisearch",
-  "meilisearch-desc": "Meilisearch interface for MediaWiki"
+  "dataspectssearch": "dataspects Search",
+  "dataspectssearch-desc": "dataspects Search interface for MediaWiki"
 }

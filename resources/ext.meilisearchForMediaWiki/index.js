@@ -24,7 +24,10 @@ $(function () {
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch("http://localhost:7700", "masterKey"),
     searchFunction(helper) {
-      helper.state.query = getUrlParameter("q");
+      let q = getUrlParameter("q");
+      if (q) {
+        helper.state.query = q;
+      }
       helper.search();
     },
   });

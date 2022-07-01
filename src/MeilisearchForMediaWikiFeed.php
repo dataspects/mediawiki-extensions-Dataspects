@@ -2,14 +2,14 @@
 
 namespace MediaWiki\Extension\MeilisearchForMediaWiki;
 
-use MeiliSearch\Client;
+use DataspectsSearch\Client;
 
 class MeilisearchForMediaWikiFeed {
 
   public function __construct(\Title $title) {
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgMeilisearchURL'], $GLOBALS['wgMeilisearchKey']);
+    $meiliClient = new \DataspectsSearch\Client($GLOBALS['wgMeilisearchURL'], $GLOBALS['wgMeilisearchKey']);
     $this->index = $meiliClient->index($GLOBALS['wgMeilisearchIndex']);
   }
 

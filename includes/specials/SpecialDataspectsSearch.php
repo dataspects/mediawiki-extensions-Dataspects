@@ -1,8 +1,8 @@
 <?php
 
-class SpecialMeilisearch extends SpecialPage {
+class SpecialDataspectsSearch extends SpecialPage {
 	function __construct() {
-		parent::__construct( 'Meilisearch' );
+		parent::__construct( 'DataspectsSearch' );
 	}
 
 	function execute( $par ) {
