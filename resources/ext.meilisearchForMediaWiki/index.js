@@ -56,6 +56,7 @@ $(function () {
         `,
       },
     }),
+    // FIXME: https://localhost/wiki/ by variable
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
@@ -63,15 +64,9 @@ $(function () {
           <div class="hit">
             <div>
               {{#eppo0__hasEntityType}}
-                <a href="{{eppo0__hasEntityType}}">
-                  <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span>
-                </a> 
+                <a href="{{eppo0__hasEntityType}}"><span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span></a> 
               {{/eppo0__hasEntityType}}
-              <a href="{{name}}">
-                <span class="eppo0__hasEntityTitle">
-                  {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}
-                </span>
-              </a>
+              <a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span></a>
               {{#eppo0__categories}}
                 <a href="https://localhost/wiki/Category:{{.}}">
                   <span class="eppo0__category">{{.}}</span>
@@ -88,7 +83,8 @@ $(function () {
               <tbody>
                 {{#annotations}}
                   <tr>
-                    <td>{{predicate}}</td>
+                    <td><a href="https://localhost/wiki/Property:{{predicate}}">{{predicate}}</a></td>
+                    <td>::</td>
                     <td>{{objectLiteral}}</td>
                   </tr>
                 {{/annotations}}
