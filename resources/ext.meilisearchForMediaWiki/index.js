@@ -68,10 +68,16 @@ $(function () {
               <a href="{{eppo0__hasEntityType}}">
                 <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span>
               </a> 
-            {{/eppo0__hasEntityType}}<a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
+            {{/eppo0__hasEntityType}}
+            <a href="{{name}}">
+              <span class="eppo0__hasEntityTitle">
+                {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}
+              </span>
             </a>
             {{#eppocategories}}
-              <a class="eppo0__category" href="https://localhost/wiki/Category:{{.}}">{{.}}</a>
+              <a href="https://localhost/wiki/Category:{{.}}">
+                <span class="eppo0__category">{{.}}</span>
+              </a>
             {{/eppocategories}}
           </p>
           <p>
