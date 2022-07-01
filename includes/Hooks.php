@@ -17,7 +17,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\MeilisearchForMediaWiki;
+namespace MediaWiki\Extension\DataspectsSearch;
 
 class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 
@@ -30,21 +30,21 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 		$config = $out->getConfig();
 		if ( $config->get( 'BoilerPlateVandalizeEachPage' ) ) {
 			$out->addModules( 'oojs-ui-core' );
-			$out->addHTML( \Html::element( 'p', [], 'MeilisearchForMediaWiki was here' ) );
+			$out->addHTML( \Html::element( 'p', [], 'DataspectsSearch was here' ) );
 		}
 	}
 	public static function onPageSaveComplete( $wikiPage ) {
-		$job = new MeilisearchForMediaWikiFeederSendJob($wikiPage->getTitle());
+		$job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
 		\JobQueueGroup::singleton()->lazyPush($job);
 	}
 
 	public static function onPageDeleteComplete( $wikiPage, $user, $reason, $id ) {
-		\MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed::deleteFromDatastore($id);
+		\MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed::deleteFromDatastore($id);
 	}
 
 	public static function onPageMoveComplete( $title, $newTitle, $user, $oldid, $newid ) {
-		\MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed::deleteFromDatastore($oldid);
-		$job = new MeilisearchForMediaWikiFeederSendJob($newTitle);
+		\MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed::deleteFromDatastore($oldid);
+		$job = new DataspectsSearchFeederSendJob($newTitle);
 		\JobQueueGroup::singleton()->lazyPush($job);
 		if($newid == 0) {
 			// LEX2006041158

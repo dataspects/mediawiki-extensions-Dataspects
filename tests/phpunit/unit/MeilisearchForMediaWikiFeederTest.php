@@ -2,13 +2,13 @@
 
 /**
  * @group Feeder
- * @covers MeilisearchForMediaWikiFeeder
+ * @covers DataspectsSearchFeeder
  */
-namespace MediaWiki\Extension\MeilisearchForMediaWiki\Tests;
+namespace MediaWiki\Extension\DataspectsSearch\Tests;
 
-use MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWiki;
+use MediaWiki\Extension\DataspectsSearch\DataspectsSearch;
 
-class MeilisearchForMediaWikiFeederTest extends \MediaWikiUnitTestCase {
+class DataspectsSearchFeederTest extends \MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();

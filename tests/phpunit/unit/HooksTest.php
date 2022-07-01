@@ -1,11 +1,11 @@
 <?php
 
-namespace MediaWiki\Extension\MeilisearchForMediaWiki\Tests;
+namespace MediaWiki\Extension\DataspectsSearch\Tests;
 
-use MediaWiki\Extension\MeilisearchForMediaWiki\Hooks;
+use MediaWiki\Extension\DataspectsSearch\Hooks;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\MeilisearchForMediaWiki\Hooks
+ * @coversDefaultClass \MediaWiki\Extension\DataspectsSearch\Hooks
  */
 class HooksTest extends \MediaWikiUnitTestCase {
 
@@ -24,7 +24,7 @@ class HooksTest extends \MediaWikiUnitTestCase {
 
 		$outputPageMock->expects( $this->once() )
 			->method( 'addHTML' )
-			->with( '<p>MeilisearchForMediaWiki was here</p>' );
+			->with( '<p>DataspectsSearch was here</p>' );
 		$outputPageMock->expects( $this->once() )
 			->method( 'addModules' )
 			->with( 'oojs-ui-core' );

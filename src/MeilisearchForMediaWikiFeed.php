@@ -1,21 +1,21 @@
 <?php
 
-namespace MediaWiki\Extension\MeilisearchForMediaWiki;
+namespace MediaWiki\Extension\DataspectsSearch;
 
 use DataspectsSearch\Client;
 
-class MeilisearchForMediaWikiFeed {
+class DataspectsSearchFeed {
 
   public function __construct(\Title $title) {
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \DataspectsSearch\Client($GLOBALS['wgMeilisearchURL'], $GLOBALS['wgMeilisearchKey']);
-    $this->index = $meiliClient->index($GLOBALS['wgMeilisearchIndex']);
+    $meiliClient = new \DataspectsSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
+    $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
   }
 
   static function deleteFromDatastore($id) {
 		// Run this code immediately rather than through a job.
-		$url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgMeilisearchForMediaWikiID']."/pages/".$id;
+		$url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgDataspectsSearchID']."/pages/".$id;
 		$req = \MWHttpRequest::factory(
 		$url,
 		[
@@ -236,7 +236,7 @@ class MeilisearchForMediaWikiFeed {
   # LEX200122141600
   private function getMediaWikiPage() {
     $mediaWikiPage = [
-      "id" => $GLOBALS['wgMeilisearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "id" => $GLOBALS['wgDataspectsSearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       // "mw0__rawUrl" => $this->title->getInternalURL(),

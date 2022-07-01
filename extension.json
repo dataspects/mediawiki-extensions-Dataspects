@@ -9,31 +9,31 @@
     "MediaWiki": ">= 1.35.0"
   },
   "AutoloadNamespaces": {
-    "MediaWiki\\Extension\\MeilisearchForMediaWiki\\": "src/"
+    "MediaWiki\\Extension\\DataspectsSearch\\": "src/"
   },
   "SpecialPages": {
     "DataspectsSearch": "SpecialDataspectsSearch"
   },
   "HookHandlers": {
-    "MeilisearchForMediaWikiHooks": {
-      "class": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks"
+    "DataspectsSearchHooks": {
+      "class": "MediaWiki\\Extension\\DataspectsSearch\\Hooks"
     }
   },
   "AutoloadClasses": {
     "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
   },
   "Hooks": {
-    "PageSaveComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::ononPageSaveComplete",
-    "PageDeleteComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::onPageDeleteComplete",
-    "PageMoveComplete": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\Hooks::onPageMoveComplete"
+    "PageSaveComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::ononPageSaveComplete",
+    "PageDeleteComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::onPageDeleteComplete",
+    "PageMoveComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::onPageMoveComplete"
   },
   "MessagesDirs": {
-    "MeilisearchForMediaWiki": ["i18n"]
+    "DataspectsSearch": ["i18n"]
   },
   "ResourceModules": {
     "ext.meilisearchForMediaWiki": {
       "localBasePath": "resources/ext.meilisearchForMediaWiki",
-      "remoteExtPath": "MeilisearchForMediaWiki/resources/ext.meilisearchForMediaWiki",
+      "remoteExtPath": "DataspectsSearch/resources/ext.meilisearchForMediaWiki",
       "dependencies": [],
       "styles": [],
       "packageFiles": [
@@ -45,7 +45,7 @@
     }
   },
   "JobClasses": {
-    "MeilisearchForMediaWikiSendJob": "MediaWiki\\Extension\\MeilisearchForMediaWiki\\MeilisearchForMediaWikiSendJob"
+    "DataspectsSearchSendJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchSendJob"
   },
   "manifest_version": 2
 }

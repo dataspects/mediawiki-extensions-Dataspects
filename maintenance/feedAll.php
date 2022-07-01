@@ -27,7 +27,7 @@ class DMFFeedAll extends Maintenance {
 	private function feedNamespace(int $namespaceNumber) {
 		foreach($this->pageTitlesInNamespace($namespaceNumber) as $title) {
 			echo $title;
-			$dmwf = new \MediaWiki\Extension\MeilisearchForMediaWiki\MeilisearchForMediaWikiFeed($title);
+			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title);
 			$dmwf->sendToDatastore();
 		}
 	}
