@@ -1,3 +1,21 @@
+var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = window.location.search.substring(1),
+    sURLVariables = sPageURL.split("&"),
+    sParameterName,
+    i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split("=");
+
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined
+        ? true
+        : decodeURIComponent(sParameterName[1]);
+    }
+  }
+  return false;
+};
+
 $(function () {
   require("./instant-meilisearch.umd.min.js");
   require("./instantsearch.js@4");
@@ -5,6 +23,10 @@ $(function () {
     indexName: "mediawiki",
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch("http://localhost:7700", "masterKey"),
+    searchFunction(helper) {
+      helper.state.query = getUrlParameter("q");
+      helper.search();
+    },
   });
   search.addWidgets([
     instantsearch.widgets.configure({
