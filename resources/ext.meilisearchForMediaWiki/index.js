@@ -55,48 +55,46 @@ $(function () {
           </a>
         `,
       },
-      // Using cssClasses: { list: ["count"] } with <span class="{{cssClasses.count}}"> causes
-      // Uncaught (in promise) Error: Nesting error: helpers.highlight vs. helpers.highlight
     }),
-    // FIXME: with ?debug=true this works!
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
         item: `
-          <p>
-            {{#eppo0__hasEntityType}}
-              <a href="{{eppo0__hasEntityType}}">
-                <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span>
-              </a> 
-            {{/eppo0__hasEntityType}}
-            <a href="{{name}}">
-              <span class="eppo0__hasEntityTitle">
-                {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}
-              </span>
-            </a>
-            {{#eppocategories}}
-              <a href="https://localhost/wiki/Category:{{.}}">
-                <span class="eppo0__category">{{.}}</span>
+          <div class="hit">
+            <div>
+              {{#eppo0__hasEntityType}}
+                <a href="{{eppo0__hasEntityType}}">
+                  <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span>
+                </a> 
+              {{/eppo0__hasEntityType}}
+              <a href="{{name}}">
+                <span class="eppo0__hasEntityTitle">
+                  {{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}
+                </span>
               </a>
-            {{/eppocategories}}
-          </p>
-          <p>
-            {{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}
-          </p>
-          <table class="eppo0__hasAnnotations">
-            <thead>
-              <td></td><td></td>
-            </thead>
-            <tbody>
-              {{#annotations}}
-                <tr>
-                  <td>{{predicate}}</td>
-                  <td>{{objectLiteral}}</td>
-                </tr>
-              {{/annotations}}
-            </tbody>
-          </table>
-        
+              {{#eppo0__categories}}
+                <a href="https://localhost/wiki/Category:{{.}}">
+                  <span class="eppo0__category">{{.}}</span>
+                </a>
+              {{/eppo0__categories}}
+            </div>
+            <div>
+              {{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}
+            </div>
+            <table class="eppo0__hasAnnotations">
+              <thead>
+                <td></td><td></td>
+              </thead>
+              <tbody>
+                {{#annotations}}
+                  <tr>
+                    <td>{{predicate}}</td>
+                    <td>{{objectLiteral}}</td>
+                  </tr>
+                {{/annotations}}
+              </tbody>
+            </table>
+          </div>
         `,
         empty: `No results for <q>{{ query }}</q>`,
       },

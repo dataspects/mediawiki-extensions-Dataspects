@@ -249,7 +249,6 @@ class DataspectsSearchFeed {
       // "mw0__wikiText" => trim($this->wikitext),
       "mw0__text" => trim(strip_tags($this->parsedWikitext)),
       // "sections" => $this->sections,
-      "annotations" => $this->annotations,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
       // "incomingLinks" => $this->incomingLinks,
@@ -269,14 +268,15 @@ class DataspectsSearchFeed {
     }
     if(!empty($eppo0__categories)) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
-        "eppocategories" => $eppo0__categories,
+        "eppo0__categories" => $eppo0__categories,
       ]);
     }
     return $mediaWikiPage;
   }
 
   private function processAnnotations($mediaWikiPage) {
-    foreach ($this->annotations as $annotation) {
+    $showAnnotations = [];
+    foreach ($this->annotations as $key => $annotation) {
       switch ($annotation["predicate"]) {
         case "Eppo0:hasEntityType":
           $mediaWikiPage = array_merge($mediaWikiPage, [
@@ -292,9 +292,13 @@ class DataspectsSearchFeed {
           ]);
           break;
         default:
+          if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
+            $showAnnotations[] = $annotation;
+          }
           break;
       }
     }
+    $mediaWikiPage["annotations"] = $showAnnotations;
     return $mediaWikiPage;
   }
 
