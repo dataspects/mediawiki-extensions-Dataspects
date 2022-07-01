@@ -27,8 +27,10 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 	 * @param \Skin $skin
 	 */
 	
-	 public static function onPageSaveComplete( $wikiPage ) {
+	public static function onPageSaveComplete( $wikiPage ) {
+		$logger = LoggerFactory::getInstance( 'dataspects' );
 		$job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
+		$logger->debug($wikiPage->getTitle()->mTextform);
 		\JobQueueGroup::singleton()->lazyPush($job);
 	}
 

@@ -9,13 +9,18 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-		$param = $request->getText( 'param' );
-		$output->addWikiTextAsInterface( '{|class="layout_table_0"
-			|colspan=2|<div id="searchbox"></div>
-			|-
-			|<div id="hits"></div>
-			|<div id="hierarchical-menu"></div>
-		|}' );
+		$output->addHTML( '<table class="layout_table_0">
+			<tr>
+				<td colspan=2>
+					<div id="searchbox"></div>
+					<a href="https://localhost/wiki/Special:DataspectsSearch">Reset</a>
+				</td>
+			</tr>
+			<tr>
+				<td><div id="hits"></div></td>
+				<td><div id="hierarchical-menu"></div></td>
+			</tr>
+		</table>' );
 		$output->addModules( 'ext.meilisearchForMediaWiki' );
 	}
 }

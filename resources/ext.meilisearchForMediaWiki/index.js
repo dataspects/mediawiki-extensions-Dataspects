@@ -39,6 +39,8 @@ $(function () {
     }),
     instantsearch.widgets.searchBox({
       container: "#searchbox",
+      showReset: false,
+      showSubmit: false,
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#hierarchical-menu",
@@ -56,22 +58,41 @@ $(function () {
       // Using cssClasses: { list: ["count"] } with <span class="{{cssClasses.count}}"> causes
       // Uncaught (in promise) Error: Nesting error: helpers.highlight vs. helpers.highlight
     }),
-    // FIXME: solve conditional display of eppo0__hasEntityType?
+    // FIXME: with ?debug=true this works!
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
         item: `
-          <article>
-            <p>
-            <a href="{{eppo0__hasEntityType}}">
-              <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span></a>&nbsp;<a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
+          <p>
+            {{#eppo0__hasEntityType}}
+              <a href="{{eppo0__hasEntityType}}">
+                <span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span>
+              </a> 
+            {{/eppo0__hasEntityType}}<a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span>
             </a>
-            </p>
-            <p><span class="eppo0__categories">{{ eppo0__categories }}</span></p>
-            <p>{{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}</p>
-          </article>
+            {{#eppocategories}}
+              <a class="eppo0__category" href="https://localhost/wiki/Category:{{.}}">{{.}}</a>
+            {{/eppocategories}}
+          </p>
+          <p>
+            {{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}
+          </p>
+          <table class="eppo0__hasAnnotations">
+            <thead>
+              <td></td><td></td>
+            </thead>
+            <tbody>
+              {{#annotations}}
+                <tr>
+                  <td>{{predicate}}</td>
+                  <td>{{objectLiteral}}</td>
+                </tr>
+              {{/annotations}}
+            </tbody>
+          </table>
+        
         `,
-        empty: "No results for <q>{{ query }}</q>",
+        empty: `No results for <q>{{ query }}</q>`,
       },
     }),
   ]);

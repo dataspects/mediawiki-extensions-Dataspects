@@ -12,18 +12,21 @@ class DataspectsSearchFeederSendJob extends \Job {
   // private $wikitext = '';
   // private $parsedWikitext = '';
 
-  public function __construct(\Title $title) {
+  public function __construct(\Title $title, $params) {
+    $this->logger = LoggerFactory::getInstance( 'dataspects' );
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("DataspectsSearchFeederSendJob", []);
+    parent::__construct("dataspectsSearchFeederSendJob", $title, $params);
     $this->title = $title;
   }
 
   public function run() {
+    $this->logger->debug($this->title->mTextform);
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
     $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);
     $dmwf->sendToDatastore();
+    return true;
   }
 
 }

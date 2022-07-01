@@ -9,8 +9,7 @@ use MediaWiki\Logger\LoggerFactory;
 class DataspectsSearchFeed {
 
   public function __construct(\Title $title) {
-    $logger = LoggerFactory::getInstance( 'dataspects' );
-    $logger->debug("test");
+    $this->logger = LoggerFactory::getInstance( 'dataspects' );
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
@@ -39,7 +38,8 @@ class DataspectsSearchFeed {
 	}
 
   public function sendToDatastore() {
-    $this->annotations = array();
+    $this->logger->debug($this->title->mTextform);
+    $this->annotations = [];
     $this->wikiPage = \WikiPage::factory($this->title);
     /*
     * The getMediaWikiPage's full.html expects $this->parsedWikitext.
@@ -269,7 +269,7 @@ class DataspectsSearchFeed {
     }
     if(!empty($eppo0__categories)) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
-        "eppo0__categories" => join(" ", $eppo0__categories),
+        "eppocategories" => $eppo0__categories,
       ]);
     }
     return $mediaWikiPage;
