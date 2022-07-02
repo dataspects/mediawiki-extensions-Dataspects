@@ -16,8 +16,58 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
-const test = (me) => {
-  return me;
+const mw0__text = (hit, instantsearch) => {
+  if (["Template"].includes(hit.mw0__namespace)) {
+    return instantsearch.snippet({
+      attribute: "mw0__wikitext",
+      highlightedTagName: "mark",
+      hit,
+    });
+  }
+  return instantsearch.snippet({
+    attribute: "mw0__text",
+    highlightedTagName: "mark",
+    hit,
+  });
+};
+
+const eppo0__hasEntityType = (hit) => {
+  if (hit.eppo0__hasEntityType) {
+    return `<a href="${hit.eppo0__hasEntityType}">
+              <span class="eppo0__hasEntityType">
+                ${hit.eppo0__hasEntityType}
+              </span>
+            </a>`;
+  }
+  return "";
+};
+
+const eppo0__categories = (hit) => {
+  if (hit.eppo0__categories) {
+    return hit.eppo0__categories.map((category) => {
+      return `<a href="https://localhost/wiki/Category:${category}">
+                <span class="eppo0__category">${category}</span>
+              </a>`;
+    });
+  }
+  return "";
+};
+
+const annotations = (hit, instantsearch) => {
+  if (hit.annotations.length > 0) {
+    return `<table class="eppo0__hasAnnotations">
+              <tbody>
+                ${hit.annotations.map((annotation) => {
+                  return `<tr>
+                            <td><a href="https://localhost/wiki/Property:${annotation.predicate}">${annotation.predicate}</a></td>
+                            <td>::</td>
+                            <td>${annotation.objectLiteral}</td>
+                          </tr>`;
+                })}
+              </tbody>
+            </table>`;
+  }
+  return "";
 };
 
 $(function () {
@@ -78,38 +128,26 @@ $(function () {
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
-        item: `{{=<% %>=}}
-          <div class="hit">
-            <div>
-              <%#eppo0__hasEntityType%>
-                <a href="<%eppo0__hasEntityType%>"><span class="eppo0__hasEntityType"><%eppo0__hasEntityType%></span></a> 
-              <%/eppo0__hasEntityType%>
-              <a href="<%mw0__rawUrl%>"><span class="eppo0__hasEntityTitle"><%#helpers.highlight%>{ "attribute": "eppo0__hasEntityTitle"}<%/helpers.highlight%></span></a>
-              <%#eppo0__categories%>
-                <a href="https://localhost/wiki/Category:<%.%>">
-                  <span class="eppo0__category"><%.%></span>
+        item(hit) {
+          return `
+            <div class="hit">
+              <div>
+                ${eppo0__hasEntityType(hit)}
+                <a href="${hit.mw0__rawUrl}">
+                  ${instantsearch.snippet({
+                    attribute: "eppo0__hasEntityTitle",
+                    highlightedTagName: "mark",
+                    hit,
+                  })}
                 </a>
-              <%/eppo0__categories%>
-            </div>
-            <div>
-              <%#helpers.snippet%>{ "attribute": "mw0__wikitext" }<%/helpers.snippet%>
-            </div>
-            <table class="eppo0__hasAnnotations">
-              <thead>
-                <td></td><td></td>
-              </thead>
-              <tbody>
-                <%#annotations%>
-                  <tr>
-                    <td><a href="https://localhost/wiki/Property:<%predicate%>"><%predicate%></a></td>
-                    <td>::</td>
-                    <td><%objectLiteral%></td>
-                  </tr>
-                <%/annotations%>
-              </tbody>
-            </table>
-          </div>
-        `,
+                ${eppo0__categories(hit)}
+              </div>
+              <div>
+                ${mw0__text(hit, instantsearch)}
+              </div>
+              ${annotations(hit, instantsearch)}
+            </div>`;
+        },
         empty: `No results for <q>{{ query }}</q>`,
       },
     }),
