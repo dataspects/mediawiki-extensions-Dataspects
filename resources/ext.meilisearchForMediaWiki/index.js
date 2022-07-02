@@ -43,12 +43,26 @@ $(function () {
       showSubmit: false,
     }),
     instantsearch.widgets.hierarchicalMenu({
-      container: "#hierarchical-menu",
+      container: "#topic-types-hierarchical-menu",
       attributes: ["eppo0__hasEntityType.1v10", "eppo0__hasEntityType.1v11"],
       templates: {
         item: `
           <a class="{{cssClasses.link}}" href="{{url}}">
             <span class="eppo0__hasEntityType">{{label}}</span>
+            <span class="ms-count">
+              {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
+            </span>
+          </a>
+        `,
+      },
+    }),
+    instantsearch.widgets.hierarchicalMenu({
+      container: "#sources-hierarchical-menu",
+      attributes: ["ds0__source.1v10", "ds0__source.1v11"],
+      templates: {
+        item: `
+          <a class="{{cssClasses.link}}" href="{{url}}">
+            <span class="ds0__source">{{label}}</span>
             <span class="ms-count">
               {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
             </span>

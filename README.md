@@ -17,6 +17,8 @@ $wgResourceLoaderDebug = true;
 
 ## Manual indexing
 
+* $this->elementsToBeRemoved
+
 ```bash
 sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 ```

@@ -251,7 +251,7 @@ class DataspectsSearchFeed {
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       // "mw0__rawUrl" => $this->title->getInternalURL(),
       // "mw0__shortUrl" => $this->title->getFullURL(),
-      // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
+      "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       // "mw0__wikiText" => trim($this->wikitext),
       "mw0__text" => $this->mw0__text($this->parsedWikitext),
       // "sections" => $this->sections,
@@ -262,6 +262,7 @@ class DataspectsSearchFeed {
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
+    $mediaWikiPage = $this->processSources($mediaWikiPage);
     return $mediaWikiPage;
   }
 
@@ -270,8 +271,9 @@ class DataspectsSearchFeed {
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
     foreach ($this->elementsToBeRemoved["ids"] as $id) {
-      $mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0);
-      $mwParserOutput->parentNode->removeChild($mwParserOutput);
+      if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
+        $mwParserOutput->parentNode->removeChild($mwParserOutput);
+      }      
     }
     foreach ($this->elementsToBeRemoved["tags"] as $tag) {
       $editSections = $xpath->query("//$tag");
@@ -280,6 +282,15 @@ class DataspectsSearchFeed {
       }
     }
     return $dom->textContent;
+  }
+
+  private function processSources($mediaWikiPage) {
+    $mediaWikiPage = array_merge($mediaWikiPage, [
+      "ds0__source" => ["MWStake Wiki", $this->getNamespace($this->title->mNamespace)],
+      "ds0__source.1v10" => "MWStake Wiki",
+      "ds0__source.1v11" => "MWStake Wiki > ".$this->getNamespace($this->title->mNamespace)
+    ]);
+    return $mediaWikiPage;
   }
 
   private function processCategories($mediaWikiPage) {
@@ -304,8 +315,8 @@ class DataspectsSearchFeed {
         case "Eppo0:hasEntityType":
           $mediaWikiPage = array_merge($mediaWikiPage, [
             "eppo0__hasEntityType" => $annotation["objectLiteral"],
-            "eppo0__hasEntityType.1v10" => "Type",
-            "eppo0__hasEntityType.1v11" => "Type > ".$annotation["objectLiteral"],
+            "eppo0__hasEntityType.1v10" => "Topic Type",
+            "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectLiteral"],
           ]);
           break;
         case "Eppo0:hasEntityTitle":
@@ -354,7 +365,7 @@ class DataspectsSearchFeed {
     } else {
       $namespace = \MWNamespace::getCanonicalName($index);
     }
-    return $namespace;
+    return ucfirst($namespace);
   }
 
   private function browseBySubject(string $title) {

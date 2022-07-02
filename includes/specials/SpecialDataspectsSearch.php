@@ -18,7 +18,10 @@ class SpecialDataspectsSearch extends SpecialPage {
 			</tr>
 			<tr>
 				<td><div id="hits"></div></td>
-				<td><div id="hierarchical-menu"></div></td>
+				<td>
+					<div id="sources-hierarchical-menu"></div>
+					<div id="topic-types-hierarchical-menu"></div>
+				</td>
 			</tr>
 		</table>' );
 		$output->addModules( 'ext.meilisearchForMediaWiki' );
