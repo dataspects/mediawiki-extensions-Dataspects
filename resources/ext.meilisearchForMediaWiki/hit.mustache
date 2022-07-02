@@ -1,0 +1,30 @@
+<div class="hit">
+  <div>
+    {{#eppo0__hasEntityType}}
+      <a href="{{eppo0__hasEntityType}}"><span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span></a> 
+    {{/eppo0__hasEntityType}}
+    <a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span></a>
+    {{#eppo0__categories}}
+      <a href="https://localhost/wiki/Category:{{.}}">
+        <span class="eppo0__category">{{.}}</span>
+      </a>
+    {{/eppo0__categories}}
+  </div>
+  <div>
+    {{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}
+  </div>
+  <table class="eppo0__hasAnnotations">
+    <thead>
+      <td></td><td></td>
+    </thead>
+    <tbody>
+      {{#annotations}}
+        <tr>
+          <td><a href="https://localhost/wiki/Property:{{predicate}}">{{predicate}}</a></td>
+          <td>::</td>
+          <td>{{objectLiteral}}</td>
+        </tr>
+      {{/annotations}}
+    </tbody>
+  </table>
+</div>

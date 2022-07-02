@@ -249,10 +249,9 @@ class DataspectsSearchFeed {
       "id" => $GLOBALS['wgDataspectsSearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
       "eppo0__hasEntityTitle" => $this->title->mTextform,
-      // "mw0__rawUrl" => $this->title->getInternalURL(),
-      // "mw0__shortUrl" => $this->title->getFullURL(),
+      "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
-      // "mw0__wikiText" => trim($this->wikitext),
+      "mw0__wikitext" => trim($this->wikitext),
       "mw0__text" => $this->mw0__text($this->parsedWikitext),
       // "sections" => $this->sections,
       // "templates" => $this->templates,
@@ -286,9 +285,9 @@ class DataspectsSearchFeed {
 
   private function processSources($mediaWikiPage) {
     $mediaWikiPage = array_merge($mediaWikiPage, [
-      "ds0__source" => ["MWStake Wiki", $this->getNamespace($this->title->mNamespace)],
-      "ds0__source.1v10" => "MWStake Wiki",
-      "ds0__source.1v11" => "MWStake Wiki > ".$this->getNamespace($this->title->mNamespace)
+      "ds0__source" => ["https://mwstake.org/mwstake/wiki/", $this->getNamespace($this->title->mNamespace)],
+      "ds0__source.1v10" => "https://mwstake.org/mwstake/wiki/",
+      "ds0__source.1v11" => "https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)
     ]);
     return $mediaWikiPage;
   }

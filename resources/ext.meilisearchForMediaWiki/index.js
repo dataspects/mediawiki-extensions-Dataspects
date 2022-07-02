@@ -16,6 +16,10 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
+const test = (me) => {
+  return me;
+};
+
 $(function () {
   require("./instant-meilisearch.umd.min.js");
   require("./instantsearch.js@4");
@@ -60,11 +64,11 @@ $(function () {
       container: "#sources-hierarchical-menu",
       attributes: ["ds0__source.1v10", "ds0__source.1v11"],
       templates: {
-        item: `
-          <a class="{{cssClasses.link}}" href="{{url}}">
-            <span class="ds0__source">{{label}}</span>
+        item: `{{=<% %>=}}
+          <a class="<%cssClasses.link%>" href="<%url%>">
+            <span class="ds0__source"><%label%></span>
             <span class="ms-count">
-              {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
+              <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%>
             </span>
           </a>
         `,
@@ -74,34 +78,34 @@ $(function () {
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
-        item: `
+        item: `{{=<% %>=}}
           <div class="hit">
             <div>
-              {{#eppo0__hasEntityType}}
-                <a href="{{eppo0__hasEntityType}}"><span class="eppo0__hasEntityType">{{eppo0__hasEntityType}}</span></a> 
-              {{/eppo0__hasEntityType}}
-              <a href="{{name}}"><span class="eppo0__hasEntityTitle">{{#helpers.highlight}}{ "attribute": "eppo0__hasEntityTitle"}{{/helpers.highlight}}</span></a>
-              {{#eppo0__categories}}
-                <a href="https://localhost/wiki/Category:{{.}}">
-                  <span class="eppo0__category">{{.}}</span>
+              <%#eppo0__hasEntityType%>
+                <a href="<%eppo0__hasEntityType%>"><span class="eppo0__hasEntityType"><%eppo0__hasEntityType%></span></a> 
+              <%/eppo0__hasEntityType%>
+              <a href="<%mw0__rawUrl%>"><span class="eppo0__hasEntityTitle"><%#helpers.highlight%>{ "attribute": "eppo0__hasEntityTitle"}<%/helpers.highlight%></span></a>
+              <%#eppo0__categories%>
+                <a href="https://localhost/wiki/Category:<%.%>">
+                  <span class="eppo0__category"><%.%></span>
                 </a>
-              {{/eppo0__categories}}
+              <%/eppo0__categories%>
             </div>
             <div>
-              {{#helpers.snippet}}{ "attribute": "mw0__text" }{{/helpers.snippet}}
+              <%#helpers.snippet%>{ "attribute": "mw0__wikitext" }<%/helpers.snippet%>
             </div>
             <table class="eppo0__hasAnnotations">
               <thead>
                 <td></td><td></td>
               </thead>
               <tbody>
-                {{#annotations}}
+                <%#annotations%>
                   <tr>
-                    <td><a href="https://localhost/wiki/Property:{{predicate}}">{{predicate}}</a></td>
+                    <td><a href="https://localhost/wiki/Property:<%predicate%>"><%predicate%></a></td>
                     <td>::</td>
-                    <td>{{objectLiteral}}</td>
+                    <td><%objectLiteral%></td>
                   </tr>
-                {{/annotations}}
+                <%/annotations%>
               </tbody>
             </table>
           </div>
