@@ -15,6 +15,11 @@ class DataspectsSearchFeed {
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
+    $this->elementsToBeRemoved = array(
+      "tags" => ["editsection"],
+      "classes" => [],
+      "ids" => ["ds0__topicMetaTemplate"]
+    );
   }
 
   static function deleteFromDatastore($id) {
@@ -264,11 +269,15 @@ class DataspectsSearchFeed {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
-    $mwParserOutput = $xpath->query("//div[@id = 'ds0__topicMetaTemplate']")->item(0);
-    $mwParserOutput->parentNode->removeChild($mwParserOutput);
-    $editSections = $xpath->query("//editsection");
-    foreach($editSections as $editSection){
-      $editSection->parentNode->removeChild($editSection);
+    foreach ($this->elementsToBeRemoved["ids"] as $id) {
+      $mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0);
+      $mwParserOutput->parentNode->removeChild($mwParserOutput);
+    }
+    foreach ($this->elementsToBeRemoved["tags"] as $tag) {
+      $editSections = $xpath->query("//$tag");
+      foreach($editSections as $editSection){
+        $editSection->parentNode->removeChild($editSection);
+      }
     }
     return $dom->textContent;
   }
