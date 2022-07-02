@@ -17,12 +17,12 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 const mw0__text = (hit, instantsearch) => {
-  if (["Template"].includes(hit.mw0__namespace)) {
-    return instantsearch.snippet({
+  if (["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)) {
+    return `<pre>${instantsearch.snippet({
       attribute: "mw0__wikitext",
       highlightedTagName: "mark",
       hit,
-    });
+    })}</pre>`;
   }
   return instantsearch.snippet({
     attribute: "mw0__text",
