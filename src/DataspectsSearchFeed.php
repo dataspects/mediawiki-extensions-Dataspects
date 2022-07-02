@@ -6,6 +6,7 @@ use MeiliSearch\Client;
 use MediaWiki\Logger\LoggerFactory;
 
 
+
 class DataspectsSearchFeed {
 
   public function __construct(\Title $title) {
@@ -247,7 +248,7 @@ class DataspectsSearchFeed {
       // "mw0__shortUrl" => $this->title->getFullURL(),
       // "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       // "mw0__wikiText" => trim($this->wikitext),
-      "mw0__text" => trim(strip_tags($this->parsedWikitext)),
+      "mw0__text" => $this->mw0__text($this->parsedWikitext),
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
@@ -257,6 +258,19 @@ class DataspectsSearchFeed {
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
     return $mediaWikiPage;
+  }
+
+  private function mw0__text($parsedWikitext) {
+    $dom = new \DOMDocument('1.0', 'utf-8');
+    $dom->loadHTML($parsedWikitext);
+    $xpath = new \DomXPath($dom);
+    $mwParserOutput = $xpath->query("//div[@id = 'ds0__topicMetaTemplate']")->item(0);
+    $mwParserOutput->parentNode->removeChild($mwParserOutput);
+    $editSections = $xpath->query("//editsection");
+    foreach($editSections as $editSection){
+      $editSection->parentNode->removeChild($editSection);
+    }
+    return $dom->textContent;
   }
 
   private function processCategories($mediaWikiPage) {
