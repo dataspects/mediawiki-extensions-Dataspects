@@ -78,17 +78,20 @@ class DataspectsSearchFeed {
         $this->getWikitext();
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
-      case 106:
-        $this->getCategories();
-        $this->getWikitext();
-        $this->mediaWikiPage = $this->getMediaWikiPage();
-        break;
       case 102:
         $this->getCategories();
         $this->getPredicateAnnotations();
-        $this->mediaWikiPage = $this->predicateMongodoc();
+        $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 6: // File LEX2006041204
+        break;
+      case 108:
+      case 102:
+      case 106:
+      case 828:
+        $this->getCategories();
+        $this->getWikitext();
+        $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       default:
         echo "ERROR in determining namespace ".$this->title->mNamespace."\n";
