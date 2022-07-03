@@ -1,0 +1,33 @@
+.badge {
+    border-radius: 2px;
+    padding:2px;
+}
+.eppo0__hasEntityType {
+    background-color: lightgreen;
+    
+}
+.ms-count {
+    background-color: #E8E8E8;
+    padding: 3px;
+    border-radius: 3px;
+}
+.eppo0__hasEntityTitle {
+    font-weight: bold;
+}
+
+.eppo0__category {
+    color: grey;
+}
+
+.eppo0__hasAnnotations {
+    font-size: 10px;
+    margin-left: 15px;
+}
+
+.eppo0__hasAnnotations>tbody>tr>td {
+    vertical-align: top;
+}
+
+.hit {
+    margin-bottom: 15px;
+}

@@ -33,11 +33,7 @@ const mw0__text = (hit, instantsearch) => {
 
 const eppo0__hasEntityType = (hit) => {
   if (hit.eppo0__hasEntityType) {
-    return `<a href="${hit.eppo0__hasEntityType}">
-              <span class="eppo0__hasEntityType">
-                ${hit.eppo0__hasEntityType}
-              </span>
-            </a>`;
+    return `<a href="${hit.eppo0__hasEntityType}"><span class="badge eppo0__hasEntityType">${hit.eppo0__hasEntityType}</span></a>`;
   }
   return "";
 };
@@ -45,9 +41,7 @@ const eppo0__hasEntityType = (hit) => {
 const eppo0__categories = (hit) => {
   if (hit.eppo0__categories) {
     return hit.eppo0__categories.map((category) => {
-      return `<a href="https://localhost/wiki/Category:${category}">
-                <span class="eppo0__category">${category}</span>
-              </a>`;
+      return `<a href="https://localhost/wiki/Category:${category}"><span class="eppo0__category">${category}</span></a>`;
     });
   }
   return "";
@@ -102,8 +96,8 @@ $(function () {
       templates: {
         item: `
           <a class="{{cssClasses.link}}" href="{{url}}">
-            <span class="eppo0__hasEntityType">{{label}}</span>
-            <span class="ms-count">
+            <span class="badge eppo0__hasEntityType">{{label}}</span>
+            <span class="badge ms-count">
               {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
             </span>
           </a>
@@ -133,7 +127,7 @@ $(function () {
             <div class="hit">
               <div>
                 ${eppo0__hasEntityType(hit)}
-                <a href="${hit.mw0__rawUrl}">
+                <a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">
                   ${instantsearch.snippet({
                     attribute: "eppo0__hasEntityTitle",
                     highlightedTagName: "mark",

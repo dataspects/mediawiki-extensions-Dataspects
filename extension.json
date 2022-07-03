@@ -35,9 +35,9 @@
       "localBasePath": "resources/ext.meilisearchForMediaWiki",
       "remoteExtPath": "DataspectsSearch/resources/ext.meilisearchForMediaWiki",
       "dependencies": [],
-      "styles": [],
+      "styles": ["dataspectsSearch.css"],
       "packageFiles": [
-        "./index.js",
+        "./dataspectsSearch.js",
         "./instant-meilisearch.umd.min.js",
         "./instantsearch.js@4"
       ],
