@@ -31,3 +31,9 @@
 .hit {
     margin-bottom: 15px;
 }
+
+.dataspectsSearchInterface>tbody>tr>td {
+    width: 50%;
+    vertical-align: top;
+    padding: 20px 20px 20px 0px;
+}

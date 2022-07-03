@@ -286,8 +286,9 @@ class DataspectsSearchFeed {
   private function processSources($mediaWikiPage) {
     $mediaWikiPage = array_merge($mediaWikiPage, [
       "ds0__source" => ["https://mwstake.org/mwstake/wiki/", $this->getNamespace($this->title->mNamespace)],
-      "ds0__source.1v10" => "https://mwstake.org/mwstake/wiki/",
-      "ds0__source.1v11" => "https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)
+      "ds0__source.1v10" => "Source",
+      "ds0__source.1v11" => "Source > https://mwstake.org/mwstake/wiki/",
+      "ds0__source.1v12" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)
     ]);
     return $mediaWikiPage;
   }

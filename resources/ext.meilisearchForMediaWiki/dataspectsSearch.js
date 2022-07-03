@@ -106,7 +106,7 @@ $(function () {
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sources-hierarchical-menu",
-      attributes: ["ds0__source.1v10", "ds0__source.1v11"],
+      attributes: ["ds0__source.1v10", "ds0__source.1v11", "ds0__source.1v12"],
       templates: {
         item: `{{=<% %>=}}
           <a class="<%cssClasses.link%>" href="<%url%>">

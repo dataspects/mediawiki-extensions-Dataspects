@@ -9,7 +9,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-		$output->addHTML( '<table class="layout_table_0">
+		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
 				<td colspan=2>
 					<div id="searchbox"></div>
