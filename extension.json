@@ -32,8 +32,8 @@
   },
   "ResourceModules": {
     "ext.meilisearchForMediaWiki": {
-      "localBasePath": "resources/ext.meilisearchForMediaWiki",
-      "remoteExtPath": "DataspectsSearch/resources/ext.meilisearchForMediaWiki",
+      "localBasePath": "resources/ext.dataspectsSearch",
+      "remoteExtPath": "DataspectsSearch/resources/ext.dataspectsSearch",
       "dependencies": [],
       "styles": ["dataspectsSearch.css"],
       "packageFiles": [
