@@ -73,7 +73,7 @@ class DataspectsSearchFeed {
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->getAttachmentTexts();
+        $this->getAttachments();
         $this->mediaWikiPage = $this->getMediaWikiPage();
 	    break;
       case 4:
@@ -225,8 +225,8 @@ class DataspectsSearchFeed {
     }
   }
 
-  private function getAttachmentTexts() {
-    $this->attachmentTexts = [];
+  private function getAttachments() {
+    $this->attachments = [];
     foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
@@ -243,9 +243,12 @@ class DataspectsSearchFeed {
       $htmlDoc = $data["X-TIKA:content"];
       $dom = new \DOMDocument();
       $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
-      $this->attachmentTexts[] = $dom->textContent;
+      $this->attachments[] = array(
+        "type" => $data["Content-Type"],
+        "text" => trim($dom->textContent)
+      );
     }
-    return $this->attachmentTexts;
+    return $this->attachments;
   }
 
   
@@ -280,7 +283,10 @@ class DataspectsSearchFeed {
       "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->wikitext),
       "mw0__text" => $this->mw0__text($this->parsedWikitext),
-      "mw0__attachmentsTexts" => trim($this->attachmentTexts[0]),
+      "mw0__attachment" => array(
+        "text" => $this->attachments[0]["text"],
+        "type" => $this->attachments[0]["type"]
+      ),
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
@@ -316,7 +322,8 @@ class DataspectsSearchFeed {
       "ds0__source" => ["https://mwstake.org/mwstake/wiki/", $this->getNamespace($this->title->mNamespace)],
       "ds0__source.1v10" => "Source",
       "ds0__source.1v11" => "Source > https://mwstake.org/mwstake/wiki/",
-      "ds0__source.1v12" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)
+      "ds0__source.1v12" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace),
+      "ds0__source.1v13" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)." > ".$this->attachments[0]["type"]
     ]);
     return $mediaWikiPage;
   }

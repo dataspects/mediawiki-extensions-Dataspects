@@ -31,10 +31,10 @@ const mw0__text = (hit, instantsearch) => {
   });
 };
 
-const mw0__attachmentsTexts = (hit, instantsearch) => {
+const mw0__attachment = (hit, instantsearch) => {
   if (["File"].includes(hit.mw0__namespace)) {
     return `<div class="mw0__attachmentsText">${instantsearch.snippet({
-      attribute: "mw0__attachmentsTexts",
+      attribute: "mw0__attachment.text",
       highlightedTagName: "mark",
       hit,
     })}</div>`;
@@ -119,7 +119,12 @@ $(function () {
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sources-hierarchical-menu",
-      attributes: ["ds0__source.1v10", "ds0__source.1v11", "ds0__source.1v12"],
+      attributes: [
+        "ds0__source.1v10",
+        "ds0__source.1v11",
+        "ds0__source.1v12",
+        "ds0__source.1v13",
+      ],
       templates: {
         item: `{{=<% %>=}}
           <a class="<%cssClasses.link%>" href="<%url%>">
@@ -152,7 +157,7 @@ $(function () {
               <div>
                 ${mw0__text(hit, instantsearch)}
               </div>
-              ${mw0__attachmentsTexts(hit, instantsearch)}
+              ${mw0__attachment(hit, instantsearch)}
               ${annotations(hit, instantsearch)}
             </div>`;
         },
