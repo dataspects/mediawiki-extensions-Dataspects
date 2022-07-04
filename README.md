@@ -2,7 +2,8 @@
 
 ```php
 wfLoadExtension( 'DataspectsSearch' );
-$wgDataspectsSearchURL = "http://meili:7700";
+$wgDataspectsSearchTikaURL = "http://tika:9998";
+$wgDataspectsSearchMeiliURL = "http://meili:7700";
 $wgDataspectsSearchKey = "masterKey";
 $wgDataspectsSearchIndex = "mediawiki";
 $wgDataspectsSearchMediaWikiID = "dscan";
@@ -32,4 +33,6 @@ https://github.com/dataspects/MVP/tree/main/MeiliSearch
 ```bash
 root@95e3ef5ecc17:/var/www/mediawiki/w# clear; php extensions/DataspectsSearch/maintenance/feedOne.php
 lex@lexYoga:~/MVP/MeiliSearch$ MEILI_MASTER_KEY=masterKey ./getDocument.sh
+
+tail -f  apache2/error_log.current
 ```

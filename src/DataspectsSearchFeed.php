@@ -15,7 +15,7 @@ class DataspectsSearchFeed {
     $this->logger = LoggerFactory::getInstance( 'dataspects' );
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey']);
+    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchKey']);
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
     $this->elementsToBeRemoved = array(
       "tags" => ["editsection"],
@@ -231,7 +231,7 @@ class DataspectsSearchFeed {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
 
-      $ch = curl_init("http://tika:9998/rmeta");
+      $ch = curl_init($GLOBALS['wgDataspectsSearchTikaURL']."/rmeta");
       curl_setopt_array($ch, array(
         CURLOPT_PUT => 1,
         CURLOPT_INFILE => $fh_res,
