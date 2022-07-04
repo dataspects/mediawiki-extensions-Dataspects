@@ -241,8 +241,8 @@ class DataspectsSearchFeed {
       $curl_response_res = curl_exec ($ch);
       $data  = (array) json_decode($curl_response_res)[0];
       $htmlDoc = $data["X-TIKA:content"];
-      $dom = new \DOMDocument('1.0', 'utf-8');
-      $dom->loadHTML($htmlDoc);
+      $dom = new \DOMDocument();
+      $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
       $this->attachmentTexts[] = $dom->textContent;
     }
     return $this->attachmentTexts;
