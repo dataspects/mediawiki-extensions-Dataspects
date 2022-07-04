@@ -24,6 +24,13 @@ const mw0__text = (hit, instantsearch) => {
       hit,
     })}</pre>`;
   }
+  if (["File"].includes(hit.mw0__namespace)) {
+    return `${instantsearch.snippet({
+      attribute: "mw0__attachmentsTexts",
+      highlightedTagName: "mark",
+      hit,
+    })}`;
+  }
   return instantsearch.snippet({
     attribute: "mw0__text",
     highlightedTagName: "mark",

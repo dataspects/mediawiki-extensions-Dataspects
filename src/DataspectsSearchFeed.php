@@ -73,7 +73,7 @@ class DataspectsSearchFeed {
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->getFiles();
+        $this->getAttachmentTexts();
         $this->mediaWikiPage = $this->getMediaWikiPage();
 	    break;
       case 4:
@@ -225,9 +225,9 @@ class DataspectsSearchFeed {
     }
   }
 
-  private function getFiles() {
-    $files = MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]);
-    foreach($files as $name => $file) {
+  private function getAttachmentTexts() {
+    $this->attachmentTexts = [];
+    foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
 
@@ -239,9 +239,13 @@ class DataspectsSearchFeed {
         CURLOPT_RETURNTRANSFER => 1
       ));
       $curl_response_res = curl_exec ($ch);
-      fclose($fh_res);
-      print_r(json_decode($curl_response_res));
+      $data  = (array) json_decode($curl_response_res)[0];
+      $htmlDoc = $data["X-TIKA:content"];
+      $dom = new \DOMDocument('1.0', 'utf-8');
+      $dom->loadHTML($htmlDoc);
+      $this->attachmentTexts[] = $dom->textContent;
     }
+    return $this->attachmentTexts;
   }
 
   
@@ -276,6 +280,7 @@ class DataspectsSearchFeed {
       "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->wikitext),
       "mw0__text" => $this->mw0__text($this->parsedWikitext),
+      "mw0__attachmentsTexts" => trim($this->attachmentTexts[0]),
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
