@@ -33,11 +33,16 @@ const mw0__text = (hit, instantsearch) => {
 
 const mw0__attachment = (hit, instantsearch) => {
   if (["File"].includes(hit.mw0__namespace)) {
-    return `<div class="mw0__attachmentsText">${instantsearch.snippet({
-      attribute: "mw0__attachment.text",
-      highlightedTagName: "mark",
-      hit,
-    })}</div>`;
+    return `<fieldset>
+              <legend>${hit.mw0__attachment.type}</legend>
+              <div class="mw0__attachmentsText">
+                ${instantsearch.snippet({
+                  attribute: "mw0__attachment.text",
+                  highlightedTagName: "mark",
+                  hit,
+                })}
+              </div>
+            </fieldset>`;
   }
   return "";
 };
