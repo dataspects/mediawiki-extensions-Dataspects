@@ -24,18 +24,22 @@ const mw0__text = (hit, instantsearch) => {
       hit,
     })}</pre>`;
   }
-  if (["File"].includes(hit.mw0__namespace)) {
-    return `${instantsearch.snippet({
-      attribute: "mw0__attachmentsTexts",
-      highlightedTagName: "mark",
-      hit,
-    })}`;
-  }
   return instantsearch.snippet({
     attribute: "mw0__text",
     highlightedTagName: "mark",
     hit,
   });
+};
+
+const mw0__attachmentsTexts = (hit, instantsearch) => {
+  if (["File"].includes(hit.mw0__namespace)) {
+    return `<div class="mw0__attachmentsText">${instantsearch.snippet({
+      attribute: "mw0__attachmentsTexts",
+      highlightedTagName: "mark",
+      hit,
+    })}</div>`;
+  }
+  return "";
 };
 
 const eppo0__hasEntityType = (hit) => {
@@ -58,13 +62,15 @@ const annotations = (hit, instantsearch) => {
   if (hit.annotations.length > 0) {
     return `<table class="eppo0__hasAnnotations">
               <tbody>
-                ${hit.annotations.map((annotation) => {
-                  return `<tr>
+                ${hit.annotations
+                  .map((annotation) => {
+                    return `<tr>
                             <td><a href="https://localhost/wiki/Property:${annotation.predicate}">${annotation.predicate}</a></td>
                             <td>::</td>
                             <td>${annotation.objectLiteral}</td>
                           </tr>`;
-                })}
+                  })
+                  .join("")}
               </tbody>
             </table>`;
   }
@@ -146,6 +152,7 @@ $(function () {
               <div>
                 ${mw0__text(hit, instantsearch)}
               </div>
+              ${mw0__attachmentsTexts(hit, instantsearch)}
               ${annotations(hit, instantsearch)}
             </div>`;
         },

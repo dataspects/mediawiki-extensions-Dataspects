@@ -37,3 +37,9 @@
     vertical-align: top;
     padding: 20px 20px 20px 0px;
 }
+
+.mw0__attachmentsText {
+    border: 1px solid gray;
+    padding: 10px;
+    background-color: #eee;
+}
