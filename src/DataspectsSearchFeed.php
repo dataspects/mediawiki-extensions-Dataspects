@@ -1,7 +1,9 @@
 <?php
 
+
 namespace MediaWiki\Extension\DataspectsSearch;
 
+use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
 use MediaWiki\Logger\LoggerFactory;
 
@@ -57,6 +59,13 @@ class DataspectsSearchFeed {
     $this->parsedWikitext = null;
     switch($this->title->mNamespace) {
       case 0:
+        $this->getCategories();
+        $this->getWikitext();
+        $this->getParse();
+        $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
+        $this->getMediaWikiPageAnnotations();
+        $this->getIncomingAndOutgoingLinks();
+        $this->mediaWikiPage = $this->getMediaWikiPage();
       case 6:
         $this->getCategories();
         $this->getWikitext();
@@ -64,6 +73,7 @@ class DataspectsSearchFeed {
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
+        $this->getFiles();
         $this->mediaWikiPage = $this->getMediaWikiPage();
 	    break;
       case 4:
@@ -215,9 +225,24 @@ class DataspectsSearchFeed {
     }
   }
 
-  
+  private function getFiles() {
+    $files = MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]);
+    foreach($files as $name => $file) {
+      $file_path_str = $file->getLocalRefPath();
+      $fh_res = fopen($file_path_str, 'r');
 
-  
+      $ch = curl_init("http://tika:9998/rmeta");
+      curl_setopt_array($ch, array(
+        CURLOPT_PUT => 1,
+        CURLOPT_INFILE => $fh_res,
+        CURLOPT_INFILESIZE => filesize($file_path_str),
+        CURLOPT_RETURNTRANSFER => 1
+      ));
+      $curl_response_res = curl_exec ($ch);
+      fclose($fh_res);
+      print_r(json_decode($curl_response_res));
+    }
+  }
 
   
 
