@@ -19,7 +19,9 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
-class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
+use MediaWiki\Storage\Hook\PageSaveCompleteHook;
+
+class DataspectsSearchHooks implements PageSaveCompleteHook {
 
 	/**
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
@@ -27,25 +29,11 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 	 * @param \Skin $skin
 	 */
 	
-	public static function onPageSaveComplete( $wikiPage ) {
+	public function onPageSaveComplete( $wikiPage ) {
 		$logger = LoggerFactory::getInstance( 'dataspects' );
 		$job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
 		$logger->debug($wikiPage->getTitle()->mTextform);
 		\JobQueueGroup::singleton()->lazyPush($job);
-	}
-
-	public static function onPageDeleteComplete( $wikiPage, $user, $reason, $id ) {
-		\MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed::deleteFromDatastore($id);
-	}
-
-	public static function onPageMoveComplete( $title, $newTitle, $user, $oldid, $newid ) {
-		\MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed::deleteFromDatastore($oldid);
-		$job = new DataspectsSearchFeederSendJob($newTitle);
-		\JobQueueGroup::singleton()->lazyPush($job);
-		if($newid == 0) {
-			// LEX2006041158
-			// $newid = database page_id of the created redirect, or 0 if the redirect was suppressed
-		}
 	}
 
 }

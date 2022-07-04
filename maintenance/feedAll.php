@@ -19,6 +19,7 @@ class DMFFeedAll extends Maintenance {
 		// api.php?action=query&meta=siteinfo&siprop=namespaces
 		$this->feedNamespace(0); // Mainspace
 		$this->feedNamespace(4); // Project
+		$this->feedNamespace(6); // File
 		$this->feedNamespace(10); // Template
 		$this->feedNamespace(106); // Form
 		$this->feedNamespace(102); // Property

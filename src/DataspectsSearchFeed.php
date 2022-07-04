@@ -57,6 +57,7 @@ class DataspectsSearchFeed {
     $this->parsedWikitext = null;
     switch($this->title->mNamespace) {
       case 0:
+      case 6:
         $this->getCategories();
         $this->getWikitext();
         $this->getParse();
@@ -73,18 +74,12 @@ class DataspectsSearchFeed {
         $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
-      case 10:
-        $this->getCategories();
-        $this->getWikitext();
-        $this->mediaWikiPage = $this->getMediaWikiPage();
-        break;
       case 102:
         $this->getCategories();
         $this->getPredicateAnnotations();
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
-      case 6: // File LEX2006041204
-        break;
+      case 10:
       case 108:
       case 102:
       case 106:

@@ -14,18 +14,17 @@
   "SpecialPages": {
     "DataspectsSearch": "SpecialDataspectsSearch"
   },
+  "AutoloadClasses": {
+    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
+    "DataspectsSearchHooks": "includes/DataspectsSearchHooks.php"
+  },
   "HookHandlers": {
     "DataspectsSearchHooks": {
       "class": "MediaWiki\\Extension\\DataspectsSearch\\Hooks"
     }
   },
-  "AutoloadClasses": {
-    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
-  },
   "Hooks": {
-    "PageSaveComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::ononPageSaveComplete",
-    "PageDeleteComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::onPageDeleteComplete",
-    "PageMoveComplete": "MediaWiki\\Extension\\DataspectsSearch\\Hooks::onPageMoveComplete"
+    "PageSaveComplete": "DataspectsSearchHooks"
   },
   "MessagesDirs": {
     "DataspectsSearch": ["i18n"]
