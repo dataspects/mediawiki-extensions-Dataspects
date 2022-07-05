@@ -88,7 +88,10 @@ $(function () {
   const search = instantsearch({
     indexName: "mediawiki",
     // FIXME: How to get these from $GLOBALS?
-    searchClient: instantMeiliSearch("http://localhost:7700", "masterKey"),
+    searchClient: instantMeiliSearch(
+      "http://localhost:7700",
+      mw.config.get("wgDataspectsSearchKey")
+    ),
     searchFunction(helper) {
       if (!helper.state.query) {
         let q = getUrlParameter("q");
@@ -139,6 +142,10 @@ $(function () {
             </span>
           </a>
         `,
+      },
+      cssClasses: {
+        parentItem: "parentItem",
+        selectedItem: "selectedItem",
       },
     }),
     // FIXME: https://localhost/wiki/ by variable

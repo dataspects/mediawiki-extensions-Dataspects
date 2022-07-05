@@ -19,21 +19,17 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\Storage\Hook\PageSaveCompleteHook;
 
 class DataspectsSearchHooks implements PageSaveCompleteHook {
 
-	/**
-	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
-	 * @param \OutputPage $out
-	 * @param \Skin $skin
-	 */
-	
-	public function onPageSaveComplete( $wikiPage ) {
+	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
+		echo "me";
 		$logger = LoggerFactory::getInstance( 'dataspects' );
-		$job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
-		$logger->debug($wikiPage->getTitle()->mTextform);
-		\JobQueueGroup::singleton()->lazyPush($job);
+		// $job = new DataspectsSearchFeederSendJob($wikiPage->getTitle());
+		$logger->debug($summary);
+		// \JobQueueGroup::singleton()->lazyPush($job);
 	}
 
 }

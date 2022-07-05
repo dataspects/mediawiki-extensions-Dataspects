@@ -46,3 +46,11 @@
     padding: 10px;
     background-color: #eee;
 }
+
+.selectedItem {
+    font-weight: bold;
+}
+
+.parentItem {
+    font-weight: bold;
+}

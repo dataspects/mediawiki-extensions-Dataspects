@@ -1,8 +1,8 @@
 <?php
 
-class SpecialDataspectsSearch extends SpecialPage {
+class SpecialDataspectsSearchBackstage extends SpecialPage {
 	function __construct() {
-		parent::__construct( 'DataspectsSearch' );
+		parent::__construct( 'DataspectsSearchBackstage' );
 	}
 
 	function execute( $par ) {
@@ -24,7 +24,6 @@ class SpecialDataspectsSearch extends SpecialPage {
 				</td>
 			</tr>
 		</table>' );
-		$output->addJsConfigVars(array('wgDataspectsSearchKey' => $GLOBALS['wgDataspectsSearchKey']));
 		$output->addModules( 'ext.dataspectsSearch' );
 	}
 }

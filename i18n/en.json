@@ -3,5 +3,7 @@
     "authors": ["Lex Sulzer"]
   },
   "dataspectssearch": "dataspects Search",
-  "dataspectssearch-desc": "dataspects Search interface for MediaWiki"
+  "dataspectssearch-desc": "dataspects Search interface for MediaWiki",
+  "dataspectssearchbackstage": "dataspects Search Backstage",
+  "dataspectssearchbackstage-desc": "dataspects Search Backstage for MediaWiki"
 }

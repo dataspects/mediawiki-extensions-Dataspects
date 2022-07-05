@@ -12,25 +12,26 @@
     "MediaWiki\\Extension\\DataspectsSearch\\": "src/"
   },
   "SpecialPages": {
-    "DataspectsSearch": "SpecialDataspectsSearch"
+    "DataspectsSearch": "SpecialDataspectsSearch",
+    "DataspectsSearchBackstage": "SpecialDataspectsSearchBackstage"
   },
   "AutoloadClasses": {
     "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
-    "DataspectsSearchHooks": "includes/DataspectsSearchHooks.php"
+    "SpecialDataspectsSearchBackstage": "includes/specials/SpecialDataspectsSearchBackstage.php"
   },
   "HookHandlers": {
-    "DataspectsSearchHooks": {
-      "class": "MediaWiki\\Extension\\DataspectsSearch\\Hooks"
+    "main": {
+      "class": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchHooks"
     }
   },
   "Hooks": {
-    "PageSaveComplete": "DataspectsSearchHooks"
+    "PageSaveComplete": "main"
   },
   "MessagesDirs": {
     "DataspectsSearch": ["i18n"]
   },
   "ResourceModules": {
-    "ext.meilisearchForMediaWiki": {
+    "ext.dataspectsSearch": {
       "localBasePath": "resources/ext.dataspectsSearch",
       "remoteExtPath": "DataspectsSearch/resources/ext.dataspectsSearch",
       "dependencies": [],
