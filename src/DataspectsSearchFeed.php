@@ -67,6 +67,7 @@ class DataspectsSearchFeed {
         $this->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->getMediaWikiPage();
+        break;
       case 6:
         $this->getCategories();
         $this->getWikitext();
@@ -76,7 +77,7 @@ class DataspectsSearchFeed {
         $this->getIncomingAndOutgoingLinks();
         $this->getAttachments();
         $this->mediaWikiPage = $this->getMediaWikiPage();
-	    break;
+	      break;
       case 4:
         $this->getCategories();
         $this->getWikitext();
