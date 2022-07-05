@@ -15,13 +15,14 @@ class DataspectsSearchFeed {
     $this->logger = LoggerFactory::getInstance( 'dataspects' );
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchKey']);
+    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchMasterKey']);
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
     $this->elementsToBeRemoved = array(
       "tags" => ["editsection"],
       "classes" => [],
       "ids" => ["ds0__topicMetaTemplate"]
     );
+    $this->attachments = [];
   }
 
   static function deleteFromDatastore($id) {
@@ -226,7 +227,6 @@ class DataspectsSearchFeed {
   }
 
   private function getAttachments() {
-    $this->attachments = [];
     foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
@@ -282,11 +282,7 @@ class DataspectsSearchFeed {
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->wikitext),
-      "mw0__text" => $this->mw0__text($this->parsedWikitext),
-      "mw0__attachment" => array(
-        "text" => $this->attachments[0]["text"],
-        "type" => $this->attachments[0]["type"]
-      ),
+      "mw0__text" => $this->mw0__text($this->parsedWikitext)
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
@@ -296,6 +292,7 @@ class DataspectsSearchFeed {
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
     $mediaWikiPage = $this->processSources($mediaWikiPage);
+    $mediaWikiPage = $this->processAttachments($mediaWikiPage);
     return $mediaWikiPage;
   }
 
@@ -317,13 +314,25 @@ class DataspectsSearchFeed {
     return $dom->textContent;
   }
 
+  private function processAttachments($mediaWikiPage) {
+    if(count($this->attachments) > 0) {
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        "mw0__attachment" => [
+          "text" => $this->attachments[0]["text"],
+          "type" => $this->attachments[0]["type"]
+        ],
+        "ds0__source.1v13" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)." > ".$this->attachments[0]["type"]
+      ]);
+    }
+    return $mediaWikiPage;
+  }
+
   private function processSources($mediaWikiPage) {
     $mediaWikiPage = array_merge($mediaWikiPage, [
       "ds0__source" => ["https://mwstake.org/mwstake/wiki/", $this->getNamespace($this->title->mNamespace)],
       "ds0__source.1v10" => "Source",
       "ds0__source.1v11" => "Source > https://mwstake.org/mwstake/wiki/",
-      "ds0__source.1v12" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace),
-      "ds0__source.1v13" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)." > ".$this->attachments[0]["type"]
+      "ds0__source.1v12" => "Source > https://mwstake.org/mwstake/wiki/ > ".$this->getNamespace($this->title->mNamespace)
     ]);
     return $mediaWikiPage;
   }

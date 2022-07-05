@@ -16,7 +16,7 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends Maintenance {
 
 	public function execute() {
-		$title = Title::newFromText("File:Auslandzahlung_20211117_1122.pdf");
+		$title = Title::newFromText("Backup and restore or clone your wiki");
 		$this->feedOne($title);
 	}
 

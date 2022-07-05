@@ -28,6 +28,10 @@ sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 
 https://github.com/dataspects/MVP/tree/main/MeiliSearch
 
+
+composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0
+
+
 ```yaml
 tika:
     container_name: tika

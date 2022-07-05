@@ -12,12 +12,10 @@
     "MediaWiki\\Extension\\DataspectsSearch\\": "src/"
   },
   "SpecialPages": {
-    "DataspectsSearch": "SpecialDataspectsSearch",
-    "DataspectsSearchBackstage": "SpecialDataspectsSearchBackstage"
+    "DataspectsSearch": "SpecialDataspectsSearch"
   },
   "AutoloadClasses": {
-    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
-    "SpecialDataspectsSearchBackstage": "includes/specials/SpecialDataspectsSearchBackstage.php"
+    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
   },
   "HookHandlers": {
     "main": {
