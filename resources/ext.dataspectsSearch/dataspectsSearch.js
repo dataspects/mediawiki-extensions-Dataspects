@@ -89,7 +89,7 @@ $(function () {
     indexName: "mediawiki",
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch(
-      "http://" + window.location.host + ":7700",
+      mw.config.get("wgDataspectsSearchMeiliURL"),
       mw.config.get("wgDataspectsSearchSearchKey")
     ),
     searchFunction(helper) {
