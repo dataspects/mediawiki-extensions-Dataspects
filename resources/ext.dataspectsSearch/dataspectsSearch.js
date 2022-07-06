@@ -86,7 +86,7 @@ $(function () {
   require("./instant-meilisearch.umd.min.js");
   require("./instantsearch.js@4");
   const search = instantsearch({
-    indexName: "mediawiki",
+    indexName: mw.config.get("wgDataspectsSearchIndex"),
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch(
       mw.config.get("wgDataspectsSearchMeiliURL"),
