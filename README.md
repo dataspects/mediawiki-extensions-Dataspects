@@ -4,29 +4,38 @@ dataspects Search for MediaWiki is based on [Meilisearch](https://www.meilisearc
 
 ```mermaid
 flowchart LR
-  mediawiki("<b>MediaWiki</b>
-  - LocalSettings.php")
-  meilisearch("<b>Meilisearch</b>")
-  tika("<b>Tika</b>")
-  userAgent("<b>User Agent</b>")
-  DataspectsSearchCLI("<b><a href='https://github.com/dataspects/DataspectsSearchCLI'>DataspectsSearchCLI</a></b>
-  - export MEILI_MASTER_KEY=
-  - export INDEX=")
+
+  subgraph Docker on server
+    mediawiki("<b>MediaWiki</b>
+    - LocalSettings.php")
+    meilisearch("<b>Meilisearch</b>")
+    tika("<b>Tika</b>")
+  end
+
+  subgraph Internet
+    userAgent("<b>User Agent</b>")
+    DataspectsSearchCLI("<b><a href='https://github.com/dataspects/DataspectsSearchCLI'>DataspectsSearchCLI</a></b>
+    - export MEILI_MASTER_KEY=
+    - export INDEX=")
+  end
 
   DataspectsSearchCLI-->|configure/manage|meilisearch
   userAgent<-->|<b>search content</b><br/>wgDataspectsSearchSearchKey|meilisearch
   userAgent<-->mediawiki
-
-  subgraph Docker
-    mediawiki<-->|<b>update content</b><br/>wgDataspectsSearchWriteKey|meilisearch
-    mediawiki<-->|analyze content|tika
-  end
+  mediawiki<-->|<b>update content</b><br/>wgDataspectsSearchWriteKey|meilisearch
+  mediawiki<-->|analyze content|tika
   
-
 classDef default text-align:left;
 linkStyle 0,3 stroke:#ff0000
 linkStyle 1,4 stroke:#00ff00
 ```
+
+## PENDING
+
+* onPageSave index CRUD hooks
+* Logging
+* Testing
+* Search privileges by user group?
 
 ## LocalSettings.php
 
