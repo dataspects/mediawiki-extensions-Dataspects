@@ -7,8 +7,8 @@ flowchart LR
   mediawiki("<b>MediaWiki</b>
   - LocalSettings.php")
   meilisearch("<b>Meilisearch</b>")
-  tika("Tika")
-  userAgent("User Agent")
+  tika("<b>Tika</b>")
+  userAgent("<b>User Agent</b>")
   DataspectsSearchCLI("<b><a href='https://github.com/dataspects/DataspectsSearchCLI'>DataspectsSearchCLI</a></b>
   - export MEILI_MASTER_KEY=
   - export INDEX=")
@@ -24,6 +24,8 @@ flowchart LR
   
 
 classDef default text-align:left;
+linkStyle 0,3 stroke:#ff0000
+linkStyle 1,4 stroke:#00ff00
 ```
 
 ## LocalSettings.php
