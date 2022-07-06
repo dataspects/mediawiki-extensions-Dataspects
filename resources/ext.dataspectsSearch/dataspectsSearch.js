@@ -57,7 +57,9 @@ const eppo0__hasEntityType = (hit) => {
 const eppo0__categories = (hit) => {
   if (hit.eppo0__categories) {
     return hit.eppo0__categories.map((category) => {
-      return `<a href="Category:${category}"><span class="eppo0__category">${category}</span></a>`;
+      return `<a href="${mw.config.get(
+        "wgServer"
+      )}/wiki/Category:${category}"><span class="eppo0__category">${category}</span></a>`;
     });
   }
   return "";
@@ -70,7 +72,11 @@ const annotations = (hit, instantsearch) => {
                 ${hit.annotations
                   .map((annotation) => {
                     return `<tr>
-                            <td><a href="Property:${annotation.predicate}">${annotation.predicate}</a></td>
+                            <td><a href="${mw.config.get(
+                              "wgServer"
+                            )}/wiki/Property:${annotation.predicate}">${
+                      annotation.predicate
+                    }</a></td>
                             <td>::</td>
                             <td>${annotation.objectLiteral}</td>
                           </tr>`;
@@ -148,7 +154,7 @@ $(function () {
         selectedItem: "selectedItem",
       },
     }),
-    // FIXME:  by variable
+    // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
     instantsearch.widgets.hits({
       container: "#hits",
       templates: {
