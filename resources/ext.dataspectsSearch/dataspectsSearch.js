@@ -90,7 +90,7 @@ $(function () {
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch(
       "http://" + window.location.host + ":7700",
-      mw.config.get("wgDataspectsSearchKey")
+      mw.config.get("wgDataspectsSearchSearchKey")
     ),
     searchFunction(helper) {
       if (!helper.state.query) {

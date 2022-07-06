@@ -15,7 +15,11 @@ class DataspectsSearchFeed {
     $this->logger = LoggerFactory::getInstance( 'dataspects' );
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchMasterKey']);
+    try { # FIXME
+      $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
+    } catch (\MeiliSearch\Exceptions\ApiException $e) {
+      echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
     $this->elementsToBeRemoved = array(
       "tags" => ["editsection"],
@@ -88,7 +92,7 @@ class DataspectsSearchFeed {
         break;
       case 102:
         $this->getCategories();
-        $this->getPredicateAnnotations();
+        // $this->getPredicateAnnotations(); // PENDING FEATURE
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 10:
@@ -180,13 +184,13 @@ class DataspectsSearchFeed {
       if(is_array($property)) {
         $propertyName = $property['property'];
         if($propertyName[0] != '_') {
-		foreach($property['dataitem'] as $object) {
-			if(is_array($object)) {
-			$source = str_replace('#0##', '', $object['item']);
-			$smwLiteral = $source;
-			  if($object['type'] == 9) {
-				$source = $this->fullArticlePath.$source;
-			  }
+          foreach($property['dataitem'] as $object) {
+            if(is_array($object)) {
+              $source = str_replace('#0##', '', $object['item']);
+              $smwLiteral = $source;
+              if($object['type'] == 9) {
+                $source = $this->fullArticlePath.$source;
+              }
               $this->annotations[] = array(
                 'subject' => strtolower($this->title->getFullURL()),
                 'predicate' => $propertyName,
@@ -356,6 +360,7 @@ class DataspectsSearchFeed {
   private function processAnnotations($mediaWikiPage) {
     $showAnnotations = [];
     foreach ($this->annotations as $key => $annotation) {
+      print_r($annotation);
       switch ($annotation["predicate"]) {
         case "Eppo0:hasEntityType":
           $mediaWikiPage = array_merge($mediaWikiPage, [

@@ -24,7 +24,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 				</td>
 			</tr>
 		</table>' );
-		$output->addJsConfigVars(array('wgDataspectsSearchKey' => $GLOBALS['wgDataspectsSearchKey']));
+		$output->addJsConfigVars(array('wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey']));
 		$output->addModules( 'ext.dataspectsSearch' );
 	}
 }
