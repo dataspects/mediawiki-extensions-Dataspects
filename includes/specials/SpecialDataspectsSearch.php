@@ -25,6 +25,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 			</tr>
 		</table>' );
 		$output->addJsConfigVars(array(
+			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
 			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
 			'wgDataspectsSearchMeiliURL' => $GLOBALS['wgDataspectsSearchMeiliURL']
 		));
