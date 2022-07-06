@@ -95,7 +95,7 @@ $(function () {
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch(
-      mw.config.get("wgDataspectsSearchMeiliURL"),
+      mw.config.get("wgDataspectsSearchSearchURL"),
       mw.config.get("wgDataspectsSearchSearchKey")
     ),
     searchFunction(helper) {

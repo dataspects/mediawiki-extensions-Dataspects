@@ -43,7 +43,8 @@ linkStyle 1,4 stroke:#00ff00
 ```php
 wfLoadExtension( 'DataspectsSearch' );
 $wgDataspectsSearchTikaURL = "http://tika:9998";
-$wgDataspectsSearchMeiliURL = "http://meili:7700";
+$wgDataspectsSearchWriteURL = "http://meili:7700";
+$wgDataspectsSearchSearchURL = "http://localhost:7700";
 
 # See later section "Keys" about how to set these keys
 $wgDataspectsSearchSearchKey = "";       # Used by class SpecialDataspectsSearch
@@ -76,38 +77,14 @@ See https://github.com/dataspects/DataspectsSearchCLI
 
 ## Manual indexing
 
-```bash
-php extensions/DataspectsSearch/maintenance/feedAll.php # Allows per-MediaWiki-namespace indexing
-```
+Allows per-MediaWiki-namespace indexing
+`sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/DataspectsSearch/maintenance/feedAll.php'`
 
 ## Example: configure dataspects Search for [Canasta](https://canasta.wiki/)
 
 ### Fixme
 
 1. Add to Canasta MediaWiki container: `composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0`
-2. 
-
-### docker-compose.override.yml
-
-```yaml
-services:
-  tika:
-    container_name: tika
-    image: apache/tika:2.4.0-full
-    ports:
-      - 9998:9998
-  meili:
-    container_name: meili
-    image: getmeili/meilisearch:v0.27.2
-    ports:
-      - 7700:7700
-    environment:
-      - MEILI_MASTER_KEY=
-    volumes:
-      - meili_data:/meili_data
-volumes:
-  meili_data:
-```
 
 ## Test
 ```bash

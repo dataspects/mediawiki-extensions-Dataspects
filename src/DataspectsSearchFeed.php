@@ -16,7 +16,7 @@ class DataspectsSearchFeed {
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     try { # FIXME
-      $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchMeiliURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
+      $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
     } catch (\MeiliSearch\Exceptions\ApiException $e) {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }

@@ -28,7 +28,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 			'wgServer' => $GLOBALS['wgServer'],
 			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
 			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
-			'wgDataspectsSearchMeiliURL' => $GLOBALS['wgDataspectsSearchMeiliURL']
+			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL']
 		));
 		$output->addModules( 'ext.dataspectsSearch' );
 	}
