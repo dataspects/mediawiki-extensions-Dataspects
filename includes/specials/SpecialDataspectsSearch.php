@@ -13,7 +13,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 			<tr>
 				<td colspan=2>
 					<div id="searchbox"></div>
-					<a href="https://localhost/wiki/Special:DataspectsSearch">Reset</a>
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Reset</a>
 				</td>
 			</tr>
 			<tr>
