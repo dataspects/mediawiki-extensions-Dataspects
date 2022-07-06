@@ -4,14 +4,23 @@ dataspects Search for MediaWiki is based on [Meilisearch](https://www.meilisearc
 
 ```mermaid
 flowchart LR
-  mediawiki("MediaWiki")
-  meilisearch("Meilisearch")
+  mediawiki("<b>MediaWiki</b>
+  - LocalSettings.php")
+  meilisearch("<b>Meilisearch</b>")
   tika("Tika")
-  ds("ds")
+  userAgent("User Agent")
+  DataspectsSearchCLI("<b><a href='https://github.com/dataspects/DataspectsSearchCLI'>DataspectsSearchCLI</a></b>
+  - export MEILI_MASTER_KEY=
+  - export INDEX=")
 
-  ds-->|configure/manage|meilisearch
-  mediawiki<-->|CRUD content|meilisearch
-  mediawiki<-->|analyze content|tika
+  DataspectsSearchCLI-->|configure/manage|meilisearch
+  userAgent<-->|<b>search content</b><br/>wgDataspectsSearchSearchKey|meilisearch
+  userAgent<-->mediawiki
+
+  subgraph Docker
+    mediawiki<-->|<b>update content</b><br/>wgDataspectsSearchWriteKey|meilisearch
+    mediawiki<-->|analyze content|tika
+  end
   
 
 classDef default text-align:left;
@@ -23,8 +32,12 @@ classDef default text-align:left;
 wfLoadExtension( 'DataspectsSearch' );
 $wgDataspectsSearchTikaURL = "http://tika:9998";
 $wgDataspectsSearchMeiliURL = "http://meili:7700";
-$wgDataspectsSearchSearchKey = "";              # Used by class SpecialDataspectsSearch
+
+# See later section "Keys" about how to set these keys
+$wgDataspectsSearchSearchKey = "";       # Used by class SpecialDataspectsSearch
 $wgDataspectsSearchWriteKey = "";        # Used by class DataspectsSearchFeed
+
+# See later section "Keys" about how to create/configure this index
 $wgDataspectsSearchIndex = "mediawiki";
 $wgDataspectsSearchMediaWikiID = "dscan"; # together with the page ID, this represents the index doc id
 
@@ -35,7 +48,19 @@ $wgSearchForwardUrl = "/wiki/Special:DataspectsSearch?q=$1";
 
 ## Keys
 
-* create-mediawiki-keys.sh
+See https://github.com/dataspects/DataspectsSearchCLI
+
+* `create-mediawiki-keys.sh`
+* `get-all-keys.sh`
+
+## Indexes
+
+See https://github.com/dataspects/DataspectsSearchCLI
+
+* `create-mediawiki-indexes.sh`
+* `list-all-indexes.sh`
+* `update-mediawiki-indexes-settings.sh`
+* `mediawiki-settings.sh`
 
 ## Manual indexing
 
@@ -52,14 +77,13 @@ php extensions/DataspectsSearch/maintenance/feedAll.php # Allows per-MediaWiki-n
 
 ### docker-compose.override.yml
 
-
 ```yaml
 services:
   tika:
     container_name: tika
     image: apache/tika:2.4.0-full
     ports:
-      - "9998:9998"
+      - 9998:9998
   meili:
     container_name: meili
     image: getmeili/meilisearch:v0.27.2
@@ -83,11 +107,31 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
 
 ## Develop
 
-```bash
-root@95e3ef5ecc17:/var/www/mediawiki/w# clear; php extensions/DataspectsSearch/maintenance/feedOne.php
-lex@lexYoga:~/MVP/MeiliSearch$ MEILI_MASTER_KEY=masterKey ./getDocument.sh
+See https://github.com/dataspects/DataspectsSearchCLI/tree/main/Development
 
+```bash
+sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
+root@95e3ef5ecc17:/var/www/mediawiki/w# clear; php extensions/DataspectsSearch/maintenance/feedOne.php
+```
+
+### Tika
+
+```bash
+#!/bin/bash
+
+# https://cwiki.apache.org/confluence/display/TIKA/TikaServerEndpointsCompared
+curl \
+    -T /home/lex/python-regular-expressions-cheat-sheet.pdf \
+    http://localhost:9998/rmeta
+```
+
+## Logs
+
+```bash
+sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 tail -f  apache2/error_log.current
 ```
 
-https://www.digitalocean.com/community/tutorials/how-to-run-a-meilisearch-frontend-using-instantsearch-on-ubuntu-22-04
+## See also
+* https://www.digitalocean.com/community/tutorials/how-to-run-a-meilisearch-frontend-using-instantsearch-on-ubuntu-22-04
+
