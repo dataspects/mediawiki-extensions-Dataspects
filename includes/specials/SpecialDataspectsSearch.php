@@ -7,9 +7,10 @@ class SpecialDataspectsSearch extends SpecialPage {
 
 	function execute( $par ) {
 		$request = $this->getRequest();
-		$this->output = $this->getOutput();
+		$user = $this->getUser();
+		$output = $this->getOutput();
 		$this->setHeaders();
-		$this->output->addHTML( '<table class="dataspectsSearchInterface">
+		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
 				<td colspan=2>
 					<div id="searchbox"></div>
@@ -24,24 +25,12 @@ class SpecialDataspectsSearch extends SpecialPage {
 				</td>
 			</tr>
 		</table>' );
-		$this->output->addJsConfigVars(array(
+		$output->addJsConfigVars(array(
 			'wgServer' => $GLOBALS['wgServer'],
+			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
 			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
 			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL']
 		));
-		$this->wgDataspectsSearchIndex();
-		$this->output->addModules( 'ext.dataspectsSearch' );
-	}
-
-	private function wgDataspectsSearchIndex() {
-		if(count($this->getUser()->getGroups() == 0)) {
-			$this->output->addJsConfigVars(array(
-				'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndexes']["public"]
-			));
-		} else {
-			$this->output->addJsConfigVars(array(
-				'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndexes']["public"]
-			));
-		}
+		$output->addModules( 'ext.dataspectsSearch' );
 	}
 }

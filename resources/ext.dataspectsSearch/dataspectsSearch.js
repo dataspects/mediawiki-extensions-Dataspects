@@ -105,6 +105,8 @@ $(function () {
           helper.state.query = q;
         }
       }
+      helper.setState(helper.state.setFacets(["ds0__source"]));
+      helper.addFacetRefinement("ds0__source", "ESCAM");
       helper.search();
     },
   });
