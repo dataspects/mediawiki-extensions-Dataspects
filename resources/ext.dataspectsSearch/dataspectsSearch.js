@@ -93,7 +93,6 @@ $(function () {
   require("./instantsearch.js@4");
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
-    // FIXME: How to get these from $GLOBALS?
     searchClient: instantMeiliSearch(
       mw.config.get("wgDataspectsSearchSearchURL"),
       mw.config.get("wgDataspectsSearchSearchKey")
@@ -105,8 +104,10 @@ $(function () {
           helper.state.query = q;
         }
       }
-      helper.setState(helper.state.setFacets(["ds0__source"]));
-      helper.addFacetRefinement("ds0__source", "ESCAM");
+      helper.setState(helper.state.setDisjunctiveFacets(["ds0__source"]));
+      mw.config.get("sources").forEach((source) => {
+        helper.addDisjunctiveFacetRefinement("ds0__source", source);
+      });
       helper.search();
     },
   });

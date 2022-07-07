@@ -52,6 +52,8 @@ $wgDataspectsSearchWriteKey = "";        # Used by class DataspectsSearchFeed
 
 # See later section "Keys" about how to create/configure this index
 $wgDataspectsSearchIndex = "mediawiki";
+$wgDataspectsSearchSourcesForAnonymous = [];
+$wgDataspectsSearchSourcesForAuthenticated = [];
 $wgDataspectsSearchMediaWikiID = "dscan"; # together with the page ID, this represents the index doc id
 
 # This will direct full text searches to dataspects Search

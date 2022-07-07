@@ -7,7 +7,6 @@ class SpecialDataspectsSearch extends SpecialPage {
 
 	function execute( $par ) {
 		$request = $this->getRequest();
-		$user = $this->getUser();
 		$output = $this->getOutput();
 		$this->setHeaders();
 		$output->addHTML( '<table class="dataspectsSearchInterface">
@@ -29,8 +28,16 @@ class SpecialDataspectsSearch extends SpecialPage {
 			'wgServer' => $GLOBALS['wgServer'],
 			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
 			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
-			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL']
+			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL'],
+			'sources' => $this->sources()
 		));
 		$output->addModules( 'ext.dataspectsSearch' );
+	}
+
+	private function sources() {
+		if(count($this->getUser()->getGroups()) > 0) {
+			return $GLOBALS['wgDataspectsSearchSourcesForAuthenticated'];
+		}
+		return $GLOBALS['wgDataspectsSearchSourcesForAnonymous'];
 	}
 }
