@@ -287,7 +287,7 @@ class DataspectsSearchFeed {
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->wikitext),
-      "mw0__text" => $this->mw0__text($this->parsedWikitext)
+      "ds0__text" => $this->ds0__text($this->parsedWikitext)
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,
@@ -301,7 +301,7 @@ class DataspectsSearchFeed {
     return $mediaWikiPage;
   }
 
-  private function mw0__text($parsedWikitext) {
+  private function ds0__text($parsedWikitext) {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);

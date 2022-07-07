@@ -16,7 +16,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
-const mw0__text = (hit, instantsearch) => {
+const ds0__text = (hit, instantsearch) => {
   if (["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)) {
     return `<pre>${instantsearch.snippet({
       attribute: "mw0__wikitext",
@@ -25,7 +25,7 @@ const mw0__text = (hit, instantsearch) => {
     })}</pre>`;
   }
   return instantsearch.snippet({
-    attribute: "mw0__text",
+    attribute: "ds0__text",
     highlightedTagName: "mark",
     hit,
   });
@@ -113,7 +113,7 @@ $(function () {
   });
   search.addWidgets([
     instantsearch.widgets.configure({
-      attributesToSnippet: ["mw0__text"],
+      attributesToSnippet: ["ds0__text"],
     }),
     instantsearch.widgets.searchBox({
       container: "#searchbox",
@@ -176,7 +176,7 @@ $(function () {
                 ${eppo0__categories(hit)}
               </div>
               <div>
-                ${mw0__text(hit, instantsearch)}
+                ${ds0__text(hit, instantsearch)}
               </div>
               ${mw0__attachment(hit, instantsearch)}
               ${annotations(hit, instantsearch)}
