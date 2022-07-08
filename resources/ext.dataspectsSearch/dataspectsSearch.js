@@ -17,6 +17,11 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 const ds0__text = (hit, instantsearch) => {
+  if (["Element"].includes(hit.ds0__source)) {
+    // https://www.algolia.com/doc/api-reference/widgets/highlight/js/
+    // FIXME: this still snippets!
+    return hit.ds0__text;
+  }
   if (["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)) {
     return `<pre>${instantsearch.snippet({
       attribute: "mw0__wikitext",
@@ -66,7 +71,7 @@ const eppo0__categories = (hit) => {
 };
 
 const annotations = (hit, instantsearch) => {
-  if (hit.annotations.length > 0) {
+  if (hit.annotations && hit.annotations.length > 0) {
     return `<table class="eppo0__hasAnnotations">
               <tbody>
                 ${hit.annotations
@@ -166,7 +171,9 @@ $(function () {
             <div class="hit">
               <div>
                 ${eppo0__hasEntityType(hit)}
-                <a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">
+                <a href="${
+                  hit.eppo0__hasEntityURL
+                }" class="eppo0__hasEntityTitle">
                   ${instantsearch.snippet({
                     attribute: "eppo0__hasEntityTitle",
                     highlightedTagName: "mark",

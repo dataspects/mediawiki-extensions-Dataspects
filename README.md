@@ -32,11 +32,10 @@ linkStyle 1,4 stroke:#00ff00
 
 ## **PENDING**
 
-* DDOS protection?
 * onPageSave index CRUD hooks
 * Logging
 * Testing
-* Search privileges by user group, i.e. by index (aliases)?
+* Delete docs from indexes?
 
 ## LocalSettings.php
 
