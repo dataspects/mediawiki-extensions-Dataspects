@@ -189,7 +189,7 @@ $(function () {
               ${annotations(hit, instantsearch)}
             </div>`;
         },
-        empty: `No results for <q>{{ query }}</q>`,
+        empty: `No results for <q>{{ query }}</q> or no results for your authorization level.`,
       },
     }),
   ]);
