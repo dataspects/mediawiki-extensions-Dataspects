@@ -171,9 +171,7 @@ $(function () {
             <div class="hit">
               <div>
                 ${eppo0__hasEntityType(hit)}
-                <a href="${
-                  hit.eppo0__hasEntityURL
-                }" class="eppo0__hasEntityTitle">
+                <a href="${hit.name}" class="eppo0__hasEntityTitle">
                   ${instantsearch.snippet({
                     attribute: "eppo0__hasEntityTitle",
                     highlightedTagName: "mark",
