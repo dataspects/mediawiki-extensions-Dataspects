@@ -94,8 +94,8 @@ const annotations = (hit, instantsearch) => {
 };
 
 $(function () {
-  require("./instant-meilisearch.umd.min.js");
-  require("./instantsearch.js@4");
+  require("./instant-meilisearch.umd.js");
+  require("./instantsearch.development.js");
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     searchClient: instantMeiliSearch(

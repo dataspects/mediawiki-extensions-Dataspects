@@ -85,7 +85,7 @@ Allows per-MediaWiki-namespace indexing
 
 ### Fixme
 
-1. Add to Canasta MediaWiki container: `composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0`
+1. Add to Canasta MediaWiki container: `sudo docker exec mwstakeorgdevclone_web_1 bash -c 'composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0'`
 
 ## Test
 ```bash
@@ -94,15 +94,15 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
   extensions/DataspectsSearch/tests/phpunit/unit/DataspectsSearchTest.php
 ```
 
-
 ## Develop
 
-See https://github.com/dataspects/DataspectsSearchCLI/tree/main/Development
+1. `image: getmeili/meilisearch:v0.28.1`<br/>`image: apache/tika:2.4.1-full`
+2. Clone the test data: https://mwstakeorg.dataspects.com/wiki/C1728772915
+3. `$wgDataspectsSearchSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchSearchKey = "masterKey";`<br/>
+`$wgDataspectsSearchWriteKey = "masterKey";`       
+1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsSearchCLI<br/>E.g. `php extensions/DataspectsSearch/maintenance/feedOne.php`
+1. Update JS code: LEX2208021344
 
-```bash
-sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
-root@95e3ef5ecc17:/var/www/mediawiki/w# clear; php extensions/DataspectsSearch/maintenance/feedOne.php
-```
 
 ### Tika
 

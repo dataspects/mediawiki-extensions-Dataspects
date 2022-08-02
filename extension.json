@@ -36,8 +36,8 @@
       "styles": ["dataspectsSearch.css"],
       "packageFiles": [
         "./dataspectsSearch.js",
-        "./instant-meilisearch.umd.min.js",
-        "./instantsearch.js@4"
+        "./instant-meilisearch.umd.js",
+        "./instantsearch.development.js"
       ],
       "messages": []
     }
