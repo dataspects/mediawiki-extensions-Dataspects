@@ -142,6 +142,7 @@ $(function () {
           </a>
         `,
       },
+      limit: 50,
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sources-hierarchical-menu",
@@ -165,6 +166,7 @@ $(function () {
         parentItem: "parentItem",
         selectedItem: "selectedItem",
       },
+      limit: 50,
     }),
     // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
     instantsearch.widgets.hits({
