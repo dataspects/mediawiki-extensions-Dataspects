@@ -127,7 +127,11 @@ $(function () {
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#topic-types-hierarchical-menu",
-      attributes: ["eppo0__hasEntityType.1v10", "eppo0__hasEntityType.1v11"],
+      attributes: [
+        "eppo0__hasEntityType.1v10",
+        "eppo0__hasEntityType.1v11",
+        "eppo0__hasEntityType.1v12",
+      ],
       templates: {
         item: `
           <a class="{{cssClasses.link}}" href="{{url}}">
@@ -171,7 +175,7 @@ $(function () {
             <div class="hit">
               <div>
                 ${eppo0__hasEntityType(hit)}
-                <a href="${hit.name}" class="eppo0__hasEntityTitle">
+                <a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">
                   ${instantsearch.snippet({
                     attribute: "eppo0__hasEntityTitle",
                     highlightedTagName: "mark",

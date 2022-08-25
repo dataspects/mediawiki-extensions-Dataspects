@@ -360,7 +360,6 @@ class DataspectsSearchFeed {
   private function processAnnotations($mediaWikiPage) {
     $showAnnotations = [];
     foreach ($this->annotations as $key => $annotation) {
-      print_r($annotation);
       switch ($annotation["predicate"]) {
         case "Eppo0:hasEntityType":
           $mediaWikiPage = array_merge($mediaWikiPage, [
@@ -368,6 +367,9 @@ class DataspectsSearchFeed {
             "eppo0__hasEntityType.1v10" => "Topic Type",
             "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectLiteral"],
           ]);
+          if($annotation["objectLiteral"] == "Event") {
+            $mediaWikiPage = $this->specialCaseForIsEventType($mediaWikiPage);
+          }
           break;
         case "Eppo0:hasEntityTitle":
           // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
@@ -384,6 +386,23 @@ class DataspectsSearchFeed {
     }
     $mediaWikiPage["annotations"] = $showAnnotations;
     return $mediaWikiPage;
+  }
+
+  private function specialCaseForIsEventType($mediaWikiPage) {
+    $eventType = $this->getObjectByPredicateName("Mwstake:isEventType", $mediaWikiPage);
+    $mediaWikiPage = array_merge($mediaWikiPage, [
+      "eppo0__hasEntityType.1v12" => "Topic Type > Event > ".$eventType,
+    ]);
+    return $mediaWikiPage;
+  }
+
+  private function getObjectByPredicateName($predicateName, $mediaWikiPage) {
+    foreach ($this->annotations as $key => $annotation) {
+      if($annotation["predicate"] == $predicateName) {
+        return $annotation["objectLiteral"];
+      }
+    }
+    return $predicateName." not found for ".$mediaWikiPage['name'];
   }
 
   private function addPage() {
