@@ -11,6 +11,9 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$this->setHeaders();
 
 		$output->addWikiTextAsContent( '{|class="backstage_table"
+			|wgDataspectsSearchWriteURL
+			|'.$GLOBALS['wgDataspectsSearchWriteURL'].'
+			|-
 			|wgDataspectsSearchSearchURL
 			|'.$GLOBALS['wgDataspectsSearchSearchURL'].'
 			|-
