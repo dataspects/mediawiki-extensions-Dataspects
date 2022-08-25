@@ -9,6 +9,15 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
+
+		$output->addWikiTextAsContent( '{|class="backstage_table"
+			|wgDataspectsSearchSearchURL
+			|'.$GLOBALS['wgDataspectsSearchSearchURL'].'
+			|-
+			|wgDataspectsSearchIndex
+			|'.$GLOBALS['wgDataspectsSearchIndex'].'
+			|}' );
+
 		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
 				<td colspan=2>
