@@ -21,7 +21,7 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
-    $this->elementsToBeRemoved = array(
+    $this->HTMLElementsToBeRemovedBeforeIndexingContent = array(
       "tags" => ["editsection"],
       "classes" => [],
       "ids" => ["ds0__topicMetaTemplate"]
@@ -305,12 +305,12 @@ class DataspectsSearchFeed {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
-    foreach ($this->elementsToBeRemoved["ids"] as $id) {
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
       if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
         $mwParserOutput->parentNode->removeChild($mwParserOutput);
       }      
     }
-    foreach ($this->elementsToBeRemoved["tags"] as $tag) {
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
       $editSections = $xpath->query("//$tag");
       foreach($editSections as $editSection){
         $editSection->parentNode->removeChild($editSection);
