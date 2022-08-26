@@ -37,7 +37,18 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<td>wgDataspectsSearchTikaURL
 						</td>
 						<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
-						</td></tr></tbody>
+						</td>
+						<tr>
+						<td>Code tags
+						</td>
+						<td>#IndexConfigSetting
+						</td>
+						</tr>
+						<tr>
+						<td colspan="2">https://github.com/dataspects/DataspectsSearch
+						</td>
+						</tr>
+						</tbody>
 					</table>
 				</td>
 			</tr>

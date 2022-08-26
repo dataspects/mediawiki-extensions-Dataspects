@@ -21,6 +21,7 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
+    #IndexConfigSetting
     $this->HTMLElementsToBeRemovedBeforeIndexingContent = array(
       "tags" => ["editsection"],
       "classes" => [],
@@ -407,25 +408,6 @@ class DataspectsSearchFeed {
 
   private function addPage() {
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
-    // echo $result["uid"];
-    // $req = \MWHttpRequest::factory(
-    //   $this->url,
-    //   [
-    //     "method" => "post",
-    //     "postData" => $this->mediaWikiPage
-    //   ],
-    //   __METHOD__
-    // );
-    // $req->setHeader("Authorization", "Bearer ".$GLOBALS['wgDataspectsApiKey']);
-    // $req->setHeader("content-type", "application/json");
-    // $req->setHeader("accept", "application/json");
-    // $status = $req->execute();
-    // if($status->isOK()) {
-    //   echo "DATASPECTS: page JSON ".$this->title->getFullURL()." created\n";
-    //   echo "DATASPECTS: page sent to ".$this->url."\n";
-    // } else {
-    //   echo "DATASPECTS: ".$status;
-    // }
   }
 
   private function getNamespace($index) {
