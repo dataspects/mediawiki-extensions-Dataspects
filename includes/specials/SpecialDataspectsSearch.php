@@ -12,7 +12,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 
 		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
-				<td colspan=2>
+				<td>
 					<div id="searchbox"></div>
 					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Reset</a>
 				</td>
