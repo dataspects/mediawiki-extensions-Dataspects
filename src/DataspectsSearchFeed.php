@@ -215,6 +215,20 @@ class DataspectsSearchFeed {
     }
   }
 
+  private function analyzeSeaKay($mediaWikiPage) {
+    #IndexConfigSetting
+    $cognitiveKeywords = ["CASE", "FACT", "OPTION", "SYSTEM BEHAVIOR", "EXAMPLE", "ACT", "ASPECT", "DECIDE"];
+    preg_match_all('/[;#:*]+ *('.implode("|", $cognitiveKeywords).')/', $mediaWikiPage["mw0__wikitext"], $matches);
+    $cks = array_unique($matches[1]);
+    if(count($cks) > 0) {
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        "ck0__containsCognitiveKeyword.1v10" => "Cognitive Keywords",
+        "ck0__containsCognitiveKeyword.1v11" => "Cognitive Keywords > ".implode(", ", $cks),
+      ]);
+    }
+    return $mediaWikiPage;
+  }
+
   private function getPredicateAnnotations() {
     $data = $this->browseBySubject($this->title);
     foreach($data['query']['data'] as $property) {
@@ -299,6 +313,7 @@ class DataspectsSearchFeed {
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
+    $mediaWikiPage = $this->analyzeSeaKay($mediaWikiPage);
     return $mediaWikiPage;
   }
 

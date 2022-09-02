@@ -168,6 +168,28 @@ $(function () {
       },
       limit: 50,
     }),
+    instantsearch.widgets.hierarchicalMenu({
+      container: "#sea-kay-menu",
+      attributes: [
+        "ck0__containsCognitiveKeyword.1v10",
+        "ck0__containsCognitiveKeyword.1v11",
+      ],
+      templates: {
+        item: `{{=<% %>=}}
+          <a class="<%cssClasses.link%>" href="<%url%>">
+            <span class="ds0__source"><%label%></span>
+            <span class="ms-count">
+              <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%>
+            </span>
+          </a>
+        `,
+      },
+      cssClasses: {
+        parentItem: "parentItem",
+        selectedItem: "selectedItem",
+      },
+      limit: 50,
+    }),
     // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
     instantsearch.widgets.hits({
       container: "#hits",
