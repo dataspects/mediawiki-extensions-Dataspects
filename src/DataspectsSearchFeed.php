@@ -217,8 +217,7 @@ class DataspectsSearchFeed {
 
   private function analyzeSeaKay($mediaWikiPage) {
     #IndexConfigSetting
-    $cognitiveKeywords = ["CASE", "FACT", "OPTION", "SYSTEM BEHAVIOR", "EXAMPLE", "ACT", "ASPECT", "DECIDE", "ACTION"];
-    preg_match_all('/[;#:*]+ *('.implode("|", $cognitiveKeywords).') *[\n:>]+/', $mediaWikiPage["mw0__wikitext"], $matches);
+    preg_match_all('/[;#:*]+ *([A-Z ]{2,}) *[\n:>]+/', $mediaWikiPage["mw0__wikitext"], $matches);
     $cks = array_unique($matches[1]);
     if(count($cks) > 0) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
