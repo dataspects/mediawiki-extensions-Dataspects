@@ -23,11 +23,15 @@ const ds0__text = (hit, instantsearch) => {
     return hit.ds0__text;
   }
   if (["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)) {
-    return `<pre>${instantsearch.snippet({
-      attribute: "mw0__wikitext",
-      highlightedTagName: "mark",
-      hit,
-    })}</pre>`;
+    return (
+      "<pre>" +
+      instantsearch.snippet({
+        attribute: "mw0__wikitext",
+        highlightedTagName: "mark",
+        hit,
+      }) +
+      "</pre>"
+    );
   }
   return instantsearch.snippet({
     attribute: "ds0__text",
@@ -38,23 +42,31 @@ const ds0__text = (hit, instantsearch) => {
 
 const mw0__attachment = (hit, instantsearch) => {
   if (["File"].includes(hit.mw0__namespace)) {
-    return `<fieldset>
-              <legend>${hit.mw0__attachment.type}</legend>
-              <div class="mw0__attachmentsText">
-                ${instantsearch.snippet({
-                  attribute: "mw0__attachment.text",
-                  highlightedTagName: "mark",
-                  hit,
-                })}
-              </div>
-            </fieldset>`;
+    return (
+      "<fieldset><legend>" +
+      hit.mw0__attachment.type +
+      "</legend>" +
+      '<div class="mw0__attachmentsText">' +
+      instantsearch.snippet({
+        attribute: "mw0__attachment.text",
+        highlightedTagName: "mark",
+        hit,
+      }) +
+      "</div></fieldset>"
+    );
   }
   return "";
 };
 
 const eppo0__hasEntityType = (hit) => {
   if (hit.eppo0__hasEntityType) {
-    return `<a href="${hit.eppo0__hasEntityType}"><span class="badge eppo0__hasEntityType">${hit.eppo0__hasEntityType}</span></a>`;
+    return (
+      '<a href="' +
+      hit.eppo0__hasEntityType +
+      '"><span class="badge eppo0__hasEntityType">' +
+      hit.eppo0__hasEntityType +
+      "</span></a>"
+    );
   }
   return "";
 };
@@ -62,33 +74,43 @@ const eppo0__hasEntityType = (hit) => {
 const eppo0__categories = (hit) => {
   if (hit.eppo0__categories) {
     return hit.eppo0__categories.map((category) => {
-      return `<a href="${mw.config.get(
-        "wgServer"
-      )}/wiki/Category:${category}"><span class="eppo0__category">${category}</span></a>`;
+      return (
+        '<a href="' +
+        mw.config.get("wgServer") +
+        "/wiki/Category:" +
+        category +
+        '"><span class="eppo0__category">' +
+        category +
+        "</span></a>"
+      );
     });
   }
   return "";
 };
 
 const annotations = (hit, instantsearch) => {
+  var annots = hit.annotations
+    .map((annotation) => {
+      return (
+        '<tr><td><a href="' +
+        mw.config.get("wgServer") +
+        "/wiki/Property:" +
+        annotation.predicate +
+        '">' +
+        annotation.predicate +
+        "</a></td><td>::</td><td>" +
+        annotation.objectLiteral +
+        "</td></tr>"
+      );
+    })
+    .join("");
+
   if (hit.annotations && hit.annotations.length > 0) {
-    return `<table class="eppo0__hasAnnotations">
-              <tbody>
-                ${hit.annotations
-                  .map((annotation) => {
-                    return `<tr>
-                            <td><a href="${mw.config.get(
-                              "wgServer"
-                            )}/wiki/Property:${annotation.predicate}">${
-                      annotation.predicate
-                    }</a></td>
-                            <td>::</td>
-                            <td>${annotation.objectLiteral}</td>
-                          </tr>`;
-                  })
-                  .join("")}
-              </tbody>
-            </table>`;
+    return (
+      '<table class="eppo0__hasAnnotations"><tbody>' +
+      annots +
+      "</tbody></table>"
+    );
   }
   return "";
 };
@@ -100,15 +122,25 @@ const createMetaPageLink = (hit) => {
     "eppo0:hasEntityTitle": hit.eppo0__hasEntityTitle,
     "eppo0:hasEntityBlurb": hit.ds0__text,
   };
-  var backlink = `Annotation[1][AnnotationPredicate]=mwstake:copiedFromElementMessage&Annotation[1][AnnotationObject]=${hit.name}`;
+  var backlink =
+    "Annotation[1][AnnotationPredicate]=mwstake:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
+    hit.name;
   if (["Element"].includes(hit.ds0__source)) {
-    return `&rarr; <a href="${mw.config.get(
-      "wgServer"
-    )}/wiki/Special:FormEdit/${eppo0__hasEntityTitle}?${Object.keys(args)
-      .map((key) => {
-        return encodeURI(`${eppo0__hasEntityTitle}[${key}]=${args[key]}`);
-      })
-      .join("&")}&${backlink}">Create a meta page for this</a>`;
+    return (
+      '&rarr; <a href="' +
+      mw.config.get("wgServer") +
+      "/wiki/Special:FormEdit/" +
+      eppo0__hasEntityTitle +
+      "?" +
+      Object.keys(args)
+        .map((key) => {
+          return encodeURI(eppo0__hasEntityTitle[key] + "=" + args[key]);
+        })
+        .join("&") +
+      "&" +
+      backlink +
+      '">Create a meta page for this</a>'
+    );
   }
   return "";
 };
@@ -153,14 +185,7 @@ $(function () {
         "eppo0__hasEntityType.1v12",
       ],
       templates: {
-        item: `
-          <a class="{{cssClasses.link}}" href="{{url}}">
-            <span class="badge eppo0__hasEntityType">{{label}}</span>
-            <span class="badge ms-count">
-              {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}
-            </span>
-          </a>
-        `,
+        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge eppo0__hasEntityType">{{label}}</span><span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
       },
       limit: 50,
     }),
@@ -173,14 +198,7 @@ $(function () {
         "ds0__source.1v13",
       ],
       templates: {
-        item: `{{=<% %>=}}
-          <a class="<%cssClasses.link%>" href="<%url%>">
-            <span class="ds0__source"><%label%></span>
-            <span class="ms-count">
-              <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%>
-            </span>
-          </a>
-        `,
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span><span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
         parentItem: "parentItem",
@@ -195,14 +213,7 @@ $(function () {
         "ck0__containsCognitiveKeyword.1v11",
       ],
       templates: {
-        item: `{{=<% %>=}}
-          <a class="<%cssClasses.link%>" href="<%url%>">
-            <span class="ds0__source"><%label%></span>
-            <span class="ms-count">
-              <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%>
-            </span>
-          </a>
-        `,
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span><span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
         parentItem: "parentItem",
@@ -215,28 +226,24 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
-          return `
-            <div class="hit">
-              <div>
-                ${eppo0__hasEntityType(hit)}
-                <a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">
-                  ${instantsearch.snippet({
-                    attribute: "eppo0__hasEntityTitle",
-                    highlightedTagName: "mark",
-                    hit,
-                  })}
-                </a>
-                ${eppo0__categories(hit)}
-                ${createMetaPageLink(hit)}
-              </div>
-              <div>
-                ${ds0__text(hit, instantsearch)}
-              </div>
-              ${mw0__attachment(hit, instantsearch)}
-              ${annotations(hit, instantsearch)}
-            </div>`;
+          return (
+            '<div class="hit"><div>' +
+            eppo0__hasEntityType(hit) +
+            '<a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">' +
+            instantsearch.snippet({
+              attribute: "eppo0__hasEntityTitle",
+              highlightedTagName: "mark",
+              hit,
+            }) +
+            "</a></div><div>" +
+            ds0__text(hit, instantsearch) +
+            "</div>" +
+            mw0__attachment(hit, instantsearch) +
+            "</div>"
+          );
         },
-        empty: `No results for <q>{{ query }}</q> or no results for your authorization level.`,
+        empty:
+          "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
     }),
   ]);
