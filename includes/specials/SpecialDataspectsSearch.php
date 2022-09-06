@@ -45,7 +45,11 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</td>
 						</tr>
 						<tr>
-						<td colspan="2">https://github.com/dataspects/DataspectsSearch
+						<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
+						</td>
+						</tr>
+						<tr>
+						<td colspan="2"><a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">dataspects log</a>
 						</td>
 						</tr>
 						</tbody>

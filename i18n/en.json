@@ -3,7 +3,7 @@
     "authors": ["Lex Sulzer"]
   },
   "log-name-dataspects": "dataspects log",
-  "logentry-dataspects-test": "Test $4",
+  "logentry-dataspects-test": "$4",
   "dataspects-header": "dataspects Search Log",
   "dataspectssearch": "dataspects Search",
   "dataspectssearch-desc": "dataspects Search interface for MediaWiki",

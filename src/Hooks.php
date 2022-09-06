@@ -11,15 +11,8 @@ class Hooks implements \MediaWiki\Storage\Hook\PageSaveCompleteHook {
 	
 	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
 		// https://www.mediawiki.org/wiki/Manual:Logging_to_Special:Log
-		$logEntry = new ManualLogEntry( 'dataspects', 'test' );
-		$logEntry->setTarget( $wikiPage->getTitle() );
-		$logEntry->setPerformer( $user );
-		$logEntry->setParameters( [
-			'4::unused' => 'log onPageSaveComplete: '.$wikiPage->getTitle()->getBaseTitle(). " by ".$user->getName(),
-		] );
-		$logEntry->insert();
 		# FIXME: implement job queue
-		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($wikiPage->getTitle());
+		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($wikiPage->getTitle(), $user);
     	$dmwf->sendToDatastore();
 		// try {
 		// 	$job = new DataspectsSearchFeedSendJob($wikiPage->getTitle(), []);

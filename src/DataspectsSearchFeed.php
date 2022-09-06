@@ -6,13 +6,15 @@ namespace MediaWiki\Extension\DataspectsSearch;
 use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
 use MediaWiki\Logger\LoggerFactory;
+use ManualLogEntry;
 
 
 
 class DataspectsSearchFeed {
 
-  public function __construct(\Title $title) {
+  public function __construct(\Title $title, $user) {
     $this->title = $title;
+    $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     try { # FIXME
       $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
@@ -420,11 +422,19 @@ class DataspectsSearchFeed {
   }
 
   private function addPage() {
+    // $h = fopen('/var/log/apache2/error.log', 'a');
+		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
+		// fclose($h);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
-    $h = fopen('/var/log/apache2/error.log', 'a');
-		fwrite($h, $result["status"]);
-		fclose($h);
+    $logEntry = new ManualLogEntry( 'dataspects', 'test' );
+		$logEntry->setTarget( $this->wikiPage->getTitle() );
+		$logEntry->setPerformer( $this->user );
+		$logEntry->setParameters( [
+			'4::unused' => 'Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")",
+		] );
+		$logEntry->insert();
+    
   }
 
   private function getNamespace($index) {
