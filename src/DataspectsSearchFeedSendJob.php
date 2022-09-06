@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
-class DataspectsSearchFeederSendJob extends \Job {
+class DataspectsSearchFeedSendJob extends \Job {
   // https://doc.wikimedia.org/mediawiki-core/master/php/classJob.html
 
   private $annotations = [];
@@ -13,15 +13,19 @@ class DataspectsSearchFeederSendJob extends \Job {
   // private $parsedWikitext = '';
 
   public function __construct(\Title $title, $params) {
-    $this->logger = LoggerFactory::getInstance( 'dataspects' );
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("dataspectsSearchFeederSendJob", $title, $params);
+    parent::__construct("dataspectsSearchFeedSendJob", $title, $params);
     $this->title = $title;
+    $h = fopen('/var/log/apache2/error.log', 'a');
+		fwrite($h, "Send job contructed\n");
+		fclose($h);
   }
 
   public function run() {
-    $this->logger->debug($this->title->mTextform);
+    $h = fopen('/var/log/apache2/error.log', 'a');
+		fwrite($h, 'Message5');
+		fclose($h);
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
     $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);

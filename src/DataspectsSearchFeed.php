@@ -12,7 +12,6 @@ use MediaWiki\Logger\LoggerFactory;
 class DataspectsSearchFeed {
 
   public function __construct(\Title $title) {
-    $this->logger = LoggerFactory::getInstance( 'dataspects' );
     $this->title = $title;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     try { # FIXME
@@ -52,7 +51,6 @@ class DataspectsSearchFeed {
 	}
 
   public function sendToDatastore() {
-    $this->logger->debug($this->title->mTextform);
     $this->annotations = [];
     $this->wikiPage = \WikiPage::factory($this->title);
     /*
@@ -423,6 +421,10 @@ class DataspectsSearchFeed {
 
   private function addPage() {
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
+    # $result array keys: taskUid, indexUid, status, type, enqueuedAt
+    $h = fopen('/var/log/apache2/error.log', 'a');
+		fwrite($h, $result["status"]);
+		fclose($h);
   }
 
   private function getNamespace($index) {

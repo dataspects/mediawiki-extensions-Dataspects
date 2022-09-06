@@ -43,7 +43,7 @@
     }
   },
   "JobClasses": {
-    "DataspectsSearchSendJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchSendJob"
+    "DataspectsSearchFeedSendJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchFeedSendJob"
   },
   "LogTypes": ["dataspects"],
   "LogNames": {
