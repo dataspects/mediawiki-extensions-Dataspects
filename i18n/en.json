@@ -2,7 +2,7 @@
   "@metadata": {
     "authors": ["Lex Sulzer"]
   },
-  "log-name-dataspects": "dataspects",
+  "log-name-dataspects": "dataspects log",
   "logentry-dataspects-test": "Test $4",
   "dataspects-header": "dataspects Search Log",
   "dataspectssearch": "dataspects Search",

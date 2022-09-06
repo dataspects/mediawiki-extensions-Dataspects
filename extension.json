@@ -23,7 +23,7 @@
     }
   },
   "Hooks": {
-    "BeforePageDisplay": "DataspectsSearchHooks"
+    "PageSaveComplete": "DataspectsSearchHooks"
   },
   "MessagesDirs": {
     "DataspectsSearch": ["i18n"]
