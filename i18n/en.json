@@ -2,6 +2,9 @@
   "@metadata": {
     "authors": ["Lex Sulzer"]
   },
+  "log-name-dataspects": "dataspects",
+  "logentry-dataspects-test": "Test $4",
+  "dataspects-header": "dataspects Search Log",
   "dataspectssearch": "dataspects Search",
   "dataspectssearch-desc": "dataspects Search interface for MediaWiki",
   "dataspectssearchbackstage": "dataspects Search Backstage",

@@ -18,12 +18,12 @@
     "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
   },
   "HookHandlers": {
-    "main": {
-      "class": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchHooks"
+    "DataspectsSearchHooks": {
+      "class": "MediaWiki\\Extension\\DataspectsSearch\\Hooks"
     }
   },
   "Hooks": {
-    "PageSaveComplete": "main"
+    "BeforePageDisplay": "DataspectsSearchHooks"
   },
   "MessagesDirs": {
     "DataspectsSearch": ["i18n"]
@@ -44,6 +44,16 @@
   },
   "JobClasses": {
     "DataspectsSearchSendJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSearchSendJob"
+  },
+  "LogTypes": ["dataspects"],
+  "LogNames": {
+    "dataspects": "log-name-dataspects"
+  },
+  "LogHeaders": {
+    "dataspects": "dataspects-header"
+  },
+  "LogActionsHandlers": {
+    "dataspects/*": "LogFormatter"
   },
   "manifest_version": 2
 }

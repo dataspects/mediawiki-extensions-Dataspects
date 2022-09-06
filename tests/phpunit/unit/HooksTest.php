@@ -2,17 +2,17 @@
 
 namespace MediaWiki\Extension\DataspectsSearch\Tests;
 
-use MediaWiki\Extension\DataspectsSearch\Hooks;
+use MediaWiki\Extension\DataspectsSearch\DataspectsSearchHooks;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\DataspectsSearch\Hooks
+ * @coversDefaultClass \MediaWiki\Extension\DataspectsSearch\DataspectsSearchHooks
  */
 class HooksTest extends \MediaWikiUnitTestCase {
 
 	/**
 	 * @covers ::onBeforePageDisplay
 	 */
-	public function testOnBeforePageDisplayVandalizeIsTrue() {
+	public function testOnPageSaveComplete() {
 		$config = new \HashConfig( [
 			'BoilerPlateVandalizeEachPage' => true
 		] );
@@ -33,7 +33,7 @@ class HooksTest extends \MediaWikiUnitTestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		( new Hooks )->onBeforePageDisplay( $outputPageMock, $skinMock );
+		( new DataspectsSearchHooks )->onPageSaveComplete( $outputPageMock, $skinMock );
 	}
 
 	/**
