@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\DataspectsSearch;
 
 use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
-use MediaWiki\Logger\LoggerFactory;
 use ManualLogEntry;
 
 
@@ -13,6 +12,8 @@ use ManualLogEntry;
 class DataspectsSearchFeed {
 
   public function __construct(\Title $title, $user) {
+    $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
+    $this->smwsof = new SpecialMWStakeORGFeed($this, $title, $user);
     $this->title = $title;
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
@@ -22,12 +23,7 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
-    #IndexConfigSetting
-    $this->HTMLElementsToBeRemovedBeforeIndexingContent = array(
-      "tags" => ["editsection"],
-      "classes" => [],
-      "ids" => ["ds0__topicMetaTemplate"]
-    );
+    
     $this->attachments = [];
   }
 
@@ -69,7 +65,7 @@ class DataspectsSearchFeed {
         $this->getWikitext();
         $this->getParse();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
-        $this->getMediaWikiPageAnnotations();
+        $this->sdf->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
@@ -78,7 +74,7 @@ class DataspectsSearchFeed {
         $this->getWikitext();
         $this->getParse();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
-        $this->getMediaWikiPageAnnotations();
+        $this->sdf->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->getAttachments();
         $this->mediaWikiPage = $this->getMediaWikiPage();
@@ -87,13 +83,13 @@ class DataspectsSearchFeed {
         $this->getCategories();
         $this->getWikitext();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
-        $this->getMediaWikiPageAnnotations();
+        $this->sdf->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 102:
         $this->getCategories();
-        // $this->getPredicateAnnotations(); // PENDING FEATURE
+        // $this->sdf->getPredicateAnnotations(); // PENDING FEATURE
         $this->mediaWikiPage = $this->getMediaWikiPage();
         break;
       case 10:
@@ -112,17 +108,6 @@ class DataspectsSearchFeed {
     $this->addPage();
   }
 
-  /*
-    LEX2106251826: https://search.dataspects.com/understand/
-  */
-  private function getCategories() {
-    $this->categories = array();
-    $categories = $this->wikiPage->getCategories();
-    foreach($categories as $category) {
-      $this->categories[] = $this->fullArticlePath.$category->mTextform;
-    }
-  }
-
   private function getWikitext() {
     $revision = $this->wikiPage->getRevision();
     if(empty($revision)) {
@@ -133,7 +118,7 @@ class DataspectsSearchFeed {
     }
   }
 
-  private function getParsedWikitext($wikitext) {
+  function getParsedWikitext($wikitext) {
     $parser = new \Parser();
     $parserOptions = new \ParserOptions();
     $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
@@ -179,30 +164,14 @@ class DataspectsSearchFeed {
     }
   }
 
-  private function getMediaWikiPageAnnotations() {
-    $data = $this->browseBySubject($this->title);
-    foreach($data['query']['data'] as $property) {
-      if(is_array($property)) {
-        $propertyName = $property['property'];
-        if($propertyName[0] != '_') {
-          foreach($property['dataitem'] as $object) {
-            if(is_array($object)) {
-              $source = str_replace('#0##', '', $object['item']);
-              $smwLiteral = $source;
-              if($object['type'] == 9) {
-                $source = $this->fullArticlePath.$source;
-              }
-              $this->annotations[] = array(
-                'subject' => strtolower($this->title->getFullURL()),
-                'predicate' => $propertyName,
-                'objectLiteral' => $source,
-                'objectLiteralHTML' => $this->getParsedWikitext($source),
-                'smwPropertyType' => $object['type']
-              );
-            }
-          }
-        }
-      }
+  /*
+    LEX2106251826: https://search.dataspects.com/understand/
+  */
+  private function getCategories() {
+    $this->categories = array();
+    $categories = $this->wikiPage->getCategories();
+    foreach($categories as $category) {
+      $this->categories[] = $this->fullArticlePath.$category->mTextform;
     }
   }
 
@@ -212,37 +181,6 @@ class DataspectsSearchFeed {
     }
     foreach($this->title->getLinksTo() as $linkTo) {
         $this->incomingLinks[] = $linkTo->getInternalURL();
-    }
-  }
-
-  private function analyzeSeaKay($mediaWikiPage) {
-    #IndexConfigSetting
-    $cognitiveKeywords = ["CASE", "FACT", "OPTION", "SYSTEM BEHAVIOR", "EXAMPLE", "ACT", "ASPECT", "DECIDE", "ACTION"];
-    preg_match_all('/[;#:*]+ *('.implode("|", $cognitiveKeywords).') *[\n:>]+/', $mediaWikiPage["mw0__wikitext"], $matches);
-    $cks = array_unique($matches[1]);
-    if(count($cks) > 0) {
-      $mediaWikiPage = array_merge($mediaWikiPage, [
-        "ck0__containsCognitiveKeyword.1v10" => "Cognitive Keywords",
-        "ck0__containsCognitiveKeyword.1v11" => "Cognitive Keywords > ".implode(", ", $cks),
-      ]);
-    }
-    return $mediaWikiPage;
-  }
-
-  private function getPredicateAnnotations() {
-    $data = $this->browseBySubject($this->title);
-    foreach($data['query']['data'] as $property) {
-      if(is_array($property)) {
-        $propertyName = $property['property'];
-        foreach($property['dataitem'] as $object) {
-          if(is_array($object)) {
-            $this->annotations[$propertyName] = array(
-              'objectLiteral' => $object['item'],
-              'smwPropertyType' => $object['type']
-            );
-          }
-        }
-      }
     }
   }
 
@@ -313,7 +251,7 @@ class DataspectsSearchFeed {
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
-    $mediaWikiPage = $this->analyzeSeaKay($mediaWikiPage);
+    $mediaWikiPage = $this->smwsof->analyzeSeaKay($mediaWikiPage);
     return $mediaWikiPage;
   }
 
@@ -321,12 +259,12 @@ class DataspectsSearchFeed {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
+    foreach ($this->sdf->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
       if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
         $mwParserOutput->parentNode->removeChild($mwParserOutput);
       }      
     }
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
+    foreach ($this->sdf->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
       $editSections = $xpath->query("//$tag");
       foreach($editSections as $editSection){
         $editSection->parentNode->removeChild($editSection);
@@ -427,14 +365,19 @@ class DataspectsSearchFeed {
 		// fclose($h);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
-    $logEntry = new ManualLogEntry( 'dataspects', 'test' );
-		$logEntry->setTarget( $this->wikiPage->getTitle() );
-		$logEntry->setPerformer( $this->user );
-		$logEntry->setParameters( [
-			'4::unused' => 'Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")",
-		] );
-		$logEntry->insert();
-    
+    $this->manualLogEntry($result);
+  }
+
+  private function manualLogEntry($result) {
+    if($this->user) {
+      $logEntry = new ManualLogEntry( 'dataspects', 'test' );
+      $logEntry->setTarget( $this->wikiPage->getTitle() );
+      $logEntry->setPerformer( $this->user );
+      $logEntry->setParameters( [
+        '4::unused' => 'Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")",
+      ] );
+      $logEntry->insert();
+    }
   }
 
   private function getNamespace($index) {
@@ -446,7 +389,7 @@ class DataspectsSearchFeed {
     return ucfirst($namespace);
   }
 
-  private function browseBySubject(string $title) {
+  function browseBySubject(string $title) {
     $params = new \FauxRequest(
       array(
         'action' => 'browsebysubject',

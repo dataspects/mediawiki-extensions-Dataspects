@@ -29,7 +29,7 @@ class DMFFeedAll extends Maintenance {
 
 	private function feedNamespace(int $namespaceNumber) {
 		foreach($this->pageTitlesInNamespace($namespaceNumber) as $title) {
-			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title);
+			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL); #FIXME: NULL is bad design
 			$dmwf->sendToDatastore();
 		}
 	}

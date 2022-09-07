@@ -73,17 +73,19 @@ const eppo0__hasEntityType = (hit) => {
 
 const eppo0__categories = (hit) => {
   if (hit.eppo0__categories) {
-    return hit.eppo0__categories.map((category) => {
-      return (
-        '<a href="' +
-        mw.config.get("wgServer") +
-        "/wiki/Category:" +
-        category +
-        '"><span class="eppo0__category">' +
-        category +
-        "</span></a>"
-      );
-    });
+    return hit.eppo0__categories
+      .map((category) => {
+        return (
+          '<a href="' +
+          mw.config.get("wgServer") +
+          "/wiki/Category:" +
+          category +
+          '"><span class="eppo0__category">' +
+          category +
+          "</span></a>"
+        );
+      })
+      .join(", ");
   }
   return "";
 };
@@ -237,7 +239,11 @@ $(function () {
               highlightedTagName: "mark",
               hit,
             }) +
-            "</a></div><div>" +
+            "</a>&nbsp;" +
+            eppo0__categories(hit) +
+            " " +
+            createMetaPageLink(hit) +
+            "</div><div>" +
             ds0__text(hit, instantsearch) +
             "</div>" +
             mw0__attachment(hit, instantsearch) +

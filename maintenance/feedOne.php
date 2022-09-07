@@ -21,7 +21,7 @@ class DMFFeedOne extends Maintenance {
 	}
 
 	private function feedOne($title) {
-		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title);
+		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL); #FIXME: NULL is bad design
 		$dmwf->sendToDatastore();
 	}
 
