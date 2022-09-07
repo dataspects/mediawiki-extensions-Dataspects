@@ -6,7 +6,8 @@ use ManualLogEntry;
 use Title;
 use User;
 
-class Hooks implements \MediaWiki\Storage\Hook\PageSaveCompleteHook {
+class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
+						\MediaWiki\Hook\BeforePageDisplayHook {
 
 	
 	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
@@ -22,6 +23,14 @@ class Hooks implements \MediaWiki\Storage\Hook\PageSaveCompleteHook {
 		// 	fwrite($h, "Error dataspects onPageSaveComplete\n");
 		// 	fclose($h);
 		// }
+	}
+
+	public function onBeforePageDisplay( $out, $skin ): void {
+		$html = $out->getHTML();
+		$out->clearHTML();
+		$this->sk = new SeaKay($html);
+		$out->addHTML( $this->sk->markup() );
+		$out->addModules( 'ext.dataspectsSearch' );
 	}
 
 }

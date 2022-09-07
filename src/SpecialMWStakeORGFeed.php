@@ -10,12 +10,12 @@ class SpecialMWStakeORGFeed {
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
     $this->sourceURL = "https://mwstake.org/mwstake/wiki/";
+    $this->sk = new SeaKay();
   }
 
   function analyzeSeaKay($mediaWikiPage) {
     #IndexConfigSetting
-    $cognitiveKeywords = ["CASE", "FACT", "OPTION", "SYSTEM BEHAVIOR", "EXAMPLE", "ACT", "ASPECT", "DECIDE", "ACTION"];
-    preg_match_all('/[;#:*]+ *('.implode("|", $cognitiveKeywords).') *[\n:>]+/', $mediaWikiPage["mw0__wikitext"], $matches);
+    preg_match_all($this->sk->regex, $mediaWikiPage["mw0__wikitext"], $matches);
     $cks = array_unique($matches[1]);
     if(count($cks) > 0) {
       $mediaWikiPage = array_merge($mediaWikiPage, [

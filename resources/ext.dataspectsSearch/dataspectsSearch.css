@@ -54,3 +54,23 @@
 .parentItem {
     
 }
+
+.seaKay {
+    font-weight: bold;
+}
+
+.CASE {
+    color:orange
+}
+
+.FACT, .CONS {
+    color: red
+}
+
+.OPTION, .PROS {
+    color: green
+}
+
+.SCENARIOS {
+    font-size:20px;
+}
