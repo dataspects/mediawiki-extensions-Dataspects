@@ -229,7 +229,9 @@ $(function () {
           return (
             '<div class="hit"><div>' +
             eppo0__hasEntityType(hit) +
-            '<a href="${hit.mw0__rawUrl}" class="eppo0__hasEntityTitle">' +
+            '<a href="' +
+            hit.mw0__rawUrl +
+            '" class="eppo0__hasEntityTitle">' +
             instantsearch.snippet({
               attribute: "eppo0__hasEntityTitle",
               highlightedTagName: "mark",
