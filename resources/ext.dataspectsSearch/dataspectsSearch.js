@@ -1,4 +1,4 @@
-var getUrlParameter = function getUrlParameter(sParam) {
+const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
     sURLVariables = sPageURL.split("&"),
     sParameterName,
@@ -16,160 +16,13 @@ var getUrlParameter = function getUrlParameter(sParam) {
   return false;
 };
 
-const ds0__text = (hit, instantsearch) => {
-  if (["Element"].includes(hit.ds0__source)) {
-    // https://www.algolia.com/doc/api-reference/widgets/highlight/js/
-    // FIXME: this still snippets!
-    return hit.ds0__text;
-  }
-  if (["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)) {
-    return (
-      "<pre>" +
-      instantsearch.snippet({
-        attribute: "mw0__wikitext",
-        highlightedTagName: "mark",
-        hit,
-      }) +
-      "</pre>"
-    );
-  }
-  return instantsearch.snippet({
-    attribute: "ds0__text",
-    highlightedTagName: "mark",
-    hit,
-  });
-};
-
-const mw0__attachment = (hit, instantsearch) => {
-  if (["File"].includes(hit.mw0__namespace)) {
-    return (
-      "<fieldset><legend>" +
-      hit.mw0__attachment.type +
-      "</legend>" +
-      '<div class="mw0__attachmentsText">' +
-      instantsearch.snippet({
-        attribute: "mw0__attachment.text",
-        highlightedTagName: "mark",
-        hit,
-      }) +
-      "</div></fieldset>"
-    );
-  }
-  return "";
-};
-
-const eppo0__hasEntityType = (hit) => {
-  if (hit.eppo0__hasEntityType) {
-    return (
-      '<a href="' +
-      hit.eppo0__hasEntityType +
-      '"><span class="badge eppo0__hasEntityType">' +
-      hit.eppo0__hasEntityType +
-      "</span></a>"
-    );
-  }
-  return "";
-};
-
-const eppo0__categories = (hit) => {
-  console.log(hit.eppo0__categories);
-  if (hit.eppo0__categories) {
-    return hit.eppo0__categories
-      .map((category) => {
-        return (
-          '<a href="' +
-          mw.config.get("wgServer") +
-          "/wiki/Category:" +
-          category +
-          '"><span class="eppo0__category">' +
-          category +
-          "</span></a>"
-        );
-      })
-      .join(", ");
-  }
-  return "";
-};
-
-const annotations = (hit, instantsearch) => {
-  if (hit.annotations && hit.annotations.length > 0) {
-    var annots = hit.annotations
-      .map((annotation) => {
-        return (
-          '<tr><td><a href="' +
-          mw.config.get("wgServer") +
-          "/wiki/Property:" +
-          annotation.predicate +
-          '">' +
-          annotation.predicate +
-          "</a></td><td>::</td><td>" +
-          annotation.objectLiteral +
-          "</td></tr>"
-        );
-      })
-      .join("");
-    return (
-      '<table class="eppo0__hasAnnotations"><tbody>' +
-      annots +
-      "</tbody></table>"
-    );
-  }
-  return "";
-};
-
-const createMetaPageLink = (hit) => {
-  //#IndexConfigSetting
-  const eppo0__hasEntityTitle = "Topic";
-  var args = {
-    "eppo0:hasEntityTitle": hit.eppo0__hasEntityTitle,
-    "eppo0:hasEntityBlurb": hit.ds0__text,
-  };
-  var backlink =
-    "Annotation[1][AnnotationPredicate]=mwstake:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
-    hit.name;
-  if (["Element"].includes(hit.ds0__source)) {
-    return (
-      '&rarr; <a href="' +
-      mw.config.get("wgServer") +
-      "/wiki/Special:FormEdit/" +
-      eppo0__hasEntityTitle +
-      "?" +
-      Object.keys(args)
-        .map((key) => {
-          return encodeURI(
-            eppo0__hasEntityTitle + "[" + key + "]" + "=" + args[key]
-          );
-        })
-        .join("&") +
-      "&" +
-      backlink +
-      '">Create a meta page for this</a>'
-    );
-  }
-  return "";
-};
-
-const mw0RawUrl = (hit) => {
-  var iss = instantsearch.snippet({
-    attribute: "eppo0__hasEntityTitle",
-    highlightedTagName: "mark",
-    hit,
-  });
-  if (hit.mw0__rawUrl) {
-    return (
-      '<a href="' +
-      hit.mw0__rawUrl +
-      '" class="eppo0__hasEntityTitle">' +
-      iss +
-      "</a>"
-    );
-  }
-  return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
-};
-
 $(function () {
+  const { SpecialDataspects } = require("./specialDataspects.js");
+  const { SpecialMWStakeORG } = require("./specialMWStakeORG.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.development.js");
+  var sd = new SpecialDataspects();
+  var smwso = new SpecialMWStakeORG();
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     searchClient: instantMeiliSearch(
@@ -250,18 +103,18 @@ $(function () {
         item(hit) {
           return (
             '<div class="hit"><div>' +
-            eppo0__hasEntityType(hit) +
+            sd.eppo0__hasEntityType(hit) +
             "&nbsp;" +
-            mw0RawUrl(hit) +
+            sd.mw0RawUrl(hit) +
             "&nbsp;" +
-            eppo0__categories(hit) +
+            sd.eppo0__categories(hit) +
             " " +
-            createMetaPageLink(hit) +
+            smwso.createMetaPageLink(hit) +
             "</div><div>" +
-            ds0__text(hit, instantsearch) +
+            sd.ds0__text(hit, instantsearch) +
             "</div>" +
-            mw0__attachment(hit, instantsearch) +
-            annotations(hit, instantsearch) +
+            sd.mw0__attachment(hit, instantsearch) +
+            sd.annotations(hit, instantsearch) +
             "</div>"
           );
         },
