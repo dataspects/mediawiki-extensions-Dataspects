@@ -26,7 +26,7 @@ class SpecialDataspectsFeed {
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
-      "mw0__wikitext" => trim($this->wikitext),
+      "mw0__wikitext" => trim($this->dsf->wikitext),
       "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext)
       // "sections" => $this->sections,
       // "templates" => $this->templates,
