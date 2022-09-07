@@ -46,12 +46,12 @@ class SpecialDataspectsFeed {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
-    foreach ($this->sdf->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
       if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
         $mwParserOutput->parentNode->removeChild($mwParserOutput);
       }      
     }
-    foreach ($this->sdf->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
       $editSections = $xpath->query("//$tag");
       foreach($editSections as $editSection){
         $editSection->parentNode->removeChild($editSection);
@@ -105,13 +105,13 @@ class SpecialDataspectsFeed {
   }
 
   private function processAttachments($mediaWikiPage) {
-    if(count($this->attachments) > 0) {
+    if(count($this->dsf->attachments) > 0) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
         "mw0__attachment" => [
-          "text" => $this->attachments[0]["text"],
-          "type" => $this->attachments[0]["type"]
+          "text" => $this->dsf->attachments[0]["text"],
+          "type" => $this->dsf->attachments[0]["type"]
         ],
-        "ds0__source.1v13" => "Source > ".$this->smwsof->sourceURL." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->attachments[0]["type"]
+        "ds0__source.1v13" => "Source > ".$this->smwsof->sourceURL." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->dsf->attachments[0]["type"]
       ]);
     }
     return $mediaWikiPage;
@@ -129,7 +129,7 @@ class SpecialDataspectsFeed {
 
   private function processCategories($mediaWikiPage) {
     $eppo0__categories = array();
-    foreach ($this->categories as $category) {
+    foreach ($this->dsf->categories as $category) {
       if(!in_array(basename($category), [$mediaWikiPage["eppo0__hasEntityType"], "Pages using DynamicPageList3 parser function"])) {
         $eppo0__categories[] = basename($category);
       }

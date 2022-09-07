@@ -72,6 +72,7 @@ const eppo0__hasEntityType = (hit) => {
 };
 
 const eppo0__categories = (hit) => {
+  console.log(hit.eppo0__categories);
   if (hit.eppo0__categories) {
     return hit.eppo0__categories
       .map((category) => {
@@ -91,23 +92,22 @@ const eppo0__categories = (hit) => {
 };
 
 const annotations = (hit, instantsearch) => {
-  var annots = hit.annotations
-    .map((annotation) => {
-      return (
-        '<tr><td><a href="' +
-        mw.config.get("wgServer") +
-        "/wiki/Property:" +
-        annotation.predicate +
-        '">' +
-        annotation.predicate +
-        "</a></td><td>::</td><td>" +
-        annotation.objectLiteral +
-        "</td></tr>"
-      );
-    })
-    .join("");
-
   if (hit.annotations && hit.annotations.length > 0) {
+    var annots = hit.annotations
+      .map((annotation) => {
+        return (
+          '<tr><td><a href="' +
+          mw.config.get("wgServer") +
+          "/wiki/Property:" +
+          annotation.predicate +
+          '">' +
+          annotation.predicate +
+          "</a></td><td>::</td><td>" +
+          annotation.objectLiteral +
+          "</td></tr>"
+        );
+      })
+      .join("");
     return (
       '<table class="eppo0__hasAnnotations"><tbody>' +
       annots +
