@@ -52,6 +52,11 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<td colspan="2"><a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">dataspects log</a>
 						</td>
 						</tr>
+						<tr>
+						<td>Config</td>
+						<td><a href="https://github.com/dataspects/DataspectsSearch/blob/master/src/SpecialDataspectsFeed.php">SpecialDataspectsFeed</a><br/><a href="https://github.com/dataspects/DataspectsSearch/blob/master/src/SpecialMWStakeORGFeed.php">SpecialMWStakeORGFeed</a><br/><a href="https://github.com/dataspects/DataspectsSearch/blob/master/resources/ext.dataspectsSearch/dataspectsSearch.js">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Index settings/mappings</a>
+						</td>
+						</tr>
 						</tbody>
 					</table>
 				</td>
