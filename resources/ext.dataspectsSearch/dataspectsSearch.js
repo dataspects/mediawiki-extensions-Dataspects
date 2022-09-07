@@ -231,7 +231,7 @@ $(function () {
           return (
             '<div class="hit"><div>' +
             eppo0__hasEntityType(hit) +
-            '<a href="' +
+            '&nbsp;<a href="' +
             hit.mw0__rawUrl +
             '" class="eppo0__hasEntityTitle">' +
             instantsearch.snippet({
@@ -247,6 +247,7 @@ $(function () {
             ds0__text(hit, instantsearch) +
             "</div>" +
             mw0__attachment(hit, instantsearch) +
+            annotations(hit, instantsearch) +
             "</div>"
           );
         },

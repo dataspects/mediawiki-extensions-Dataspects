@@ -3,14 +3,13 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
-use ManualLogEntry;
-
 class SpecialMWStakeORGFeed {
 
   public function __construct($dataspectsSearchFeed, \Title $title, $user) {
     $this->dsf = $dataspectsSearchFeed;
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
+    $this->sourceURL = "https://mwstake.org/mwstake/wiki/";
   }
 
   function analyzeSeaKay($mediaWikiPage) {
