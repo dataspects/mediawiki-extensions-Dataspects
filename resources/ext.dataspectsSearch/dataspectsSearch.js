@@ -136,7 +136,9 @@ const createMetaPageLink = (hit) => {
       "?" +
       Object.keys(args)
         .map((key) => {
-          return encodeURI(eppo0__hasEntityTitle[key] + "=" + args[key]);
+          return encodeURI(
+            eppo0__hasEntityTitle + "[" + key + "]" + "=" + args[key]
+          );
         })
         .join("&") +
       "&" +
@@ -145,6 +147,24 @@ const createMetaPageLink = (hit) => {
     );
   }
   return "";
+};
+
+const mw0RawUrl = (hit) => {
+  var iss = instantsearch.snippet({
+    attribute: "eppo0__hasEntityTitle",
+    highlightedTagName: "mark",
+    hit,
+  });
+  if (hit.mw0__rawUrl) {
+    return (
+      '<a href="' +
+      hit.mw0__rawUrl +
+      '" class="eppo0__hasEntityTitle">' +
+      iss +
+      "</a>"
+    );
+  }
+  return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
 };
 
 $(function () {
@@ -231,15 +251,9 @@ $(function () {
           return (
             '<div class="hit"><div>' +
             eppo0__hasEntityType(hit) +
-            '&nbsp;<a href="' +
-            hit.mw0__rawUrl +
-            '" class="eppo0__hasEntityTitle">' +
-            instantsearch.snippet({
-              attribute: "eppo0__hasEntityTitle",
-              highlightedTagName: "mark",
-              hit,
-            }) +
-            "</a>&nbsp;" +
+            "&nbsp;" +
+            mw0RawUrl(hit) +
+            "&nbsp;" +
             eppo0__categories(hit) +
             " " +
             createMetaPageLink(hit) +
