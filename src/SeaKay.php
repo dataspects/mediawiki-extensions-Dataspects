@@ -20,7 +20,7 @@ class SeaKay {
         "PROS"              => "<span class='seaKay PROS'>@@@MATCHES0@@@</span>",
         "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>"
     );
-    $this->regex = '/[;#:*]+ *('.implode("|", $this->cognitiveKeywords).') *[\n:>]+/';
+    $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';
   }
 
   private function markupRegex($ck) {
