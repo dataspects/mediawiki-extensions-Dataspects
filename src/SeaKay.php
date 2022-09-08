@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\DataspectsSearch;
 
 class SeaKay {
 
-  public function __construct($html) {
+  public function __construct() {
     $this->cognitiveKeywords = array(
         "CASE"              => "<span class='seaKay CASE'>@@@MATCHES0@@@</span>",
         "SCENARIOS"         => "<span class='seaKay SCENARIOS'>@@@MATCHES0@@@</span>",
@@ -21,7 +21,6 @@ class SeaKay {
         "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>"
     );
     $this->regex = '/[;#:*]+ *('.implode("|", $this->cognitiveKeywords).') *[\n:>]+/';
-    $this->html = $html;
   }
 
   private function markupRegex($ck) {
@@ -40,10 +39,10 @@ class SeaKay {
     return $ckMatchers;
   }
 
-  public function markup() {
+  public function markup($html) {
     return preg_replace_callback_array(
         $this->ckMatchers(),
-        $this->html
+        $html
     );
   }
 

@@ -28,8 +28,8 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 	public function onBeforePageDisplay( $out, $skin ): void {
 		$html = $out->getHTML();
 		$out->clearHTML();
-		$this->sk = new SeaKay($html);
-		$out->addHTML( $this->sk->markup() );
+		$this->sk = new SeaKay();
+		$out->addHTML( $this->sk->markup($html) );
 		$out->addModules( 'ext.dataspectsSearch' );
 	}
 
