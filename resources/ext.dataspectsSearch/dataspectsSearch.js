@@ -116,9 +116,11 @@ $(function () {
             "</div>" +
             sd.mw0__attachment(hit, instantsearch) +
             sd.annotations(hit, instantsearch) +
-            '<div id="' +
+            '<fieldset id="' +
             hit.id +
-            '" class="parsedPageText"></div><script>' +
+            '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
+            hit.id +
+            '"></div></fieldset><script>' +
             sd.parsedPageText(hit) +
             +"</script></div>"
           );
