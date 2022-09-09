@@ -102,7 +102,8 @@ $(function () {
       templates: {
         item(hit) {
           return (
-            '<div class="hit"><div>' +
+            '<div class="hit">' +
+            "<div>" +
             sd.eppo0__hasEntityType(hit) +
             "&nbsp;" +
             sd.mw0RawUrl(hit) +
@@ -115,7 +116,11 @@ $(function () {
             "</div>" +
             sd.mw0__attachment(hit, instantsearch) +
             sd.annotations(hit, instantsearch) +
-            "</div>"
+            '<div id="' +
+            hit.id +
+            '" class="parsedPageText"></div>' +
+            sd.parsedPageText(hit) +
+            +"</div>"
           );
         },
         empty:

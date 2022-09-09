@@ -77,7 +77,6 @@ SpecialDataspects = class {
   };
 
   eppo0__categories = (hit) => {
-    console.log(hit.eppo0__categories);
     if (hit.eppo0__categories) {
       return hit.eppo0__categories
         .map((category) => {
@@ -94,6 +93,28 @@ SpecialDataspects = class {
         .join(", ");
     }
     return "";
+  };
+
+  parsedPageText = (hit) => {
+    if (
+      hit.ds0__source == "https://mwstake.org/mwstake/wiki/" &&
+      hit.mw0__namespace == "Main"
+    ) {
+      $.ajax({
+        url:
+          "https://localhost/w/api.php?action=parse&page=" +
+          hit.name +
+          "&prop=text&disablelimitreport&format=json",
+        success: function (data) {
+          $("#" + hit.id).html(data.parse.text["*"]);
+          $("#ds0__topicMetaTemplate").remove();
+        },
+      });
+    } else {
+      console.debug("test");
+      $("#" + hit.id).remove();
+    }
+    return "A";
   };
 
   annotations = (hit, instantsearch) => {
