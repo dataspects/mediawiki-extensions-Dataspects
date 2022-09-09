@@ -118,13 +118,16 @@ $(function () {
             sd.annotations(hit, instantsearch) +
             '<div id="' +
             hit.id +
-            '" class="parsedPageText"></div>' +
+            '" class="parsedPageText"></div><script>' +
             sd.parsedPageText(hit) +
-            +"</div>"
+            +"</script></div>"
           );
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
+      },
+      transformItems(items) {
+        return items;
       },
     }),
   ]);

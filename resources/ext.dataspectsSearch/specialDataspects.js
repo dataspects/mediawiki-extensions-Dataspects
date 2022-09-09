@@ -102,19 +102,17 @@ SpecialDataspects = class {
     ) {
       $.ajax({
         url:
-          "https://localhost/w/api.php?action=parse&page=" +
+          mw.config.get("wgServer") +
+          "/w/api.php?action=parse&page=" +
           hit.name +
           "&prop=text&disablelimitreport&format=json",
         success: function (data) {
           $("#" + hit.id).html(data.parse.text["*"]);
+          $("#" + hit.id).css("display", "block");
           $("#ds0__topicMetaTemplate").remove();
         },
       });
-    } else {
-      console.debug("test");
-      $("#" + hit.id).remove();
     }
-    return "A";
   };
 
   annotations = (hit, instantsearch) => {
