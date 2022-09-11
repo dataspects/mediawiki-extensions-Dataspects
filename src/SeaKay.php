@@ -20,7 +20,16 @@ class SeaKay {
         "PROS"              => "<span class='seaKay PROS'>@@@MATCHES0@@@</span>",
         "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>"
     );
-    $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';
+    $this->basicRegex = '/[;#:*]+ *(@@@SEAKAYKEYWORDS@@@) *[\n:>]+/';
+    // $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';
+  }
+
+  public function regex() {
+    return str_replace("@@@SEAKAYKEYWORDS@@@", implode("|", array_keys($this->cognitiveKeywords)), $this->basicRegex);
+  }
+
+  public function simpleRegex($keyword) {
+    return str_replace("@@@SEAKAYKEYWORDS@@@", $keyword, $this->basicRegex);
   }
 
   private function markupRegex($ck) {

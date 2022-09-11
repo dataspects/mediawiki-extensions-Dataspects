@@ -4,7 +4,7 @@
 }
 .eppo0__hasEntityType {
     background-color: lightgreen;
-    
+    font-weight: bold;
 }
 .ms-count {
     background-color: #E8E8E8;
@@ -85,4 +85,9 @@
     border-width:1px 0px 0px 1px;
     display: none;
     box-shadow: 10px 10px 5px lightgray;
+}
+
+.ds0__featuresAction {
+    background-color: orange;
+    font-weight: bold;
 }

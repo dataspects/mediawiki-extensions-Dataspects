@@ -67,6 +67,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<div id="sources-hierarchical-menu"></div>
 					<div id="topic-types-hierarchical-menu"></div>
 					<div id="sea-kay-menu"></div>
+					<div id="actions-menu"></div>
 				</td>
 			</tr>
 		</table>' );

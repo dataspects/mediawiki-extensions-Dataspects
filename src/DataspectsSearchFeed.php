@@ -104,6 +104,8 @@ class DataspectsSearchFeed {
         echo "ERROR in determining namespace ".$this->title->mNamespace."\n";
         break;
     }
+    $this->semantologics = new Semantologics($this->mediaWikiPage);
+    $this->mediaWikiPage = $this->semantologics->process();
     $this->addPage();
   }
 
