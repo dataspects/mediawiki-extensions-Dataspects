@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\DataspectsSearch;
 class Semantologics {
 
   public function __construct($mediaWikiPage) {
+    echo $mediaWikiPage["mw0__wikitext"];
     $this->mediaWikiPage = $mediaWikiPage;
     $this->sk = new SeaKay();
     $this->annotations = array(
@@ -18,24 +19,49 @@ class Semantologics {
         ),
         $this->sk->simpleRegex("OPTION") => array(
             "predicate"         => "mwstake:offersOption"
+        ),
+        "/(?:{{#lst[xh]?:|{{TranscludeOverview\|)(.+)}}/" => array(
+            "predicate"         => "mw0:transcludes",
+            "objectHandler"     => "transclusionLogics"
         )
     );
   }
 
+  private function transclusionLogics($match) {
+    $elements = explode("|", $match);
+    $pageLink = "<a href='".$GLOBALS['wgServer']."/wiki/".$elements[0]."'>".$elements[0]."</a>";
+    if(array_key_exists(1, $elements)) {
+        // If section $elements[1] is transcluded
+        return "Section <b>".$elements[1]."</b> from ".$pageLink;
+    }
+    // If whole page is transcluded
+    return $pageLink;
+  }
+
   # LEX200122141600
   function process() {
+    echo $this->mediaWikiPage["mw0__wikitext"];
     foreach($this->annotations as $regex => $data) {
         preg_match_all($regex, $this->mediaWikiPage["mw0__wikitext"], $matches);
-        if(count($matches[1]) > 0) {
-            $this->mediaWikiPage["annotations"][] = array(
-                'subject' => $this->mediaWikiPage["name"],
-                'predicate' => $data["predicate"],
-                'objectLiteral' => true,
-                'objectLiteralHTML' => true,
-                'smwPropertyType' => 9
-            );
-            if($data["hierarchicalMenu"]) {
-                $this->mediaWikiPage = array_merge($this->mediaWikiPage, $data["hierarchicalMenu"]);
+        if(array_key_exists(1, $matches)) {
+            if (count($matches[1]) > 0) {
+                foreach($matches[1] as $match) {
+                    $object = $match;
+                    if(array_key_exists("objectHandler", $data)) {
+                        $func = $data["objectHandler"];
+                        $object = $this->$func($match);
+                    }
+                    $this->mediaWikiPage["annotations"][] = array(
+                        'subject' => $this->mediaWikiPage["name"],
+                        'predicate' => $data["predicate"],
+                        'objectLiteral' => $object,
+                        'objectLiteralHTML' => $object,
+                        'smwPropertyType' => 9
+                    );
+                    if(array_key_exists("hierarchicalMenu", $data)) {
+                        $this->mediaWikiPage = array_merge($this->mediaWikiPage, $data["hierarchicalMenu"]);
+                    }
+                }
             }
         }
     }
