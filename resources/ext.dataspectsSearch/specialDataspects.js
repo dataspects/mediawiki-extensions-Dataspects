@@ -108,7 +108,7 @@ SpecialDataspects = class {
           "&prop=text&disablelimitreport&format=json",
         success: function (data) {
           $("#" + hit.id).html(data.parse.text["*"]);
-          $("#" + hit.id + "_fieldset").css("display", "block");
+          // $("#" + hit.id + "_fieldset").css("display", "block");
           $("#ds0__topicMetaTemplate").remove();
         },
       });

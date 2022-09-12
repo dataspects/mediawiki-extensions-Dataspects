@@ -16,6 +16,16 @@ const getUrlParameter = (sParam) => {
   return false;
 };
 
+$("#originalPageContent").click(function () {
+  if ($(this).text() === "Show original page contents") {
+    $(this).text("Hide original page contents");
+    $(".parsedPageText").css("display", "block");
+  } else {
+    $(this).text("Show original page contents");
+    $(".parsedPageText").css("display", "none");
+  }
+});
+
 $(function () {
   const { SpecialDataspects } = require("./specialDataspects.js");
   const { SpecialMWStakeORG } = require("./specialMWStakeORG.js");

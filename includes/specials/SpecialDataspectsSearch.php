@@ -57,6 +57,8 @@ class SpecialDataspectsSearch extends SpecialPage {
 			<tr>
 				<td><div id="hits"></div></td>
 				<td>
+					<span id="originalPageContent">Show original page contents</span>
+					<hr/>
 					<div id="sources-hierarchical-menu"></div>
 					<div id="topic-types-hierarchical-menu"></div>
 					<div id="sea-kay-menu"></div>

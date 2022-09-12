@@ -83,7 +83,7 @@
     overflow-y: scroll;
     border-color:gray;
     border-style: solid;
-    border-width:1px 0px 0px 1px;
+    border-width:1px;
     display: none;
     box-shadow: 10px 10px 5px lightgray;
 }
@@ -91,4 +91,24 @@
 .ds0__featuresAction {
     background-color: orange;
     font-weight: bold;
+}
+
+#originalPageContent {
+    background-color: beige;
+    padding: 3px;
+    border: 1px solid red;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.originalPageContentHide {
+    display: none;
+}
+
+.originalPageContentShow {
+    background-color: beige;
+    padding: 3px;
+    border: 1px solid red;
+    border-radius: 3px;
+    display: block;
 }
