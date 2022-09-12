@@ -77,7 +77,8 @@
 
 .parsedPageText {
     height:200px;
-    width:890px;
+    width: 890px;
+    max-width:890px;
     overflow-x: hidden;
     overflow-y: scroll;
     border-color:gray;

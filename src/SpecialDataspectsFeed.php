@@ -16,6 +16,15 @@ class SpecialDataspectsFeed {
       "classes" => [],
       "ids" => ["ds0__topicMetaTemplate"]
     );
+    #IndexConfigSetting
+    $this->selectedAspects = array(
+      "Mwstake:hasIssue" => array(
+        "title" => "things that have issues"
+      ),
+      "Mwstake:isManagedInGithubRepository" => array(
+        "title" => "things that are managed on GitHub"
+      )
+    );
   }
 
   # LEX200122141600
@@ -166,10 +175,21 @@ class SpecialDataspectsFeed {
           if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
             $showAnnotations[] = $annotation;
           }
+          $mediaWikiPage = $this->selectedAspects($annotation, $mediaWikiPage);
           break;
       }
     }
     $mediaWikiPage["annotations"] = $showAnnotations;
+    return $mediaWikiPage;
+  }
+
+  private function selectedAspects($annotation, $mediaWikiPage) {
+    if (in_array($annotation["predicate"], array_keys($this->selectedAspects))) {
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        "ds0__specialAspect.1v10" => "Selected Aspects",
+        "ds0__specialAspect.1v11" => "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
+      ]);
+    }
     return $mediaWikiPage;
   }
 

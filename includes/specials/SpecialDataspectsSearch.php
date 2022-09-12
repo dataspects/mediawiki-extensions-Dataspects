@@ -39,12 +39,6 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
 						</td>
 						<tr>
-						<td>Code tags
-						</td>
-						<td>#IndexConfigSetting
-						</td>
-						</tr>
-						<tr>
 						<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
 						</td>
 						</tr>
@@ -53,7 +47,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</td>
 						</tr>
 						<tr>
-						<td>Config</td>
+						<td>Config<br/><code>#IndexConfigSetting</code></td>
 						<td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
 						</tr>
 						</tbody>
@@ -67,6 +61,8 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<div id="topic-types-hierarchical-menu"></div>
 					<div id="sea-kay-menu"></div>
 					<div id="actions-menu"></div>
+					<hr/>
+					<div id="selected-aspects-menu"></div>
 				</td>
 			</tr>
 		</table>' );
