@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\DataspectsSearch;
 class Semantologics {
 
   public function __construct($mediaWikiPage) {
-    echo $mediaWikiPage["mw0__wikitext"];
     $this->mediaWikiPage = $mediaWikiPage;
     $this->sk = new SeaKay();
     $this->annotations = array(
@@ -40,7 +39,6 @@ class Semantologics {
 
   # LEX200122141600
   function process() {
-    echo $this->mediaWikiPage["mw0__wikitext"];
     foreach($this->annotations as $regex => $data) {
         preg_match_all($regex, $this->mediaWikiPage["mw0__wikitext"], $matches);
         if(array_key_exists(1, $matches)) {

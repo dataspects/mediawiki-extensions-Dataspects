@@ -23,6 +23,9 @@ class SpecialDataspectsFeed {
       ),
       "Mwstake:isManagedInGithubRepository" => array(
         "title" => "things that are managed on GitHub"
+      ),
+      "mw0:transcludes" => array(  // FIXME: mw0 is case sensitive
+        "title" => "pages that transclude content"
       )
     );
   }
@@ -51,23 +54,7 @@ class SpecialDataspectsFeed {
     return $mediaWikiPage;
   }
 
-  private function ds0__text($parsedWikitext) {
-    $dom = new \DOMDocument('1.0', 'utf-8');
-    $dom->loadHTML($parsedWikitext);
-    $xpath = new \DomXPath($dom);
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
-      if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
-        $mwParserOutput->parentNode->removeChild($mwParserOutput);
-      }      
-    }
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
-      $editSections = $xpath->query("//$tag");
-      foreach($editSections as $editSection){
-        $editSection->parentNode->removeChild($editSection);
-      }
-    }
-    return $dom->textContent;
-  }
+  
 
   function getMediaWikiPageAnnotations() {
     $data = $this->dsf->browseBySubject($this->title);
@@ -111,6 +98,36 @@ class SpecialDataspectsFeed {
         }
       }
     }
+  }
+
+  public function selectedAspects($mediaWikiPage) {
+    foreach($mediaWikiPage["annotations"] as $annotation) {
+      if (in_array($annotation["predicate"], array_keys($this->selectedAspects))) {
+        $mediaWikiPage = array_merge($mediaWikiPage, [
+          "ds0__specialAspect.1v10" => "Selected Aspects",
+          "ds0__specialAspect.1v11" => "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
+        ]);
+      }
+    }
+    return $mediaWikiPage;
+  }
+
+  private function ds0__text($parsedWikitext) {
+    $dom = new \DOMDocument('1.0', 'utf-8');
+    $dom->loadHTML($parsedWikitext);
+    $xpath = new \DomXPath($dom);
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
+      if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
+        $mwParserOutput->parentNode->removeChild($mwParserOutput);
+      }      
+    }
+    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
+      $editSections = $xpath->query("//$tag");
+      foreach($editSections as $editSection){
+        $editSection->parentNode->removeChild($editSection);
+      }
+    }
+    return $dom->textContent;
   }
 
   private function processAttachments($mediaWikiPage) {
@@ -175,21 +192,11 @@ class SpecialDataspectsFeed {
           if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
             $showAnnotations[] = $annotation;
           }
-          $mediaWikiPage = $this->selectedAspects($annotation, $mediaWikiPage);
+          // $mediaWikiPage = $this->selectedAspects($annotation, $mediaWikiPage);
           break;
       }
     }
     $mediaWikiPage["annotations"] = $showAnnotations;
-    return $mediaWikiPage;
-  }
-
-  private function selectedAspects($annotation, $mediaWikiPage) {
-    if (in_array($annotation["predicate"], array_keys($this->selectedAspects))) {
-      $mediaWikiPage = array_merge($mediaWikiPage, [
-        "ds0__specialAspect.1v10" => "Selected Aspects",
-        "ds0__specialAspect.1v11" => "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
-      ]);
-    }
     return $mediaWikiPage;
   }
 
