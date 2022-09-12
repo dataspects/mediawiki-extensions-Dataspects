@@ -112,3 +112,8 @@
     border-radius: 3px;
     display: block;
 }
+
+#hierarchicalMenus>tbody>tr>td {
+    vertical-align: top;
+    padding: 0px;
+}

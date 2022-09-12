@@ -25,7 +25,7 @@ class SpecialDataspectsFeed {
         "title" => "things that are managed on GitHub"
       ),
       "mw0:transcludes" => array(  // FIXME: mw0 is case sensitive
-        "title" => "pages that transclude content"
+        "title" => "pages that transclude aspects to put them in a broader context"
       )
     );
   }

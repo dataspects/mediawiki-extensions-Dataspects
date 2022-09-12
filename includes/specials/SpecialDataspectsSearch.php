@@ -50,6 +50,14 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<td>Config<br/><code>#IndexConfigSetting</code></td>
 						<td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
 						</tr>
+						<tr>
+						<td>wgDataspectsSearchSourcesForAuthenticated</td>
+						<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAuthenticated']).'</td>
+						</tr>
+						<tr>
+						<td>wgDataspectsSearchSourcesForAnonymous</td>
+						<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAnonymous']).'</td>
+						</tr>
 						</tbody>
 					</table>
 				</td>
@@ -59,10 +67,14 @@ class SpecialDataspectsSearch extends SpecialPage {
 				<td>
 					<span id="originalPageContent">Show original page contents</span>
 					<hr/>
-					<div id="sources-hierarchical-menu"></div>
-					<div id="topic-types-hierarchical-menu"></div>
-					<div id="sea-kay-menu"></div>
-					<div id="actions-menu"></div>
+					<table id="hierarchicalMenus">
+					<tbody>
+						<tr><td id="sources-hierarchical-menu"></td><td><i>Available sources depend on authentication</i></td></tr>
+						<tr><td id="topic-types-hierarchical-menu"></td></tr>
+						<tr><td id="sea-kay-menu"></td></tr>
+						<tr><td id="actions-menu"></td></tr>
+					</tbody>
+					</table>
 					<hr/>
 					<div id="selected-aspects-menu"></div>
 				</td>
