@@ -112,6 +112,24 @@ class SpecialDataspectsFeed {
     return $mediaWikiPage;
   }
 
+  public function allPredicates($mediaWikiPage) {
+    // Initialize
+    $mediaWikiPage = array_merge($mediaWikiPage, [
+        "ds0__allPredicates.1v10" => "All Predicates",
+        "ds0__allPredicates.1v11" => array(),
+      ]);
+    // Add predicates
+    foreach($mediaWikiPage["annotations"] as $annotation) {
+      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v11"],
+        [
+          "All Predicates > ".$annotation["predicate"]
+        ],
+      );
+    }
+    return $mediaWikiPage;
+  }
+
   private function ds0__text($parsedWikitext) {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);

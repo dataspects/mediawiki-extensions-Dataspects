@@ -75,8 +75,9 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<tr><td id="actions-menu"></td></tr>
 					</tbody>
 					</table>
-					<hr/>
 					<div id="selected-aspects-menu"></div>
+					<hr/>
+					<div id="all-predicates-menu"></div>
 				</td>
 			</tr>
 		</table>' );

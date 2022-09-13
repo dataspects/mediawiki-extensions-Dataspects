@@ -130,6 +130,18 @@ $(function () {
       },
       limit: 50,
     }),
+    instantsearch.widgets.hierarchicalMenu({
+      container: "#all-predicates-menu",
+      attributes: ["ds0__allPredicates.1v10", "ds0__allPredicates.1v11"],
+      templates: {
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+      },
+      cssClasses: {
+        parentItem: "parentItem",
+        selectedItem: "selectedItem",
+      },
+      limit: 50,
+    }),
     // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
     instantsearch.widgets.hits({
       container: "#hits",
