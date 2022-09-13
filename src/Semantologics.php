@@ -22,7 +22,7 @@ class Semantologics {
         $this->sk->simpleRegex("METAPHOR") => array(
             "predicate"         => "mwstake:providesMetaphor"
         ),
-        "/(?:{{#lst[xh]?:|{{TranscludeOverview\|)(.+)}}/" => array(
+        "/(?:{{#lst[xh]?:|{{Transclude\|)(.+)}}/" => array(
             "predicate"         => "mw0:transcludes",
             "objectHandler"     => "transclusionLogics"
         )
