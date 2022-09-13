@@ -69,7 +69,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<hr/>
 					<table id="hierarchicalMenus">
 					<tbody>
-						<tr><td id="sources-hierarchical-menu"></td><td><i>Available sources depend on authentication</i></td></tr>
+						<tr><td id="sources-hierarchical-menu"></td><td><i>Available sources depend on authentication. You might want to <a href="'.$GLOBALS['wgServer'].'/wiki/Special:UserLogin">log in</a>.</i></td></tr>
 						<tr><td id="topic-types-hierarchical-menu"></td></tr>
 						<tr><td id="sea-kay-menu"></td></tr>
 						<tr><td id="actions-menu"></td></tr>
