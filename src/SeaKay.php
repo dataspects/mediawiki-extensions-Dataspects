@@ -18,9 +18,11 @@ class SeaKay {
         "DECIDE"            => "<span class='seaKay DECIDE'>@@@MATCHES0@@@</span>",
         "ACTION"            => "<span class='seaKay ACTION'>@@@MATCHES0@@@</span>",
         "PROS"              => "<span class='seaKay PROS'>@@@MATCHES0@@@</span>",
-        "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>"
+        "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>",
+        "QUESTION"              => "<span class='seaKay QUESTION'>@@@MATCHES0@@@</span>",
+        "METAPHOR"              => "<span class='seaKay METAPHOR'>@@@MATCHES0@@@</span>"
     );
-    $this->basicRegex = '/[;#:*]+ *(@@@SEAKAYKEYWORDS@@@) *[\n:>]+/';
+    $this->basicRegex = '/[=;#:*]+ *(@@@SEAKAYKEYWORDS@@@) *[\n:>]+/';
     // $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';
   }
 

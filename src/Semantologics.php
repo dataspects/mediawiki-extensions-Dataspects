@@ -19,6 +19,9 @@ class Semantologics {
         $this->sk->simpleRegex("OPTION") => array(
             "predicate"         => "mwstake:offersOption"
         ),
+        $this->sk->simpleRegex("METAPHOR") => array(
+            "predicate"         => "mwstake:providesMetaphor"
+        ),
         "/(?:{{#lst[xh]?:|{{TranscludeOverview\|)(.+)}}/" => array(
             "predicate"         => "mw0:transcludes",
             "objectHandler"     => "transclusionLogics"

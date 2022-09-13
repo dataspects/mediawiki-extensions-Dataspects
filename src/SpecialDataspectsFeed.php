@@ -26,6 +26,9 @@ class SpecialDataspectsFeed {
       ),
       "mw0:transcludes" => array(  // FIXME: mw0 is case sensitive
         "title" => "pages that transclude aspects to put them in a broader context"
+      ),
+      "mwstake:providesMetaphor" => array(  // FIXME: mwstake is case sensitive
+        "title" => "pages that explain something using analogies"
       )
     );
   }
@@ -103,21 +106,33 @@ class SpecialDataspectsFeed {
   public function selectedAspects($mediaWikiPage) {
     foreach($mediaWikiPage["annotations"] as $annotation) {
       if (in_array($annotation["predicate"], array_keys($this->selectedAspects))) {
-        $mediaWikiPage = array_merge($mediaWikiPage, [
-          "ds0__specialAspect.1v10" => "Selected Aspects",
-          "ds0__specialAspect.1v11" => "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
-        ]);
+        // Initialize
+        $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__specialAspect", "Selected Aspects");
+        // Add aspects
+        $mediaWikiPage["ds0__specialAspect.1v11"] = array_merge(
+          $mediaWikiPage["ds0__specialAspect.1v11"],
+          [
+            "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
+          ]
+        );
       }
+    }
+    return $mediaWikiPage;
+  }
+
+  private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
+    if(!array_key_exists($predicate.".1v10", $mediaWikiPage)) {
+      $mediaWikiPage = array_merge($mediaWikiPage, [
+        $predicate.".1v10" => $title,
+        $predicate.".1v11" => array(),
+      ]);
     }
     return $mediaWikiPage;
   }
 
   public function allPredicates($mediaWikiPage) {
     // Initialize
-    $mediaWikiPage = array_merge($mediaWikiPage, [
-        "ds0__allPredicates.1v10" => "All Predicates",
-        "ds0__allPredicates.1v11" => array(),
-      ]);
+    $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
     // Add predicates
     foreach($mediaWikiPage["annotations"] as $annotation) {
       $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
