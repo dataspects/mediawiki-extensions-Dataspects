@@ -151,7 +151,8 @@ class SpecialDataspectsFeed {
       $mediaWikiPage = array_merge($mediaWikiPage, [
         "mw0__attachment" => [
           "text" => $this->dsf->attachments[0]["text"],
-          "type" => $this->dsf->attachments[0]["type"]
+          "type" => $this->dsf->attachments[0]["type"],
+          "thumbURL" => $this->dsf->attachments[0]["thumbURL"]
         ],
         "ds0__source.1v13" => "Source > ".$GLOBALS['wgSourceURL']." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->dsf->attachments[0]["type"]
       ]);
