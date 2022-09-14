@@ -107,7 +107,7 @@ SpecialDataspects = class {
 
   parsedPageText = (hit) => {
     //FIXME
-    if ("mw0__apiParseTextURL" in hit) {
+    if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
       $.ajax({
         url: encodeURI(hit.mw0__apiParseTextURL),
         success: function (data) {
@@ -121,6 +121,14 @@ SpecialDataspects = class {
           );
         },
       });
+    } else {
+      // FIXME: Is it correct that $("#" + hit.id) does not yet exist when this is run?
+      $("#" + hit.id).html(
+        "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
+      );
+      console.debug(
+        "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
+      );
     }
   };
 
