@@ -116,13 +116,14 @@ class DataspectsSearchFeed {
     if(empty($revision)) {
       $this->wikitext = '';
     } else {
-      $content = $revision->getContent( \Revision::RAW );
+      $content = $revision->getContent( \Revision::RAW ); // \Revision::RAW = get the text regardless of permissions
+
       $this->wikitext = \ContentHandler::getContentText( $content );
     }
   }
 
   function getParsedWikitext($wikitext) {
-    $parser = new \Parser();
+    $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
     $parserOptions = new \ParserOptions();
     $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
     if($parsedWikitext->mText) {
