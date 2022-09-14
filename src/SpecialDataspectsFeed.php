@@ -22,7 +22,8 @@ class SpecialDataspectsFeed {
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->dsf->wikitext),
-      "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext)
+      "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext),
+      "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json"
       // "sections" => $this->sections,
       // "templates" => $this->templates,
       // "outgoingLinks" => $this->outgoingLinks,

@@ -106,16 +106,10 @@ SpecialDataspects = class {
   };
 
   parsedPageText = (hit) => {
-    if (
-      hit.ds0__source == "https://mwstake.org/mwstake/wiki/" &&
-      hit.mw0__namespace == "Main"
-    ) {
+    //FIXME
+    if (hit.mw0__apiParseTextURL) {
       $.ajax({
-        url:
-          mw.config.get("wgServer") +
-          "/w/api.php?action=parse&page=" +
-          hit.name +
-          "&prop=text&disablelimitreport&format=json",
+        url: hit.mw0__apiParseTextURL,
         success: function (data) {
           $("#" + hit.id).html(data.parse.text["*"]);
           // $("#" + hit.id + "_fieldset").css("display", "block");

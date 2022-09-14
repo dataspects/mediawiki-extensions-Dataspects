@@ -10,6 +10,7 @@ SpecialMWStakeORG = class {
     var backlink =
       "Annotation[1][AnnotationPredicate]=ds0:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
       hit.name;
+    // FIXME: this must be moved!
     if (["Element"].includes(hit.ds0__source)) {
       return (
         '&rarr; <a href="' +
