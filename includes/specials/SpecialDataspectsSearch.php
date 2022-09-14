@@ -39,6 +39,12 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
 						</td>
 						<tr>
+						<tr>
+						<td>wgDataspectsSearchMediaWikiIDPrefix
+						</td>
+						<td><b>'.$GLOBALS['wgDataspectsSearchMediaWikiIDPrefix'].'</b>
+						</td>
+						<tr>
 						<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
 						</td>
 						</tr>
