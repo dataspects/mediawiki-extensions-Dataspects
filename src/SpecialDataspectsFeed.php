@@ -10,27 +10,6 @@ class SpecialDataspectsFeed {
     $this->smwsof = new SpecialMWStakeORGFeed($this, $title, $user);
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
-    #IndexConfigSetting
-    $this->HTMLElementsToBeRemovedBeforeIndexingContent = array(
-      "tags" => ["editsection"],
-      "classes" => [],
-      "ids" => ["ds0__topicMetaTemplate"]
-    );
-    #IndexConfigSetting
-    $this->selectedAspects = array(
-      "Mwstake:hasIssue" => array(
-        "title" => "things that have issues"
-      ),
-      "Mwstake:isManagedInGithubRepository" => array(
-        "title" => "things that are managed on GitHub"
-      ),
-      "mw0:transcludes" => array(  // FIXME: mw0 is case sensitive
-        "title" => "pages that transclude aspects to put them in a broader context"
-      ),
-      "ds0:providesMetaphor" => array(  // FIXME: mwstake is case sensitive
-        "title" => "pages that explain something using analogies"
-      )
-    );
   }
 
   # LEX200122141600
@@ -105,14 +84,14 @@ class SpecialDataspectsFeed {
 
   public function selectedAspects($mediaWikiPage) {
     foreach($mediaWikiPage["annotations"] as $annotation) {
-      if (in_array($annotation["predicate"], array_keys($this->selectedAspects))) {
+      if (in_array($annotation["predicate"], array_keys($GLOBALS['wgSelectedAspects']))) {
         // Initialize
         $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__specialAspect", "Selected Aspects");
         // Add aspects
         $mediaWikiPage["ds0__specialAspect.1v11"] = array_merge(
           $mediaWikiPage["ds0__specialAspect.1v11"],
           [
-            "Selected Aspects > ".$this->selectedAspects[$annotation["predicate"]]["title"],
+            "Selected Aspects > ".$GLOBALS['wgSelectedAspects'][$annotation["predicate"]]["title"],
           ]
         );
       }
@@ -149,12 +128,12 @@ class SpecialDataspectsFeed {
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->loadHTML($parsedWikitext);
     $xpath = new \DomXPath($dom);
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["ids"] as $id) {
+    foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
       if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
         $mwParserOutput->parentNode->removeChild($mwParserOutput);
       }      
     }
-    foreach ($this->HTMLElementsToBeRemovedBeforeIndexingContent["tags"] as $tag) {
+    foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["tags"] as $tag) {
       $editSections = $xpath->query("//$tag");
       foreach($editSections as $editSection){
         $editSection->parentNode->removeChild($editSection);
@@ -225,7 +204,7 @@ class SpecialDataspectsFeed {
           if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
             $showAnnotations[] = $annotation;
           }
-          // $mediaWikiPage = $this->selectedAspects($annotation, $mediaWikiPage);
+          // $mediaWikiPage = $GLOBALS['wgSelectedAspects']($annotation, $mediaWikiPage);
           break;
       }
     }
