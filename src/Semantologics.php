@@ -10,17 +10,17 @@ class Semantologics {
     $this->sk = new SeaKay();
     $this->annotations = array(
         "/(can +be +managed)/" => array(
-            "predicate"         => "mwstake:canBeManaged",
+            "predicate"         => "ds0:canBeManaged",
             "hierarchicalMenu"  => [
                 "ds0__featuresAction.1v10" => "Action",
                 "ds0__featuresAction.1v11" => "Action > Can be managed"
             ] 
         ),
         $this->sk->simpleRegex("OPTION") => array(
-            "predicate"         => "mwstake:offersOption"
+            "predicate"         => "ds0:offersOption"
         ),
         $this->sk->simpleRegex("METAPHOR") => array(
-            "predicate"         => "mwstake:providesMetaphor"
+            "predicate"         => "ds0:providesMetaphor"
         ),
         "/(?:{{#lst[xh]?:|{{Transclude\|)(.+)}}/" => array(
             "predicate"         => "mw0:transcludes",

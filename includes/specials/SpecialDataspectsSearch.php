@@ -93,6 +93,9 @@ class SpecialDataspectsSearch extends SpecialPage {
 
 	private function sources() {
 		if(count($this->getUser()->getGroups()) > 0) {
+			if($this->getUser()->getName() == "Lex") {
+				return $GLOBALS['wgDataspectsSearchSourcesForLex'];	
+			}
 			return $GLOBALS['wgDataspectsSearchSourcesForAuthenticated'];
 		}
 		return $GLOBALS['wgDataspectsSearchSourcesForAnonymous'];

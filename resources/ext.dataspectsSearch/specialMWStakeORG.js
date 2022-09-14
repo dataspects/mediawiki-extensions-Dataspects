@@ -8,7 +8,7 @@ SpecialMWStakeORG = class {
       "eppo0:hasEntityBlurb": hit.ds0__text,
     };
     var backlink =
-      "Annotation[1][AnnotationPredicate]=mwstake:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
+      "Annotation[1][AnnotationPredicate]=ds0:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
       hit.name;
     if (["Element"].includes(hit.ds0__source)) {
       return (

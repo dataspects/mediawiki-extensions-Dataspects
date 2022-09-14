@@ -27,7 +27,7 @@ class SpecialDataspectsFeed {
       "mw0:transcludes" => array(  // FIXME: mw0 is case sensitive
         "title" => "pages that transclude aspects to put them in a broader context"
       ),
-      "mwstake:providesMetaphor" => array(  // FIXME: mwstake is case sensitive
+      "ds0:providesMetaphor" => array(  // FIXME: mwstake is case sensitive
         "title" => "pages that explain something using analogies"
       )
     );
@@ -36,7 +36,7 @@ class SpecialDataspectsFeed {
   # LEX200122141600
   function getMediaWikiPage() {
     $mediaWikiPage = [
-      "id" => $GLOBALS['wgDataspectsSearchMediaWikiID']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "id" => $GLOBALS['wgDataspectsSearchMediaWikiIDPrefix']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       "mw0__rawUrl" => $this->title->getInternalURL(),

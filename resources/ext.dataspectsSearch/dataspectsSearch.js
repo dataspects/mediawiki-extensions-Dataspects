@@ -1,3 +1,13 @@
+/*
+
+instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
+
+  - mw0
+  - ds0
+  - eppo0
+
+*/
+
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
     sURLVariables = sPageURL.split("&"),
