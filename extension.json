@@ -40,7 +40,7 @@
         "./specialDataspects.js",
         "./specialMWStakeORG.js",
         "./instant-meilisearch.umd.js",
-        "./instantsearch.development.js"
+        "./instantsearch.production.js"
       ],
       "messages": []
     }

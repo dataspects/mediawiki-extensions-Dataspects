@@ -40,7 +40,7 @@ $(function () {
   const { SpecialDataspects } = require("./specialDataspects.js");
   const { SpecialMWStakeORG } = require("./specialMWStakeORG.js");
   require("./instant-meilisearch.umd.js");
-  require("./instantsearch.development.js");
+  require("./instantsearch.production.js");
   var sd = new SpecialDataspects();
   var smwso = new SpecialMWStakeORG();
   const search = instantsearch({
@@ -150,7 +150,7 @@ $(function () {
         parentItem: "parentItem",
         selectedItem: "selectedItem",
       },
-      limit: 50,
+      limit: 1000,
     }),
     // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
     instantsearch.widgets.hits({
