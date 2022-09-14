@@ -206,11 +206,11 @@ class DataspectsSearchFeed {
       $dom = new \DOMDocument();
       $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
       $this->attachments[] = array(
-        "type" => $data["Content-Type"],
-        "text" => trim($dom->textContent)
+        "type"      => $data["Content-Type"],
+        "text"      => trim($dom->textContent),
+        "thumbURL"  => $GLOBALS['wgServer'].$file->getThumbUrl() # FIXME
       );
     }
-    return $this->attachments;
   }
 
   
@@ -246,6 +246,7 @@ class DataspectsSearchFeed {
 		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
 		// fclose($h);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
+    echo $GLOBALS['wgDataspectsSearchWriteURL'].":".$GLOBALS['wgDataspectsSearchIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry($result);
   }

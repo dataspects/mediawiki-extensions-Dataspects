@@ -10,6 +10,7 @@ class SpecialDataspectsFeed {
     $this->smwsof = new SpecialMWStakeORGFeed($this, $title, $user);
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
+    $this->annotations = [];
   }
 
   # LEX200122141600
@@ -126,17 +127,19 @@ class SpecialDataspectsFeed {
 
   private function ds0__text($parsedWikitext) {
     $dom = new \DOMDocument('1.0', 'utf-8');
-    $dom->loadHTML($parsedWikitext);
-    $xpath = new \DomXPath($dom);
-    foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
-      if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
-        $mwParserOutput->parentNode->removeChild($mwParserOutput);
-      }      
-    }
-    foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["tags"] as $tag) {
-      $editSections = $xpath->query("//$tag");
-      foreach($editSections as $editSection){
-        $editSection->parentNode->removeChild($editSection);
+    if($parsedWikitext) {
+      $dom->loadHTML($parsedWikitext);
+      $xpath = new \DomXPath($dom);
+      foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
+        if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
+          $mwParserOutput->parentNode->removeChild($mwParserOutput);
+        }      
+      }
+      foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["tags"] as $tag) {
+        $editSections = $xpath->query("//$tag");
+        foreach($editSections as $editSection){
+          $editSection->parentNode->removeChild($editSection);
+        }
       }
     }
     return $dom->textContent;
@@ -182,30 +185,32 @@ class SpecialDataspectsFeed {
 
   private function processAnnotations($mediaWikiPage) {
     $showAnnotations = [];
-    foreach ($this->annotations as $key => $annotation) {
-      switch ($annotation["predicate"]) {
-        case "Eppo0:hasEntityType":
-          $mediaWikiPage = array_merge($mediaWikiPage, [
-            "eppo0__hasEntityType" => $annotation["objectLiteral"],
-            "eppo0__hasEntityType.1v10" => "Topic Type",
-            "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectLiteral"],
-          ]);
-          if($annotation["objectLiteral"] == "Event") {
-            $mediaWikiPage = $this->specialCaseForIsEventType($mediaWikiPage);
-          }
-          break;
-        case "Eppo0:hasEntityTitle":
-          // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
-          $mediaWikiPage = array_merge($mediaWikiPage, [
-            "eppo0__hasEntityTitle" => $annotation["objectLiteral"],
-          ]);
-          break;
-        default:
-          if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
-            $showAnnotations[] = $annotation;
-          }
-          // $mediaWikiPage = $GLOBALS['wgSelectedAspects']($annotation, $mediaWikiPage);
-          break;
+    if($this->annotations) {
+      foreach ($this->annotations as $key => $annotation) {
+        switch ($annotation["predicate"]) {
+          case "Eppo0:hasEntityType":
+            $mediaWikiPage = array_merge($mediaWikiPage, [
+              "eppo0__hasEntityType" => $annotation["objectLiteral"],
+              "eppo0__hasEntityType.1v10" => "Topic Type",
+              "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectLiteral"],
+            ]);
+            if($annotation["objectLiteral"] == "Event") {
+              $mediaWikiPage = $this->specialCaseForIsEventType($mediaWikiPage);
+            }
+            break;
+          case "Eppo0:hasEntityTitle":
+            // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
+            $mediaWikiPage = array_merge($mediaWikiPage, [
+              "eppo0__hasEntityTitle" => $annotation["objectLiteral"],
+            ]);
+            break;
+          default:
+            if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
+              $showAnnotations[] = $annotation;
+            }
+            // $mediaWikiPage = $GLOBALS['wgSelectedAspects']($annotation, $mediaWikiPage);
+            break;
+        }
       }
     }
     $mediaWikiPage["annotations"] = $showAnnotations;
