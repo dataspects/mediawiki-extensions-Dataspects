@@ -9,7 +9,6 @@ class SpecialMWStakeORGFeed {
     $this->dsf = $dataspectsSearchFeed;
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
-    $this->sourceURL = "https://mwstake.org/mwstake/wiki/";
     $this->sk = new SeaKay();
   }
 

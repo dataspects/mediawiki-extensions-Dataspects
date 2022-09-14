@@ -149,7 +149,7 @@ class SpecialDataspectsFeed {
           "text" => $this->dsf->attachments[0]["text"],
           "type" => $this->dsf->attachments[0]["type"]
         ],
-        "ds0__source.1v13" => "Source > ".$this->smwsof->sourceURL." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->dsf->attachments[0]["type"]
+        "ds0__source.1v13" => "Source > ".$GLOBALS['wgSourceURL']." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->dsf->attachments[0]["type"]
       ]);
     }
     return $mediaWikiPage;
@@ -157,10 +157,10 @@ class SpecialDataspectsFeed {
 
   private function processSources($mediaWikiPage) {
     $mediaWikiPage = array_merge($mediaWikiPage, [
-      "ds0__source" => $this->smwsof->sourceURL,
+      "ds0__source" => $GLOBALS['wgSourceURL'],
       "ds0__source.1v10" => "Source",
-      "ds0__source.1v11" => "Source > ".$this->smwsof->sourceURL,
-      "ds0__source.1v12" => "Source > ".$this->smwsof->sourceURL." > ".$this->dsf->getNamespace($this->title->mNamespace)
+      "ds0__source.1v11" => "Source > ".$GLOBALS['wgSourceURL'],
+      "ds0__source.1v12" => "Source > ".$GLOBALS['wgSourceURL']." > ".$this->dsf->getNamespace($this->title->mNamespace)
     ]);
     return $mediaWikiPage;
   }
