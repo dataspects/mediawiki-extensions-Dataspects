@@ -162,12 +162,14 @@ $(function () {
             "<div>" +
             sd.eppo0__hasEntityType(hit) +
             "&nbsp;" +
-            sd.mw0RawUrl(hit) +
+            sd.eppo0__hasEntityTitle(hit) +
             "&nbsp;" +
             sd.eppo0__categories(hit) +
             " " +
             smwso.createMetaPageLink(hit) +
-            "</div><div>" +
+            "</div>" +
+            sd.mw0__rawUrl(hit) +
+            "<div>" +
             sd.ds0__text(hit, instantsearch) +
             "</div>" +
             sd.mw0__attachment(hit, instantsearch) +

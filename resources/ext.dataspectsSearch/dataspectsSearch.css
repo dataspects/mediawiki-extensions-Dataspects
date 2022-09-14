@@ -36,6 +36,13 @@
     width:100%;
 }
 
+.mw0__rawUrl {
+    font-size:12px;
+    color:darkgreen !important;
+    padding:3px 0px 3px 0px;
+    display:block;
+}
+
 .dataspectsSearchInterface>tbody>tr>td {
     width: 50%;
     vertical-align: top;

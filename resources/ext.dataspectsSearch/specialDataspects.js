@@ -1,7 +1,7 @@
 SpecialDataspects = class {
   constructor() {}
 
-  mw0RawUrl = (hit) => {
+  eppo0__hasEntityTitle = (hit) => {
     var iss = instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
@@ -17,6 +17,16 @@ SpecialDataspects = class {
       );
     }
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
+  };
+
+  mw0__rawUrl = (hit) => {
+    return hit.mw0__rawUrl
+      ? '<a href="' +
+          hit.mw0__rawUrl +
+          '" class="mw0__rawUrl">' +
+          hit.mw0__rawUrl +
+          "</a>"
+      : "";
   };
 
   ds0__text = (hit, instantsearch) => {
