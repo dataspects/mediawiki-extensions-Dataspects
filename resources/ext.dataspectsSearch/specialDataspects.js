@@ -107,13 +107,18 @@ SpecialDataspects = class {
 
   parsedPageText = (hit) => {
     //FIXME
-    if (hit.mw0__apiParseTextURL) {
+    if ("mw0__apiParseTextURL" in hit) {
       $.ajax({
-        url: hit.mw0__apiParseTextURL,
+        url: encodeURI(hit.mw0__apiParseTextURL),
         success: function (data) {
           $("#" + hit.id).html(data.parse.text["*"]);
           // $("#" + hit.id + "_fieldset").css("display", "block");
-          $("#ds0__topicMetaTemplate").remove();
+          $("#ds0__topicMetaTemplate").remove(); // FIXME
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#" + hit.id).html(
+            "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
+          );
         },
       });
     }
