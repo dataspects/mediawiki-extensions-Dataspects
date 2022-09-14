@@ -67,8 +67,12 @@ SpecialDataspects = class {
           highlightedTagName: "mark",
           hit,
         }) +
-        "</div></fieldset>"
-      );
+        "</div><img src='" +
+        hit.mw0__attachment.thumbURL +
+        "/120px-" +
+        hit.name +
+        "'></fieldset>"
+      ); // FIXME: img!
     }
     return "";
   };
