@@ -60,7 +60,7 @@ ElementSource = class extends SearchResult {
       backlink +
       "'>Create a meta page for this</a> on <img class='resultIcon' src='" +
       mw.config.get("wgServer") +
-      "/w/images/5/5c/Elementlogo.png'>"
+      "/w/images/a/a9/Mediawikilogo.png'>"
     );
   };
 
@@ -69,7 +69,7 @@ ElementSource = class extends SearchResult {
       return (
         "<img class='resultIcon' src='" +
         mw.config.get("wgServer") +
-        "/w/images/a/a9/Mediawikilogo.png'>&nbsp;<a href='" +
+        "/w/images/5/5c/Elementlogo.png'>&nbsp;<a href='" +
         annotation.objectLiteral +
         "'>" +
         annotation.objectLiteral +
