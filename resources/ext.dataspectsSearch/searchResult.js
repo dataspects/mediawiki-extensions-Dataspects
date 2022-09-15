@@ -160,7 +160,7 @@ SearchResult = class {
             '">' +
             annotation.predicate +
             "</a></td><td>::</td><td>" +
-            annotation.objectLiteral +
+            this.objectLiteral(annotation) +
             "</td></tr>"
           );
         })
@@ -172,6 +172,10 @@ SearchResult = class {
       );
     }
     return "";
+  };
+
+  objectLiteral = (annotation) => {
+    return annotation.objectLiteral;
   };
 
   createMetaPageLink = () => {

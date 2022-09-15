@@ -4,6 +4,7 @@ ElementSource = class extends SearchResult {
   constructor(hit) {
     super(hit);
   }
+
   eppo0__hasEntityTitle = () => {
     var iss = instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
@@ -11,8 +12,11 @@ ElementSource = class extends SearchResult {
       hit: this.hit,
     });
     if (this.hit.eppo0__hasEntityURL) {
+      // FIXME: Image resource link
       return (
-        '<a href="' +
+        '<img class="resultIcon" src="' +
+        mw.config.get("wgServer") +
+        '/w/images/5/5c/Elementlogo.png">&nbsp;<a href="' +
         this.hit.eppo0__hasEntityURL +
         '" class="eppo0__hasEntityTitle">' +
         iss +
@@ -21,6 +25,7 @@ ElementSource = class extends SearchResult {
     }
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
+
   createMetaPageLink = () => {
     //#IndexConfigSetting
     var eppo0__hasEntityTitle = "Topic";
@@ -50,6 +55,21 @@ ElementSource = class extends SearchResult {
       backlink +
       '">Create a meta page for this</a>'
     );
+  };
+
+  objectLiteral = (annotation) => {
+    if (annotation.predicate == "ds77__isReplyTo") {
+      return (
+        "<img class='resultIcon' src='" +
+        mw.config.get("wgServer") +
+        "/w/images/5/5c/Elementlogo.png'>&nbsp;<a href='" +
+        annotation.objectLiteral +
+        "'>" +
+        annotation.objectLiteral +
+        "</a>"
+      );
+    }
+    return annotation.objectLiteral;
   };
 };
 

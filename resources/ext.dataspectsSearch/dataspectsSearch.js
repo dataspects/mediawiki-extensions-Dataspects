@@ -69,6 +69,7 @@ $(function () {
   search.addWidgets([
     instantsearch.widgets.configure({
       attributesToSnippet: ["ds0__text"],
+      hitsPerPage: 20,
     }),
     instantsearch.widgets.searchBox({
       container: "#searchbox",

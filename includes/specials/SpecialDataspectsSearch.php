@@ -69,7 +69,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 				</td>
 			</tr>
 			<tr>
-				<td><div id="hits"></div></td>
+				<td><div id="hits"></div><div id="pagination"></div></td>
 				<td>
 					<span id="originalPageContent">Show original page contents</span>
 					<hr/>
