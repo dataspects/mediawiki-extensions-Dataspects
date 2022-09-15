@@ -32,26 +32,6 @@ SearchResult = class {
   };
 
   ds0__text = (instantsearch) => {
-    if (["Element"].includes(this.hit.ds0__source)) {
-      // https://www.algolia.com/doc/api-reference/widgets/highlight/js/
-      // FIXME: this still snippets!
-      return this.hit.ds0__text;
-    }
-    if (
-      ["Template", "Form", "Module", "Concept"].includes(
-        this.hit.mw0__namespace
-      )
-    ) {
-      return (
-        "<pre>" +
-        instantsearch.snippet({
-          attribute: "mw0__wikitext",
-          highlightedTagName: "mark",
-          hit: this.hit,
-        }) +
-        "</pre>"
-      );
-    }
     return instantsearch.snippet({
       attribute: "ds0__text",
       highlightedTagName: "mark",

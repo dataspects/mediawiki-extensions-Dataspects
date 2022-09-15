@@ -26,6 +26,11 @@ ElementSource = class extends SearchResult {
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
 
+  ds0__text = (instantsearch) => {
+    // FIXME: highlight but don't snippet! (https://www.algolia.com/doc/api-reference/widgets/highlight/js/)
+    return this.hit.ds0__text;
+  };
+
   createMetaPageLink = () => {
     //#IndexConfigSetting
     var eppo0__hasEntityTitle = "Topic";
