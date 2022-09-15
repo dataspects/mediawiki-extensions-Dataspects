@@ -31,7 +31,7 @@ SearchResult = class {
       : "";
   };
 
-  ds0__text = (hit, instantsearch) => {
+  ds0__text = (instantsearch) => {
     if (["Element"].includes(this.hit.ds0__source)) {
       // https://www.algolia.com/doc/api-reference/widgets/highlight/js/
       // FIXME: this still snippets!
@@ -47,7 +47,7 @@ SearchResult = class {
         instantsearch.snippet({
           attribute: "mw0__wikitext",
           highlightedTagName: "mark",
-          hit,
+          hit: this.hit,
         }) +
         "</pre>"
       );
@@ -55,7 +55,7 @@ SearchResult = class {
     return instantsearch.snippet({
       attribute: "ds0__text",
       highlightedTagName: "mark",
-      hit,
+      hit: this.hit,
     });
   };
 
@@ -63,7 +63,7 @@ SearchResult = class {
     return url.replaceAll(" ", "_");
   };
 
-  mw0__attachment = (hit, instantsearch) => {
+  mw0__attachment = (instantsearch) => {
     //FIXME: handle non-image displays
     if (["File"].includes(this.hit.mw0__namespace)) {
       return (
@@ -80,7 +80,7 @@ SearchResult = class {
         instantsearch.snippet({
           attribute: "mw0__attachment.text",
           highlightedTagName: "mark",
-          hit,
+          hit: this.hit,
         }) +
         "</div></td></tr></table></fieldset>"
       ); // FIXME: img!
@@ -134,9 +134,10 @@ SearchResult = class {
           $("#ds0__topicMetaTemplate").remove(); // FIXME
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          $("#" + this.hit.id).html(
-            "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
-          );
+          // FIXME: make this available here
+          // $("#" + this.hit.id).html(
+          //   "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
+          // );
         },
       });
     } else {
@@ -150,7 +151,7 @@ SearchResult = class {
     }
   };
 
-  annotations = (hit, instantsearch) => {
+  annotations = () => {
     if (this.hit.annotations && this.hit.annotations.length > 0) {
       var annots = this.hit.annotations
         .map((annotation) => {
@@ -173,6 +174,10 @@ SearchResult = class {
         "</tbody></table>"
       );
     }
+    return "";
+  };
+
+  createMetaPageLink = () => {
     return "";
   };
 };

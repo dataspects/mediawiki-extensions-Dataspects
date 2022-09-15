@@ -39,11 +39,9 @@ $("#originalPageContent").click(function () {
 $(function () {
   const { ElementSource } = require("./indexDataSources/element.js");
   const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
-  const { SpecialMWStakeORG } = require("./specialMWStakeORG.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
 
-  var smwso = new SpecialMWStakeORG();
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     searchClient: instantMeiliSearch(
@@ -160,7 +158,7 @@ $(function () {
         item(hit) {
           switch (hit.ds0__source) {
             case "Element":
-              console.debug(JSON.stringify(hit, null, 2));
+              // console.debug(JSON.stringify(hit, null, 2));
               var sr = new ElementSource(hit);
               break;
             default: // FIXME
@@ -175,14 +173,14 @@ $(function () {
             "&nbsp;" +
             sr.eppo0__categories() +
             " " +
-            smwso.createMetaPageLink(hit) +
+            sr.createMetaPageLink() +
             "</div>" +
             sr.mw0__rawUrl() +
             "<div>" +
-            sr.ds0__text(hit, instantsearch) +
+            sr.ds0__text(instantsearch) +
             "</div>" +
-            sr.mw0__attachment(hit, instantsearch) +
-            sr.annotations(hit, instantsearch) +
+            sr.mw0__attachment(instantsearch) +
+            sr.annotations() +
             '<fieldset id="' +
             hit.id +
             '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
