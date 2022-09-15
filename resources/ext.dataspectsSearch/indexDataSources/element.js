@@ -76,6 +76,10 @@ ElementSource = class extends SearchResult {
     }
     return annotation.objectLiteral;
   };
+
+  parsedPageTextFieldset = () => {
+    return "";
+  };
 };
 
 module.exports = { ElementSource };
