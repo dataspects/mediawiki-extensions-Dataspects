@@ -44,7 +44,7 @@ ElementSource = class extends SearchResult {
     // FIXME: this must be moved!
 
     return (
-      '&rarr; <a href="' +
+      "&rarr; <a href='" +
       mw.config.get("wgServer") +
       "/wiki/Special:FormEdit/" +
       eppo0__hasEntityTitle +
@@ -58,7 +58,9 @@ ElementSource = class extends SearchResult {
         .join("&") +
       "&" +
       backlink +
-      '">Create a meta page for this</a>'
+      "'>Create a meta page for this</a> on <img class='resultIcon' src='" +
+      mw.config.get("wgServer") +
+      "/w/images/5/5c/Elementlogo.png'>"
     );
   };
 
@@ -67,7 +69,7 @@ ElementSource = class extends SearchResult {
       return (
         "<img class='resultIcon' src='" +
         mw.config.get("wgServer") +
-        "/w/images/5/5c/Elementlogo.png'>&nbsp;<a href='" +
+        "/w/images/a/a9/Mediawikilogo.png'>&nbsp;<a href='" +
         annotation.objectLiteral +
         "'>" +
         annotation.objectLiteral +
