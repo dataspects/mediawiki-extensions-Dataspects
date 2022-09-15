@@ -104,6 +104,10 @@ SearchResult = class {
     return "";
   };
 
+  resultIcon = (hit) => {
+    return "";
+  };
+
   annotations = () => {
     if (this.hit.annotations && this.hit.annotations.length > 0) {
       var annots = this.hit.annotations

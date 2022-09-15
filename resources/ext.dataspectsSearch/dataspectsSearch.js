@@ -178,6 +178,7 @@ $(function () {
           return (
             '<div class="hit">' +
             "<div>" +
+            sr.resultIcon() +
             sr.eppo0__hasEntityType() +
             "&nbsp;" +
             sr.eppo0__hasEntityTitle() +

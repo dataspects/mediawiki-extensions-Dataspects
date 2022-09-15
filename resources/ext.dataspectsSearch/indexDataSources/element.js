@@ -5,6 +5,14 @@ ElementSource = class extends SearchResult {
     super(hit);
   }
 
+  resultIcon = (hit) => {
+    return (
+      "<img class='resultIcon' src='" +
+      mw.config.get("wgServer") +
+      "/w/images/5/5c/Elementlogo.png'>"
+    );
+  };
+
   eppo0__hasEntityTitle = () => {
     var iss = instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
@@ -14,9 +22,7 @@ ElementSource = class extends SearchResult {
     if (this.hit.eppo0__hasEntityURL) {
       // FIXME: Image resource link
       return (
-        '<img class="resultIcon" src="' +
-        mw.config.get("wgServer") +
-        '/w/images/5/5c/Elementlogo.png">&nbsp;<a href="' +
+        '<a href="' +
         this.hit.eppo0__hasEntityURL +
         '" class="eppo0__hasEntityTitle">' +
         iss +

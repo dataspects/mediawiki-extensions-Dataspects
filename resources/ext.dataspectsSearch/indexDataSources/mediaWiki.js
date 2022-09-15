@@ -5,6 +5,14 @@ MediaWikiSource = class extends SearchResult {
     super(hit);
   }
 
+  resultIcon = (hit) => {
+    return (
+      "<img class='resultIcon' src='" +
+      mw.config.get("wgServer") +
+      "/w/images/a/a9/Mediawikilogo.png'>"
+    );
+  };
+
   ds0__text = (instantsearch) => {
     if (
       ["Template", "Form", "Module", "Concept"].includes(
