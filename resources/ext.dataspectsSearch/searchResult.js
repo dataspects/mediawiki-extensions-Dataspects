@@ -178,6 +178,15 @@ SearchResult = class {
     return "";
   };
 
+  mw0__namespace = () => {
+    if (this.hit.mw0__namespace != "Main") {
+      return (
+        "<span class='mw0__namespace'>" + this.hit.mw0__namespace + "</span>"
+      );
+    }
+    return "";
+  };
+
   annotationByPredicate = (predicate) => {
     for (const key in Object.keys(this.hit.annotations)) {
       const annot = this.hit.annotations[key];
