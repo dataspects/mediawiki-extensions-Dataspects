@@ -179,7 +179,7 @@ SearchResult = class {
   };
 
   mw0__namespace = () => {
-    if (this.hit.mw0__namespace != "Main") {
+    if (this.hit.mw0__namespace && this.hit.mw0__namespace != "Main") {
       return (
         "<span class='mw0__namespace'>" + this.hit.mw0__namespace + "</span>"
       );
