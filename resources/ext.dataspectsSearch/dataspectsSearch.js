@@ -193,11 +193,8 @@ $(function () {
             "</div>" +
             sr.mw0__attachment(instantsearch) +
             sr.annotations() +
-            '<fieldset id="' +
-            hit.id +
-            '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
-            hit.id +
-            '"></div></fieldset><script>' +
+            sr.parsedPageTextFieldset() +
+            "<script>" +
             sr.parsedPageText(hit) +
             +"</script></div>"
           );

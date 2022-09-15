@@ -2,6 +2,7 @@ WikiDataspectsSource = class extends MediaWikiSource {
   constructor(hit) {
     super(hit);
   }
+
   eppo0__hasEntityTitle = () => {
     // FIXME: snippet in dynamic nested field
     return (
