@@ -40,6 +40,8 @@
         "./searchResult.js",
         "./indexDataSources/element.js",
         "./indexDataSources/mediaWiki.js",
+        "./indexDataSources/sMWCindyKate.js",
+        "./indexDataSources/wikiDataspects.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js"
       ],

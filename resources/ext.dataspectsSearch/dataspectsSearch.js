@@ -39,6 +39,10 @@ $("#originalPageContent").click(function () {
 $(function () {
   const { ElementSource } = require("./indexDataSources/element.js");
   const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
+  const { SMWCindyKateSource } = require("./indexDataSources/sMWCindyKate.js");
+  const {
+    WikiDataspectsSource,
+  } = require("./indexDataSources/wikiDataspects.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
 
@@ -160,6 +164,12 @@ $(function () {
             case "Element":
               // console.debug(JSON.stringify(hit, null, 2));
               var sr = new ElementSource(hit);
+              break;
+            case "https://smw-cindykate.com/wiki/":
+              var sr = new SMWCindyKateSource(hit);
+              break;
+            case "https://wiki.dataspects.com/wiki/":
+              var sr = new WikiDataspectsSource(hit);
               break;
             default: // FIXME
               var sr = new MediaWikiSource(hit);

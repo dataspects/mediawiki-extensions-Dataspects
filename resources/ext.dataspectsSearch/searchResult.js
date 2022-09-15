@@ -177,6 +177,16 @@ SearchResult = class {
   createMetaPageLink = () => {
     return "";
   };
+
+  annotationByPredicate = (predicate) => {
+    for (const key in Object.keys(this.hit.annotations)) {
+      const annot = this.hit.annotations[key];
+      if (annot.predicate == predicate) {
+        return annot.objectLiteral;
+      }
+    }
+    return this.hit.name;
+  };
 };
 
 module.exports = { SearchResult };
