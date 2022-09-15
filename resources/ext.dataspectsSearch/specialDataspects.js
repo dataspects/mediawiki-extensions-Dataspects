@@ -55,23 +55,28 @@ SpecialDataspects = class {
     });
   };
 
+  myURLEncode = (url) => {
+    return url.replaceAll(" ", "_");
+  };
+
   mw0__attachment = (hit, instantsearch) => {
+    //FIXME: handle non-image displays
     if (["File"].includes(hit.mw0__namespace)) {
       return (
         "<fieldset><legend>" +
         hit.mw0__attachment.type +
         "</legend>" +
-        '<div class="mw0__attachmentsText">' +
+        '<table class="mw0__attachment"><tr><td><a href="' +
+        hit.mw0__rawUrl +
+        '"><img src="' +
+        this.myURLEncode(hit.mw0__attachment.thumbURL + "/120px-" + hit.name) +
+        '"></a></td><td><div class="mw0__attachmentsText">' +
         instantsearch.snippet({
           attribute: "mw0__attachment.text",
           highlightedTagName: "mark",
           hit,
         }) +
-        "</div><img src='" +
-        hit.mw0__attachment.thumbURL +
-        "/120px-" +
-        hit.name +
-        "'></fieldset>"
+        "</div></td></tr></table></fieldset>"
       ); // FIXME: img!
     }
     return "";

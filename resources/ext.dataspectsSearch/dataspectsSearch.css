@@ -49,6 +49,11 @@
     padding: 20px 20px 20px 0px;
 }
 
+.mw0__attachment>tbody>tr>td {
+    vertical-align: top;
+    
+}
+
 .mw0__attachmentsText {
     padding: 10px;
     background-color: #eee;
