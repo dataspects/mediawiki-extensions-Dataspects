@@ -180,9 +180,7 @@ $(function () {
             "<div>" +
             sr.resultIcon() +
             sr.eppo0__hasEntityType() +
-            "&nbsp;" +
             sr.eppo0__hasEntityTitle() +
-            "&nbsp;" +
             sr.eppo0__categories() +
             sr.mw0__namespace() +
             " " +

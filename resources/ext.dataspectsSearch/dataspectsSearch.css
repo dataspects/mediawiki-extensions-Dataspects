@@ -5,6 +5,7 @@
 .eppo0__hasEntityType {
     background-color: lightgreen;
     font-weight: bold;
+    margin-right: 3px;
 }
 .ms-count {
     background-color: #E8E8E8;
@@ -13,6 +14,7 @@
 }
 .eppo0__hasEntityTitle {
     font-weight: bold;
+    margin-right: 3px;
 }
 
 .eppo0__category {
@@ -146,4 +148,5 @@
 
 .resultIcon {
     height:20px;
+    margin-right:3px;
 }
