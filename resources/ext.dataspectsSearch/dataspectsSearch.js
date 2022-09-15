@@ -186,7 +186,7 @@ $(function () {
             '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
             hit.id +
             '"></div></fieldset><script>' +
-            sr.parsedPageText() +
+            sr.parsedPageText(hit) +
             +"</script></div>"
           );
         },

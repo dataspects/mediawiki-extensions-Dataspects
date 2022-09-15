@@ -120,33 +120,30 @@ SearchResult = class {
     return "";
   };
 
-  parsedPageText = () => {
+  parsedPageText = (hit) => {
     //FIXME
-    if (
-      "mw0__apiParseTextURL" in this.hit &&
-      this.hit.mw0__apiParseTextURL != ""
-    ) {
+    if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
       $.ajax({
-        url: encodeURI(this.hit.mw0__apiParseTextURL),
+        url: encodeURI(hit.mw0__apiParseTextURL),
         success: function (data) {
-          $("#" + this.hit.id).html(data.parse.text["*"]);
+          $("#" + hit.id).html(data.parse.text["*"]);
           // $("#" + this.hit.id + "_fieldset").css("display", "block");
           $("#ds0__topicMetaTemplate").remove(); // FIXME
         },
         error: function (jqXHR, textStatus, errorThrown) {
           // FIXME: make this available here
-          // $("#" + this.hit.id).html(
-          //   "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
-          // );
+          $("#" + hit.id).html(
+            "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
+          );
         },
       });
     } else {
       // FIXME: Is it correct that $("#" + this.hit.id) does not yet exist when this is run?
-      $("#" + this.hit.id).html(
+      $("#" + hit.id).html(
         "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
       );
       console.debug(
-        "mw0__apiParseTextURL is not defined for " + this.hit.mw0__rawUrl
+        "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
       );
     }
   };
