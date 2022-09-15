@@ -1,16 +1,18 @@
-SpecialDataspects = class {
-  constructor() {}
+SearchResult = class {
+  constructor(hit) {
+    this.hit = hit;
+  }
 
-  eppo0__hasEntityTitle = (hit) => {
+  eppo0__hasEntityTitle = () => {
     var iss = instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
-      hit,
+      hit: this.hit,
     });
-    if (hit.mw0__rawUrl) {
+    if (this.hit.mw0__rawUrl) {
       return (
         '<a href="' +
-        hit.mw0__rawUrl +
+        this.hit.mw0__rawUrl +
         '" class="eppo0__hasEntityTitle">' +
         iss +
         "</a>"
@@ -19,24 +21,26 @@ SpecialDataspects = class {
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
 
-  mw0__rawUrl = (hit) => {
-    return hit.mw0__rawUrl
+  mw0__rawUrl = () => {
+    return this.hit.mw0__rawUrl
       ? '<a href="' +
-          hit.mw0__rawUrl +
+          this.hit.mw0__rawUrl +
           '" class="mw0__rawUrl">' +
-          hit.mw0__rawUrl +
+          this.hit.mw0__rawUrl +
           "</a>"
       : "";
   };
 
   ds0__text = (hit, instantsearch) => {
-    if (["Element"].includes(hit.ds0__source)) {
+    if (["Element"].includes(this.hit.ds0__source)) {
       // https://www.algolia.com/doc/api-reference/widgets/highlight/js/
       // FIXME: this still snippets!
-      return hit.ds0__text;
+      return this.hit.ds0__text;
     }
     if (
-      ["Template", "Form", "Module", "Concept"].includes(hit.mw0__namespace)
+      ["Template", "Form", "Module", "Concept"].includes(
+        this.hit.mw0__namespace
+      )
     ) {
       return (
         "<pre>" +
@@ -61,15 +65,17 @@ SpecialDataspects = class {
 
   mw0__attachment = (hit, instantsearch) => {
     //FIXME: handle non-image displays
-    if (["File"].includes(hit.mw0__namespace)) {
+    if (["File"].includes(this.hit.mw0__namespace)) {
       return (
         "<fieldset><legend>" +
-        hit.mw0__attachment.type +
+        this.hit.mw0__attachment.type +
         "</legend>" +
         '<table class="mw0__attachment"><tr><td><a href="' +
-        hit.mw0__rawUrl +
+        this.hit.mw0__rawUrl +
         '"><img src="' +
-        this.myURLEncode(hit.mw0__attachment.thumbURL + "/120px-" + hit.name) +
+        this.myURLEncode(
+          this.hit.mw0__attachment.thumbURL + "/120px-" + this.hit.name
+        ) +
         '"></a></td><td><div class="mw0__attachmentsText">' +
         instantsearch.snippet({
           attribute: "mw0__attachment.text",
@@ -82,22 +88,22 @@ SpecialDataspects = class {
     return "";
   };
 
-  eppo0__hasEntityType = (hit) => {
-    if (hit.eppo0__hasEntityType) {
+  eppo0__hasEntityType = () => {
+    if (this.hit.eppo0__hasEntityType) {
       return (
         '<a href="' +
-        hit.eppo0__hasEntityType +
+        this.hit.eppo0__hasEntityType +
         '"><span class="badge eppo0__hasEntityType">' +
-        hit.eppo0__hasEntityType +
+        this.hit.eppo0__hasEntityType +
         "</span></a>"
       );
     }
     return "";
   };
 
-  eppo0__categories = (hit) => {
-    if (hit.eppo0__categories) {
-      return hit.eppo0__categories
+  eppo0__categories = () => {
+    if (this.hit.eppo0__categories) {
+      return this.hit.eppo0__categories
         .map((category) => {
           return (
             '<a href="' +
@@ -114,36 +120,39 @@ SpecialDataspects = class {
     return "";
   };
 
-  parsedPageText = (hit) => {
+  parsedPageText = () => {
     //FIXME
-    if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
+    if (
+      "mw0__apiParseTextURL" in this.hit &&
+      this.hit.mw0__apiParseTextURL != ""
+    ) {
       $.ajax({
-        url: encodeURI(hit.mw0__apiParseTextURL),
+        url: encodeURI(this.hit.mw0__apiParseTextURL),
         success: function (data) {
-          $("#" + hit.id).html(data.parse.text["*"]);
-          // $("#" + hit.id + "_fieldset").css("display", "block");
+          $("#" + this.hit.id).html(data.parse.text["*"]);
+          // $("#" + this.hit.id + "_fieldset").css("display", "block");
           $("#ds0__topicMetaTemplate").remove(); // FIXME
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          $("#" + hit.id).html(
+          $("#" + this.hit.id).html(
             "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
           );
         },
       });
     } else {
-      // FIXME: Is it correct that $("#" + hit.id) does not yet exist when this is run?
-      $("#" + hit.id).html(
+      // FIXME: Is it correct that $("#" + this.hit.id) does not yet exist when this is run?
+      $("#" + this.hit.id).html(
         "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
       );
       console.debug(
-        "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
+        "mw0__apiParseTextURL is not defined for " + this.hit.mw0__rawUrl
       );
     }
   };
 
   annotations = (hit, instantsearch) => {
-    if (hit.annotations && hit.annotations.length > 0) {
-      var annots = hit.annotations
+    if (this.hit.annotations && this.hit.annotations.length > 0) {
+      var annots = this.hit.annotations
         .map((annotation) => {
           return (
             '<tr><td><a href="' +
@@ -168,4 +177,4 @@ SpecialDataspects = class {
   };
 };
 
-module.exports = { SpecialDataspects };
+module.exports = { SearchResult };

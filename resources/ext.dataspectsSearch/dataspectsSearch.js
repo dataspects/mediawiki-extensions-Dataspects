@@ -37,11 +37,12 @@ $("#originalPageContent").click(function () {
 });
 
 $(function () {
-  const { SpecialDataspects } = require("./specialDataspects.js");
+  const { ElementSource } = require("./indexDataSources/element.js");
+  const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
   const { SpecialMWStakeORG } = require("./specialMWStakeORG.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
-  var sd = new SpecialDataspects();
+
   var smwso = new SpecialMWStakeORG();
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
@@ -157,29 +158,37 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
+          switch (hit.ds0__source) {
+            case "Element":
+              console.debug(JSON.stringify(hit, null, 2));
+              var sr = new ElementSource(hit);
+              break;
+            default: // FIXME
+              var sr = new MediaWikiSource(hit);
+          }
           return (
             '<div class="hit">' +
             "<div>" +
-            sd.eppo0__hasEntityType(hit) +
+            sr.eppo0__hasEntityType() +
             "&nbsp;" +
-            sd.eppo0__hasEntityTitle(hit) +
+            sr.eppo0__hasEntityTitle() +
             "&nbsp;" +
-            sd.eppo0__categories(hit) +
+            sr.eppo0__categories() +
             " " +
             smwso.createMetaPageLink(hit) +
             "</div>" +
-            sd.mw0__rawUrl(hit) +
+            sr.mw0__rawUrl() +
             "<div>" +
-            sd.ds0__text(hit, instantsearch) +
+            sr.ds0__text(hit, instantsearch) +
             "</div>" +
-            sd.mw0__attachment(hit, instantsearch) +
-            sd.annotations(hit, instantsearch) +
+            sr.mw0__attachment(hit, instantsearch) +
+            sr.annotations(hit, instantsearch) +
             '<fieldset id="' +
             hit.id +
             '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
             hit.id +
             '"></div></fieldset><script>' +
-            sd.parsedPageText(hit) +
+            sr.parsedPageText() +
             +"</script></div>"
           );
         },

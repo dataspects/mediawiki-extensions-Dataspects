@@ -37,7 +37,9 @@
       "styles": ["dataspectsSearch.css"],
       "packageFiles": [
         "./dataspectsSearch.js",
-        "./specialDataspects.js",
+        "./searchResult.js",
+        "./indexDataSources/element.js",
+        "./indexDataSources/mediaWiki.js",
         "./specialMWStakeORG.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js"
