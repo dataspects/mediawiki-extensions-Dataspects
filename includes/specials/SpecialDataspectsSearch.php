@@ -9,7 +9,6 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-
 		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
 				<td>
@@ -67,6 +66,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</tr>
 						</tbody>
 					</table>
+					'.$this->searchFacets().'
 				</td>
 			</tr>
 			<tr>
@@ -96,6 +96,32 @@ class SpecialDataspectsSearch extends SpecialPage {
 			'sources' => $this->sources()
 		));
 		$output->addModules( 'ext.dataspectsSearch' );
+	}
+
+	private function searchFacets() {
+		$params = new \FauxRequest(
+			array(
+				'action' => 'ask',
+				'query' => "[[eppo0:hasEntityType::SearchFacet]]|?Eppo0:hasEntityTitle|?Eppo0:hasEntityBlurb|?Ds0:instantsearchHelper"
+			)
+		);
+		$api = new \ApiMain( $params );
+		$api->execute();
+		$data = $api->getResult()->getResultData();
+		$searchFacets = array();
+		foreach($data["query"]["results"] as $searchFacet => $data) {
+			$searchFacets[] = array(
+				"Eppo0:hasEntityTitle" => $data["printouts"]["Eppo0:hasEntityTitle"][0],
+				"Eppo0:hasEntityBlurb" => $data["printouts"]["Eppo0:hasEntityBlurb"][0],
+				"Ds0:instantsearchHelper" => $data["printouts"]["Ds0:instantsearchHelper"][0]
+			);
+		};
+		$html = array("<ul>");
+		foreach($searchFacets as $searchFacet) {
+			$html[] = "<li>".$searchFacet["Eppo0:hasEntityTitle"]."</li>";
+		}
+		$html[] = "</ul>";
+		return implode("", $html);
 	}
 
 	private function sources() {

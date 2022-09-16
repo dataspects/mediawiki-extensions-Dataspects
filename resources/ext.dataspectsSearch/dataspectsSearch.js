@@ -65,8 +65,6 @@ const getCurrentHelperAndUpdateUI = () => {
     )
   );
   let args = {
-    "eppo0:hasEntityTitle": "title",
-    "eppo0:hasEntityBlurb": "blurb",
     "ds0:instantsearchHelper": JSON.stringify(currentHelper),
   };
   $("#saveFacetLink").html(saveFacetLink(args));
