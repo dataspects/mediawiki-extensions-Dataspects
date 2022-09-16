@@ -47,7 +47,6 @@ ElementSource = class extends SearchResult {
     var backlink =
       "Annotation[1][AnnotationPredicate]=ds0:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
       this.hit.name;
-    // FIXME: this must be moved!
 
     return (
       "&rarr; <a href='" +
