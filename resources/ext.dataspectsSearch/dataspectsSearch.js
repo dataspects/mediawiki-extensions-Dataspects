@@ -76,11 +76,11 @@ saveFacetLink = (args) => {
   return (
     "<a href='" +
     mw.config.get("wgServer") +
-    "/wiki/Special:FormEdit/Topic" +
+    "/wiki/Special:FormEdit/SearchFacet" +
     "?" +
     Object.keys(args)
       .map((key) => {
-        return encodeURI("Topic[" + key + "]" + "=" + args[key]);
+        return encodeURI("SearchFacet[" + key + "]" + "=" + args[key]);
       })
       .join("&") +
     "'>Save this facet</a>"
