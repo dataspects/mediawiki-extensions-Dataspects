@@ -112,6 +112,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$searchFacets = array();
 		foreach($data["query"]["results"] as $searchFacet => $data) {
 			$searchFacets[] = array(
+				"name" => $searchFacet,
 				"Eppo0:hasEntityTitle" => $data["printouts"]["Eppo0:hasEntityTitle"][0],
 				"Eppo0:hasEntityBlurb" => $data["printouts"]["Eppo0:hasEntityBlurb"][0],
 				"Ds0:instantsearchHelper" => $data["printouts"]["Ds0:instantsearchHelper"][0]
@@ -119,7 +120,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		};
 		$html = array("<ul>");
 		foreach($searchFacets as $searchFacet) {
-			$html[] = "<li><a href='".$searchFacet["Eppo0:hasEntityTitle"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
+			$html[] = "<li><a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
 		}
 		$html[] = "</ul>";
 		return implode("", $html);
