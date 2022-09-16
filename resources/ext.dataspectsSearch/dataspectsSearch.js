@@ -36,6 +36,35 @@ $("#originalPageContent").click(function () {
   }
 });
 
+const configureThisSearch = (helper) => {
+  configureQ(helper);
+  configureFacets(helper);
+  helper.setState(helper.state.setDisjunctiveFacets(["ds0__source"]));
+  mw.config.get("sources").forEach((source) => {
+    helper.addDisjunctiveFacetRefinement("ds0__source", source);
+  });
+
+  // return { q: "draft", facets: { eppo0__hasEntityType: "Aspect" } };
+};
+
+const configureQ = (helper) => {
+  if (!helper.state.query) {
+    let q = getUrlParameter("q");
+    if (q) {
+      helper.state.query = q;
+    }
+  }
+};
+
+const configureFacets = (helper) => {
+  // https://localhost/wiki/Special:DataspectsSearch?q=&facets={%22ds0__allPredicates.1v11%22:%22All%20Predicates%20%3E%20Ds0:hasDescription%22,%20%22ds0__allPredicates.1v12%22:%20%22All%20Predicates%20%3E%20Ds0:hasDescription%20%3E%20This%20namespace%20cover...%22}
+  const facetsJSON = JSON.parse(getUrlParameter("facets"));
+  helper.setState(helper.state.setFacets(Object.keys(facetsJSON)));
+  for (const [predicate, value] of Object.entries(facetsJSON)) {
+    helper.addFacetRefinement(predicate, value);
+  }
+};
+
 $(function () {
   const { ElementSource } = require("./indexDataSources/element.js");
   const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
@@ -53,16 +82,7 @@ $(function () {
       mw.config.get("wgDataspectsSearchSearchKey")
     ),
     searchFunction(helper) {
-      if (!helper.state.query) {
-        let q = getUrlParameter("q");
-        if (q) {
-          helper.state.query = q;
-        }
-      }
-      helper.setState(helper.state.setDisjunctiveFacets(["ds0__source"]));
-      mw.config.get("sources").forEach((source) => {
-        helper.addDisjunctiveFacetRefinement("ds0__source", source);
-      });
+      configureThisSearch(helper);
       helper.search();
     },
   });
@@ -146,7 +166,11 @@ $(function () {
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#all-predicates-menu",
-      attributes: ["ds0__allPredicates.1v10", "ds0__allPredicates.1v11"],
+      attributes: [
+        "ds0__allPredicates.1v10",
+        "ds0__allPredicates.1v11",
+        "ds0__allPredicates.1v12",
+      ],
       templates: {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },

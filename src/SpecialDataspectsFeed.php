@@ -102,10 +102,12 @@ class SpecialDataspectsFeed {
   }
 
   private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
+    // For hierarchicalMenus, it starts at *.1v10
     if(!array_key_exists($predicate.".1v10", $mediaWikiPage)) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
         $predicate.".1v10" => $title,
         $predicate.".1v11" => array(),
+        $predicate.".1v12" => array(),
       ]);
     }
     return $mediaWikiPage;
@@ -122,8 +124,22 @@ class SpecialDataspectsFeed {
           "All Predicates > ".$annotation["predicate"]
         ],
       );
+      $mediaWikiPage["ds0__allPredicates.1v12"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v12"],
+        [
+          "All Predicates > ".$annotation["predicate"]." > ".$this->objectLiteralValue($annotation["objectLiteral"])
+        ],
+      );
     }
     return $mediaWikiPage;
+  }
+
+  private function objectLiteralValue($objectLiteral) {
+    $length = 20;
+    if (strlen($objectLiteral) > $length) {
+      return substr($objectLiteral, 0, $length)."...";
+    }
+    return $objectLiteral;
   }
 
   private function ds0__text($parsedWikitext) {
