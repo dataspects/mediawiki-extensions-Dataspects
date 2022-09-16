@@ -66,6 +66,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</tr>
 						</tbody>
 					</table>
+					<div>Saved search facets:</div>
 					'.$this->searchFacets().'
 				</td>
 			</tr>
@@ -118,7 +119,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		};
 		$html = array("<ul>");
 		foreach($searchFacets as $searchFacet) {
-			$html[] = "<li>".$searchFacet["Eppo0:hasEntityTitle"]."</li>";
+			$html[] = "<li><a href='".$searchFacet["Eppo0:hasEntityTitle"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
 		}
 		$html[] = "</ul>";
 		return implode("", $html);
