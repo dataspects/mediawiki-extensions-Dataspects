@@ -36,15 +36,6 @@ $("#originalPageContent").click(function () {
   }
 });
 
-const configureQ = (helper) => {
-  if (!helper.state.query) {
-    let q = getUrlParameter("q");
-    if (q) {
-      helper.state.query = q;
-    }
-  }
-};
-
 const setCurrentHelper = (helper) => {
   window.localStorage.setItem("dataspectsSearchFacet", JSON.stringify(helper));
 };
@@ -65,7 +56,9 @@ const getCurrentHelperAndUpdateUI = () => {
     )
   );
   let args = {
-    "ds0:instantsearchHelper": JSON.stringify(currentHelper),
+    "ds0:instantsearchHelper": JSON.stringify(currentHelper)
+      .replaceAll("{", "@@@ocb@@@")
+      .replaceAll("}", "@@@ccb@@@"), // FIXME
   };
   $("#saveFacetLink").html(saveFacetLink(args));
 };
@@ -85,24 +78,18 @@ saveFacetLink = (args) => {
   );
 };
 
-const configureFacets = (helper) => {
-  // https://localhost/wiki/Special:DataspectsSearch?q=&facets={%22ds0__allPredicates.1v11%22:%22All%20Predicates%20%3E%20Ds0:hasDescription%22,%20%22ds0__allPredicates.1v12%22:%20%22All%20Predicates%20%3E%20Ds0:hasDescription%20%3E%20This%20namespace%20cover...%22}
-  if (getUrlParameter("facets")) {
-    const facetsJSON = JSON.parse(getUrlParameter("facets"));
-    helper.setState(helper.state.setFacets(Object.keys(facetsJSON)));
-    for (const [predicate, value] of Object.entries(facetsJSON)) {
-      helper.addFacetRefinement(predicate, value);
-    }
-  }
-};
-
 const configureThisSearch = (helper) => {
-  configureQ(helper);
-  configureFacets(helper);
-  helper.setState(helper.state.setDisjunctiveFacets(["ds0__source"]));
-  mw.config.get("sources").forEach((source) => {
-    helper.addDisjunctiveFacetRefinement("ds0__source", source);
-  });
+  if (getUrlParameter("q")) {
+    helper.state.query = getUrlParameter("q");
+  } else if (getUrlParameter("helper")) {
+    helper.setState(
+      JSON.parse(
+        getUrlParameter("helper")
+          .replaceAll("@@@ocb@@@", "{")
+          .replaceAll("@@@ccb@@@", "}")
+      ).state
+    );
+  }
 };
 
 $(function () {
@@ -122,7 +109,9 @@ $(function () {
       mw.config.get("wgDataspectsSearchSearchKey")
     ),
     searchFunction(helper) {
-      // console.debug(JSON.stringify(helper, null, 2));
+      /*
+        This code is executed on page load as well as "as-you-type"
+      */
       configureThisSearch(helper);
       helper.search();
       setCurrentHelper(helper);

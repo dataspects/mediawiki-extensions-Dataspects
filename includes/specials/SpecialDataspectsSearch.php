@@ -102,25 +102,28 @@ class SpecialDataspectsSearch extends SpecialPage {
 	private function searchFacets() {
 		$params = new \FauxRequest(
 			array(
-				'action' => 'ask',
-				'query' => "[[eppo0:hasEntityType::SearchFacet]]|?Eppo0:hasEntityTitle|?Eppo0:hasEntityBlurb|?Ds0:instantsearchHelper"
+				'action' => 'askargs',
+				'conditions' => "eppo0:hasEntityType::SearchFacet",
+				"printouts" => "Eppo0:hasEntityTitle|Eppo0:hasEntityBlurb|Ds0:instantsearchHelper"
 			)
 		);
 		$api = new \ApiMain( $params );
 		$api->execute();
 		$data = $api->getResult()->getResultData();
 		$searchFacets = array();
-		foreach($data["query"]["results"] as $searchFacet => $data) {
+		foreach($data["query"]["results"] as $searchFacet => $sfdata) {
 			$searchFacets[] = array(
 				"name" => $searchFacet,
-				"Eppo0:hasEntityTitle" => $data["printouts"]["Eppo0:hasEntityTitle"][0],
-				"Eppo0:hasEntityBlurb" => $data["printouts"]["Eppo0:hasEntityBlurb"][0],
-				"Ds0:instantsearchHelper" => $data["printouts"]["Ds0:instantsearchHelper"][0]
+				"Eppo0:hasEntityTitle" => $sfdata["printouts"]["Eppo0:hasEntityTitle"][0],
+				"Eppo0:hasEntityBlurb" => $sfdata["printouts"]["Eppo0:hasEntityBlurb"][0],
+				"Ds0:instantsearchHelper" => implode("", $sfdata["printouts"]["Ds0:instantsearchHelper"])
 			);
 		};
 		$html = array("<ul>");
 		foreach($searchFacets as $searchFacet) {
-			$html[] = "<li><a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
+			$pageLink = "<a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
+			$activateLink = "<a href='".$GLOBALS['wgServer']."/wiki/Special:DataspectsSearch?helper=".$searchFacet["Ds0:instantsearchHelper"]."'>Activate</a>";
+			$html[] = "<li>".$pageLink." (".$activateLink.")</li>";
 		}
 		$html[] = "</ul>";
 		return implode("", $html);
