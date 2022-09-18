@@ -8,6 +8,8 @@ instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
 
 */
 
+var pageInternalHelper = false;
+
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
     sURLVariables = sPageURL.split("&"),
@@ -79,16 +81,18 @@ saveFacetLink = (args) => {
 };
 
 const configureThisSearch = (helper) => {
-  if (getUrlParameter("q")) {
-    helper.state.query = getUrlParameter("q");
-  } else if (getUrlParameter("helper")) {
-    helper.setState(
-      JSON.parse(
-        getUrlParameter("helper")
-          .replaceAll("@@@ocb@@@", "{")
-          .replaceAll("@@@ccb@@@", "}")
-      ).state
-    );
+  if (!pageInternalHelper) {
+    if (getUrlParameter("q")) {
+      helper.state.query = getUrlParameter("q");
+    } else if (getUrlParameter("helper")) {
+      helper.setState(
+        JSON.parse(
+          getUrlParameter("helper")
+            .replaceAll("@@@ocb@@@", "{")
+            .replaceAll("@@@ccb@@@", "}")
+        ).state
+      );
+    }
   }
 };
 
@@ -116,6 +120,7 @@ $(function () {
       helper.search();
       setCurrentHelper(helper);
       getCurrentHelperAndUpdateUI();
+      pageInternalHelper = true;
     },
   });
   search.addWidgets([
