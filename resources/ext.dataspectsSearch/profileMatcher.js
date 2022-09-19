@@ -1,45 +1,70 @@
-const { ElementSource } = require("./indexDataSources/element.js");
-const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
-const { SMWCindyKateSource } = require("./indexDataSources/sMWCindyKate.js");
+const { ElementSearchResult } = require("./searchResultClasses/element.js");
+const { MediaWikiSearchResult } = require("./searchResultClasses/mediaWiki.js");
 const {
-  WikiDataspectsSource,
-} = require("./indexDataSources/wikiDataspects.js");
+  SMWCindyKateSearchResult,
+} = require("./searchResultClasses/sMWCindyKate.js");
+const {
+  WikiDataspectsSearchResult,
+} = require("./searchResultClasses/wikiDataspects.js");
 const profiles = require("./profiles.json");
 
-ProfileMatcher = class {
+SearchResultMatcher = class {
   constructor(hit, instantsearch) {
     this.hit = hit;
     this.instantsearch = instantsearch;
+    this.error = new SearchResultMatchError();
     this.searchResultClass = this.getSearchResultClass();
   }
 
   searchResultClassMappings = (searchResultClassName) => {
+    var theClass = null;
     switch (searchResultClassName) {
-      case "ElementSource":
-        return new ElementSource(this.hit);
-      case "SMWCindyKateSource":
-        return new SMWCindyKateSource(this.hit);
-      case "WikiDataspectsSource":
-        return new WikiDataspectsSource(this.hit);
+      case "ElementSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new ElementSearchResult(this.hit);
+        break;
+      case "SMWCindyKateSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new SMWCindyKateSearchResult(this.hit);
+        break;
+      case "WikiDataspectsSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new WikiDataspectsSearchResult(this.hit);
+        break;
       default:
-        return new MediaWikiSource(this.hit);
+        this.error.message =
+          "ERROR: " +
+          searchResultClassName +
+          " matched but not found. Reverting to standard.";
+        return null; // FIXME
     }
+    return theClass;
   };
 
   getSearchResultClass = () => {
+    var theClass = null;
+    this.searchResultClassName = "MediaWikiSearchResult"; // This is if no profile matches!
     for (const key in Object.keys(profiles)) {
+      // console.debug(JSON.stringify(this.hit, null, 2));
+      // console.debug(JSON.stringify(profiles[key].hit, null, 2));
       if (this.firstContainsSecond(this.hit, profiles[key].hit)) {
-        return this.searchResultClassMappings(
+        // This hit requests a class.
+        theClass = this.searchResultClassMappings(
           profiles[key].searchResultClassName
         );
       }
     }
-    return new MediaWikiSource(this.hit);
+    if (theClass) {
+      // The hit profiles DOES match a search result class
+      return theClass;
+    }
+    return new MediaWikiSearchResult(this.hit);
   };
 
   searchResult = () => {
     return (
       '<div class="hit">' +
+      (this.error.message ? this.error.message : "") +
       "<div>" +
       this.searchResultClass.resultIcon() +
       this.searchResultClass.eppo0__hasEntityType() +
@@ -79,9 +104,22 @@ ProfileMatcher = class {
     }
     return true;
   };
+
   isObject = (object) => {
     return object != null && typeof object === "object";
   };
 };
 
-module.exports = { ProfileMatcher };
+SearchResultMatchError = class {
+  #messageValue;
+  constructor() {}
+  set message(m) {
+    this.#messageValue = '<div class="hitAlert" title="' + m + '">!</div>';
+  }
+
+  get message() {
+    return this.#messageValue;
+  }
+};
+
+module.exports = { SearchResultMatcher };

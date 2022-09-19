@@ -1,4 +1,4 @@
-WikiDataspectsSource = class extends MediaWikiSource {
+WikiDataspectsSearchResult = class extends MediaWikiSearchResult {
   constructor(hit) {
     super(hit);
   }
@@ -15,4 +15,4 @@ WikiDataspectsSource = class extends MediaWikiSource {
   };
 };
 
-module.exports = { WikiDataspectsSource };
+module.exports = { WikiDataspectsSearchResult };

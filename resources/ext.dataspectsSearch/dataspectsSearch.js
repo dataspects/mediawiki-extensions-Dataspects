@@ -97,7 +97,7 @@ const configureThisSearch = (helper) => {
 };
 
 $(function () {
-  const { ProfileMatcher } = require("./profileMatcher.js");
+  const { SearchResultMatcher } = require("./profileMatcher.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
 
@@ -217,7 +217,7 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
-          var pm = new ProfileMatcher(hit, instantsearch);
+          var pm = new SearchResultMatcher(hit, instantsearch);
           return pm.searchResult();
         },
         empty:

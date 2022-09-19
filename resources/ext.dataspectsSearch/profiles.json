@@ -3,18 +3,18 @@
     "hit": {
       "ds0__source": "https://wiki.dataspects.com/wiki/"
     },
-    "searchResultClassName": "WikiDatapectsSource"
+    "searchResultClassName": "WikiDataspectsSearchResult"
   },
   {
     "hit": {
       "ds0__source": "https://smw-cindykate.com/wiki/"
     },
-    "searchResultClassName": "SMWCindyKateSouce"
+    "searchResultClassName": "SMWCindyKateSearchResult"
   },
   {
     "hit": {
       "ds0__source": "Element"
     },
-    "searchResultClassName": "ElementSurce"
+    "searchResultClassName": "ElementSearchResult"
   }
 ]

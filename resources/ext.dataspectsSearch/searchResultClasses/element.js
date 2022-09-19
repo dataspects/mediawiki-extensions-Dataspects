@@ -1,6 +1,6 @@
 const { SearchResult } = require("../searchResult.js");
 
-ElementSource = class extends SearchResult {
+ElementSearchResult = class extends SearchResult {
   constructor(hit) {
     super(hit);
   }
@@ -89,4 +89,4 @@ ElementSource = class extends SearchResult {
   };
 };
 
-module.exports = { ElementSource };
+module.exports = { ElementSearchResult };

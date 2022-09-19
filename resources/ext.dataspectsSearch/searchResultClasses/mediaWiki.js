@@ -1,6 +1,6 @@
 const { SearchResult } = require("../searchResult.js");
 
-MediaWikiSource = class extends SearchResult {
+MediaWikiSearchResult = class extends SearchResult {
   constructor(hit) {
     super(hit);
   }
@@ -65,4 +65,4 @@ MediaWikiSource = class extends SearchResult {
   };
 };
 
-module.exports = { MediaWikiSource };
+module.exports = { MediaWikiSearchResult };
