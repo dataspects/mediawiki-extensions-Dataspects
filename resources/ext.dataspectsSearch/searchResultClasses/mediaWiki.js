@@ -1,5 +1,3 @@
-const { SearchResult } = require("../searchResult.js");
-
 MediaWikiSearchResult = class extends SearchResult {
   constructor(hit) {
     super(hit);

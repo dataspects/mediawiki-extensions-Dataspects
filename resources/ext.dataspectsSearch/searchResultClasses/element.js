@@ -1,9 +1,26 @@
-const { SearchResult } = require("../searchResult.js");
-
 ElementSearchResult = class extends SearchResult {
   constructor(hit) {
     super(hit);
   }
+
+  searchResult = (hit, error, instantsearch) => {
+    return (
+      '<div class="hit">' +
+      (error.message ? error.message : "") +
+      "<div>" +
+      this.resultIcon() +
+      this.eppo0__hasEntityTitle() +
+      "<br/>&rarr; " +
+      this.createMetaPageLink() +
+      "</div>" +
+      this.mw0__rawUrl() +
+      "<div>" +
+      this.ds0__text(instantsearch) +
+      "</div>" +
+      this.mw0__attachment(instantsearch) +
+      this.annotations()
+    );
+  };
 
   resultIcon = (hit) => {
     return (
@@ -49,7 +66,7 @@ ElementSearchResult = class extends SearchResult {
       this.hit.name;
 
     return (
-      "&rarr; <a href='" +
+      "<a href='" +
       mw.config.get("wgServer") +
       "/wiki/Special:FormEdit/" +
       eppo0__hasEntityTitle +

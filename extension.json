@@ -44,6 +44,7 @@
         "./searchResultClasses/mediaWiki.js",
         "./searchResultClasses/sMWCindyKate.js",
         "./searchResultClasses/wikiDataspects.js",
+        "./searchResultClasses/searchFacet.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js"
       ],

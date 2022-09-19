@@ -3,6 +3,30 @@ SearchResult = class {
     this.hit = hit;
   }
 
+  searchResult = (hit, error, instantsearch) => {
+    return (
+      '<div class="hit">' +
+      (error.message ? error.message : "") +
+      "<div>" +
+      this.resultIcon() +
+      this.eppo0__hasEntityType() +
+      this.eppo0__hasEntityTitle() +
+      this.eppo0__categories() +
+      this.mw0__namespace() +
+      "</div>" +
+      this.mw0__rawUrl() +
+      "<div>" +
+      this.ds0__text(instantsearch) +
+      "</div>" +
+      this.mw0__attachment(instantsearch) +
+      this.annotations() +
+      this.parsedPageTextFieldset() +
+      "<script>" +
+      this.parsedPageText(hit) +
+      +"</script></div>"
+    );
+  };
+
   eppo0__hasEntityTitle = () => {
     var iss = instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",

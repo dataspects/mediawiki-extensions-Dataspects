@@ -1,3 +1,4 @@
+const { SearchResult } = require("./searchResult.js");
 const { ElementSearchResult } = require("./searchResultClasses/element.js");
 const { MediaWikiSearchResult } = require("./searchResultClasses/mediaWiki.js");
 const {
@@ -6,6 +7,9 @@ const {
 const {
   WikiDataspectsSearchResult,
 } = require("./searchResultClasses/wikiDataspects.js");
+const {
+  SearchFacetSearchResult,
+} = require("./searchResultClasses/searchFacet.js");
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
@@ -30,6 +34,10 @@ SearchResultMatcher = class {
       case "WikiDataspectsSearchResult":
         this.searchResultClassName = searchResultClassName;
         theClass = new WikiDataspectsSearchResult(this.hit);
+        break;
+      case "SearchFacetSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new SearchFacetSearchResult(this.hit);
         break;
       default:
         this.error.message =
@@ -62,28 +70,10 @@ SearchResultMatcher = class {
   };
 
   searchResult = () => {
-    return (
-      '<div class="hit">' +
-      (this.error.message ? this.error.message : "") +
-      "<div>" +
-      this.searchResultClass.resultIcon() +
-      this.searchResultClass.eppo0__hasEntityType() +
-      this.searchResultClass.eppo0__hasEntityTitle() +
-      this.searchResultClass.eppo0__categories() +
-      this.searchResultClass.mw0__namespace() +
-      " " +
-      this.searchResultClass.createMetaPageLink() +
-      "</div>" +
-      this.searchResultClass.mw0__rawUrl() +
-      "<div>" +
-      this.searchResultClass.ds0__text(this.instantsearch) +
-      "</div>" +
-      this.searchResultClass.mw0__attachment(this.instantsearch) +
-      this.searchResultClass.annotations() +
-      this.searchResultClass.parsedPageTextFieldset() +
-      "<script>" +
-      this.searchResultClass.parsedPageText(this.hit) +
-      +"</script></div>"
+    return this.searchResultClass.searchResult(
+      this.hit,
+      this.error,
+      instantsearch
     );
   };
 

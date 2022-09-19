@@ -217,8 +217,8 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
-          var pm = new SearchResultMatcher(hit, instantsearch);
-          return pm.searchResult();
+          var srm = new SearchResultMatcher(hit, instantsearch);
+          return srm.searchResult();
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",

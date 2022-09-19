@@ -16,5 +16,11 @@
       "ds0__source": "Element"
     },
     "searchResultClassName": "ElementSearchResult"
+  },
+  {
+    "hit": {
+      "eppo0__hasEntityType": "SearchFacet"
+    },
+    "searchResultClassName": "SearchFacetSearchResult"
   }
 ]
