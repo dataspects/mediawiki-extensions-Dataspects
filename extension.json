@@ -37,6 +37,8 @@
       "styles": ["dataspectsSearch.css"],
       "packageFiles": [
         "./dataspectsSearch.js",
+        "./profileMatcher.js",
+        "./profiles.json",
         "./searchResult.js",
         "./indexDataSources/element.js",
         "./indexDataSources/mediaWiki.js",

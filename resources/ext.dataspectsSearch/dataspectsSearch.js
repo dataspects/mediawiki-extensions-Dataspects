@@ -97,12 +97,7 @@ const configureThisSearch = (helper) => {
 };
 
 $(function () {
-  const { ElementSource } = require("./indexDataSources/element.js");
-  const { MediaWikiSource } = require("./indexDataSources/mediaWiki.js");
-  const { SMWCindyKateSource } = require("./indexDataSources/sMWCindyKate.js");
-  const {
-    WikiDataspectsSource,
-  } = require("./indexDataSources/wikiDataspects.js");
+  const { ProfileMatcher } = require("./profileMatcher.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
 
@@ -222,42 +217,8 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
-          switch (hit.ds0__source) {
-            case "Element":
-              // console.debug(JSON.stringify(hit, null, 2));
-              var sr = new ElementSource(hit);
-              break;
-            case "https://smw-cindykate.com/wiki/":
-              var sr = new SMWCindyKateSource(hit);
-              break;
-            case "https://wiki.dataspects.com/wiki/":
-              var sr = new WikiDataspectsSource(hit);
-              break;
-            default: // FIXME
-              var sr = new MediaWikiSource(hit);
-          }
-          return (
-            '<div class="hit">' +
-            "<div>" +
-            sr.resultIcon() +
-            sr.eppo0__hasEntityType() +
-            sr.eppo0__hasEntityTitle() +
-            sr.eppo0__categories() +
-            sr.mw0__namespace() +
-            " " +
-            sr.createMetaPageLink() +
-            "</div>" +
-            sr.mw0__rawUrl() +
-            "<div>" +
-            sr.ds0__text(instantsearch) +
-            "</div>" +
-            sr.mw0__attachment(instantsearch) +
-            sr.annotations() +
-            sr.parsedPageTextFieldset() +
-            "<script>" +
-            sr.parsedPageText(hit) +
-            +"</script></div>"
-          );
+          var pm = new ProfileMatcher(hit, instantsearch);
+          return pm.searchResult();
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",

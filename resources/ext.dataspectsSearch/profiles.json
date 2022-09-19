@@ -1,0 +1,20 @@
+[
+  {
+    "hit": {
+      "ds0__source": "https://wiki.dataspects.com/wiki/"
+    },
+    "searchResultClassName": "WikiDatapectsSource"
+  },
+  {
+    "hit": {
+      "ds0__source": "https://smw-cindykate.com/wiki/"
+    },
+    "searchResultClassName": "SMWCindyKateSouce"
+  },
+  {
+    "hit": {
+      "ds0__source": "Element"
+    },
+    "searchResultClassName": "ElementSurce"
+  }
+]
