@@ -38,6 +38,18 @@ $("#originalPageContent").click(function () {
   }
 });
 
+$("#compactList").click(function () {
+  if ($("#compactList").prop("checked")) {
+    $(".searchResultBody").css("display", "none");
+    $(".hit").removeClass("hit");
+    $(".hit").addClass("compactHit");
+  } else {
+    $(".searchResultBody").css("display", "block");
+    $(".hit").removeClass("compactHit");
+    $(".hit").addClass("hit");
+  }
+});
+
 const setCurrentHelper = (helper) => {
   window.localStorage.setItem("dataspectsSearchFacet", JSON.stringify(helper));
 };

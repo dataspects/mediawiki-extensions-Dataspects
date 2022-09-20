@@ -7,13 +7,15 @@ SearchResult = class {
     return (
       '<div class="hit">' +
       (error.message ? error.message : "") +
-      "<div>" +
+      "<div class='searchResultHeader'>" +
       this.resultIcon() +
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
       this.mw0__namespace() +
       "</div>" +
+      "<div class='searchResultBody'>" +
+      "<div>" +
       this.mw0__rawUrl() +
       "<div>" +
       this.ds0__text(instantsearch) +
@@ -23,7 +25,9 @@ SearchResult = class {
       this.parsedPageTextFieldset() +
       "<script>" +
       this.parsedPageText(hit) +
-      +"</script></div>"
+      +"</script>" +
+      "</div>" +
+      "</div>"
     );
   };
 

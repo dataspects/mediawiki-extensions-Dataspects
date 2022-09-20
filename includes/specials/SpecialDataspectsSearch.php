@@ -71,7 +71,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 				</td>
 			</tr>
 			<tr>
-				<td><div id="hits"></div><div id="pagination"></div></td>
+				<td><div style="float:right;"><input type="checkbox" id="compactList" value="1">Compact list</div><div id="hits"></div><div id="pagination"></div></td>
 				<td>
 					<span id="originalPageContent">Show original page contents</span>
 					<hr/>
