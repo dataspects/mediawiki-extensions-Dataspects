@@ -3,16 +3,19 @@ ElementSearchResult = class extends SearchResult {
     super(hit);
   }
 
-  searchResult = (hit, error, instantsearch) => {
+  searchResultHeader = () => {
     return (
-      '<div class="hit">' +
-      (error.message ? error.message : "") +
-      "<div>" +
       this.resultIcon() +
-      this.eppo0__hasEntityTitle() +
+      this.eppo0__hasEntityType() +
+      this.eppo0__hasEntityTitle()
+    );
+  };
+
+  searchResultBody = (hit, instantsearch) => {
+    return (
       "<br/>&rarr; " +
       this.createMetaPageLink() +
-      "</div>" +
+      "<div>" +
       this.mw0__rawUrl() +
       "<div>" +
       this.ds0__text(instantsearch) +
@@ -99,10 +102,6 @@ ElementSearchResult = class extends SearchResult {
       );
     }
     return annotation.objectLiteral;
-  };
-
-  parsedPageTextFieldset = () => {
-    return "";
   };
 };
 

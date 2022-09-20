@@ -3,20 +3,22 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
     super(hit);
   }
 
-  searchResult = (hit, error, instantsearch) => {
+  searchResultHeader = () => {
     return (
-      '<div class="hit">' +
-      (error.message ? error.message : "") +
-      "<div>" +
       this.resultIcon() +
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
       this.mw0__namespace() +
-      "</div>" +
+      this.activateLink()
+    );
+  };
+
+  searchResultBody = (hit, instantsearch) => {
+    return (
+      "<div>" +
       this.mw0__rawUrl() +
       "<div>" +
-      this.activateLink() +
       this.ds0__text(instantsearch) +
       "</div>" +
       this.mw0__attachment(instantsearch) +
@@ -24,7 +26,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
       this.parsedPageTextFieldset() +
       "<script>" +
       this.parsedPageText(hit) +
-      +"</script></div>"
+      +"</script>"
     );
   };
 

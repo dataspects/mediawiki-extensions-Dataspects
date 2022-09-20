@@ -8,12 +8,27 @@ SearchResult = class {
       '<div class="hit">' +
       (error.message ? error.message : "") +
       "<div class='searchResultHeader'>" +
+      this.searchResultHeader() +
+      "</div><div class='searchResultBody'>" +
+      this.searchResultBody(hit, instantsearch) +
+      "</div></div>"
+    );
+  };
+
+  searchResultHeader = () => {
+    return (
+      "<div class='searchResultHeader'>" +
       this.resultIcon() +
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
       this.mw0__namespace() +
-      "</div>" +
+      "</div>"
+    );
+  };
+
+  searchResultBody = (hit, instantsearch) => {
+    return (
       "<div class='searchResultBody'>" +
       "<div>" +
       this.mw0__rawUrl() +
@@ -26,7 +41,6 @@ SearchResult = class {
       "<script>" +
       this.parsedPageText(hit) +
       +"</script>" +
-      "</div>" +
       "</div>"
     );
   };
@@ -147,7 +161,7 @@ SearchResult = class {
             annotation.predicate +
             '">' +
             annotation.predicate +
-            "</a></td><td>::</td><td>" +
+            "</a></td><td>::</td><td class='annotationObjectLiteral'>" +
             this.objectLiteral(annotation) +
             "</td></tr>"
           );

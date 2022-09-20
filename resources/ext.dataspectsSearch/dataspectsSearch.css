@@ -163,3 +163,10 @@
     height:20px;
     margin-right:3px;
 }
+
+.annotationObjectLiteral {
+    max-height: 200px;
+    max-width: 890px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
