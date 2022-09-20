@@ -126,6 +126,7 @@ $(function () {
       /*
         This code is executed on page load as well as "as-you-type"
       */
+
       configureThisSearch(helper);
       helper.search();
       setCurrentHelper(helper);
@@ -162,9 +163,21 @@ $(function () {
           // In order to always show all sources (disjunctively),
           // we initialize theDs0__sources on initialPageLoad to all sources.
           // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
-          theDs0__sources = items;
+          theDs0__sources = items
+            .filter((item) => {
+              if (mw.config.get("sources").includes(item.value)) {
+                return true;
+              }
+              return false;
+            })
+            .map((item) => {
+              if (mw.config.get("sources").includes(item.value)) {
+                return item;
+              }
+            });
           initialPageLoad = false;
         }
+        console.debug(theDs0__sources);
         return theDs0__sources;
       },
     }),
