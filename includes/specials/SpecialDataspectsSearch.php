@@ -74,10 +74,10 @@ class SpecialDataspectsSearch extends SpecialPage {
 				<td><div style="float:right;"><input type="checkbox" id="compactList" value="1">Compact list</div><div id="hits"></div><div id="pagination"></div></td>
 				<td>
 					<span id="originalPageContent">Show original page contents</span>
-					<hr/>
 					<table id="hierarchicalMenus">
 					<tbody>
-						<tr><td id="sources-hierarchical-menu"></td><td><i>Available sources depend on authentication.'.$this->logInMessage().'</i></td></tr>
+						<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td><td><i>Available sources depend on authentication.'.$this->logInMessage().'</i></td></tr>
+						<tr><td colspan="2"><hr/></td></tr>
 						<tr><td id="topic-types-hierarchical-menu"></td></tr>
 						<tr><td id="sea-kay-menu"></td></tr>
 						<tr><td id="actions-menu"></td></tr>

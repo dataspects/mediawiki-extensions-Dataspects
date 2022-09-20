@@ -170,3 +170,8 @@
     overflow-x: scroll;
     overflow-y: scroll;
 }
+
+#currentHelper {
+        height: 200px;
+        overflow-y: scroll;
+    }

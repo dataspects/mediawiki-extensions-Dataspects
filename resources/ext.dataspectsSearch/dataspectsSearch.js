@@ -8,7 +8,8 @@ instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
 
 */
 
-var pageInternalHelper = false;
+var initialPageLoad = true;
+var theDs0__sources = [];
 
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
@@ -64,6 +65,8 @@ const getCurrentHelperAndUpdateUI = () => {
         query: currentHelper.state.query,
         hierarchicalFacetsRefinements:
           currentHelper.state.hierarchicalFacetsRefinements,
+        disjunctiveFacetsRefinements:
+          currentHelper.state.disjunctiveFacetsRefinements,
       },
       0,
       2
@@ -93,7 +96,7 @@ saveFacetLink = (args) => {
 };
 
 const configureThisSearch = (helper) => {
-  if (!pageInternalHelper) {
+  if (initialPageLoad) {
     if (getUrlParameter("q")) {
       helper.state.query = getUrlParameter("q");
     } else if (getUrlParameter("helper")) {
@@ -127,7 +130,6 @@ $(function () {
       helper.search();
       setCurrentHelper(helper);
       getCurrentHelperAndUpdateUI();
-      pageInternalHelper = true;
     },
   });
   search.addWidgets([
@@ -152,22 +154,19 @@ $(function () {
       },
       limit: 50,
     }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#sources-hierarchical-menu",
-      attributes: [
-        "ds0__source.1v10",
-        "ds0__source.1v11",
-        "ds0__source.1v12",
-        "ds0__source.1v13",
-      ],
-      templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+    instantsearch.widgets.refinementList({
+      container: "#sources-refinement-list",
+      attribute: "ds0__source",
+      transformItems(items, { results }) {
+        if (initialPageLoad) {
+          // In order to always show all sources (disjunctively),
+          // we initialize theDs0__sources on initialPageLoad to all sources.
+          // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
+          theDs0__sources = items;
+          initialPageLoad = false;
+        }
+        return theDs0__sources;
       },
-      cssClasses: {
-        parentItem: "parentItem",
-        selectedItem: "selectedItem",
-      },
-      limit: 50,
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sea-kay-menu",
