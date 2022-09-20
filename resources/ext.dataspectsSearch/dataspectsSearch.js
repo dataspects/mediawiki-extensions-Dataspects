@@ -97,6 +97,7 @@ saveFacetLink = (args) => {
 
 const configureThisSearch = (helper) => {
   if (initialPageLoad) {
+    defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
     if (getUrlParameter("q")) {
       helper.state.query = getUrlParameter("q");
     } else if (getUrlParameter("helper")) {
@@ -109,6 +110,12 @@ const configureThisSearch = (helper) => {
       );
     }
   }
+};
+
+const defaultToAuthorizedSources = (helper) => {
+  mw.config.get("sources").forEach((source) => {
+    helper.addDisjunctiveFacetRefinement("ds0__source", source);
+  });
 };
 
 $(function () {
@@ -126,9 +133,13 @@ $(function () {
       /*
         This code is executed on page load as well as "as-you-type"
       */
-
       configureThisSearch(helper);
-      helper.search();
+      if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
+        // FXIME!
+        helper.search();
+      } else {
+        alert("You have to select one or more source(s).");
+      }
       setCurrentHelper(helper);
       getCurrentHelperAndUpdateUI();
     },
@@ -163,6 +174,10 @@ $(function () {
           // In order to always show all sources (disjunctively),
           // we initialize theDs0__sources on initialPageLoad to all sources.
           // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
+
+          // FIXME: The following merely confines the options list to the authorized sources.
+          // It does not restrict the helper's disjunctiveFacetsRefinements!
+          // This could be done if we were able to access the helper here.
           theDs0__sources = items
             .filter((item) => {
               if (mw.config.get("sources").includes(item.value)) {
@@ -171,13 +186,12 @@ $(function () {
               return false;
             })
             .map((item) => {
-              if (mw.config.get("sources").includes(item.value)) {
-                return item;
-              }
+              return item;
             });
           initialPageLoad = false;
         }
-        console.debug(theDs0__sources);
+
+        // enforceAuthorizedSources(helper);
         return theDs0__sources;
       },
     }),
