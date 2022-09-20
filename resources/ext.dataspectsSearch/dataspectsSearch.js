@@ -42,12 +42,10 @@ $("#originalPageContent").click(function () {
 $("#compactList").click(function () {
   if ($("#compactList").prop("checked")) {
     $(".searchResultBody").css("display", "none");
-    $(".hit").removeClass("hit");
-    $(".hit").addClass("compactHit");
+    $(".hit").removeClass("hit").addClass("compactHit");
   } else {
     $(".searchResultBody").css("display", "block");
-    $(".hit").removeClass("compactHit");
-    $(".hit").addClass("hit");
+    $(".compactHit").removeClass("compactHit").addClass("hit");
   }
 });
 
