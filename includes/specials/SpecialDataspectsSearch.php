@@ -81,6 +81,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 						<tr><td id="topic-types-hierarchical-menu"></td></tr>
 						<tr><td id="sea-kay-menu"></td></tr>
 						<tr><td id="actions-menu"></td></tr>
+						<tr><td><b>MediaWiki Namespaces</b><div id="mw0__namespace-menu"></div></td></tr>
 					</tbody>
 					</table>
 					<div id="selected-aspects-menu"></div>

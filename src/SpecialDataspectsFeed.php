@@ -35,7 +35,6 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
     $mediaWikiPage = $this->smwsof->analyzeSeaKay($mediaWikiPage);
-    print_r($mediaWikiPage);
     return $mediaWikiPage;
   }
 

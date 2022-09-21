@@ -193,6 +193,13 @@ $(function () {
         return theDs0__sources;
       },
     }),
+    instantsearch.widgets.refinementList({
+      container: "#mw0__namespace-menu",
+      attribute: "mw0__namespace",
+      showMore: true,
+      showMoreLimit: 20,
+      limit: 1,
+    }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sea-kay-menu",
       attributes: [
