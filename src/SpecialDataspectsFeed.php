@@ -35,6 +35,7 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
     $mediaWikiPage = $this->smwsof->analyzeSeaKay($mediaWikiPage);
+    print_r($mediaWikiPage);
     return $mediaWikiPage;
   }
 
@@ -220,6 +221,11 @@ class SpecialDataspectsFeed {
             // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
             $mediaWikiPage = array_merge($mediaWikiPage, [
               "eppo0__hasEntityTitle" => $annotation["objectLiteral"],
+            ]);
+            break;
+          case "Eppo0:hasEntityBlurb":
+            $mediaWikiPage = array_merge($mediaWikiPage, [
+              "eppo0__hasEntityBlurb" => $annotation["objectLiteral"],
             ]);
             break;
           default:

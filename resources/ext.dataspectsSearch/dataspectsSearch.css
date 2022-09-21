@@ -17,6 +17,10 @@
     margin-right: 3px;
 }
 
+.eppo0__hasEntityBlurb {
+    background-color: #F8F8F8;
+}
+
 .eppo0__category {
     color: grey;
 }
@@ -54,7 +58,7 @@
 .mw0__rawUrl {
     font-size:12px;
     color:darkgreen !important;
-    padding:3px 0px 3px 0px;
+    padding:3px 0px 0px 0px;
     display:block;
 }
 

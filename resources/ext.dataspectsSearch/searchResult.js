@@ -22,8 +22,7 @@ SearchResult = class {
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
-      this.mw0__namespace() +
-      "</div>"
+      this.mw0__namespace()
     );
   };
 
@@ -32,6 +31,9 @@ SearchResult = class {
       "<div class='searchResultBody'>" +
       "<div>" +
       this.mw0__rawUrl() +
+      "<br/>" +
+      this.eppo0__hasEntityBlurb() +
+      "</div>" +
       "<div>" +
       this.ds0__text(instantsearch) +
       "</div>" +
@@ -118,6 +120,17 @@ SearchResult = class {
         '"><span class="badge eppo0__hasEntityType">' +
         this.hit.eppo0__hasEntityType +
         "</span></a>"
+      );
+    }
+    return "";
+  };
+
+  eppo0__hasEntityBlurb = () => {
+    if (this.hit.eppo0__hasEntityBlurb) {
+      return (
+        "<div class='eppo0__hasEntityBlurb'>" +
+        this.hit.eppo0__hasEntityBlurb +
+        "</div>"
       );
     }
     return "";
