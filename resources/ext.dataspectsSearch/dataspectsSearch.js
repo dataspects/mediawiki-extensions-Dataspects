@@ -120,6 +120,15 @@ $(function () {
   const { SearchResultMatcher } = require("./profileMatcher.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
+  require("./neo4j-driver.js");
+
+  //DEV Neo4j
+  var driver = neo4j.driver(
+    "neo4j://snoopy:7687"
+    // neo4j.auth.basic("neo4j", "password")
+  );
+  var session = driver.session({ defaultAccessMode: neo4j.session.READ });
+  console.debug(session);
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
