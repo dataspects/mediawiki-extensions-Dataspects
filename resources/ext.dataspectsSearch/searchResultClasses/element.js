@@ -62,7 +62,7 @@ ElementSearchResult = class extends SearchResult {
     var eppo0__hasEntityTitle = "Topic";
     var args = {
       "eppo0:hasEntityTitle": this.hit.eppo0__hasEntityTitle,
-      "eppo0:hasEntityBlurb": this.hit.ds0__text,
+      "eppo0:hasEntityBlurb": this.hit.ds0__text.replaceAll("'", "&#39;"), // FIXME
     };
     var backlink =
       "Annotation[1][AnnotationPredicate]=ds0:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +
