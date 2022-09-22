@@ -46,8 +46,7 @@
         "./searchResultClasses/wikiDataspects.js",
         "./searchResultClasses/searchFacet.js",
         "./instant-meilisearch.umd.js",
-        "./instantsearch.production.js",
-        "./neo4j-driver.js"
+        "./instantsearch.production.js"
       ],
       "messages": []
     }
