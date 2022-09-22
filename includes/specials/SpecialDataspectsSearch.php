@@ -104,6 +104,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 			'wgDataspectsSearchNeo4jURL' =>  $GLOBALS['wgDataspectsSearchNeo4jURL'],
 			'wgDataspectsSearchNeo4jUsername' =>  $GLOBALS['wgDataspectsSearchNeo4jUsername'],
 			'wgDataspectsSearchNeo4jPassword' =>  $GLOBALS['wgDataspectsSearchNeo4jPassword'],
+			'wgDataspectsSearchNeo4jDatabase' =>  $GLOBALS['wgDataspectsSearchNeo4jDatabase'],
 			'sources' => $this->sources()
 		));
 		$output->addModules( 'ext.dataspectsSearch' );

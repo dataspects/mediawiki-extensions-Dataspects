@@ -23,16 +23,14 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
-    try { # FIXME
-      $this->neo4jClient = ClientBuilder::create()->withDriver(
-        'neo4j',
-        $GLOBALS['wgDataspectsSearchNeo4jURL'],
-        Authenticate::basic($GLOBALS['wgDataspectsSearchNeo4jUsername'], $GLOBALS['wgDataspectsSearchNeo4jPassword'])
-      )->build();
-    } catch (Exception $e) {
-      echo 'Caught exception: ',  $e->getMessage(), "\n";
-    }
+    $this->dsNeo4j = new DSNeo4j();
+    
     $this->attachments = [];
+    $this->incomingLinks = [];
+    $this->outgoingLinks = [];
+    $this->sections = [];
+    $this->templates = [];
+    $this->images = [];
   }
 
   static function deleteFromDatastore($id) {
@@ -107,6 +105,8 @@ class DataspectsSearchFeed {
       case 828:
         $this->getCategories();
         $this->getWikitext();
+        $this->getParse();
+        $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
         break;
       default:
@@ -118,7 +118,7 @@ class DataspectsSearchFeed {
     $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->addPageToMeilisearch();
-    $this->addPageToNeo4j();
+    $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
   }
 
   private function getWikitext() {
@@ -191,10 +191,10 @@ class DataspectsSearchFeed {
 
   private function getIncomingAndOutgoingLinks() {
     foreach($this->title->getLinksFrom() as $linkFrom) {
-	$this->outgoingLinks[] = $linkFrom->getInternalURL();
+      $this->outgoingLinks[] = $linkFrom->getInternalURL();
     }
     foreach($this->title->getLinksTo() as $linkTo) {
-        $this->incomingLinks[] = $linkTo->getInternalURL();
+      $this->incomingLinks[] = $linkTo->getInternalURL();
     }
   }
 
@@ -261,13 +261,6 @@ class DataspectsSearchFeed {
     $this->manualLogEntry($result);
   }
 
-  private function addPageToNeo4j() {
-    $result = $this->neo4jClient->readTransaction(static function (TransactionInterface $tsx) {
-      $result = $tsx->run('MATCH (n) RETURN count(n) AS count');
-      return $result->first()->get("count");
-    }); 
-    echo $result;
-  }  
 
   private function manualLogEntry($result) {
     if($this->user) {

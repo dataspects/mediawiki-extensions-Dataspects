@@ -1,9 +1,7 @@
 require("./neo4j-driver.js");
 DSNeo4j = class {
   constructor(uri, user, password) {
-    const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), {
-      encrypted: "ENCRYPTION_OFF",
-    });
+    const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
     this.session = driver.session();
   }
 
