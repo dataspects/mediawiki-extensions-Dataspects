@@ -6,8 +6,9 @@ namespace MediaWiki\Extension\DataspectsSearch;
 use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
 use ManualLogEntry;
-
-
+use Laudis\Neo4j\Authentication\Authenticate;
+use Laudis\Neo4j\ClientBuilder;
+use Laudis\Neo4j\Contracts\TransactionInterface;
 
 class DataspectsSearchFeed {
 
@@ -22,7 +23,15 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
-    
+    try { # FIXME
+      $this->neo4jClient = ClientBuilder::create()->withDriver(
+        'neo4j',
+        $GLOBALS['wgDataspectsSearchNeo4jURL'],
+        Authenticate::basic($GLOBALS['wgDataspectsSearchNeo4jUsername'], $GLOBALS['wgDataspectsSearchNeo4jPassword'])
+      )->build();
+    } catch (Exception $e) {
+      echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
     $this->attachments = [];
   }
 
@@ -108,7 +117,8 @@ class DataspectsSearchFeed {
     $this->mediaWikiPage = $this->semantologics->process();
     $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
-    $this->addPage();
+    $this->addPageToMeilisearch();
+    $this->addPageToNeo4j();
   }
 
   private function getWikitext() {
@@ -241,7 +251,7 @@ class DataspectsSearchFeed {
 
   
 
-  private function addPage() {
+  private function addPageToMeilisearch() {
     // $h = fopen('/var/log/apache2/error.log', 'a');
 		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
 		// fclose($h);
@@ -250,6 +260,14 @@ class DataspectsSearchFeed {
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry($result);
   }
+
+  private function addPageToNeo4j() {
+    $result = $this->neo4jClient->readTransaction(static function (TransactionInterface $tsx) {
+      $result = $tsx->run('MATCH (n) RETURN count(n) AS count');
+      return $result->first()->get("count");
+    }); 
+    echo $result;
+  }  
 
   private function manualLogEntry($result) {
     if($this->user) {

@@ -126,6 +126,8 @@ $(function () {
     mw.config.get("wgDataspectsSearchNeo4jUsername"),
     mw.config.get("wgDataspectsSearchNeo4jPassword")
   );
+
+  // UI elements from Neo4j
   n4j.numberOfNodes().then((result) => {
     $("#numberOfNeo4jNodes").text(result);
   });
