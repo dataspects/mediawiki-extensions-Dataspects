@@ -23,12 +23,12 @@ class SpecialDataspectsFeed {
       "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->dsf->wikitext),
       "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext),
-      "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json"
-      // "sections" => $this->sections,
-      // "templates" => $this->templates,
-      // "outgoingLinks" => $this->outgoingLinks,
-      // "incomingLinks" => $this->incomingLinks,
-      // "images" => $this->images,
+      "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
+      "sections" => $this->dsf->sections,
+      "templates" => $this->dsf->templates,
+      "outgoingLinks" => $this->dsf->outgoingLinks,
+      "incomingLinks" => $this->dsf->incomingLinks,
+      "images" => $this->dsf->images,
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
@@ -145,6 +145,7 @@ class SpecialDataspectsFeed {
   private function ds0__text($parsedWikitext) {
     $dom = new \DOMDocument('1.0', 'utf-8');
     if($parsedWikitext) {
+      // FIXME: DOMDocument::loadHTML(): Namespace prefix mw is not defined in Entity
       $dom->loadHTML($parsedWikitext);
       $xpath = new \DomXPath($dom);
       foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
