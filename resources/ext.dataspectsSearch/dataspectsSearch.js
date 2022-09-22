@@ -118,8 +118,17 @@ const defaultToAuthorizedSources = (helper) => {
 
 $(function () {
   const { SearchResultMatcher } = require("./profileMatcher.js");
+  const { DSNeo4j } = require("./DSneo4j.js");
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
+  n4j = new DSNeo4j(
+    mw.config.get("wgDataspectsSearchNeo4jURL"),
+    mw.config.get("wgDataspectsSearchNeo4jUsername"),
+    mw.config.get("wgDataspectsSearchNeo4jPassword")
+  );
+  n4j.numberOfNodes().then((result) => {
+    $("#numberOfNeo4jNodes").text(result);
+  });
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
