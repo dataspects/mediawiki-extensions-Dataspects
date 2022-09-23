@@ -38,7 +38,13 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</td>
 						<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
 						</td>
+						</tr>
 						<tr>
+						<td>wgDataspectsSearchNeo4jURL
+						</td>
+						<td>'.$GLOBALS['wgDataspectsSearchNeo4jURL'].' (<code id="numberOfNeo4jNodes"></code> nodes)
+						</td>
+						</tr>
 						<tr>
 						<td>wgDataspectsSearchMediaWikiIDPrefix
 						</td>
@@ -95,6 +101,10 @@ class SpecialDataspectsSearch extends SpecialPage {
 			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
 			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
 			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL'],
+			'wgDataspectsSearchNeo4jURL' =>  $GLOBALS['wgDataspectsSearchNeo4jURL'],
+			'wgDataspectsSearchNeo4jUsername' =>  $GLOBALS['wgDataspectsSearchNeo4jUsername'],
+			'wgDataspectsSearchNeo4jPassword' =>  $GLOBALS['wgDataspectsSearchNeo4jPassword'],
+			'wgDataspectsSearchNeo4jDatabase' =>  $GLOBALS['wgDataspectsSearchNeo4jDatabase'],
 			'sources' => $this->sources()
 		));
 		$output->addModules( 'ext.dataspectsSearch' );

@@ -6,8 +6,9 @@ namespace MediaWiki\Extension\DataspectsSearch;
 use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
 use ManualLogEntry;
-
-
+use Laudis\Neo4j\Authentication\Authenticate;
+use Laudis\Neo4j\ClientBuilder;
+use Laudis\Neo4j\Contracts\TransactionInterface;
 
 class DataspectsSearchFeed {
 
@@ -22,8 +23,14 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
+    $this->dsNeo4j = new DSNeo4j();
     
     $this->attachments = [];
+    $this->mw0__incomingLinks = [];
+    $this->mw0__outgoingLinks = [];
+    $this->mw0__sections = [];
+    $this->mw0__templates = [];
+    $this->mw0__images = [];
   }
 
   static function deleteFromDatastore($id) {
@@ -98,6 +105,8 @@ class DataspectsSearchFeed {
       case 828:
         $this->getCategories();
         $this->getWikitext();
+        $this->getParse();
+        $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
         break;
       default:
@@ -108,7 +117,9 @@ class DataspectsSearchFeed {
     $this->mediaWikiPage = $this->semantologics->process();
     $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
-    $this->addPage();
+    $this->addPageToMeilisearch();
+    // $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
+    $this->dsNeo4j->numberOfNodes();
   }
 
   private function getWikitext() {
@@ -147,23 +158,23 @@ class DataspectsSearchFeed {
     $data = $api->getResult()->getResultData();
     foreach($data["parse"]["sections"] as $i => $section) {
       if(is_numeric($i)) {
-            $this->sections[] = $section;
+            $this->mw0__sections[] = $section;
       }
     }
     foreach($data["parse"]["templates"] as $template) {
       if(is_array($template)) {
-        $this->templates[] = $template;
+        $this->mw0__templates[] = $template;
       }
     }
-    $this->images = array();
+    $this->mw0__images = array();
     foreach($data["parse"]["images"] as $i => $image) {
     	if(is_numeric($i)) {
-        $this->images[] = $image;
+        $this->mw0__images[] = $image;
       }
     }
     foreach($data["parse"]["externallinks"] as $i => $externalLink) {
 	    if(is_numeric($i)) {
-                $this->outgoingLinks[] = $externalLink;
+                $this->mw0__outgoingLinks[] = $externalLink;
         }
     }
   }
@@ -181,10 +192,10 @@ class DataspectsSearchFeed {
 
   private function getIncomingAndOutgoingLinks() {
     foreach($this->title->getLinksFrom() as $linkFrom) {
-	$this->outgoingLinks[] = $linkFrom->getInternalURL();
+      $this->mw0__outgoingLinks[] = $linkFrom->getInternalURL();
     }
     foreach($this->title->getLinksTo() as $linkTo) {
-        $this->incomingLinks[] = $linkTo->getInternalURL();
+      $this->mw0__incomingLinks[] = $linkTo->getInternalURL();
     }
   }
 
@@ -241,7 +252,7 @@ class DataspectsSearchFeed {
 
   
 
-  private function addPage() {
+  private function addPageToMeilisearch() {
     // $h = fopen('/var/log/apache2/error.log', 'a');
 		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
 		// fclose($h);
@@ -250,6 +261,7 @@ class DataspectsSearchFeed {
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry($result);
   }
+
 
   private function manualLogEntry($result) {
     if($this->user) {
