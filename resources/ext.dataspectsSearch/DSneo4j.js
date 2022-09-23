@@ -8,10 +8,10 @@ DSNeo4j = class {
       api
         .get({
           action: "neo4japi",
-          querytype: "test",
+          querytype: "numberofnodes",
         })
         .done(function (data) {
-          $(elementID).text(4);
+          $(elementID).text(data.data.numberofnodes);
         });
     });
   };
