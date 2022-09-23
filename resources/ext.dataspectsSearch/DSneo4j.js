@@ -1,5 +1,23 @@
+require("./vis-network.min.js");
 DSNeo4j = class {
-  constructor() {}
+  constructor() {
+    var nodes = new vis.DataSet([
+      { id: 1, label: "Node 1" },
+      { id: 2, label: "Node 2" },
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([{ from: 1, to: 2 }]);
+
+    // create a network
+    var container = document.getElementById("graphTest");
+    var data = {
+      nodes: nodes,
+      edges: edges,
+    };
+    var options = {};
+    var network = new vis.Network(container, data, options);
+  }
 
   numberOfNodes = (elementID) => {
     mw.loader.using("mediawiki.api", function () {

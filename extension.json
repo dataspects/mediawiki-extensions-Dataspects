@@ -48,7 +48,8 @@
         "./searchResultClasses/searchFacet.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js",
-        "./DSneo4j.js"
+        "./DSneo4j.js",
+        "./vis-network.min.js"
       ],
       "messages": []
     }

@@ -17,6 +17,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Reset this facet</a> | <span id="saveFacetLink"></span>
 				</td>
 				<td>
+					<div id="graphTest"></div>
 					<table class="backstage_table">
 						<tbody><tr>
 						<td>wgDataspectsSearchWriteURL

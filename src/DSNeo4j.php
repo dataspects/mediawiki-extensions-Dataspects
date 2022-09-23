@@ -36,7 +36,7 @@ class DSNeo4j {
     // print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
     $coreProperties = '{
-      name: $name
+      name: $mw0__rawUrl
     }';
     $queries = [
         [
@@ -74,9 +74,8 @@ class DSNeo4j {
     foreach ($mediaWikiPage["mw0__templates"] as $template) {
       $templates[] = $template["title"];
     }
-
     $queries = [];
-    foreach ($templates as $template) {
+    foreach ($templates as $fullTemplateName) {
       $templateCoreProperties = '{
         name: $objName
       }';
@@ -107,8 +106,8 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subName" => $mediaWikiPage["name"],
-          "objName" => $template
+          "subName" => $mediaWikiPage["mw0__rawUrl"],
+          "objName" => $this->mw0__rawUrl($fullTemplateName)
         ]
       ];
     }
@@ -117,13 +116,13 @@ class DSNeo4j {
 
   private function update($queries) {
     foreach($queries as $query) {
-        $result = $this->neo4jClient->writeTransaction(static function (TransactionInterface $tsx) use ($query) {
-            try {
-                $summarisedResult = $tsx->run($query["query"], $query["params"]);
-            } catch (Exception $ex) {
-                echo $ex;
-            }
-        }); 
+      $result = $this->neo4jClient->writeTransaction(static function (TransactionInterface $tsx) use ($query) {
+          try {
+              $summarisedResult = $tsx->run($query["query"], $query["params"]);
+          } catch (Exception $ex) {
+              echo $ex;
+          }
+      }); 
     }
   }
 
@@ -141,6 +140,10 @@ class DSNeo4j {
 
   private function normalizePredicateName() {
 
+  }
+
+  private function mw0__rawUrl($someName) {
+    return $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']).$someName;
   }
 
 }
