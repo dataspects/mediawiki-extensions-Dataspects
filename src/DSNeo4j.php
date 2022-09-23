@@ -31,7 +31,14 @@ class DSNeo4j {
    */
 
   public function numberOfNodes() {
-    return 6;
+    $results = $this->query([
+      "query" => '
+        MATCH (n)
+        RETURN count(n) AS count
+      ',
+      "params" => []
+    ]);
+    return $results->first()->get("count");
   }
 
   public function addPageToNeo4j($mediaWikiPage) {
@@ -111,6 +118,18 @@ class DSNeo4j {
             }
         }); 
     }
+  }
+
+  private function query($query) {
+    $results = $this->neo4jClient->readTransaction(static function (TransactionInterface $tsx) use ($query, $results) {
+      try {
+          $results = $tsx->run($query["query"], $query["params"]);
+          return $results;
+      } catch (Exception $ex) {
+          echo $ex;
+      }
+    });
+    return $results;
   }
 
   private function normalizePredicateName() {
