@@ -15,7 +15,8 @@
     "DataspectsSearch": "SpecialDataspectsSearch"
   },
   "AutoloadClasses": {
-    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php"
+    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
+    "Neo4jAPI": "includes/api/Neo4jAPI.php"
   },
   "HookHandlers": {
     "DataspectsSearchHooks": {
@@ -47,7 +48,6 @@
         "./searchResultClasses/searchFacet.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js",
-        "./neo4j-driver.js",
         "./DSneo4j.js"
       ],
       "messages": []
@@ -65,6 +65,9 @@
   },
   "LogActionsHandlers": {
     "dataspects/*": "LogFormatter"
+  },
+  "APIModules": {
+    "neo4japi": "Neo4jAPI"
   },
   "manifest_version": 2
 }
