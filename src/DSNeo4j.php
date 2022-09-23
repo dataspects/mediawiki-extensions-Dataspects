@@ -32,23 +32,71 @@ class DSNeo4j {
 
   public function addPageToNeo4j($mediaWikiPage) {
     print_r($mediaWikiPage);
+    // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
+    $coreProperties = '{
+      name: $name
+    }';
     $queries = [
         [
             "query" => '
                 CALL apoc.merge.node(
-                [ "MediaWikiPage" ],
-                { name: $name }
+                  [ "MediaWikiPage" ],
+                  '.$coreProperties.',  // identProps
+                  {},                   // props
+                  '.$coreProperties.'   // onMatchProps
                 )
                 YIELD node
                 RETURN node
             ',
-            "params" => [
-                "name" => $mediaWikiPage["name"]
-            ]
+            "params" => $mediaWikiPage // This provides all fields. We select in $coreProperties.
         ]
     ];
+    $queries = array_merge($queries, $this->templateTransactions($mediaWikiPage));
     $this->update($queries);
     echo $GLOBALS['wgDataspectsSearchNeo4jURL'].":".$GLOBALS['wgDataspectsSearchNeo4jDatabase'].": ADDED: ".$mediaWikiPage["mw0__rawUrl"]."\n";
+  }
+
+  private function templateTransactions($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["mw0__templates"] as $template) {
+      $templateCoreProperties = '{
+        name: $objName
+      }';
+      $queries[] = [
+        "query" => '
+          MATCH (sub:MediaWikiPage{name: $subName})
+
+          WITH sub
+          
+          CALL apoc.merge.node(
+            [ "MediaWikiPage", "Template" ],
+            '.$templateCoreProperties.',  // identProps
+            {},                   // props
+            '.$templateCoreProperties.'   // onMatchProps
+          )
+          YIELD node AS obj
+
+          WITH sub, obj
+          
+          CALL apoc.merge.relationship(
+            sub,
+            "mw0__UsesTemplate",
+            {},                   // identProps
+            {},                   // props
+            obj,
+            {}                    // onMatchProps
+          )
+          YIELD rel
+
+          RETURN rel
+        ',
+        "params" => [
+          "subName" => $mediaWikiPage["name"],
+          "objName" => $template["title"]
+        ]
+      ];
+    }
+    return $queries;
   }
 
   private function update($queries) {
@@ -61,6 +109,10 @@ class DSNeo4j {
             }
         }); 
     }
+  }
+
+  private function normalizePredicateName() {
+
   }
 
 }

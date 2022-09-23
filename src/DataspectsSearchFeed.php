@@ -26,11 +26,11 @@ class DataspectsSearchFeed {
     $this->dsNeo4j = new DSNeo4j();
     
     $this->attachments = [];
-    $this->incomingLinks = [];
-    $this->outgoingLinks = [];
-    $this->sections = [];
-    $this->templates = [];
-    $this->images = [];
+    $this->mw0__incomingLinks = [];
+    $this->mw0__outgoingLinks = [];
+    $this->mw0__sections = [];
+    $this->mw0__templates = [];
+    $this->mw0__images = [];
   }
 
   static function deleteFromDatastore($id) {
@@ -157,23 +157,23 @@ class DataspectsSearchFeed {
     $data = $api->getResult()->getResultData();
     foreach($data["parse"]["sections"] as $i => $section) {
       if(is_numeric($i)) {
-            $this->sections[] = $section;
+            $this->mw0__sections[] = $section;
       }
     }
     foreach($data["parse"]["templates"] as $template) {
       if(is_array($template)) {
-        $this->templates[] = $template;
+        $this->mw0__templates[] = $template;
       }
     }
-    $this->images = array();
+    $this->mw0__images = array();
     foreach($data["parse"]["images"] as $i => $image) {
     	if(is_numeric($i)) {
-        $this->images[] = $image;
+        $this->mw0__images[] = $image;
       }
     }
     foreach($data["parse"]["externallinks"] as $i => $externalLink) {
 	    if(is_numeric($i)) {
-                $this->outgoingLinks[] = $externalLink;
+                $this->mw0__outgoingLinks[] = $externalLink;
         }
     }
   }
@@ -191,10 +191,10 @@ class DataspectsSearchFeed {
 
   private function getIncomingAndOutgoingLinks() {
     foreach($this->title->getLinksFrom() as $linkFrom) {
-      $this->outgoingLinks[] = $linkFrom->getInternalURL();
+      $this->mw0__outgoingLinks[] = $linkFrom->getInternalURL();
     }
     foreach($this->title->getLinksTo() as $linkTo) {
-      $this->incomingLinks[] = $linkTo->getInternalURL();
+      $this->mw0__incomingLinks[] = $linkTo->getInternalURL();
     }
   }
 

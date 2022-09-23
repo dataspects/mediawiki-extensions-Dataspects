@@ -16,7 +16,7 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends Maintenance {
 
 	public function execute() {
-		$title = Title::newFromText('Project_"Extension_Templates"');
+		$title = Title::newFromText('UseCase "Clone your wiki"');
 		// $title = Title::newFromText('Aspect "Effortless Input — Efficient Retrieval"');
 		$this->feedOne($title);
 	}

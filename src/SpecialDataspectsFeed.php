@@ -24,11 +24,11 @@ class SpecialDataspectsFeed {
       "mw0__wikitext" => trim($this->dsf->wikitext),
       "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext),
       "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
-      "sections" => $this->dsf->sections,
-      "templates" => $this->dsf->templates,
-      "outgoingLinks" => $this->dsf->outgoingLinks,
-      "incomingLinks" => $this->dsf->incomingLinks,
-      "images" => $this->dsf->images,
+      "mw0__sections" => $this->dsf->mw0__sections,
+      "mw0__templates" => $this->dsf->mw0__templates,
+      "mw0__outgoingLinks" => $this->dsf->mw0__outgoingLinks,
+      "mw0__incomingLinks" => $this->dsf->mw0__incomingLinks,
+      "mw0__images" => $this->dsf->mw0__images,
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
@@ -40,7 +40,7 @@ class SpecialDataspectsFeed {
 
   
 
-  function getMediaWikiPageAnnotations() {
+  public function getMediaWikiPageAnnotations() {
     $data = $this->dsf->browseBySubject($this->title);
     foreach($data['query']['data'] as $property) {
       if(is_array($property)) {
@@ -67,7 +67,7 @@ class SpecialDataspectsFeed {
     }
   }
 
-  function getPredicateAnnotations() {
+  public function getPredicateAnnotations() {
     $data = $this->browseBySubject($this->title);
     foreach($data['query']['data'] as $property) {
       if(is_array($property)) {
@@ -82,6 +82,27 @@ class SpecialDataspectsFeed {
         }
       }
     }
+  }
+
+  public function allPredicates($mediaWikiPage) {
+    // Initialize
+    $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
+    // Add predicates
+    foreach($mediaWikiPage["annotations"] as $annotation) {
+      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v11"],
+        [
+          "All Predicates > ".$annotation["predicate"]
+        ],
+      );
+      $mediaWikiPage["ds0__allPredicates.1v12"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v12"],
+        [
+          "All Predicates > ".$annotation["predicate"]." > ".$this->objectLiteralValue($annotation["objectLiteral"])
+        ],
+      );
+    }
+    return $mediaWikiPage;
   }
 
   public function selectedAspects($mediaWikiPage) {
@@ -109,27 +130,6 @@ class SpecialDataspectsFeed {
         $predicate.".1v11" => array(),
         $predicate.".1v12" => array(),
       ]);
-    }
-    return $mediaWikiPage;
-  }
-
-  public function allPredicates($mediaWikiPage) {
-    // Initialize
-    $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
-    // Add predicates
-    foreach($mediaWikiPage["annotations"] as $annotation) {
-      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v11"],
-        [
-          "All Predicates > ".$annotation["predicate"]
-        ],
-      );
-      $mediaWikiPage["ds0__allPredicates.1v12"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v12"],
-        [
-          "All Predicates > ".$annotation["predicate"]." > ".$this->objectLiteralValue($annotation["objectLiteral"])
-        ],
-      );
     }
     return $mediaWikiPage;
   }
