@@ -21,17 +21,6 @@ class DSNeo4j {
     } 
   }
 
-  /**
-   * What are we interested in?
-   * 
-   *    - namespace "Main"
-   *        - outgoing links
-   *        - incoming links
-   *        - templates used
-   */
-
-  
-
   public function addPageToNeo4j($mediaWikiPage) {
     // print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
@@ -67,6 +56,45 @@ class DSNeo4j {
       "params" => []
     ]);
     return $results->first()->get("count");
+  }
+
+  public function testgraph($name) {
+    // https://github.com/neo4j-php/neo4j-php-client/blob/main/src/Types/Node.php
+    // https://github.com/neo4j-php/neo4j-php-client/blob/main/src/Types/Relationship.php
+    $results = $this->query([
+      "query" => '
+        MATCH (sub:MediaWikiPage:Template)
+        WHERE sub.name = $name
+        CALL apoc.path.subgraphAll(sub, {
+          relationshipFilter: "mw0__UsesTemplate>",
+          minLevel: 0,                                // min/max number of hops = "nodes in between"
+          maxLevel: 5
+        })
+        YIELD 	nodes, relationships
+        RETURN 	nodes, relationships
+      ',
+      "params" => [
+        "name" => $name
+      ]
+    ]);
+    foreach ($results as $result) {
+      print_r($result->get("nodes")->first()->getProperty("name"));
+      print_r($result->get("relationships")->first()->getStartNodeId());
+      print_r($result->get("relationships")->first()->getEndNodeId());
+    }
+    return [
+      "nodes" => [
+        [ "id"=> 1, "label"=> "Node 1", "content"=> ["me"] ],
+        [ "id"=> 2, "label"=> "Node 2", "content"=> ["you"] ],
+      ],
+      "edges"=> [
+        [
+          "from"=> 1,
+          "to"=> 2,
+          "label"=> ["me", "you"],
+        ]
+      ]
+    ];
   }
 
   private function templateTransactions($mediaWikiPage) {

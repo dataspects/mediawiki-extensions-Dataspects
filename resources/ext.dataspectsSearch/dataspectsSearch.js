@@ -125,6 +125,7 @@ $(function () {
 
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
+  n4j.testGraph("graphTest");
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),

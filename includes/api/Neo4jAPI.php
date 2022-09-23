@@ -19,9 +19,17 @@ class Neo4jAPI extends ApiBase {
 			throw new MWException( wfMessage( 'querytypenull' ) );
 		}
 
-        
-		$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
-
+        switch ($queryType) {
+			case 'numberofnodes':
+				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
+				break;
+			case 'testgraph':
+				$this->getResult()->addValue(null, "data", array( 'testgraph' => $this->dsNeo4j->testgraph($params['name']) ) );
+				break;
+			default:
+				# code...
+				break;
+		}
 		
 	}
 
