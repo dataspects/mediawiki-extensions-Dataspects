@@ -67,17 +67,15 @@ class DSNeo4j {
           MATCH (sub:MediaWikiPage{name: $subName})
 
           WITH sub
-          
           CALL apoc.merge.node(
             [ "MediaWikiPage", "Template" ],
             '.$templateCoreProperties.',  // identProps
-            {},                   // props
+            {},                           // props
             '.$templateCoreProperties.'   // onMatchProps
           )
           YIELD node AS obj
 
           WITH sub, obj
-          
           CALL apoc.merge.relationship(
             sub,
             "mw0__UsesTemplate",
