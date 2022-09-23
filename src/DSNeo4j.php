@@ -30,6 +30,10 @@ class DSNeo4j {
    *        - templates used
    */
 
+  public function numberOfNodes() {
+    return 6;
+  }
+
   public function addPageToNeo4j($mediaWikiPage) {
     print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
