@@ -26,6 +26,7 @@ class SpecialDataspectsFeed {
       "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
       "mw0__sections" => $this->dsf->mw0__sections,
       "mw0__templates" => $this->dsf->mw0__templates,
+      "mw0__templates_by_regex" => $this->dsf->mw0__templates_by_regex,
       "mw0__outgoingLinks" => $this->dsf->mw0__outgoingLinks,
       "mw0__incomingLinks" => $this->dsf->mw0__incomingLinks,
       "mw0__images" => $this->dsf->mw0__images,

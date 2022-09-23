@@ -30,19 +30,10 @@ class DSNeo4j {
    *        - templates used
    */
 
-  public function numberOfNodes() {
-    $results = $this->query([
-      "query" => '
-        MATCH (n)
-        RETURN count(n) AS count
-      ',
-      "params" => []
-    ]);
-    return $results->first()->get("count");
-  }
+  
 
   public function addPageToNeo4j($mediaWikiPage) {
-    print_r($mediaWikiPage);
+    // print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
     $coreProperties = '{
       name: $name
@@ -67,9 +58,25 @@ class DSNeo4j {
     echo $GLOBALS['wgDataspectsSearchNeo4jURL'].":".$GLOBALS['wgDataspectsSearchNeo4jDatabase'].": ADDED: ".$mediaWikiPage["mw0__rawUrl"]."\n";
   }
 
+  public function numberOfNodes() {
+    $results = $this->query([
+      "query" => '
+        MATCH (n)
+        RETURN count(n) AS count
+      ',
+      "params" => []
+    ]);
+    return $results->first()->get("count");
+  }
+
   private function templateTransactions($mediaWikiPage) {
-    $queries = [];
+    $templates = $mediaWikiPage["mw0__templates_by_regex"];
     foreach ($mediaWikiPage["mw0__templates"] as $template) {
+      $templates[] = $template["title"];
+    }
+
+    $queries = [];
+    foreach ($templates as $template) {
       $templateCoreProperties = '{
         name: $objName
       }';
@@ -101,7 +108,7 @@ class DSNeo4j {
         ',
         "params" => [
           "subName" => $mediaWikiPage["name"],
-          "objName" => $template["title"]
+          "objName" => $template
         ]
       ];
     }

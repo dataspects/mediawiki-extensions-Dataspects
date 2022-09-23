@@ -30,6 +30,7 @@ class DataspectsSearchFeed {
     $this->mw0__outgoingLinks = [];
     $this->mw0__sections = [];
     $this->mw0__templates = [];
+    $this->mw0__templates_by_regex = [];
     $this->mw0__images = [];
   }
 
@@ -107,6 +108,7 @@ class DataspectsSearchFeed {
         $this->getWikitext();
         $this->getParse();
         $this->getIncomingAndOutgoingLinks();
+        $this->mw0__templates_by_regex();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
         break;
       default:
@@ -118,8 +120,7 @@ class DataspectsSearchFeed {
     $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->addPageToMeilisearch();
-    // $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
-    $this->dsNeo4j->numberOfNodes();
+    $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
   }
 
   private function getWikitext() {
@@ -146,8 +147,8 @@ class DataspectsSearchFeed {
     $params = new \FauxRequest(
       array(
         'action' => 'parse',
-	'page' => $this->title,
-	# The following prop list is also used in dataspects-cli/mediawiki/loaders.go (LEX2106281051)
+        'page' => $this->title,
+        # The following prop list is also used in dataspects-cli/mediawiki/loaders.go (LEX2106281051)
         "prop" => "categories|templates|images|externallinks|sections",
         "disablelimitreport" => "yes",
         "disableeditsection" => "yes",
@@ -166,7 +167,6 @@ class DataspectsSearchFeed {
         $this->mw0__templates[] = $template;
       }
     }
-    $this->mw0__images = array();
     foreach($data["parse"]["images"] as $i => $image) {
     	if(is_numeric($i)) {
         $this->mw0__images[] = $image;
@@ -248,7 +248,12 @@ class DataspectsSearchFeed {
 
   
 
-  
+  private function mw0__templates_by_regex() {
+    preg_match_all("/[^{]{{(\w+)\n*(?:\|+|}})[^}]/", $this->wikitext, $matches);
+    foreach($matches[1] as $templateName) {
+      $this->mw0__templates_by_regex[] = "Template:".$templateName;
+    }
+  }
 
   
 
