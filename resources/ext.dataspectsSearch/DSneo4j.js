@@ -84,6 +84,7 @@ const putVisNetwork = (data, name) => {
 
 const convertToVisNetwork = (rawData) => {
   // https://visjs.github.io/vis-network/examples/
+  // https://visjs.github.io/vis-network/docs/network/#Events
   var gmd = { nodes: [], edges: [] };
   for (const key in rawData.nodes) {
     var n = rawData.nodes[key];
@@ -91,6 +92,7 @@ const convertToVisNetwork = (rawData) => {
       id: n.id,
       label: "<b>" + n.label + "</b>\n" + n.content.join("\n"),
       font: { face: "Monospace", align: "left", background: "white" },
+      title: n.title,
     });
   }
   for (const key in rawData.edges) {
@@ -112,6 +114,7 @@ const convertToVisNetwork = (rawData) => {
       from: edge.from,
       to: edge.to,
       label: label,
+      title: edge.title,
     });
   }
   return gmd;

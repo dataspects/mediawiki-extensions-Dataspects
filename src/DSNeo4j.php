@@ -86,14 +86,16 @@ class DSNeo4j {
       $graphData["nodes"][] = [
         "id"      => $node->getId(),
         "label"   => $node->getProperty("name"),
-        "content" => []
+        "content" => [],
+        "title"   => ""
       ];
     }
     foreach ($results->first()->get("relationships") as $relationship) {
       $graphData["edges"][] = [
         "from"    => $relationship->getStartNodeId(),
         "to"      => $relationship->getEndNodeId(),
-        "label"   => [$relationship->getType()]
+        "label"   => [$relationship->getType()],
+        "title"   => ""
       ];
     }
     return $graphData;
