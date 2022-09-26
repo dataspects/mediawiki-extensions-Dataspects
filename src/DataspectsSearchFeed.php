@@ -4,21 +4,17 @@
 namespace MediaWiki\Extension\DataspectsSearch;
 
 use MediaWiki\MediaWikiServices;
-use MeiliSearch\Client;
+
 use ManualLogEntry;
 
 class DataspectsSearchFeed {
 
-  public function __construct(\Title $title, $user, $dsNeo4j) {
+  public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient) {
     $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
     $this->title = $title;
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
-    try { # FIXME
-      $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
-    } catch (\MeiliSearch\Exceptions\ApiException $e) {
-      echo 'Caught exception: ',  $e->getMessage(), "\n";
-    }
+    
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
     $this->dsNeo4j = $dsNeo4j;
     
