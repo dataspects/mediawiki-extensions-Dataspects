@@ -8,8 +8,10 @@ instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
 
 */
 
+const { DSNeo4j } = require("./DSneo4j.js");
 var initialPageLoad = true;
 var theDs0__sources = [];
+window.n4j = new DSNeo4j(); //FIXME: ok to be global?
 
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
@@ -117,15 +119,13 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 $(function () {
-  const { SearchResultMatcher } = require("./profileMatcher.js");
-  const { DSNeo4j } = require("./DSneo4j.js");
+  const { SearchResultMatcher } = require("./searchResultMatcher.js");
+
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.js");
-  n4j = new DSNeo4j();
 
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
-  n4j.testGraph("graphTest");
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),

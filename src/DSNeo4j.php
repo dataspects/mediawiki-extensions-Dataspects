@@ -58,9 +58,14 @@ class DSNeo4j {
     return $results->first()->get("count");
   }
 
-  public function testgraph($name) {
+  public function templateCallsSubgraph($name) {
     // https://github.com/neo4j-php/neo4j-php-client/blob/main/src/Types/Node.php
     // https://github.com/neo4j-php/neo4j-php-client/blob/main/src/Types/Relationship.php
+    $graphData = [
+      "nodes" => [],
+      "edges" => []
+    ];
+
     $results = $this->query([
       "query" => '
         MATCH (sub:MediaWikiPage:Template)
@@ -77,24 +82,21 @@ class DSNeo4j {
         "name" => $name
       ]
     ]);
-    foreach ($results as $result) {
-      print_r($result->get("nodes")->first()->getProperty("name"));
-      print_r($result->get("relationships")->first()->getStartNodeId());
-      print_r($result->get("relationships")->first()->getEndNodeId());
+    foreach ($results->first()->get("nodes") as $node) {
+      $graphData["nodes"][] = [
+        "id"      => $node->getId(),
+        "label"   => $node->getProperty("name"),
+        "content" => []
+      ];
     }
-    return [
-      "nodes" => [
-        [ "id"=> 1, "label"=> "Node 1", "content"=> ["me"] ],
-        [ "id"=> 2, "label"=> "Node 2", "content"=> ["you"] ],
-      ],
-      "edges"=> [
-        [
-          "from"=> 1,
-          "to"=> 2,
-          "label"=> ["me", "you"],
-        ]
-      ]
-    ];
+    foreach ($results->first()->get("relationships") as $relationship) {
+      $graphData["edges"][] = [
+        "from"    => $relationship->getStartNodeId(),
+        "to"      => $relationship->getEndNodeId(),
+        "label"   => []
+      ];
+    }
+    return $graphData;
   }
 
   private function templateTransactions($mediaWikiPage) {
@@ -155,7 +157,7 @@ class DSNeo4j {
   }
 
   private function query($query) {
-    $results = $this->neo4jClient->readTransaction(static function (TransactionInterface $tsx) use ($query, $results) {
+    $results = $this->neo4jClient->readTransaction(static function (TransactionInterface $tsx) use ($query) {
       try {
           $results = $tsx->run($query["query"], $query["params"]);
           return $results;

@@ -23,8 +23,8 @@ class Neo4jAPI extends ApiBase {
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
-			case 'testgraph':
-				$this->getResult()->addValue(null, "data", array( 'testgraph' => $this->dsNeo4j->testgraph($params['name']) ) );
+			case 'templatecallssubgraph':
+				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $this->dsNeo4j->templateCallsSubgraph($params['name']) ) );
 				break;
 			default:
 				# code...
@@ -35,7 +35,8 @@ class Neo4jAPI extends ApiBase {
 
     protected function getAllowedParams() {
         return [
-            'querytype' => null
+            'querytype' => null,
+			'name' => null
         ];
     }
 

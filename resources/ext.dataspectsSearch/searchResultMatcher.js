@@ -16,7 +16,7 @@ const {
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, instantsearch) {
+  constructor(hit, instantsearch, n4j) {
     this.hit = hit;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
@@ -71,7 +71,6 @@ SearchResultMatcher = class {
     }
     if (theClass) {
       // The hit profiles DOES match a search result class
-      console.debug(theClass);
       return theClass;
     }
     return new MediaWikiSearchResult(this.hit);

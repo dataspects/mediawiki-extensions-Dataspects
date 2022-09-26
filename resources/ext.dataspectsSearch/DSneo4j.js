@@ -6,34 +6,34 @@ DSNeo4j = class {
     this.api = new mw.Api();
   }
 
-  numberOfNodes = (elementID) => {
+  numberOfNodes = (name) => {
     this.api
       .get({
         action: "neo4japi",
         querytype: "numberofnodes",
       })
       .done(function (data) {
-        $(elementID).text(data.data.numberofnodes);
+        $(name).text(data.data.numberofnodes);
       });
   };
 
-  testGraph = (elementID) => {
+  testGraph = (name) => {
     this.api
       .get({
         action: "neo4japi",
-        querytype: "testgraph",
-        name: "https://localhost/wiki/Template:Issue",
+        querytype: "templatecallssubgraph",
+        name: name,
       })
       .done(function (data) {
-        putVisNetwork(data.data.testgraph, elementID);
+        putVisNetwork(data.data.templatecallssubgraph, name);
       });
   };
 };
 
-const putVisNetwork = (data, elementID) => {
+const putVisNetwork = (data, name) => {
   var rawData = convertToVisNetwork(data);
   new vis.Network(
-    document.getElementById(elementID),
+    document.getElementById(name),
     {
       nodes: rawData.nodes,
       edges: rawData.edges,
