@@ -2,6 +2,9 @@ const { SearchResult } = require("./searchResult.js");
 const { ElementSearchResult } = require("./searchResultClasses/element.js");
 const { MediaWikiSearchResult } = require("./searchResultClasses/mediaWiki.js");
 const {
+  MediaWikiMetaPageSearchResult,
+} = require("./searchResultClasses/mediaWikiMetaPage.js");
+const {
   SMWCindyKateSearchResult,
 } = require("./searchResultClasses/sMWCindyKate.js");
 const {
@@ -39,6 +42,10 @@ SearchResultMatcher = class {
         this.searchResultClassName = searchResultClassName;
         theClass = new SearchFacetSearchResult(this.hit);
         break;
+      case "MediaWikiMetaPageSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new MediaWikiMetaPageSearchResult(this.hit);
+        break;
       default:
         this.error.message =
           "ERROR: " +
@@ -64,6 +71,7 @@ SearchResultMatcher = class {
     }
     if (theClass) {
       // The hit profiles DOES match a search result class
+      console.debug(theClass);
       return theClass;
     }
     return new MediaWikiSearchResult(this.hit);

@@ -22,5 +22,29 @@
       "eppo0__hasEntityType": "SearchFacet"
     },
     "searchResultClassName": "SearchFacetSearchResult"
+  },
+  {
+    "hit": {
+      "mw0__namespace": "Template"
+    },
+    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+  },
+  {
+    "hit": {
+      "mw0__namespace": "Form"
+    },
+    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+  },
+  {
+    "hit": {
+      "mw0__namespace": "Module"
+    },
+    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+  },
+  {
+    "hit": {
+      "mw0__namespace": "Concept"
+    },
+    "searchResultClassName": "MediaWikiMetaPageSearchResult"
   }
 ]
