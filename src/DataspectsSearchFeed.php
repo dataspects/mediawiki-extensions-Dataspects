@@ -120,8 +120,8 @@ class DataspectsSearchFeed {
     $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->addPageToMeilisearch();
-    // $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
-    print_r($this->dsNeo4j->templateCallsSubgraph("https://localhost/wiki/Template:Issue"));
+    $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
+    // print_r($this->dsNeo4j->templateCallsSubgraph("https://localhost/wiki/Template:Issue"));
   }
 
   private function getWikitext() {
