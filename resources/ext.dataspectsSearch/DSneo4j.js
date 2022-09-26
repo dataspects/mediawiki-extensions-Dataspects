@@ -38,11 +38,13 @@ const putVisNetwork = (data, name) => {
       nodes: rawData.nodes,
       edges: rawData.edges,
     },
+    // https://visjs.github.io/vis-network/docs/network/
     {
       autoResize: false,
       height: "100%",
       width: "100%",
       clickToUse: true,
+      configure: { enabled: false },
       nodes: {
         shape: "box",
         fixed: false,
@@ -57,6 +59,11 @@ const putVisNetwork = (data, name) => {
       },
       layout: {
         improvedLayout: true,
+        hierarchical: {
+          enabled: true,
+          direction: "UD",
+          shakeTowards: "leaves",
+        },
       },
       physics: {
         enabled: false,

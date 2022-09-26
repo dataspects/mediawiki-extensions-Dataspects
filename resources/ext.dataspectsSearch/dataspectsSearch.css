@@ -116,7 +116,7 @@
     border-style: solid;
     border-width:1px;
     display: none;
-    box-shadow: 10px 10px 5px lightgray;
+    box-shadow: -10px -10px 5px lightgray;
 }
 
 .ds0__featuresAction {
@@ -176,6 +176,11 @@
 }
 
 #currentHelper {
-        height: 200px;
-        overflow-y: scroll;
-    }
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.visjsGraph {
+    height:400px;
+    box-shadow: -10px -10px 5px lightgray;
+}

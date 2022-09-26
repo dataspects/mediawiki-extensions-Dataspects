@@ -93,7 +93,7 @@ class DSNeo4j {
       $graphData["edges"][] = [
         "from"    => $relationship->getStartNodeId(),
         "to"      => $relationship->getEndNodeId(),
-        "label"   => []
+        "label"   => [$relationship->getType()]
       ];
     }
     return $graphData;
