@@ -6,13 +6,10 @@ namespace MediaWiki\Extension\DataspectsSearch;
 use MediaWiki\MediaWikiServices;
 use MeiliSearch\Client;
 use ManualLogEntry;
-use Laudis\Neo4j\Authentication\Authenticate;
-use Laudis\Neo4j\ClientBuilder;
-use Laudis\Neo4j\Contracts\TransactionInterface;
 
 class DataspectsSearchFeed {
 
-  public function __construct(\Title $title, $user) {
+  public function __construct(\Title $title, $user, $dsNeo4j) {
     $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
     $this->title = $title;
     $this->user = $user;
@@ -23,7 +20,7 @@ class DataspectsSearchFeed {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
     $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
-    $this->dsNeo4j = new DSNeo4j();
+    $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
     $this->mw0__incomingLinks = [];

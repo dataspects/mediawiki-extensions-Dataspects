@@ -1,14 +1,9 @@
 <?php
 
-/**
- * To the extent possible under law,  I, Mark Hershberger, have waived all copyright and
- * related or neighboring rights to Hello World. This work is published from the
- * United States.
- *
- * @copyright CC0 http://creativecommons.org/publicdomain/zero/1.0/
- * @author Mark A. Hershberger <mah@everybody.org>
- * @ingroup Maintenance
- */
+
+use Laudis\Neo4j\Authentication\Authenticate;
+use Laudis\Neo4j\ClientBuilder;
+use Laudis\Neo4j\Contracts\TransactionInterface;
 
 $basePath = getenv( 'MW_INSTALL_PATH' ) !== false ? getenv( 'MW_INSTALL_PATH' ) : __DIR__ . '/../../..';
 require_once $basePath . '/maintenance/Maintenance.php';
@@ -28,8 +23,9 @@ class DMFFeedAll extends Maintenance {
 	}
 
 	private function feedNamespace(int $namespaceNumber) {
+		$dsNeo4j = new \MediaWiki\Extension\DataspectsSearch\DSNeo4j();
 		foreach($this->pageTitlesInNamespace($namespaceNumber) as $title) {
-			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL); #FIXME: NULL is bad design
+			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL, $dsNeo4j); #FIXME: NULL is bad design
 			$dmwf->sendToDatastore();
 		}
 	}
