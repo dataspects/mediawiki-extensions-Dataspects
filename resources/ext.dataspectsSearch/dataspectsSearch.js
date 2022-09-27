@@ -32,7 +32,7 @@ const getUrlParameter = (sParam) => {
 };
 
 $("#originalPageContent").click(function () {
-  if ($(this).text() === "Show original page contents") {
+  if ($("#originalPageContent").prop("checked")) {
     $(this).text("Hide original page contents");
     $(".parsedPageText").css("display", "block");
   } else {

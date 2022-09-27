@@ -12,7 +12,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
 				<td style="width:66%;">
-					<div style="float:right;"><span id="originalPageContent">Show original page contents</span> <input type="checkbox" id="compactList" value="1">Compact list</div>
+					<div style="float:right;"><input type="checkbox" id="originalPageContent">Show original page contents <input type="checkbox" id="compactList" value="1">Compact list</div>
 					<div id="searchbox"></div>
 					<div id="hits"></div>
 					<div id="pagination"></div>
@@ -26,7 +26,8 @@ class SpecialDataspectsSearch extends SpecialPage {
 						</li>
 						<li>
 							<a class="toggle" href=#>Current configuration</a>
-							<table class="inner">
+							<div class="inner">
+							<table>
 								<tbody><tr>
 								<td>wgDataspectsSearchWriteURL
 								</td>
@@ -81,17 +82,18 @@ class SpecialDataspectsSearch extends SpecialPage {
 								</tr>
 								</tbody>
 							</table>
+							</div>
 						</li>
 						<li>
 							<a class="toggle" href=#>Saved search facets</a>
 							<div class="inner">'.$this->searchFacets().'</div>
 						</li>
 						<li>
-							<a id="facetingMenus" class="toggle" href=#>FACETING</a>
+							<a id="facetingMenus" class="toggle" href=#>FACETING (depends on authentication)</a>
 							<div class="inner">
 							<table id="hierarchicalMenus">
 							<tbody>
-								<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td><td><i>Available sources depend on authentication.'.$this->logInMessage().'</i></td></tr>
+								<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td></tr>
 								<tr><td colspan="2"><hr/></td></tr>
 								<tr><td id="topic-types-hierarchical-menu"></td></tr>
 								<tr><td id="sea-kay-menu"></td></tr>
