@@ -11,89 +11,100 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$this->setHeaders();
 		$output->addHTML( '<table class="dataspectsSearchInterface">
 			<tr>
-				<td>
+				<td style="width:66%;">
+					<div style="float:right;"><span id="originalPageContent">Show original page contents</span> <input type="checkbox" id="compactList" value="1">Compact list</div>
 					<div id="searchbox"></div>
-					<pre id="currentHelper"></pre>
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Reset this facet</a> | <span id="saveFacetLink"></span>
+					<div id="hits"></div>
+					<div id="pagination"></div>
 				</td>
-				<td>
-					<div id="graphTest"></div>
-					<table class="backstage_table">
-						<tbody><tr>
-						<td>wgDataspectsSearchWriteURL
-						</td>
-						<td>'.$GLOBALS['wgDataspectsSearchWriteURL'].'
-						</td></tr>
-						<tr>
-						<td>wgDataspectsSearchSearchURL
-						</td>
-						<td>'.$GLOBALS['wgDataspectsSearchSearchURL'].'
-						</td></tr>
-						<tr>
-						<td>wgDataspectsSearchIndex
-						</td>
-						<td>'.$GLOBALS['wgDataspectsSearchIndex'].'
-						</td></tr>
-						<tr>
-						<td>wgDataspectsSearchTikaURL
-						</td>
-						<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
-						</td>
-						</tr>
-						<tr>
-						<td>wgDataspectsSearchNeo4jURL
-						</td>
-						<td>'.$GLOBALS['wgDataspectsSearchNeo4jURL'].' (<code id="numberOfNeo4jNodes"></code> nodes)
-						</td>
-						</tr>
-						<tr>
-						<td>wgDataspectsSearchMediaWikiIDPrefix
-						</td>
-						<td><b>'.$GLOBALS['wgDataspectsSearchMediaWikiIDPrefix'].'</b>
-						</td>
-						<tr>
-						<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
-						</td>
-						</tr>
-						<tr>
-						<td colspan="2"><a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">dataspects log</a>
-						</td>
-						</tr>
-						<tr>
-						<td>Config<br/><code>#IndexConfigSetting</code></td>
-						<td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
-						</tr>
-						<tr>
-						<td>wgDataspectsSearchSourcesForAuthenticated</td>
-						<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAuthenticated']).'</td>
-						</tr>
-						<tr>
-						<td>wgDataspectsSearchSourcesForAnonymous</td>
-						<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAnonymous']).'</td>
-						</tr>
-						</tbody>
-					</table>
-					<div>Saved search facets:</div>
-					'.$this->searchFacets().'
-				</td>
-			</tr>
-			<tr>
-				<td><div style="float:right;"><input type="checkbox" id="compactList" value="1">Compact list</div><div id="hits"></div><div id="pagination"></div></td>
-				<td>
-					<span id="originalPageContent">Show original page contents</span>
-					<table id="hierarchicalMenus">
-					<tbody>
-						<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td><td><i>Available sources depend on authentication.'.$this->logInMessage().'</i></td></tr>
-						<tr><td colspan="2"><hr/></td></tr>
-						<tr><td id="topic-types-hierarchical-menu"></td></tr>
-						<tr><td id="sea-kay-menu"></td></tr>
-						<tr><td id="actions-menu"></td></tr>
-						<tr><td><b>MediaWiki Namespaces</b><div id="mw0__namespace-menu"></div></td></tr>
-					</tbody>
-					</table>
-					<div id="selected-aspects-menu"></div>
-					<hr/>
-					<div id="all-predicates-menu"></div>
+				<td style="width:33%; padding-left:30px;">
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Clear current facet</a> | <span id="saveFacetLink"></span>
+					<ul class="accordion">
+						<li>
+							<a class="toggle" href=#>Current facet</a>
+							<pre id="currentHelper" class="inner"></pre>
+						</li>
+						<li>
+							<a class="toggle" href=#>Current configuration</a>
+							<table class="inner">
+								<tbody><tr>
+								<td>wgDataspectsSearchWriteURL
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchWriteURL'].'
+								</td></tr>
+								<tr>
+								<td>wgDataspectsSearchSearchURL
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchSearchURL'].'
+								</td></tr>
+								<tr>
+								<td>wgDataspectsSearchIndex
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchIndex'].'
+								</td></tr>
+								<tr>
+								<td>wgDataspectsSearchTikaURL
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchTikaURL'].'
+								</td>
+								</tr>
+								<tr>
+								<td>wgDataspectsSearchNeo4jURL
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchNeo4jURL'].' (<code id="numberOfNeo4jNodes"></code> nodes)
+								</td>
+								</tr>
+								<tr>
+								<td>wgDataspectsSearchMediaWikiIDPrefix
+								</td>
+								<td><b>'.$GLOBALS['wgDataspectsSearchMediaWikiIDPrefix'].'</b>
+								</td>
+								<tr>
+								<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
+								</td>
+								</tr>
+								<tr>
+								<td colspan="2"><a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">dataspects log</a>
+								</td>
+								</tr>
+								<tr>
+								<td>Config<br/><code>#IndexConfigSetting</code></td>
+								<td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
+								</tr>
+								<tr>
+								<td>wgDataspectsSearchSourcesForAuthenticated</td>
+								<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAuthenticated']).'</td>
+								</tr>
+								<tr>
+								<td>wgDataspectsSearchSourcesForAnonymous</td>
+								<td>- '.implode("<br/>- ", $GLOBALS['wgDataspectsSearchSourcesForAnonymous']).'</td>
+								</tr>
+								</tbody>
+							</table>
+						</li>
+						<li>
+							<a class="toggle" href=#>Saved search facets</a>
+							<div class="inner">'.$this->searchFacets().'</div>
+						</li>
+						<li>
+							<a id="facetingMenus" class="toggle" href=#>FACETING</a>
+							<div class="inner">
+							<table id="hierarchicalMenus">
+							<tbody>
+								<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td><td><i>Available sources depend on authentication.'.$this->logInMessage().'</i></td></tr>
+								<tr><td colspan="2"><hr/></td></tr>
+								<tr><td id="topic-types-hierarchical-menu"></td></tr>
+								<tr><td id="sea-kay-menu"></td></tr>
+								<tr><td id="actions-menu"></td></tr>
+								<tr><td><b>MediaWiki Namespaces</b><div id="mw0__namespace-menu"></div></td></tr>
+							</tbody>
+							</table>
+							<div id="selected-aspects-menu"></div>
+							<hr/>
+							<div id="all-predicates-menu"></div>
+							</div>
+						</li>
+					</ul>
 				</td>
 			</tr>
 		</table>' );
@@ -133,7 +144,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		};
 		$html = array("<ul>");
 		foreach($searchFacets as $searchFacet) {
-			$pageLink = "<a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a></li>";
+			$pageLink = "<a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a>";
 			$activateLink = "<a href='".$GLOBALS['wgServer']."/wiki/Special:DataspectsSearch?helper=".$searchFacet["Ds0:instantsearchHelper"]."'>Activate</a>";
 			$html[] = "<li>".$pageLink." (".$activateLink.")</li>";
 		}

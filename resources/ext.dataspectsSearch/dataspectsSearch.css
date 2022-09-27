@@ -171,8 +171,8 @@
 .annotationObjectLiteral {
     max-height: 200px;
     max-width: 890px;
-    overflow-x: scroll;
-    overflow-y: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
 #currentHelper {
@@ -183,4 +183,38 @@
 .visjsGraph {
     height:400px;
     box-shadow: -10px -10px 5px lightgray;
+}
+
+
+ul {
+    list-style: none;
+    margin: 0px;
+}
+
+ul .inner {
+    /* padding-left: 1em; */
+    overflow: hidden;
+    display: none;
+}
+
+ul li {
+    margin: 0.5em 0;
+}
+
+ul li a.toggle {
+    width: 100%;
+    display: block;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fefefe;
+    padding: 5px;
+    border-radius: 0.15em;
+    transition: background 0.3s ease;
+}
+
+ul li a.toggle:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+#searchbox {
+    margin-bottom: 50px;
 }
