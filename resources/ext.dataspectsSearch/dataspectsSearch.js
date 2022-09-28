@@ -67,7 +67,13 @@ $(".toggle").click(function (e) {
 $("#facetingMenus").click();
 
 const setCurrentHelper = (helper) => {
-  window.localStorage.setItem("dataspectsSearchFacet", JSON.stringify(helper));
+  window.localStorage.setItem(
+    "dataspectsSearchFacet",
+    JSON.stringify({
+      user: mw.config.get("user"),
+      meilisearchHelper: helper,
+    })
+  );
 };
 
 const getCurrentHelperAndUpdateUI = () => {
@@ -77,11 +83,12 @@ const getCurrentHelperAndUpdateUI = () => {
   $("#currentHelper").html(
     JSON.stringify(
       {
-        query: currentHelper.state.query,
+        user: currentHelper.user,
+        query: currentHelper.meilisearchHelper.state.query,
         hierarchicalFacetsRefinements:
-          currentHelper.state.hierarchicalFacetsRefinements,
+          currentHelper.meilisearchHelper.state.hierarchicalFacetsRefinements,
         disjunctiveFacetsRefinements:
-          currentHelper.state.disjunctiveFacetsRefinements,
+          currentHelper.meilisearchHelper.state.disjunctiveFacetsRefinements,
       },
       0,
       2

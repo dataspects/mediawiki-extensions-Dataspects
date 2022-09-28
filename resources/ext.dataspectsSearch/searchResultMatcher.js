@@ -58,10 +58,11 @@ SearchResultMatcher = class {
         break;
       default:
         this.error.message =
-          "ERROR: " +
+          "ERROR: SearchResult subclass " +
           searchResultClassName +
-          " matched but not found. Reverting to standard.";
-        return null; // FIXME
+          " matched but not found. Reverting to SearchResult class.";
+        this.searchResultClassName = "SearchResult";
+        theClass = new SearchResult(this.hit);
     }
     return theClass;
   };
