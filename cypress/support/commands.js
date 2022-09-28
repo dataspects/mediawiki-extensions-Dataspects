@@ -90,6 +90,13 @@ Cypress.Commands.add("mediawiki_refresh", () => {
   cy.wait(2000);
 });
 
+// dataspectsSearch
+Cypress.Commands.add("typeIntoTextInput", (selector, text) => {
+  cy.get(selector).type(text);
+});
+
+//////////////////////////
+
 const predicateNameReformattedBySMW = (predicateName) => {
   return predicateName
     .replace(/^\w/, (c) => c.toUpperCase())

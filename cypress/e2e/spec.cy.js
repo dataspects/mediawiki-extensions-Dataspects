@@ -4,5 +4,7 @@ describe("dataspects Search", () => {
     cy.mediawiki_login(login[0], login[1]);
     cy.visit("/wiki/Special:DataspectsSearch");
     cy.takeScreenshot("dataspects-Search-page");
+    cy.typeIntoTextInput("input.ais-SearchBox-input", "clone a wiki");
+    cy.takeScreenshot("instant-search-results");
   });
 });
