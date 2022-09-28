@@ -1,6 +1,15 @@
 [
   {
     "hit": {
+      "ds0__source": "dummy"
+    },
+    "environment": {
+      "user": "dummy"
+    },
+    "searchResultClassName": "dummy"
+  },
+  {
+    "hit": {
       "ds0__source": "https://mwstake.org/mwstake/wiki/"
     },
     "searchResultClassName": "MediaWikiSearchResult"
@@ -32,9 +41,6 @@
   {
     "hit": {
       "mw0__namespace": "Template"
-    },
-    "environment": {
-      "user": "Lex"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },
