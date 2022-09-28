@@ -141,6 +141,9 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 $(function () {
+  if (!mw.config.get("wgDataspectsSearchSearchURL")) {
+    return;
+  }
   const { SearchResultMatcher } = require("./searchResultMatcher.js");
 
   require("./instant-meilisearch.umd.js");
@@ -148,7 +151,7 @@ $(function () {
 
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
-
+  console.debug(mw.config.get("wgDataspectsSearchSearchURL"));
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     searchClient: instantMeiliSearch(
