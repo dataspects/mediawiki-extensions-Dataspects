@@ -69,6 +69,10 @@ class SpecialDataspectsSearch extends SpecialPage {
 								</td>
 								</tr>
 								<tr>
+								<td colspan="2"><a href="https://wiki.dataspects.com/wiki/Dataspects:Development">Development</a>
+								</td>
+								</tr>
+								<tr>
 								<td>Config<br/><code>#IndexConfigSetting</code></td>
 								<td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
 								</tr>

@@ -281,7 +281,11 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
+          // dsImplementation:
           var srm = new SearchResultMatcher(hit, instantsearch);
+          console.info(
+            "Returning " + hit.name + " using " + srm.searchResultClassName
+          );
           return srm.searchResult();
         },
         empty:

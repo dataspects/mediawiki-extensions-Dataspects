@@ -42,13 +42,19 @@
     margin-bottom: 0px;
 }
 
-.hitAlert {
-    background-color: orange;
+.hitAlert, .hitInfo {
     width:10px;
     float:right;
     text-align: center;
     border-radius: 3px;
     padding:2px;
+    cursor: pointer;
+}
+.hitAlert {
+    background-color: orange;
+}
+.hitInfo {
+    color:#ccc;
 }
 
 .dataspectsSearchInterface {
@@ -124,25 +130,7 @@
     font-weight: bold;
 }
 
-#originalPageContent {
-    background-color: beige;
-    padding: 3px;
-    border: 1px solid red;
-    border-radius: 3px;
-    cursor: pointer;
-}
 
-.originalPageContentHide {
-    display: none;
-}
-
-.originalPageContentShow {
-    background-color: beige;
-    padding: 3px;
-    border: 1px solid red;
-    border-radius: 3px;
-    display: block;
-}
 
 #hierarchicalMenus {
     width: 100%;

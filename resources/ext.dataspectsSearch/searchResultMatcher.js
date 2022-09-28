@@ -20,12 +20,18 @@ SearchResultMatcher = class {
     this.hit = hit;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
+    this.info = new SearchResultMatchInfo();
     this.searchResultClass = this.getSearchResultClass();
+    // this.defaultSearchResultClass = "SearchResult"; // FIXME: see below
   }
 
   searchResultClassMappings = (searchResultClassName) => {
     var theClass = null;
     switch (searchResultClassName) {
+      case "SearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new SearchResult(this.hit);
+        break;
       case "ElementSearchResult":
         this.searchResultClassName = searchResultClassName;
         theClass = new ElementSearchResult(this.hit);
@@ -42,6 +48,10 @@ SearchResultMatcher = class {
         this.searchResultClassName = searchResultClassName;
         theClass = new SearchFacetSearchResult(this.hit);
         break;
+      case "MediaWikiSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new MediaWikiSearchResult(this.hit);
+        break;
       case "MediaWikiMetaPageSearchResult":
         this.searchResultClassName = searchResultClassName;
         theClass = new MediaWikiMetaPageSearchResult(this.hit);
@@ -57,8 +67,7 @@ SearchResultMatcher = class {
   };
 
   getSearchResultClass = () => {
-    var theClass = null;
-    this.searchResultClassName = "MediaWikiSearchResult"; // This is if no profile matches!
+    var theClass = this.searchResultClassMappings("SearchResult"); // FIXME: this.defaultSearchResultClass doesn't work here, since the constructor doesn't seem to have completed before this is run?!
     for (const key in Object.keys(profiles)) {
       // console.debug(JSON.stringify(this.hit, null, 2));
       // console.debug(JSON.stringify(profiles[key].hit, null, 2));
@@ -69,17 +78,16 @@ SearchResultMatcher = class {
         );
       }
     }
-    if (theClass) {
-      // The hit profiles DOES match a search result class
-      return theClass;
-    }
-    return new MediaWikiSearchResult(this.hit);
+    return theClass;
   };
 
+  // FIXME: If we move this method to the top of the class, it doesn't work as expected?! Class not fully loaded?!
   searchResult = () => {
+    this.info.message = "searchResultClassName: " + this.searchResultClassName;
     return this.searchResultClass.searchResult(
       this.hit,
       this.error,
+      this.info,
       instantsearch
     );
   };
@@ -112,6 +120,18 @@ SearchResultMatchError = class {
   constructor() {}
   set message(m) {
     this.#messageValue = '<div class="hitAlert" title="' + m + '">!</div>';
+  }
+
+  get message() {
+    return this.#messageValue;
+  }
+};
+
+SearchResultMatchInfo = class {
+  #messageValue;
+  constructor() {}
+  set message(m) {
+    this.#messageValue = '<div class="hitInfo" title="' + m + '">?</div>';
   }
 
   get message() {

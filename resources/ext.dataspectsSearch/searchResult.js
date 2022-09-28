@@ -3,10 +3,11 @@ SearchResult = class {
     this.hit = hit;
   }
 
-  searchResult = (hit, error, instantsearch) => {
+  searchResult = (hit, error, info, instantsearch) => {
     return (
       '<div class="hit">' +
       (error.message ? error.message : "") +
+      (info.message ? info.message : "") +
       "<div class='searchResultHeader'>" +
       this.searchResultHeader() +
       "</div><div class='searchResultBody'>" +
