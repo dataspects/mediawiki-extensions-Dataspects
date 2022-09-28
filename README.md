@@ -2,6 +2,8 @@
 
 dataspects Search for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
 
+[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html)
+
 ```mermaid
 flowchart LR
 
