@@ -281,7 +281,14 @@ $(function () {
       container: "#hits",
       templates: {
         item(hit) {
-          // dsImplementation:
+          /**
+           * dsImplementation: Match SearchResult class against hit/env profile
+           * We have:
+           *  1) a hit JSON from Meilisearch and
+           *  2) an environment JSON from the browser.
+           * These are matched against profiles.json in order to load
+           * the correct SearchResult subclass or default SearchResult class.
+           */
           var srm = new SearchResultMatcher(hit, instantsearch);
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName

@@ -69,7 +69,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 								</td>
 								</tr>
 								<tr>
-								<td colspan="2"><a href="https://wiki.dataspects.com/wiki/Dataspects:Development">Development</a>
+								<td colspan="2"><a href="https://wiki.dataspects.com/wiki/Dataspects:Development">Development</a> (search code base for <code>dsImplementation:</code>)
 								</td>
 								</tr>
 								<tr>
