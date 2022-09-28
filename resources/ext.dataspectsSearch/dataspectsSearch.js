@@ -70,7 +70,7 @@ const setCurrentHelper = (helper) => {
   window.localStorage.setItem(
     "dataspectsSearchFacet",
     JSON.stringify({
-      user: mw.config.get("user"),
+      environment: { user: mw.config.get("user") },
       meilisearchHelper: helper,
     })
   );
@@ -83,7 +83,7 @@ const getCurrentHelperAndUpdateUI = () => {
   $("#currentHelper").html(
     JSON.stringify(
       {
-        user: currentHelper.user,
+        environment: currentHelper.environment,
         query: currentHelper.meilisearchHelper.state.query,
         hierarchicalFacetsRefinements:
           currentHelper.meilisearchHelper.state.hierarchicalFacetsRefinements,
@@ -296,7 +296,14 @@ $(function () {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
-          var srm = new SearchResultMatcher(hit, instantsearch);
+          console.debug(window.localStorage.getItem("dataspectsSearchFacet"));
+          var srm = new SearchResultMatcher(
+            hit,
+            JSON.parse(
+              window.localStorage.getItem("dataspectsSearchFacet")
+            ).environment,
+            instantsearch
+          );
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
           );

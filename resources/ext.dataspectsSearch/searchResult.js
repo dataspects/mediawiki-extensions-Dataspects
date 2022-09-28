@@ -6,8 +6,8 @@ SearchResult = class {
   searchResult = (hit, error, info, instantsearch) => {
     return (
       '<div class="hit">' +
-      (error.message ? error.message : "") +
-      (info.message ? info.message : "") +
+      (typeof error.message == "string" ? error.message : "") +
+      (typeof info.message == "string" ? info.message : "") +
       "<div class='searchResultHeader'>" +
       this.searchResultHeader() +
       "</div><div class='searchResultBody'>" +

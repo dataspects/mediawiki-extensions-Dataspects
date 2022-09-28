@@ -3,7 +3,7 @@
     "hit": {
       "ds0__source": "https://mwstake.org/mwstake/wiki/"
     },
-    "searchResultClassName": "MediaWikiSearcResult"
+    "searchResultClassName": "MediaWikiSearchResult"
   },
   {
     "hit": {
@@ -32,6 +32,9 @@
   {
     "hit": {
       "mw0__namespace": "Template"
+    },
+    "environment": {
+      "user": "Lex"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },

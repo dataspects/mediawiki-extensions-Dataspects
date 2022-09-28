@@ -16,17 +16,29 @@ const {
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, instantsearch, n4j) {
+  constructor(hit, environment, instantsearch) {
     this.hit = hit;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo();
+    this.environment = environment;
+    this.defaultSearchResultClass = "SearchResult";
     this.searchResultClass = this.getSearchResultClass();
-    // this.defaultSearchResultClass = "SearchResult"; // FIXME: see below
   }
+
+  searchResult = () => {
+    this.info.message = "searchResultClassName: " + this.searchResultClassName;
+    return this.searchResultClass.searchResult(
+      this.hit,
+      this.error,
+      this.info,
+      instantsearch
+    );
+  };
 
   searchResultClassMappings = (searchResultClassName) => {
     var theClass = null;
+    this.error.message = false;
     switch (searchResultClassName) {
       case "SearchResult":
         this.searchResultClassName = searchResultClassName;
@@ -60,37 +72,39 @@ SearchResultMatcher = class {
         this.error.message =
           "ERROR: SearchResult subclass " +
           searchResultClassName +
-          " matched but not found. Reverting to SearchResult class.";
+          " requested by profile match but not found. Reverting to SearchResult class.";
         this.searchResultClassName = "SearchResult";
         theClass = new SearchResult(this.hit);
     }
     return theClass;
   };
 
+  profilesMatch = (profile) => {
+    if ("environment" in profile) {
+      if (
+        this.firstContainsSecond(this.hit, profile.hit) &&
+        this.firstContainsSecond(this.environment, profile.environment)
+      ) {
+        return true;
+      }
+    } else if (this.firstContainsSecond(this.hit, profile.hit)) {
+      return true;
+    }
+    return false;
+  };
+
   getSearchResultClass = () => {
-    var theClass = this.searchResultClassMappings("SearchResult"); // FIXME: this.defaultSearchResultClass doesn't work here, since the constructor doesn't seem to have completed before this is run?!
+    var theClass = this.searchResultClassMappings(
+      this.defaultSearchResultClass
+    );
     for (const key in Object.keys(profiles)) {
-      // console.debug(JSON.stringify(this.hit, null, 2));
-      // console.debug(JSON.stringify(profiles[key].hit, null, 2));
-      if (this.firstContainsSecond(this.hit, profiles[key].hit)) {
-        // This hit requests a class.
+      if (this.profilesMatch(profiles[key])) {
         theClass = this.searchResultClassMappings(
           profiles[key].searchResultClassName
         );
       }
     }
     return theClass;
-  };
-
-  // FIXME: If we move this method to the top of the class, it doesn't work as expected?! Class not fully loaded?!
-  searchResult = () => {
-    this.info.message = "searchResultClassName: " + this.searchResultClassName;
-    return this.searchResultClass.searchResult(
-      this.hit,
-      this.error,
-      this.info,
-      instantsearch
-    );
   };
 
   firstContainsSecond = (object1, object2) => {
@@ -120,7 +134,9 @@ SearchResultMatchError = class {
   #messageValue;
   constructor() {}
   set message(m) {
-    this.#messageValue = '<div class="hitAlert" title="' + m + '">!</div>';
+    if (m) {
+      this.#messageValue = '<div class="hitAlert" title="' + m + '">!</div>';
+    }
   }
 
   get message() {
@@ -132,7 +148,9 @@ SearchResultMatchInfo = class {
   #messageValue;
   constructor() {}
   set message(m) {
-    this.#messageValue = '<div class="hitInfo" title="' + m + '">?</div>';
+    if (m) {
+      this.#messageValue = '<div class="hitInfo" title="' + m + '">?</div>';
+    }
   }
 
   get message() {
