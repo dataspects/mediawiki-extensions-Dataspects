@@ -18,7 +18,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<div id="pagination"></div>
 				</td>
 				<td style="width:33%; padding-left:30px;">
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Clear current facet</a> | <span id="saveFacetLink"></span> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html">Doc</a>
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch">Clear current facet</a> | <span id="saveFacetLink"></span> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
 					<ul class="accordion">
 						<li>
 							<a class="toggle" href=#>Current facet</a>
@@ -62,10 +62,6 @@ class SpecialDataspectsSearch extends SpecialPage {
 								</td>
 								<tr>
 								<td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
-								</td>
-								</tr>
-								<tr>
-								<td colspan="2"><a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">dataspects log</a>
 								</td>
 								</tr>
 								<tr>

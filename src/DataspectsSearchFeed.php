@@ -258,7 +258,7 @@ class DataspectsSearchFeed {
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
     echo $GLOBALS['wgDataspectsSearchWriteURL'].":".$GLOBALS['wgDataspectsSearchIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
-    $this->manualLogEntry('Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
+    $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }
 
 
