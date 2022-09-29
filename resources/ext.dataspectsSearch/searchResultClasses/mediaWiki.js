@@ -12,7 +12,7 @@ MediaWikiSearchResult = class extends SearchResult {
   };
 
   parsedPageText = (hit) => {
-    //FIXME
+    //FIXME: CORS issues!
     if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
       $.ajax({
         url: encodeURI(hit.mw0__apiParseTextURL),

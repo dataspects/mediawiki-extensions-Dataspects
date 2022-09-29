@@ -13,6 +13,14 @@ WikiDataspectsSearchResult = class extends MediaWikiSearchResult {
       "</a></span>"
     );
   };
+
+  eppo0__hasEntityBlurb = () => {
+    return (
+      "<div class='eppo0__hasEntityBlurb'>" +
+      this.annotationByPredicate("HasEntityBlurb") +
+      "</div>"
+    );
+  };
 };
 
 module.exports = { WikiDataspectsSearchResult };
