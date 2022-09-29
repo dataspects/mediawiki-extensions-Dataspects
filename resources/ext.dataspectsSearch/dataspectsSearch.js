@@ -194,6 +194,9 @@ $(function () {
         item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge eppo0__hasEntityType">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
       },
       limit: 50,
+      cssClasses: {
+        root: "no-root-bullet-in-list",
+      },
     }),
     instantsearch.widgets.refinementList({
       container: "#sources-refinement-list",
@@ -219,9 +222,11 @@ $(function () {
             });
           initialPageLoad = false;
         }
-
         // enforceAuthorizedSources(helper);
         return theDs0__sources;
+      },
+      cssClasses: {
+        root: "sources-refinement-list",
       },
     }),
     instantsearch.widgets.refinementList({
@@ -230,6 +235,9 @@ $(function () {
       showMore: true,
       showMoreLimit: 20,
       limit: 1,
+      cssClasses: {
+        root: "mw0__namespace-menu",
+      },
     }),
     instantsearch.widgets.hierarchicalMenu({
       container: "#sea-kay-menu",
@@ -241,8 +249,7 @@ $(function () {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
-        parentItem: "parentItem",
-        selectedItem: "selectedItem",
+        root: "no-root-bullet-in-list",
       },
       limit: 50,
     }),
@@ -253,8 +260,7 @@ $(function () {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__featuresAction"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
-        parentItem: "parentItem",
-        selectedItem: "selectedItem",
+        root: "no-root-bullet-in-list",
       },
       limit: 50,
     }),
@@ -265,8 +271,7 @@ $(function () {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__specialAspect"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
-        parentItem: "parentItem",
-        selectedItem: "selectedItem",
+        root: "no-root-bullet-in-list",
       },
       limit: 50,
     }),
@@ -281,8 +286,7 @@ $(function () {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
       },
       cssClasses: {
-        parentItem: "parentItem",
-        selectedItem: "selectedItem",
+        root: "no-root-bullet-in-list",
       },
       limit: 1000,
     }),
