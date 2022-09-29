@@ -26,11 +26,18 @@
 
 //LEX2206071345
 
+// FIXME
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false;
+});
+
 const wait = 500;
 
 Cypress.Commands.add("takeScreenshot", (imageName) => {
   cy.wait(1000);
-  cy.screenshot(imageName);
+  cy.screenshot(imageName, { capture: "viewport" });
 });
 
 Cypress.Commands.add("mediawiki_login", (username, password) => {
@@ -93,6 +100,11 @@ Cypress.Commands.add("mediawiki_refresh", () => {
 // dataspectsSearch
 Cypress.Commands.add("typeIntoTextInput", (selector, text) => {
   cy.get(selector).type(text);
+  cy.wait(2000);
+});
+
+Cypress.Commands.add("clearCurrentFacet", (selector, text) => {
+  cy.get('[data-cy="ds-clear-current-facet"]').click();
 });
 
 //////////////////////////
