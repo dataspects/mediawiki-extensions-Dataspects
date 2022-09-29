@@ -258,19 +258,22 @@ class DataspectsSearchFeed {
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
     echo $GLOBALS['wgDataspectsSearchWriteURL'].":".$GLOBALS['wgDataspectsSearchIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
-    $this->manualLogEntry($result);
+    $this->manualLogEntry('Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }
 
 
-  private function manualLogEntry($result) {
+  public function manualLogEntry($text) {
     if($this->user) {
-      $logEntry = new ManualLogEntry( 'dataspects', 'test' );
-      $logEntry->setTarget( $this->wikiPage->getTitle() );
-      $logEntry->setPerformer( $this->user );
-      $logEntry->setParameters( [
-        '4::unused' => 'Page "'.$this->wikiPage->getTitle()->getBaseTitle().'" to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")",
-      ] );
-      $logEntry->insert();
+      try {
+        $logEntry = new ManualLogEntry( 'dataspects', 'main' );
+        $logEntry->setTarget( $this->title );
+        $logEntry->setPerformer( $this->user );
+        $logEntry->setParameters( [
+          '4::unused' => $text,
+        ] );
+        $logEntry->insert();
+        } catch (Exception $ex) {    
+      }
     }
   }
 

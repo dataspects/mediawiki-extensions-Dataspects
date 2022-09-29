@@ -11,8 +11,7 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends Maintenance {
 
 	public function execute() {
-		$title = Title::newFromText('Template:Issue');
-		// $title = Title::newFromText('Aspect "Effortless Input — Efficient Retrieval"');
+		$title = Title::newFromText('Software "MediaWiki"');
 		$this->feedOne($title);
 	}
 
@@ -23,7 +22,7 @@ class DMFFeedOne extends Maintenance {
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}
-		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL, $dsNeo4j, $meiliClient); #FIXME: NULL is bad design
+		$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient); #FIXME: NULL is bad design
 		$dmwf->sendToDatastore();
 	}
 

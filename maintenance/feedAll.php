@@ -31,7 +31,7 @@ class DMFFeedAll extends Maintenance {
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}
 		foreach($this->pageTitlesInNamespace($namespaceNumber) as $title) {
-			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, NULL, $dsNeo4j, $meiliClient); #FIXME: NULL is bad design
+			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient); #FIXME: NULL is bad design
 			$dmwf->sendToDatastore();
 		}
 	}
