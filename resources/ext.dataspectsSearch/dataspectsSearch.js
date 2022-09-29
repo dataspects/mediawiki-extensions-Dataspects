@@ -128,7 +128,7 @@ const configureThisSearch = (helper) => {
           getUrlParameter("helper")
             .replaceAll("@@@ocb@@@", "{")
             .replaceAll("@@@ccb@@@", "}")
-        ).state
+        ).meilisearchHelper.state
       );
     }
   }
@@ -151,7 +151,6 @@ $(function () {
 
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
-  console.debug(mw.config.get("wgDataspectsSearchSearchURL"));
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsSearchIndex"),
     searchClient: instantMeiliSearch(
@@ -303,7 +302,6 @@ $(function () {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
-          console.debug(window.localStorage.getItem("dataspectsSearchFacet"));
           var srm = new SearchResultMatcher(
             hit,
             JSON.parse(

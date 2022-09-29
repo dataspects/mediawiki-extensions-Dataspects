@@ -169,7 +169,7 @@
 }
 
 
-.sources-refinement-list > ul, .mw0__namespace-menu > ul, .no-root-bullet-in-list > ul {
+.accordion, .sources-refinement-list > ul, .mw0__namespace-menu > ul, .no-root-bullet-in-list > ul {
     list-style: none;
     margin: 0px;
     
