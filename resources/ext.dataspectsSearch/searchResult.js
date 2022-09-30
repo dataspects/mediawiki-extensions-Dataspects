@@ -54,6 +54,7 @@ SearchResult = class {
       this.eppo0__categories() +
       this.mw0__namespace() +
       "</td></tr><tr><td></td><td>" +
+      this.mw0__rawUrl() +
       this.eppo0__hasEntityBlurb() +
       "</td></tr></table>"
     );
@@ -61,9 +62,6 @@ SearchResult = class {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<div>" +
-      this.mw0__rawUrl() +
-      "</div>" +
       "<div>" +
       this.ds0__text(instantsearch) +
       "</div>" +

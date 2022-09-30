@@ -13,6 +13,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
       this.eppo0__categories() +
       this.mw0__namespace() +
       "</td></tr><tr><td></td><td>" +
+      this.mw0__rawUrl() +
       this.eppo0__hasEntityBlurb() +
       this.activateLink() +
       "</td></tr></table>"
@@ -21,11 +22,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<div>" +
-      this.mw0__rawUrl() +
-      "<div>" +
       this.ds0__text(instantsearch) +
-      "</div>" +
       this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
