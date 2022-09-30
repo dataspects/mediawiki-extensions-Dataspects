@@ -26,10 +26,11 @@ SearchResultMatcher = class {
     this.searchResultClass = this.getSearchResultClass();
   }
 
-  searchResult = () => {
+  searchResult = (config) => {
     this.info.message = "searchResultClassName: " + this.searchResultClassName;
     return this.searchResultClass.searchResult(
       this.hit,
+      config,
       this.error,
       this.info,
       instantsearch

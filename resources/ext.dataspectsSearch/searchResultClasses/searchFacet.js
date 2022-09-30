@@ -5,12 +5,17 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
 
   searchResultHeader = () => {
     return (
+      "<table><tr><td>" +
       this.resultIcon() +
+      "</td><td>" +
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
       this.mw0__namespace() +
-      this.activateLink()
+      "</td></tr><tr><td></td><td>" +
+      this.eppo0__hasEntityBlurb() +
+      this.activateLink() +
+      "</td></tr></table>"
     );
   };
 

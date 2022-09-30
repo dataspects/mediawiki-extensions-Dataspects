@@ -312,13 +312,18 @@ $(function () {
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
           );
-          return srm.searchResult();
+          return srm.searchResult({ compact: getUrlParameter("compact") });
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
-      transformItems(items) {
-        return items;
+      transformItems(items, { results }) {
+        return items.map((item, index) => {
+          return {
+            ...item,
+            position: { index, page: results.page },
+          };
+        });
       },
     }),
   ]);

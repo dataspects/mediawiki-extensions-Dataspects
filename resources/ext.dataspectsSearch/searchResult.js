@@ -1,39 +1,64 @@
 SearchResult = class {
+  /**
+   * dsImplementation: how to configure search result design/behaviour/interaction
+   * https://wiki.dataspects.com/wiki/C0332407119
+   *
+   */
   constructor(hit) {
     this.hit = hit;
   }
 
-  searchResult = (hit, error, info, instantsearch) => {
+  // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
+  searchResult = (hit, config, error, info, instantsearch) => {
+    var isrcss = this.initialSearchResultCSS(config);
     return (
-      '<div class="hit">' +
+      isrcss.main + // The all encompassing hit class
       (typeof error.message == "string" ? error.message : "") +
       (typeof info.message == "string" ? info.message : "") +
-      "<div class='searchResultHeader'>" +
+      isrcss.srh + // The header to be shown in compact mode
       this.searchResultHeader() +
-      "</div><div class='searchResultBody'>" +
+      "</div>" +
+      isrcss.srb + // The body to be hidden in compact mode
       this.searchResultBody(hit, instantsearch) +
-      "</div></div>"
+      "</div>" +
+      "</div>"
     );
+  };
+
+  initialSearchResultCSS = (config) => {
+    if (config.compact) {
+      return {
+        main: '<div class="compactHit">',
+        srh: "<div class='searchResultHeader'>",
+        srb: "<div class='searchResultBody' style='display:none'>",
+      };
+    }
+    return {
+      main: '<div class="hit">',
+      srh: "<div class='searchResultHeader'>",
+      srb: "<div class='searchResultBody' style='display:block'>",
+    };
   };
 
   searchResultHeader = () => {
     return (
-      "<div class='searchResultHeader'>" +
+      "<table><tr><td>" +
       this.resultIcon() +
+      "</td><td>" +
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
-      this.mw0__namespace()
+      this.mw0__namespace() +
+      "</td></tr><tr><td></td><td>" +
+      this.eppo0__hasEntityBlurb() +
+      "</td></tr></table>"
     );
   };
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<div class='searchResultBody'>" +
       "<div>" +
       this.mw0__rawUrl() +
-      "<br/>" +
-      this.eppo0__hasEntityBlurb() +
       "</div>" +
       "<div>" +
       this.ds0__text(instantsearch) +
@@ -43,8 +68,7 @@ SearchResult = class {
       this.parsedPageTextFieldset() +
       "<script>" +
       this.parsedPageText(hit) +
-      +"</script>" +
-      "</div>"
+      +"</script>"
     );
   };
 
@@ -191,7 +215,7 @@ SearchResult = class {
   };
 
   objectLiteral = (annotation) => {
-    if (annotation.objectLiteral.match(/https?:\/\//)) {
+    if (annotation.objectLiteral.match(/^https?:\/\//)) {
       return (
         "<a href='" +
         annotation.objectLiteral +

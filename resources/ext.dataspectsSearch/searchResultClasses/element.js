@@ -13,7 +13,7 @@ ElementSearchResult = class extends SearchResult {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<br/>&rarr; " +
+      "&rarr; " +
       this.createMetaPageLink() +
       "<div>" +
       this.mw0__rawUrl() +
