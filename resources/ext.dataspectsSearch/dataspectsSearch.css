@@ -209,6 +209,11 @@ ul li a.toggle:hover {
     margin-left:30px;
 }
 
+#intro {
+    margin-left: 28px;
+    font-style: italic;
+}
+
 .ais-Pagination {
     margin-bottom: 10px;
 }

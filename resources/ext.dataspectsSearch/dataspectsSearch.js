@@ -64,7 +64,13 @@ $(".toggle").click(function (e) {
     $this.next().slideToggle(350);
   }
 });
-$("#facetingMenus").click();
+
+const onPageLoadComplete = () => {
+  if (getUrlParameter("intro")) {
+    $("#intro").html(getUrlParameter("intro"));
+  }
+  $("#facetingMenus").click();
+};
 
 const setCurrentHelper = (helper) => {
   window.localStorage.setItem(
@@ -139,6 +145,8 @@ const defaultToAuthorizedSources = (helper) => {
     helper.addDisjunctiveFacetRefinement("ds0__source", source);
   });
 };
+
+onPageLoadComplete();
 
 $(function () {
   if (!mw.config.get("wgDataspectsSearchSearchURL")) {
@@ -340,8 +348,7 @@ $(function () {
       showLast: false,
       showNext: true,
       showPrevious: true,
-      totalPages: 10,
-      padding: 10,
+      scrollTo: false,
     }),
   ]);
   search.start();
