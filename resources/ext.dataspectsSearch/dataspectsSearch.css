@@ -204,3 +204,7 @@ ul li a.toggle:hover {
 #searchbox {
     margin-bottom: 50px;
 }
+
+.searchResultBody {
+    margin-left:30px;
+}

@@ -26,6 +26,10 @@ SearchResult = class {
   };
 
   initialSearchResultCSS = (config) => {
+    /**
+     * dsImplementation: allow for compact search results by get parameter
+     * FIXME: this does not check $("#compactList")
+     */
     if (config.compact) {
       return {
         main: '<div class="compactHit">',
