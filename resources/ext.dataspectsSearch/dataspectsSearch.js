@@ -326,6 +326,23 @@ $(function () {
         });
       },
     }),
+    instantsearch.widgets.hitsPerPage({
+      container: "#hits-per-page",
+      items: [
+        { label: "5 hits per page", value: 5, default: true },
+        { label: "10 hits per page", value: 10 },
+        { label: "50 hits per page", value: 50 },
+      ],
+    }),
+    instantsearch.widgets.pagination({
+      container: "#pagination",
+      showFirst: false,
+      showLast: false,
+      showNext: true,
+      showPrevious: true,
+      totalPages: 10,
+      padding: 10,
+    }),
   ]);
   search.start();
 })();

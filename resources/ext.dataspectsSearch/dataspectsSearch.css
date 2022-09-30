@@ -208,3 +208,15 @@ ul li a.toggle:hover {
 .searchResultBody {
     margin-left:30px;
 }
+
+.ais-Pagination {
+    margin-bottom: 10px;
+}
+
+.ais-Pagination > ul > li {
+    display: inline-block;
+}
+
+.ais-Pagination>ul>li>.ais-Pagination-link {
+    padding:5px;
+}
