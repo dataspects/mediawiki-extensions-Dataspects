@@ -1,7 +1,7 @@
 <?php
 
 
-class Neo4jAPI extends ApiBase {
+class DataspectsAPI extends ApiBase {
 
 	private $mInstalledExtensions = [];
 
@@ -26,9 +26,12 @@ class Neo4jAPI extends ApiBase {
 			case 'templatecallssubgraph':
 				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $this->dsNeo4j->templateCallsSubgraph($params['name']) ) );
 				break;
-			default:
-				# code...
+			case 'originalpagecontent':
+				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
 				break;
+			default:
+			# code...
+			break;
 		}
 		
 	}
@@ -36,9 +39,19 @@ class Neo4jAPI extends ApiBase {
     protected function getAllowedParams() {
         return [
             'querytype' => null,
-			'name' => null
+			'name' => null,
+			'mw0__apiParseTextURL' => null
         ];
     }
 
+	private function originalPageContent($url) {
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		$data = json_decode(curl_exec($curl), true);
+		curl_close($curl);
+		return $data["parse"]["text"]["*"];
+	}
 	
 }

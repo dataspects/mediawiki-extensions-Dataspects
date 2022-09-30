@@ -16,7 +16,7 @@
   },
   "AutoloadClasses": {
     "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
-    "Neo4jAPI": "includes/api/Neo4jAPI.php"
+    "DataspectsAPI": "includes/api/DataspectsAPI.php"
   },
   "HookHandlers": {
     "DataspectsSearchHooks": {
@@ -70,7 +70,7 @@
     "dataspects/*": "LogFormatter"
   },
   "APIModules": {
-    "neo4japi": "Neo4jAPI"
+    "dataspectsapi": "DataspectsAPI"
   },
   "manifest_version": 2
 }

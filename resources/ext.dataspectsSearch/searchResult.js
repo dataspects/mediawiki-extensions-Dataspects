@@ -1,3 +1,4 @@
+require("mediawiki.api");
 SearchResult = class {
   /**
    * dsImplementation: how to configure search result design/behaviour/interaction
@@ -6,6 +7,7 @@ SearchResult = class {
    */
   constructor(hit) {
     this.hit = hit;
+    this.api = new mw.Api();
   }
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
@@ -66,11 +68,7 @@ SearchResult = class {
       this.ds0__text(instantsearch) +
       "</div>" +
       this.mw0__attachment(instantsearch) +
-      this.annotations() +
-      this.parsedPageTextFieldset() +
-      "<script>" +
-      this.parsedPageText(hit) +
-      +"</script>"
+      this.annotations()
     );
   };
 
@@ -241,16 +239,6 @@ SearchResult = class {
       }
     }
     return this.hit.name;
-  };
-
-  parsedPageTextFieldset = () => {
-    return (
-      '<fieldset id="' +
-      this.hit.id +
-      '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
-      this.hit.id +
-      '">Loading...</div></fieldset>'
-    );
   };
 };
 

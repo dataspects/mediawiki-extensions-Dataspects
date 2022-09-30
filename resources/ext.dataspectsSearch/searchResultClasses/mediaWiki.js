@@ -11,25 +11,32 @@ MediaWikiSearchResult = class extends SearchResult {
     );
   };
 
+  searchResultBody = (hit, instantsearch) => {
+    return (
+      "<div>" +
+      this.ds0__text(instantsearch) +
+      "</div>" +
+      this.mw0__attachment(instantsearch) +
+      this.annotations() +
+      this.parsedPageTextFieldset() +
+      "<script>" +
+      this.parsedPageText(hit) +
+      +"</script>"
+    );
+  };
+
   parsedPageText = (hit) => {
-    //FIXME: CORS issues!
     if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
-      $.ajax({
-        url: encodeURI(hit.mw0__apiParseTextURL),
-        success: function (data) {
-          $("#" + hit.id).html(data.parse.text["*"]);
-          // $("#" + this.hit.id + "_fieldset").css("display", "block");
-          $("#ds0__topicMetaTemplate").remove(); // FIXME
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          // FIXME: make this available here
-          $("#" + hit.id).html(
-            "<p>SORRY: There's an issue displaying this content. Please check your browser's error console.</p>"
-          );
-        },
-      });
+      this.api
+        .get({
+          action: "dataspectsapi",
+          querytype: "originalpagecontent",
+          mw0__apiParseTextURL: hit.mw0__apiParseTextURL,
+        })
+        .done(function (data) {
+          $("#" + hit.id).html(data.data.originalpagecontent);
+        });
     } else {
-      // FIXME: Is it correct that $("#" + this.hit.id) does not yet exist when this is run?
       $("#" + hit.id).html(
         "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
       );
@@ -37,6 +44,16 @@ MediaWikiSearchResult = class extends SearchResult {
         "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
       );
     }
+  };
+
+  parsedPageTextFieldset = () => {
+    return (
+      '<fieldset id="' +
+      this.hit.id +
+      '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
+      this.hit.id +
+      '">Loading...</div></fieldset>'
+    );
   };
 };
 

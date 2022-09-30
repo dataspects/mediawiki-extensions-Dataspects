@@ -9,7 +9,7 @@ DSNeo4j = class {
   numberOfNodes = (name) => {
     this.api
       .get({
-        action: "neo4japi",
+        action: "dataspectsapi",
         querytype: "numberofnodes",
       })
       .done(function (data) {
@@ -20,7 +20,7 @@ DSNeo4j = class {
   testGraph = (name) => {
     this.api
       .get({
-        action: "neo4japi",
+        action: "dataspectsapi",
         querytype: "templatecallssubgraph",
         name: name,
       })
