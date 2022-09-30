@@ -1,3 +1,4 @@
+// require("./helpers.js");
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -9,9 +10,11 @@ instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
 */
 
 const { DSNeo4j } = require("./DSneo4j.js");
+const { Helpers } = require("./helpers.js");
 var initialPageLoad = true;
 var theDs0__sources = [];
 window.n4j = new DSNeo4j(); //FIXME: ok to be global?
+window.helpers = new Helpers(); //FIXME: ok to be global?
 
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),

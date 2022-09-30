@@ -219,16 +219,7 @@ SearchResult = class {
   };
 
   objectLiteral = (annotation) => {
-    if (annotation.objectLiteral.match(/^https?:\/\//)) {
-      return (
-        "<a href='" +
-        annotation.objectLiteral +
-        "'>" +
-        annotation.objectLiteral +
-        "</a>"
-      );
-    }
-    return annotation.objectLiteral;
+    return window.helpers.ifURLreturnAnchorTag(annotation.objectLiteral);
   };
 
   createMetaPageLink = () => {

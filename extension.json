@@ -50,7 +50,8 @@
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js",
         "./DSneo4j.js",
-        "./vis-network.min.js"
+        "./vis-network.min.js",
+        "./helpers.js"
       ],
       "messages": []
     }
