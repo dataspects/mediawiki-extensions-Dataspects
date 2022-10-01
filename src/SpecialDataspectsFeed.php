@@ -144,24 +144,8 @@ class SpecialDataspectsFeed {
   }
 
   private function ds0__text($parsedWikitext) {
-    $dom = new \DOMDocument('1.0', 'utf-8');
-    if($parsedWikitext) {
-      // FIXME: DOMDocument::loadHTML(): Namespace prefix mw is not defined in Entity
-      $dom->loadHTML($parsedWikitext);
-      $xpath = new \DomXPath($dom);
-      foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
-        if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
-          $mwParserOutput->parentNode->removeChild($mwParserOutput);
-        }      
-      }
-      foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["tags"] as $tag) {
-        $editSections = $xpath->query("//$tag");
-        foreach($editSections as $editSection){
-          $editSection->parentNode->removeChild($editSection);
-        }
-      }
-    }
-    return $dom->textContent;
+    $hp = new HTMLProcessor($parsedWikitext);
+		return $hp->processAndReturnText();
   }
 
   private function processAttachments($mediaWikiPage) {

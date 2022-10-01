@@ -18,7 +18,7 @@ class DataspectsAPI extends ApiBase {
         if ( $queryType == null ) {
 			throw new MWException( wfMessage( 'querytypenull' ) );
 		}
-
+		// FIXME: security concerns: injection, api call parameters?
         switch ($queryType) {
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
@@ -46,12 +46,17 @@ class DataspectsAPI extends ApiBase {
 
 	private function originalPageContent($url) {
 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_URL, str_replace(' ', '%20', $url)); // FIXME
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
 		$data = json_decode(curl_exec($curl), true);
 		curl_close($curl);
-		return $data["parse"]["text"]["*"];
+		return $this->processHTML($data["parse"]["text"]["*"]);
+	}
+
+	private function processHTML($html) {
+		$hp = new MediaWiki\Extension\DataspectsSearch\HTMLProcessor($html);
+		return $hp->processAndReturnHTML();
 	}
 	
 }

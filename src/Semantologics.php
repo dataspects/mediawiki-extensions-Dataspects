@@ -41,7 +41,7 @@ class Semantologics {
   }
 
   # LEX200122141600
-  function process() {
+  public function process() {
     foreach($this->annotations as $regex => $data) {
         preg_match_all($regex, $this->mediaWikiPage["mw0__wikitext"], $matches);
         if(array_key_exists(1, $matches)) {
@@ -68,4 +68,6 @@ class Semantologics {
     }
     return $this->mediaWikiPage;
   }
+
+
 }
