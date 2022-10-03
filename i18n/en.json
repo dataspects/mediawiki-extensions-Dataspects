@@ -4,9 +4,9 @@
   },
   "log-name-dataspects": "dataspects log",
   "logentry-dataspects-main": "$1 $2 $3 $4",
-  "dataspects-header": "dataspects Search Log",
-  "dataspectssearch": "dataspects Search",
-  "dataspectssearch-desc": "dataspects Search interface for MediaWiki",
-  "dataspectssearchbackstage": "dataspects Search Backstage",
-  "dataspectssearchbackstage-desc": "dataspects Search Backstage for MediaWiki"
+  "dataspects-header": "dataspects Log",
+  "dataspectssearch": "dataspects",
+  "dataspectssearch-desc": "dataspects interface for MediaWiki",
+  "dataspectssearchbackstage": "dataspects Backstage",
+  "dataspectssearchbackstage-desc": "dataspects Backstage for MediaWiki"
 }

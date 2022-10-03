@@ -1,6 +1,6 @@
-# dataspects Search for MediaWiki
+# dataspects for MediaWiki
 
-dataspects Search for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
+dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
 
 [dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html)
 
@@ -61,7 +61,7 @@ $wgDataspectsSearchSourcesForAnonymous = [];
 $wgDataspectsSearchSourcesForAuthenticated = [];
 $wgDataspectsSearchMediaWikiIDPrefix = "dscan"; # together with the page ID, this represents the index doc id
 
-# This will direct full text searches to dataspects Search
+# This will direct full text searches to dataspects
 $wgDisableTextSearch = true;
 $wgSearchForwardUrl = "/wiki/Special:DataspectsSearch?q=$1";
 ```
@@ -87,7 +87,7 @@ See https://github.com/dataspects/DataspectsSearchCLI
 Allows per-MediaWiki-namespace indexing
 `sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/DataspectsSearch/maintenance/feedAll.php'`
 
-## Example: configure dataspects Search for [Canasta](https://canasta.wiki/)
+## Example: configure dataspects for [Canasta](https://canasta.wiki/)
 
 ### Fixme
 
