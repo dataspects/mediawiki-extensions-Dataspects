@@ -46,7 +46,7 @@ class DataspectsAPI extends ApiBase {
 
 	private function originalPageContent($url) {
 		$curl = curl_init();
-		curl_setopt_array($ch, array(
+		curl_setopt_array($curl, array(
 			CURLOPT_URL => str_replace(' ', '%20', $url),
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HEADER=> false,
