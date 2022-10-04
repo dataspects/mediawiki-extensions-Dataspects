@@ -203,7 +203,10 @@ class DataspectsSearchFeed {
         CURLOPT_PUT => 1,
         CURLOPT_INFILE => $fh_res,
         CURLOPT_INFILESIZE => filesize($file_path_str),
-        CURLOPT_RETURNTRANSFER => 1
+        CURLOPT_RETURNTRANSFER => 1,
+        // CURLOPT_VERBOSE => true,
+        CURLOPT_SSL_VERIFYPEER => false, // FIXME
+        CURLOPT_SSL_VERIFYHOST => false
       ));
       $curl_response_res = curl_exec ($ch);
       $data  = (array) json_decode($curl_response_res)[0];

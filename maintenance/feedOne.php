@@ -11,7 +11,7 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends Maintenance {
 
 	public function execute() {
-		$title = Title::newFromText('Extension "dataspects"');
+		$title = Title::newFromText('File:Mediawiki-manager-ExtensionsStore.png');
 		$this->feedOne($title);
 	}
 
