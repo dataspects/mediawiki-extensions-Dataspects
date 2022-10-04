@@ -49,6 +49,7 @@ class DataspectsAPI extends ApiBase {
 		curl_setopt($curl, CURLOPT_URL, str_replace(' ', '%20', $url)); // FIXME
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		$data = json_decode(curl_exec($curl), true);
 		curl_close($curl);
 		return $this->processHTML($data["parse"]["text"]["*"]);
