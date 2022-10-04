@@ -26,7 +26,7 @@ class DMFFeedAll extends Maintenance {
 	private function feedNamespace(int $namespaceNumber) {
 		$dsNeo4j = new \MediaWiki\Extension\DataspectsSearch\DSNeo4j();
 		try { # FIXME
-			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey']);
+			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new GuzzleHttp\Client(['verify' => false ])); // FIXME
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}
