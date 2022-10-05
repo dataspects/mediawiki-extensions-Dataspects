@@ -3,6 +3,7 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
+
 class SpecialDataspectsFeed {
 
   public function __construct($dataspectsSearchFeed, \Title $title, $user) {
@@ -66,6 +67,37 @@ class SpecialDataspectsFeed {
         }
       }
     }
+  }
+
+  public function getDsSpacyAnnotations() {
+    $url = $GLOBALS['wgDataspectsSearchSpacyURL']."/pos_text_for_nsubj";
+    $ch = curl_init($url);
+    curl_setopt_array($ch, array(
+      CURLOPT_POST => 1,
+      CURLOPT_POSTFIELDS => json_encode(['text' => $this->ds0__text($this->dsf->parsedWikitext)]),
+      // CURLOPT_VERBOSE => true,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_SSL_VERIFYPEER => false, // FIXME
+      CURLOPT_SSL_VERIFYHOST => false
+    ));
+    $data = (array) json_decode(curl_exec($ch), true);
+    if(count($data) > 0) {
+      $this->spacyAnnotations($data);
+    } else {
+      $message = "No annotations for '".$this->title->mTextform."' from ".$url;
+      $this->dsf->manualLogEntry($message);
+    }
+  }
+
+  private function spacyAnnotations($data) {
+    print_r($data);
+    $this->annotations[] = array(
+        'subject' => "strtolower",
+        'predicate' => "propertyName",
+        'objectLiteral' => "source",
+        'objectLiteralHTML' => "test",
+        'smwPropertyType' => "asd"
+      );
   }
 
   public function getPredicateAnnotations() {
