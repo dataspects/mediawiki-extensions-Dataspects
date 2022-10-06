@@ -52,6 +52,12 @@ class SpecialDataspectsSearch extends SpecialPage {
 								</td>
 								</tr>
 								<tr>
+								<td>wgDataspectsSearchSpacyURL
+								</td>
+								<td>'.$GLOBALS['wgDataspectsSearchSpacyURL'].'
+								</td>
+								</tr>
+								<tr>
 								<td>wgDataspectsSearchNeo4jURL
 								</td>
 								<td>'.$GLOBALS['wgDataspectsSearchNeo4jURL'].' (<code id="numberOfNeo4jNodes"></code> nodes)
