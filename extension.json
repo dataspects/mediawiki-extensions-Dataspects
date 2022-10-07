@@ -47,6 +47,7 @@
         "./searchResultClasses/sMWCindyKate.js",
         "./searchResultClasses/wikiDataspects.js",
         "./searchResultClasses/searchFacet.js",
+        "./searchResultClasses/code.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.js",
         "./DSneo4j.js",

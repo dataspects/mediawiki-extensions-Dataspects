@@ -13,6 +13,7 @@ const {
 const {
   SearchFacetSearchResult,
 } = require("./searchResultClasses/searchFacet.js");
+const { CodeSearchResult } = require("./searchResultClasses/code.js");
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
@@ -69,6 +70,10 @@ SearchResultMatcher = class {
         this.searchResultClassName = searchResultClassName;
         theClass = new MediaWikiMetaPageSearchResult(this.hit);
         break;
+      case "CodeSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        theClass = new CodeSearchResult(this.hit);
+        break;
       default:
         this.error.message =
           "ERROR: SearchResult subclass " +
@@ -109,6 +114,7 @@ SearchResultMatcher = class {
   };
 
   firstContainsSecond = (object1, object2) => {
+    // ds1:implements: FIXME: match on annotations array containing annotation fragment(s)
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
 

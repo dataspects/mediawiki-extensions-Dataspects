@@ -26,12 +26,17 @@
 }
 
 .eppo0__hasAnnotations {
-    font-size: 10px;
     margin-left: 15px;
 }
 
 .eppo0__hasAnnotations>tbody>tr>td {
     vertical-align: top;
+}
+
+.codeAspects {
+    border:1px solid #1E86D6;
+    background-color: lightskyblue;
+    font-size:20px
 }
 
 .hit {
@@ -224,4 +229,30 @@ ul li a.toggle:hover {
 
 .ais-Pagination>ul>li>.ais-Pagination-link {
     padding:5px;
+}
+
+.blinking {
+    animation: blinkingText 1.2s infinite;
+}
+
+@keyframes blinkingText {
+    0% {
+        color: #000;
+    }
+
+    49% {
+        color: #000;
+    }
+
+    60% {
+        color: transparent;
+    }
+
+    99% {
+        color: transparent;
+    }
+
+    100% {
+        color: #000;
+    }
 }

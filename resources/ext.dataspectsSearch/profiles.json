@@ -61,5 +61,11 @@
       "mw0__namespace": "Concept"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
+  },
+  {
+    "hit": {
+      "ds0__source": "Code"
+    },
+    "searchResultClassName": "CodeSearchResult"
   }
 ]
