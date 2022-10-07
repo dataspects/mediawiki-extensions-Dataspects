@@ -306,7 +306,7 @@ $(function () {
       templates: {
         item(hit) {
           /**
-           * dsImplementation: Match SearchResult class against hit/env profile
+           * ds1:implements: Match SearchResult class against hit/env profile
            * We have:
            *  1) a hit JSON from Meilisearch and
            *  2) an environment JSON from the browser.

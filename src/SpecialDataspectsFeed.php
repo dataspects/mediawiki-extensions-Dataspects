@@ -118,7 +118,7 @@ class SpecialDataspectsFeed {
   }
 
   public function allPredicates($mediaWikiPage) {
-    // Initialize
+    // ds1:implements: instantsearch.widgets.hierarchicalMenu #all-predicates-menu
     $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
     // Add predicates
     foreach($mediaWikiPage["annotations"] as $annotation) {
@@ -131,7 +131,7 @@ class SpecialDataspectsFeed {
       $mediaWikiPage["ds0__allPredicates.1v12"] = array_merge(
         $mediaWikiPage["ds0__allPredicates.1v12"],
         [
-          "All Predicates > ".$annotation["predicate"]." > ".$this->objectLiteralValue($annotation["objectLiteral"])
+          "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectLiteral"])
         ],
       );
     }
@@ -167,7 +167,8 @@ class SpecialDataspectsFeed {
     return $mediaWikiPage;
   }
 
-  private function objectLiteralValue($objectLiteral) {
+  private function considerTruncatingObjectLiteral($objectLiteral) {
+    // ds1:implements: object literal value truncation
     $length = 20;
     if (strlen($objectLiteral) > $length) {
       return substr($objectLiteral, 0, $length)."...";
