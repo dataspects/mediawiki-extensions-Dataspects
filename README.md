@@ -131,3 +131,15 @@ tail -f  apache2/error_log.current
 ## See also
 * https://www.digitalocean.com/community/tutorials/how-to-run-a-meilisearch-frontend-using-instantsearch-on-ubuntu-22-04
 
+
+## Upgrade JS libraries
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+nvm ls-remote --lts
+nvm install v16.18.0
+npm install -g yarn
+
+lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ yarn add \
+                                                            @meilisearch/instant-meilisearch instantsearch.js vis-network
+
+lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/*/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/DataspectsSearch/resources/ext.dataspectsSearch/

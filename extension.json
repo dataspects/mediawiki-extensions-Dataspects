@@ -49,7 +49,7 @@
         "./searchResultClasses/searchFacet.js",
         "./searchResultClasses/code.js",
         "./instant-meilisearch.umd.js",
-        "./instantsearch.production.js",
+        "./instantsearch.production.min.js",
         "./DSneo4j.js",
         "./vis-network.min.js",
         "./helpers.js"

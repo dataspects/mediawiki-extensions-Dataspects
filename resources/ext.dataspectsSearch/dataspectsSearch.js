@@ -34,6 +34,7 @@ const getUrlParameter = (sParam) => {
   return false;
 };
 
+// Is this Jquery code at the right place and properly implemented?
 $("#originalPageContent").click(function () {
   if ($("#originalPageContent").prop("checked")) {
     $(this).text("Hide original page contents");
@@ -158,7 +159,7 @@ $(function () {
   const { SearchResultMatcher } = require("./searchResultMatcher.js");
 
   require("./instant-meilisearch.umd.js");
-  require("./instantsearch.production.js");
+  require("./instantsearch.production.min.js");
 
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
