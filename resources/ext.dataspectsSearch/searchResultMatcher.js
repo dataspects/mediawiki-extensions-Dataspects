@@ -17,8 +17,9 @@ const { CodeSearchResult } = require("./searchResultClasses/code.js");
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, environment, instantsearch) {
+  constructor(hit, isCompact, environment, instantsearch) {
     this.hit = hit;
+    this.isCompact = isCompact;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo();
@@ -27,11 +28,10 @@ SearchResultMatcher = class {
     this.searchResultClass = this.getSearchResultClass();
   }
 
-  searchResult = (config) => {
+  searchResult = () => {
     this.info.message = "searchResultClassName: " + this.searchResultClassName;
     return this.searchResultClass.searchResult(
       this.hit,
-      config,
       this.error,
       this.info,
       instantsearch
@@ -44,35 +44,35 @@ SearchResultMatcher = class {
     switch (searchResultClassName) {
       case "SearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SearchResult(this.hit);
+        theClass = new SearchResult(this.hit, this.isCompact);
         break;
       case "ElementSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new ElementSearchResult(this.hit);
+        theClass = new ElementSearchResult(this.hit, this.isCompact);
         break;
       case "SMWCindyKateSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SMWCindyKateSearchResult(this.hit);
+        theClass = new SMWCindyKateSearchResult(this.hit, this.isCompact);
         break;
       case "WikiDataspectsSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new WikiDataspectsSearchResult(this.hit);
+        theClass = new WikiDataspectsSearchResult(this.hit, this.isCompact);
         break;
       case "SearchFacetSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SearchFacetSearchResult(this.hit);
+        theClass = new SearchFacetSearchResult(this.hit, this.isCompact);
         break;
       case "MediaWikiSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new MediaWikiSearchResult(this.hit);
+        theClass = new MediaWikiSearchResult(this.hit, this.isCompact);
         break;
       case "MediaWikiMetaPageSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new MediaWikiMetaPageSearchResult(this.hit);
+        theClass = new MediaWikiMetaPageSearchResult(this.hit, this.isCompact);
         break;
       case "CodeSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new CodeSearchResult(this.hit);
+        theClass = new CodeSearchResult(this.hit, this.isCompact);
         break;
       default:
         this.error.message =
@@ -80,7 +80,7 @@ SearchResultMatcher = class {
           searchResultClassName +
           " requested by profile match but not found. Reverting to SearchResult class.";
         this.searchResultClassName = "SearchResult";
-        theClass = new SearchResult(this.hit);
+        theClass = new SearchResult(this.hit, this.isCompact);
     }
     return theClass;
   };

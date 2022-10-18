@@ -134,12 +134,17 @@ tail -f  apache2/error_log.current
 
 ## Upgrade JS libraries
 
+yarn add/update the libraries and then copy the corresponding files into place.
+
+**Install nvm/node**
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
 nvm ls-remote --lts
 nvm install v16.18.0
 npm install -g yarn
 
+**yarn add the libs**
 lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ yarn add \
                                                             @meilisearch/instant-meilisearch instantsearch.js vis-network
 
-lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/*/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/DataspectsSearch/resources/ext.dataspectsSearch/
+**Copy into place, e.g.**
+lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/vis-network/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/DataspectsSearch/resources/ext.dataspectsSearch/

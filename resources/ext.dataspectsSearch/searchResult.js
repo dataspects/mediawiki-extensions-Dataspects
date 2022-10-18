@@ -5,14 +5,15 @@ SearchResult = class {
    * https://wiki.dataspects.com/wiki/C0332407119
    *
    */
-  constructor(hit) {
+  constructor(hit, isCompact) {
     this.hit = hit;
     this.api = new mw.Api();
+    this.isCompact = isCompact;
   }
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
-  searchResult = (hit, config, error, info, instantsearch) => {
-    var isrcss = this.initialSearchResultCSS(config);
+  searchResult = (hit, error, info, instantsearch) => {
+    var isrcss = this.initialSearchResultCSS();
     return (
       isrcss.main + // The all encompassing hit class
       (typeof error.message == "string" ? error.message : "") +
@@ -27,12 +28,12 @@ SearchResult = class {
     );
   };
 
-  initialSearchResultCSS = (config) => {
+  initialSearchResultCSS = () => {
     /**
      * dsImplementation: allow for compact search results by get parameter
      * FIXME: this does not check $("#compactList")
      */
-    if (config.compact) {
+    if (this.isCompact) {
       return {
         main: '<div class="compactHit">',
         srh: "<div class='searchResultHeader'>",
@@ -215,7 +216,7 @@ SearchResult = class {
   };
 
   objectLiteral = (annotation) => {
-    return window.helpers.ifURLreturnAnchorTag(annotation.objectLiteral);
+    return ifURLreturnAnchorTag(annotation.objectLiteral);
   };
 
   createMetaPageLink = () => {

@@ -1,4 +1,5 @@
-// require("./helpers.js");
+require("./helpers.js");
+
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -10,11 +11,10 @@ instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
 */
 
 const { DSNeo4j } = require("./DSneo4j.js");
-const { Helpers } = require("./helpers.js");
+var isCompact = false;
 var initialPageLoad = true;
 var theDs0__sources = [];
 window.n4j = new DSNeo4j(); //FIXME: ok to be global?
-window.helpers = new Helpers(); //FIXME: ok to be global?
 
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
@@ -49,9 +49,11 @@ $("#compactList").click(function () {
   if ($("#compactList").prop("checked")) {
     $(".searchResultBody").css("display", "none");
     $(".hit").removeClass("hit").addClass("compactHit");
+    isCompact = true;
   } else {
     $(".searchResultBody").css("display", "block");
     $(".compactHit").removeClass("compactHit").addClass("hit");
+    isCompact = false;
   }
 });
 
@@ -90,20 +92,7 @@ const getCurrentHelperAndUpdateUI = () => {
   let currentHelper = JSON.parse(
     window.localStorage.getItem("dataspectsSearchFacet")
   );
-  $("#currentHelper").html(
-    JSON.stringify(
-      {
-        environment: currentHelper.environment,
-        query: currentHelper.meilisearchHelper.state.query,
-        hierarchicalFacetsRefinements:
-          currentHelper.meilisearchHelper.state.hierarchicalFacetsRefinements,
-        disjunctiveFacetsRefinements:
-          currentHelper.meilisearchHelper.state.disjunctiveFacetsRefinements,
-      },
-      0,
-      2
-    )
-  );
+  console.info(JSON.stringify(currentHelper, null, 2));
   let args = {
     "ds0:instantsearchHelper": JSON.stringify(currentHelper)
       .replaceAll("{", "@@@ocb@@@")
@@ -131,7 +120,7 @@ const configureThisSearch = (helper) => {
   if (initialPageLoad) {
     defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
     if (getUrlParameter("q")) {
-      helper.state.query = getUrlParameter("q");
+      helper.state.query = getUrlParameter("q"); // This populates the search input
     } else if (getUrlParameter("helper")) {
       helper.setState(
         JSON.parse(
@@ -302,7 +291,7 @@ $(function () {
       limit: 1000,
     }),
     // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
-    instantsearch.widgets.hits({
+    instantsearch.widgets.infiniteHits({
       container: "#hits",
       templates: {
         item(hit) {
@@ -316,6 +305,7 @@ $(function () {
            */
           var srm = new SearchResultMatcher(
             hit,
+            isCompact,
             JSON.parse(
               window.localStorage.getItem("dataspectsSearchFacet")
             ).environment,
@@ -324,7 +314,7 @@ $(function () {
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
           );
-          return srm.searchResult({ compact: getUrlParameter("compact") });
+          return srm.searchResult();
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
@@ -337,22 +327,6 @@ $(function () {
           };
         });
       },
-    }),
-    instantsearch.widgets.hitsPerPage({
-      container: "#hits-per-page",
-      items: [
-        { label: "5 hits per page", value: 5, default: true },
-        { label: "10 hits per page", value: 10 },
-        { label: "50 hits per page", value: 50 },
-      ],
-    }),
-    instantsearch.widgets.pagination({
-      container: "#pagination",
-      showFirst: false,
-      showLast: false,
-      showNext: true,
-      showPrevious: true,
-      scrollTo: false,
     }),
   ]);
   search.start();
