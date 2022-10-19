@@ -12,20 +12,16 @@ class DataspectsSearchFeedSendJob extends \Job {
   // private $wikitext = '';
   // private $parsedWikitext = '';
 
-  public function __construct(\Title $title, $params) {
+  public function __construct($title, $params) {
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
     parent::__construct("dataspectsSearchFeedSendJob", $title, $params);
     $this->title = $title;
-    $h = fopen('/var/log/apache2/error.log', 'a');
-		fwrite($h, "Send job contructed\n");
-		fclose($h);
+    
   }
 
   public function run() {
-    $h = fopen('/var/log/apache2/error.log', 'a');
-		fwrite($h, 'Message5');
-		fclose($h);
+    wfDebug("STAMFORD");
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
     $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);
