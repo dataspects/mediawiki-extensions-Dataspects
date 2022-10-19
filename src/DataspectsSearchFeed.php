@@ -78,7 +78,7 @@ class DataspectsSearchFeed {
         $this->sdf->getMediaWikiPageAnnotations();
         $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->getAttachments();
+        // $this->getAttachments();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
 	      break;
       case 4:
@@ -196,31 +196,7 @@ class DataspectsSearchFeed {
   }
 
   private function getAttachments() {
-    foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
-      $file_path_str = $file->getLocalRefPath();
-      $fh_res = fopen($file_path_str, 'r');
-
-      $ch = curl_init($GLOBALS['wgDataspectsSearchTikaURL']."/rmeta");
-      curl_setopt_array($ch, array(
-        CURLOPT_PUT => 1,
-        CURLOPT_INFILE => $fh_res,
-        CURLOPT_INFILESIZE => filesize($file_path_str),
-        CURLOPT_RETURNTRANSFER => 1,
-        // CURLOPT_VERBOSE => true,
-        CURLOPT_SSL_VERIFYPEER => false, // FIXME
-        CURLOPT_SSL_VERIFYHOST => false
-      ));
-      $curl_response_res = curl_exec ($ch);
-      $data  = (array) json_decode($curl_response_res)[0];
-      $htmlDoc = $data["X-TIKA:content"];
-      $dom = new \DOMDocument();
-      $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
-      $this->attachments[] = array(
-        "type"      => $data["Content-Type"],
-        "text"      => trim($dom->textContent),
-        "thumbURL"  => $GLOBALS['wgServer'].$file->getThumbUrl() # FIXME
-      );
-    }
+    
   }
 
   

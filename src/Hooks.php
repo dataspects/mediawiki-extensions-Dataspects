@@ -14,9 +14,16 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 		
 		// https://www.mediawiki.org/wiki/Manual:Logging_to_Special:Log
 		# FIXME: implement job queue
-			$job = new DataspectsSearchFeedSendJob($wikiPage->getTitle(), []);
-			\JobQueueGroup::singleton()->push($job);
-			
+		switch($this->title->mNamespace) {
+      		case 6:
+				$job = new DataspectsTikaJob($wikiPage->getTitle(), []);
+				\JobQueueGroup::singleton()->push($job);
+			break;
+			default:
+				$job = new DataspectsSpacyJob($wikiPage->getTitle(), []);
+				\JobQueueGroup::singleton()->push($job);
+			break;
+		}	
 	}
 
 	public function onBeforePageDisplay( $out, $skin ): void {

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\DataspectsSearch;
 
-class DataspectsSearchFeedSendJob extends \Job {
+class DataspectsIndexJob extends \Job {
   // https://doc.wikimedia.org/mediawiki-core/master/php/classJob.html
 
   private $annotations = [];
@@ -15,17 +15,16 @@ class DataspectsSearchFeedSendJob extends \Job {
   public function __construct($title, $params) {
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("dataspectsSearchFeedSendJob", $title, $params);
+    parent::__construct("dataspectsIndexJob", $title, $params);
     $this->title = $title;
     
   }
 
   public function run() {
-    wfDebug("STAMFORD");
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-    $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);
-    $dmwf->sendToDatastore();
+    // $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);
+    // $dmwf->sendToDatastore();
     return true;
   }
 
