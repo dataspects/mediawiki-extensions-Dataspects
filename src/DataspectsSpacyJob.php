@@ -1,6 +1,7 @@
 <?php
 
 namespace MediaWiki\Extension\DataspectsSearch;
+use MediaWiki\MediaWikiServices;
 
 class DataspectsSpacyJob extends \Job {
   // https://doc.wikimedia.org/mediawiki-core/master/php/classJob.html
@@ -20,21 +21,58 @@ class DataspectsSpacyJob extends \Job {
   }
 
   public function run() {
-    $this->wikiPage = \WikiPage::factory($this->title);
+    $wikiPage = \WikiPage::factory($this->title);
     $url = $GLOBALS['wgDataspectsSearchSpacyURL']."/escam-annotations";
     $ch = curl_init($url);
-    curl_setopt_array($ch, array(
-      CURLOPT_POST => 1,
-      CURLOPT_POSTFIELDS => json_encode(['text' => "test text"]),
-      // CURLOPT_VERBOSE => true,
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_SSL_VERIFYPEER => false, // FIXME
-      CURLOPT_SSL_VERIFYHOST => false
-    ));
-    $data = (array) json_decode(curl_exec($ch), true);
-    wfDebug("#######");
-    wfDebug($data);
-    wfDebug("#######");
+    $revision = $wikiPage->getRevision();
+    if(!empty($revision)) {
+      $content = $revision->getContent( \Revision::RAW );
+      $wikitext = \ContentHandler::getContentText( $content );
+      $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
+      $parserOptions = new \ParserOptions();
+      wfDebug("DataspectsSpacyJob 000");
+      $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
+      wfDebug("DataspectsSpacyJob 111");
+      if($parsedWikitext->mText) {
+        $dom = new \DOMDocument('1.0', 'utf-8');
+        // FIXME: DOMDocument::loadHTML(): Namespace prefix mw is not defined in Entity
+        $dom->loadHTML($parsedWikitext->mText);
+        $xpath = new \DomXPath($dom);
+        foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["ids"] as $id) {
+            if($mwParserOutput = $xpath->query("//div[@id = '$id']")->item(0)) {
+                $mwParserOutput->parentNode->removeChild($mwParserOutput);
+            }      
+        }
+        foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["classes"] as $class) {
+            $editSections = $xpath->query("//*[contains(@class, '$class')]");
+            foreach($editSections as $editSection){
+                $editSection->parentNode->removeChild($editSection);
+            }
+        }
+        foreach ($GLOBALS['wgHTMLElementsToBeRemovedBeforeIndexingContent']["tags"] as $tag) {
+            $editSections = $xpath->query("//$tag");
+            foreach($editSections as $editSection){
+                $editSection->parentNode->removeChild($editSection);
+            }
+        }
+        wfDebug("#######");
+        wfDebug($dom->textContent);
+        curl_setopt_array($ch, array(
+          CURLOPT_POST => 1,
+          CURLOPT_POSTFIELDS => json_encode(['text' => $dom->textContent]),
+          // CURLOPT_VERBOSE => true,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_SSL_VERIFYPEER => false, // FIXME
+          CURLOPT_SSL_VERIFYHOST => false
+        ));
+        $data = (array) json_decode(curl_exec($ch), true);
+        wfDebug("#######");
+        wfDebug($data);
+      }
+    } else {
+      wfDebug("Empty revision");
+    }
+    
     // if(count($data) > 0) {
     //   $this->spacyAnnotations($data);
     // } else {
