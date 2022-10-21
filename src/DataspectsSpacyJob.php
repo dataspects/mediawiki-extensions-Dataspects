@@ -30,6 +30,7 @@ class DataspectsSpacyJob extends \Job {
       $wikitext = \ContentHandler::getContentText( $content );
       $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
       $parserOptions = new \ParserOptions();
+      wfDebug("DataspectsSpacyJob 000");
       $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
       if($parsedWikitext->mText) {
         $dom = new \DOMDocument('1.0', 'utf-8');

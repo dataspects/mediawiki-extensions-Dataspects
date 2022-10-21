@@ -11,9 +11,6 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 
 	
 	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
-		
-		// https://www.mediawiki.org/wiki/Manual:Logging_to_Special:Log
-		# FIXME: implement job queue
 		switch($this->title->mNamespace) {
       		case 6:
 				$job = new DataspectsTikaJob($wikiPage->getTitle(), []);
