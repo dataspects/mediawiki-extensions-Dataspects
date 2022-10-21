@@ -30,9 +30,7 @@ class DataspectsSpacyJob extends \Job {
       $wikitext = \ContentHandler::getContentText( $content );
       $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
       $parserOptions = new \ParserOptions();
-      wfDebug("DataspectsSpacyJob 000");
       $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
-      wfDebug("DataspectsSpacyJob 111");
       if($parsedWikitext->mText) {
         $dom = new \DOMDocument('1.0', 'utf-8');
         // FIXME: DOMDocument::loadHTML(): Namespace prefix mw is not defined in Entity
@@ -79,8 +77,9 @@ class DataspectsSpacyJob extends \Job {
     //   $message = "No annotations for '".$this->title->mTextform."' from ".$url;
     //   $this->dsf->manualLogEntry($message);
     // }
-    // $job = new DataspectsIndexJob($this->wikiPage->getTitle(), []);
-		// \JobQueueGroup::singleton()->push($job);
+    wfDebug("DataspectsSpacyJob 222");
+    $job = new DataspectsIndexJob($wikiPage->getTitle(), []);
+		\JobQueueGroup::singleton()->push($job);
     return true;
   }
 
