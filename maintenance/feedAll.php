@@ -1,5 +1,6 @@
 <?php
 
+namespace MediaWiki\Extension\DataspectsSearch;
 
 use Laudis\Neo4j\Authentication\Authenticate;
 use Laudis\Neo4j\ClientBuilder;
@@ -9,7 +10,7 @@ use MeiliSearch\Client;
 $basePath = getenv( 'MW_INSTALL_PATH' ) !== false ? getenv( 'MW_INSTALL_PATH' ) : __DIR__ . '/../../..';
 require_once $basePath . '/maintenance/Maintenance.php';
 
-class DMFFeedAll extends Maintenance {
+class DMFFeedAll extends \Maintenance {
 
 	public function execute() {
 		// api.php?action=query&meta=siteinfo&siprop=namespaces
@@ -24,15 +25,24 @@ class DMFFeedAll extends Maintenance {
 	}
 
 	private function feedNamespace(int $namespaceNumber) {
-		$dsNeo4j = new \MediaWiki\Extension\DataspectsSearch\DSNeo4j();
-		try { # FIXME
-			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new GuzzleHttp\Client(['verify' => false ])); // FIXME
-		} catch (\MeiliSearch\Exceptions\ApiException $e) {
-			echo 'Caught exception: ',  $e->getMessage(), "\n";
-		}
 		foreach($this->pageTitlesInNamespace($namespaceNumber) as $title) {
-			$dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($title, RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient); #FIXME: NULL is bad design
-			$dmwf->sendToDatastore();
+			$params = [
+			"namespace" => $title->getNamespace(),
+			"title" => $title->getBaseText()
+			];
+			switch($title->getNamespace()) {
+				case 0:
+					$job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
+					\JobQueueGroup::singleton()->push($job);
+				break;
+				case 6:
+					$job = new DataspectsTikaJob("dataspectsTikaJob", $params);
+					\JobQueueGroup::singleton()->push($job);
+				break;
+				default:
+					
+				break;
+			}
 		}
 	}
 
@@ -50,7 +60,7 @@ class DMFFeedAll extends Maintenance {
     	array()        // $options = array()
     );
     foreach( $res as $row ) {
-    	$pageTitles[] = Title::newFromRow($row);
+    	$pageTitles[] = \Title::newFromRow($row);
     }
     return $pageTitles;
   }
