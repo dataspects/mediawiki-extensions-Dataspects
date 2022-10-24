@@ -11,14 +11,22 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 
 	
 	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
-		switch($this->title->mNamespace) {
+		$title = $wikiPage->getTitle();
+		$params = [
+			"namespace" => $title->getNamespace(),
+			"title" => $title->getBaseText()
+		];
+		switch($title->getNamespace()) {
+			case 0:
+				$job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
+				\JobQueueGroup::singleton()->push($job);
+			break;
       		case 6:
-				$job = new DataspectsTikaJob($wikiPage->getTitle(), []);
+				$job = new DataspectsTikaJob("dataspectsTikaJob", $params);
 				\JobQueueGroup::singleton()->push($job);
 			break;
 			default:
-				$job = new DataspectsSpacyJob($wikiPage->getTitle(), []);
-				\JobQueueGroup::singleton()->push($job);
+				
 			break;
 		}	
 	}

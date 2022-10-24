@@ -1,6 +1,7 @@
 <?php
 
 namespace MediaWiki\Extension\DataspectsSearch;
+use MediaWiki\MediaWikiServices;
 
 class DataspectsTikaJob extends \Job {
   // https://doc.wikimedia.org/mediawiki-core/master/php/classJob.html
@@ -12,25 +13,23 @@ class DataspectsTikaJob extends \Job {
   // private $wikitext = '';
   // private $parsedWikitext = '';
 
-  public function __construct($title, $params) {
+  public function __construct($command, $params) {
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("dataspectsTikaJob", $title, $params);
-    $this->title = $title;
-    
+    $this->params = $params;
+    parent::__construct("dataspectsTikaJob", $this->params);
   }
 
   public function run() {
+    wfDebug("### RUNNING: dataspectsTikaJob ".$this->params["namespace"].":".$this->params["title"]);
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-    // $dmwf = new \MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed($this->title);
-    // $dmwf->sendToDatastore();
     $attachments = array();
     foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
-
-      $ch = curl_init($GLOBALS['wgDataspectsSearchTikaURL']."/rmeta");
+      $url = $GLOBALS['wgDataspectsSearchTikaURL']."/rmeta";
+      $ch = curl_init($url);
       curl_setopt_array($ch, array(
         CURLOPT_PUT => 1,
         CURLOPT_INFILE => $fh_res,
@@ -41,17 +40,21 @@ class DataspectsTikaJob extends \Job {
         CURLOPT_SSL_VERIFYHOST => false
       ));
       $curl_response_res = curl_exec ($ch);
-      $data  = (array) json_decode($curl_response_res)[0];
-      $htmlDoc = $data["X-TIKA:content"];
-      $dom = new \DOMDocument();
-      $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
-      $attachments[] = array(
-        "type"      => $data["Content-Type"],
-        "text"      => trim($dom->textContent),
-        "thumbURL"  => $GLOBALS['wgServer'].$file->getThumbUrl() # FIXME
-      );
+      if($curl_response_res) {
+        $data  = (array) json_decode($curl_response_res)[0];
+        $htmlDoc = $data["X-TIKA:content"];
+        $dom = new \DOMDocument();
+        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlDoc);
+        $attachments[] = array(
+          "type"      => $data["Content-Type"],
+          "text"      => trim($dom->textContent),
+          "thumbURL"  => $GLOBALS['wgServer'].$file->getThumbUrl() # FIXME
+        );
+      } else {
+        wfDebug("#DATASPECTS: No response from ".$url);
+      }
     }
-    $job = new DataspectsSpacyJob($wikiPage->getTitle(), []);
+    $job = new DataspectsSpacyJob("dataspectsSpacyJob", array_merge($this->params, [ "attachments" => $attachments ]));
 		\JobQueueGroup::singleton()->push($job);
     return true;
   }

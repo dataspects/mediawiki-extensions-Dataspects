@@ -13,16 +13,15 @@ class DataspectsIndexJob extends \Job {
   // private $wikitext = '';
   // private $parsedWikitext = '';
 
-  public function __construct($title, $params) {
+  public function __construct($command, $params) {
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("dataspectsIndexJob", $title, $params);
-    $this->title = $title;
-    
+    $this->params = $params;
+    parent::__construct("dataspectsIndexJob", $this->params);
   }
 
   public function run() {
-    wfDebug("DataspectsSpacyJob 333");
+    wfDebug("### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]);
     $dsNeo4j = new \MediaWiki\Extension\DataspectsSearch\DSNeo4j();
     try { # FIXME
 			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new \GuzzleHttp\Client(['verify' => false ]));

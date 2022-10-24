@@ -13,19 +13,27 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends \Maintenance {
 
 	public function execute() {
-		$title = \Title::newFromText('Bylaws');
+		$title = \Title::newFromText('File:TWebC.png');
+		// $title = \Title::newFromText('Main Page');
 		$this->feedOne($title);
 	}
 
 	private function feedOne($title) {
-		switch($title->mNamespace) {
+		$params = [
+			"namespace" => $title->getNamespace(),
+			"title" => $title->getBaseText()
+		];
+		switch($title->getNamespace()) {
+			case 0:
+				$job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
+				\JobQueueGroup::singleton()->push($job);
+			break;
       		case 6:
-				$job = new DataspectsTikaJob($title, []);
+				$job = new DataspectsTikaJob("dataspectsTikaJob", $params);
 				\JobQueueGroup::singleton()->push($job);
 			break;
 			default:
-				$job = new DataspectsSpacyJob($title, []);
-				\JobQueueGroup::singleton()->push($job);
+				
 			break;
 		}
 	}

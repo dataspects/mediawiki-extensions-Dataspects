@@ -13,14 +13,20 @@ class DataspectsSpacyJob extends \Job {
   // private $wikitext = '';
   // private $parsedWikitext = '';
 
-  public function __construct($title, $params) {
+  public function __construct($command, $params) {
+    /**
+     *  QUESTION: This constructor is run when:
+     *  1. the job is registered
+     *  2. the job is run
+     */
     // https://doc.wikimedia.org/mediawiki-core/master/php/classTitle.html
     // https://www.mediawiki.org/wiki/Manual:Title.php#Functions
-    parent::__construct("dataspectsSpacyJob", $title, $params);
-    $this->title = $title;
+    $this->params = $params;
+    parent::__construct("dataspectsSpacyJob", $this->params);
   }
 
   public function run() {
+    wfDebug("### RUNNING: dataspectsSpacyJob ".$this->params["namespace"].":".$this->params["title"]);
     $wikiPage = \WikiPage::factory($this->title);
     $url = $GLOBALS['wgDataspectsSearchSpacyURL']."/escam-annotations";
     $ch = curl_init($url);
@@ -30,7 +36,6 @@ class DataspectsSpacyJob extends \Job {
       $wikitext = \ContentHandler::getContentText( $content );
       $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
       $parserOptions = new \ParserOptions();
-      wfDebug("DataspectsSpacyJob 000");
       $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
       if($parsedWikitext->mText) {
         $dom = new \DOMDocument('1.0', 'utf-8');
@@ -54,8 +59,6 @@ class DataspectsSpacyJob extends \Job {
                 $editSection->parentNode->removeChild($editSection);
             }
         }
-        wfDebug("#######");
-        wfDebug($dom->textContent);
         curl_setopt_array($ch, array(
           CURLOPT_POST => 1,
           CURLOPT_POSTFIELDS => json_encode(['text' => $dom->textContent]),
@@ -65,8 +68,6 @@ class DataspectsSpacyJob extends \Job {
           CURLOPT_SSL_VERIFYHOST => false
         ));
         $data = (array) json_decode(curl_exec($ch), true);
-        wfDebug("#######");
-        wfDebug($data);
       }
     } else {
       wfDebug("Empty revision");
@@ -78,8 +79,7 @@ class DataspectsSpacyJob extends \Job {
     //   $message = "No annotations for '".$this->title->mTextform."' from ".$url;
     //   $this->dsf->manualLogEntry($message);
     // }
-    wfDebug("DataspectsSpacyJob 222");
-    $job = new DataspectsIndexJob($wikiPage->getTitle(), []);
+    $job = new DataspectsIndexJob("dataspectsIndexJob", array_merge($this->params, []));
 		\JobQueueGroup::singleton()->push($job);
     return true;
   }
