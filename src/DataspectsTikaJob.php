@@ -54,8 +54,10 @@ class DataspectsTikaJob extends \Job {
         wfDebug("#DATASPECTS: No response from ".$url);
       }
     }
-    $job = new DataspectsSpacyJob("dataspectsSpacyJob", array_merge($this->params, [ "attachments" => $attachments ]));
-		\JobQueueGroup::singleton()->push($job);
+    // $job = new DataspectsSpacyJob("dataspectsSpacyJob", array_merge($this->params, [ "attachments" => $attachments ]));
+		// \JobQueueGroup::singleton()->push($job);
+    $job = new DataspectsIndexJob("dataspectsIndexJob", $params);
+    \JobQueueGroup::singleton()->push($job);
     return true;
   }
 

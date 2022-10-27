@@ -1,7 +1,8 @@
 <?php
 
 namespace MediaWiki\Extension\DataspectsSearch;
-use MeiliSearch\Client;
+use \Symfony\Component\HttpClient\HttplugClient;
+use \MeiliSearch\Client;
 
 class DataspectsIndexJob extends \Job {
   // https://doc.wikimedia.org/mediawiki-core/master/php/classJob.html
@@ -20,11 +21,13 @@ class DataspectsIndexJob extends \Job {
     parent::__construct("dataspectsIndexJob", $this->params);
   }
 
+  // https://docs.php-http.org/en/latest/clients.html
+
   public function run() {
     wfDebug("### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]);
     $dsNeo4j = new \MediaWiki\Extension\DataspectsSearch\DSNeo4j();
     try { # FIXME
-			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new \GuzzleHttp\Client(['verify' => false ]));
+			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new HttplugClient());
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}

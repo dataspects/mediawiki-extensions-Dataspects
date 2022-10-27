@@ -11,7 +11,7 @@ class DSNeo4j {
 
   public function __construct() {
     try {
-      $this->neo4jClient = ClientBuilder::create()->withDriver(
+      $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
         'neo4j',
         $GLOBALS['wgDataspectsSearchNeo4jURL'],
         Authenticate::basic($GLOBALS['wgDataspectsSearchNeo4jUsername'], $GLOBALS['wgDataspectsSearchNeo4jPassword'])
