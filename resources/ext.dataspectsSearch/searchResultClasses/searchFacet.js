@@ -23,7 +23,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
   searchResultBody = (hit, instantsearch) => {
     return (
       this.ds0__text(instantsearch) +
-      this.mw0__attachment(instantsearch) +
+      // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
       "<script>" +

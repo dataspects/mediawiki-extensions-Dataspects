@@ -20,7 +20,7 @@ ElementSearchResult = class extends SearchResult {
       "<div>" +
       this.ds0__text(instantsearch) +
       "</div>" +
-      this.mw0__attachment(instantsearch) +
+      // this.mw0__attachment(instantsearch) +
       this.annotations()
     );
   };
