@@ -2,7 +2,7 @@
 
 dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
 
-[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html)
+[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html)
 
 ```mermaid
 flowchart LR

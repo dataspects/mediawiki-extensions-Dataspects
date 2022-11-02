@@ -16,7 +16,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b>
                     </td>
                     <td>
-                        <a href="https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
+                        <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
                     </td>
                 </tr>
                 <tr>

@@ -18,7 +18,7 @@ class SpecialDataspects extends SpecialPage {
 					<div id="hits"></div>
 				</td>
 				<td style="padding-left:30px;">
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span><br/><a href="https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html">Doc</a> | <b><a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsBackstage">&rarr; Backstage</a></b>
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span><br/><a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <b><a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsBackstage">&rarr; Backstage</a></b>
 					<ul class="accordion">
 						<li>
 							<a class="toggle" href=#>Saved search facets</a>
