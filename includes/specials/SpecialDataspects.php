@@ -9,24 +9,22 @@ class SpecialDataspects extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-		$output->addHTML( '<table class="dataspectsSearchInterface">
+		$output->addHTML( '<table class="dataspectsTable">
 			<tr>
-				<td style="width:66%;">
+				<td style="width:60%;">
 					<div style="float:right;"><input type="checkbox" id="originalPageContent">Show original page contents <input type="checkbox" id="compactList" value="1">Compact list</div>
 					<div id="searchbox"></div>
 					<div id="intro"></div>
 					<div id="hits"></div>
 				</td>
-				<td style="width:33%; padding-left:30px;">
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
+				<td style="padding-left:30px;">
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span><br/><a href="https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html">Doc</a> | <b><a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsBackstage">&rarr; Backstage</a></b>
 					<ul class="accordion">
 						<li>
 							<a class="toggle" href=#>Saved search facets</a>
 							<div class="inner">'.$this->searchFacets().'</div>
 						</li>
 						<li>
-							<a id="facetingMenus" class="toggle" href=#>FACETING (depends on authentication)</a>
-							<div class="inner">
 							<table id="hierarchicalMenus">
 							<tbody>
 								<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td></tr>
@@ -40,7 +38,6 @@ class SpecialDataspects extends SpecialPage {
 							<div id="selected-aspects-menu"></div>
 							<hr/>
 							<div id="all-predicates-menu"></div>
-							</div>
 						</li>
 					</ul>
 				</td>

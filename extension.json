@@ -4,7 +4,7 @@
   "author": ["Lex Sulzer"],
   "url": "https://www.mediawiki.org/wiki/Extension:Dataspects",
   "license-name": "GPL-2.0-or-later",
-  "descriptionmsg": "dataspectssearch-desc",
+  "descriptionmsg": "dataspects-desc",
   "type": "other",
   "requires": {
     "MediaWiki": ">= 1.35.0"
@@ -13,10 +13,12 @@
     "MediaWiki\\Extension\\Dataspects\\": "src/"
   },
   "SpecialPages": {
-    "Dataspects": "SpecialDataspects"
+    "Dataspects": "SpecialDataspects",
+    "DataspectsBackstage": "SpecialDataspectsBackstage"
   },
   "AutoloadClasses": {
     "SpecialDataspects": "includes/specials/SpecialDataspects.php",
+    "SpecialDataspectsBackstage": "includes/specials/SpecialDataspectsBackstage.php",
     "DataspectsAPI": "includes/api/DataspectsAPI.php"
   },
   "HookHandlers": {

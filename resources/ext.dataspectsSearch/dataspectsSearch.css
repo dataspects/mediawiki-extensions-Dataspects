@@ -62,8 +62,19 @@
     color:#ccc;
 }
 
-.dataspectsSearchInterface {
+.dataspectsTable {
     width:100%;
+}
+
+.dataspectsTable>tbody>tr>td {
+    vertical-align: top;
+    padding: 20px 20px 20px 0px;
+    
+}
+
+.dataspectsBackstageTable>tbody>tr>td {
+    border: 1px solid lightblue;
+    padding: 0px;
 }
 
 .mw0__rawUrl {
@@ -73,11 +84,7 @@
     display:block;
 }
 
-.dataspectsSearchInterface>tbody>tr>td {
-    width: 50%;
-    vertical-align: top;
-    padding: 20px 20px 20px 0px;
-}
+
 
 .mw0__attachment>tbody>tr>td {
     vertical-align: top;
