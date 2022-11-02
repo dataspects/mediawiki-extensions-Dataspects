@@ -13,8 +13,8 @@ class DSNeo4j {
     try {
       $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
         'neo4j',
-        $GLOBALS['wgDataspectsSearchNeo4jURL'],
-        Authenticate::basic($GLOBALS['wgDataspectsSearchNeo4jUsername'], $GLOBALS['wgDataspectsSearchNeo4jPassword'])
+        $GLOBALS['wgDataspectsNeo4jURL'],
+        Authenticate::basic($GLOBALS['wgDataspectsNeo4jUsername'], $GLOBALS['wgDataspectsNeo4jPassword'])
       )->build();
     } catch (Exception $e) {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -44,7 +44,7 @@ class DSNeo4j {
     ];
     $queries = array_merge($queries, $this->templateTransactions($mediaWikiPage));
     $this->update($queries);
-    echo $GLOBALS['wgDataspectsSearchNeo4jURL'].":".$GLOBALS['wgDataspectsSearchNeo4jDatabase'].": ADDED: ".$mediaWikiPage["mw0__rawUrl"]."\n";
+    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$mediaWikiPage["mw0__rawUrl"]."\n";
   }
 
   public function numberOfNodes() {

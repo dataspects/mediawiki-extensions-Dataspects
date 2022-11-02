@@ -17,7 +17,7 @@ class SpecialDataspectsFeed {
   # LEX200122141600
   function getMediaWikiPage() {
     $mediaWikiPage = [
-      "id" => $GLOBALS['wgDataspectsSearchMediaWikiIDPrefix']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
+      "id" => $GLOBALS['wgDataspectsMediaWikiIDPrefix']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
       "eppo0__hasEntityTitle" => $this->title->mTextform,
       "mw0__rawUrl" => $this->title->getInternalURL(),

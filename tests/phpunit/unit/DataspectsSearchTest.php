@@ -2,14 +2,14 @@
 
 namespace MediaWiki\Extension\Dataspects\Tests;
 
-use MediaWiki\Extension\Dataspects\DataspectsSearchFeed;
+use MediaWiki\Extension\Dataspects\DataspectsFeed;
 
-class DataspectsSearchTest extends \MediaWikiUnitTestCase {
+class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
 		$title = \Title::newFromText("Main Page");
-		$this->dsf = new DataspectsSearchFeed($title);
+		$this->dsf = new DataspectsFeed($title);
 	}
 
 	protected function tearDown(): void {

@@ -13,20 +13,20 @@
     "MediaWiki\\Extension\\Dataspects\\": "src/"
   },
   "SpecialPages": {
-    "Dataspects": "SpecialDataspectsSearch"
+    "Dataspects": "SpecialDataspects"
   },
   "AutoloadClasses": {
-    "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
+    "SpecialDataspects": "includes/specials/SpecialDataspects.php",
     "DataspectsAPI": "includes/api/DataspectsAPI.php"
   },
   "HookHandlers": {
-    "DataspectsSearchHooks": {
+    "DataspectsHooks": {
       "class": "MediaWiki\\Extension\\Dataspects\\Hooks"
     }
   },
   "Hooks": {
-    "PageSaveComplete": "DataspectsSearchHooks",
-    "BeforePageDisplay": "DataspectsSearchHooks"
+    "PageSaveComplete": "DataspectsHooks",
+    "BeforePageDisplay": "DataspectsHooks"
   },
   "MessagesDirs": {
     "Dataspects": ["i18n"]

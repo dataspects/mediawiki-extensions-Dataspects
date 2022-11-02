@@ -27,13 +27,13 @@ class DataspectsIndexJob extends \Job {
     wfDebug("### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]);
     $dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
     try { # FIXME
-			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchWriteURL'], $GLOBALS['wgDataspectsSearchWriteKey'], new HttplugClient());
+			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
 		}
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-    $dmwf = new \MediaWiki\Extension\Dataspects\DataspectsSearchFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient);
+    $dmwf = new \MediaWiki\Extension\Dataspects\DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient);
     $dmwf->sendToDatastore();
     return true;
   }

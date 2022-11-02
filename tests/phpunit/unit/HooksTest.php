@@ -2,10 +2,10 @@
 
 namespace MediaWiki\Extension\Dataspects\Tests;
 
-use MediaWiki\Extension\Dataspects\DataspectsSearchHooks;
+use MediaWiki\Extension\Dataspects\DataspectsHooks;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\Dataspects\DataspectsSearchHooks
+ * @coversDefaultClass \MediaWiki\Extension\Dataspects\DataspectsHooks
  */
 class HooksTest extends \MediaWikiUnitTestCase {
 
@@ -33,7 +33,7 @@ class HooksTest extends \MediaWikiUnitTestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		( new DataspectsSearchHooks )->onPageSaveComplete( $outputPageMock, $skinMock );
+		( new DataspectsHooks )->onPageSaveComplete( $outputPageMock, $skinMock );
 	}
 
 	/**

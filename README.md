@@ -16,15 +16,15 @@ flowchart LR
 
   subgraph Internet
     userAgent("<b>User Agent</b>")
-    DataspectsSearchCLI("<b><a href='https://github.com/dataspects/DataspectsSearchCLI'>DataspectsSearchCLI</a></b>
+    DataspectsCLI("<b><a href='https://github.com/dataspects/DataspectsCLI'>DataspectsCLI</a></b>
     - export MEILI_MASTER_KEY=
     - export INDEX=")
   end
 
-  DataspectsSearchCLI-->|configure/manage|meilisearch
-  userAgent<-->|<b>search content</b><br/>wgDataspectsSearchSearchKey|meilisearch
+  DataspectsCLI-->|configure/manage|meilisearch
+  userAgent<-->|<b>search content</b><br/>wgDataspectsSearchKey|meilisearch
   userAgent<-->mediawiki
-  mediawiki<-->|<b>update content</b><br/>wgDataspectsSearchWriteKey|meilisearch
+  mediawiki<-->|<b>update content</b><br/>wgDataspectsWriteKey|meilisearch
   mediawiki<-->|analyze content|tika
   
 classDef default text-align:left;
@@ -47,19 +47,19 @@ linkStyle 1,4 stroke:#00ff00
 
 ```php
 wfLoadExtension( 'Dataspects' );
-$wgDataspectsSearchTikaURL = "http://tika:9998";
-$wgDataspectsSearchWriteURL = "http://meili:7700";
-$wgDataspectsSearchSearchURL = "http://localhost:7700";
+$wgDataspectsTikaURL = "http://tika:9998";
+$wgDataspectsWriteURL = "http://meili:7700";
+$wgDataspectsSearchURL = "http://localhost:7700";
 
 # See later section "Keys" about how to set these keys
-$wgDataspectsSearchSearchKey = "";       # Used by class SpecialDataspectsSearch
-$wgDataspectsSearchWriteKey = "";        # Used by class DataspectsSearchFeed
+$wgDataspectsSearchKey = "";       # Used by class SpecialDataspects
+$wgDataspectsWriteKey = "";        # Used by class DataspectsFeed
 
 # See later section "Keys" about how to create/configure this index
-$wgDataspectsSearchIndex = "mediawiki";
-$wgDataspectsSearchSourcesForAnonymous = [];
-$wgDataspectsSearchSourcesForAuthenticated = [];
-$wgDataspectsSearchMediaWikiIDPrefix = "dscan"; # together with the page ID, this represents the index doc id
+$wgDataspectsIndex = "mediawiki";
+$wgDataspectsSourcesForAnonymous = [];
+$wgDataspectsSourcesForAuthenticated = [];
+$wgDataspectsMediaWikiIDPrefix = "dscan"; # together with the page ID, this represents the index doc id
 
 # This will direct full text searches to dataspects
 $wgDisableTextSearch = true;
@@ -68,14 +68,14 @@ $wgSearchForwardUrl = "/wiki/Special:Dataspects?q=$1";
 
 ## Keys
 
-See https://github.com/dataspects/DataspectsSearchCLI
+See https://github.com/dataspects/DataspectsCLI
 
 * `create-mediawiki-keys.sh`
 * `get-all-keys.sh`
 
 ## Indexes
 
-See https://github.com/dataspects/DataspectsSearchCLI
+See https://github.com/dataspects/DataspectsCLI
 
 * `create-mediawiki-indexes.sh`
 * `list-all-indexes.sh`
@@ -97,16 +97,16 @@ Allows per-MediaWiki-namespace indexing
 ```bash
 sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
-  extensions/Dataspects/tests/phpunit/unit/DataspectsSearchTest.php
+  extensions/Dataspects/tests/phpunit/unit/DataspectsTest.php
 ```
 
 ## Develop
 
 1. `image: getmeili/meilisearch:v0.28.1`<br/>`image: apache/tika:2.4.1-full`
 2. Clone the test data: https://mwstakeorg.dataspects.com/wiki/C1728772915
-3. `$wgDataspectsSearchSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchSearchKey = "masterKey";`<br/>
-`$wgDataspectsSearchWriteKey = "masterKey";`       
-1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsSearchCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
+3. `$wgDataspectsSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchKey = "masterKey";`<br/>
+`$wgDataspectsWriteKey = "masterKey";`       
+1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
 1. Update JS code: LEX2208021344
 
 

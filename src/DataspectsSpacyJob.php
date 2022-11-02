@@ -28,7 +28,7 @@ class DataspectsSpacyJob extends \Job {
   public function run() {
     wfDebug("### RUNNING: dataspectsSpacyJob ".$this->params["namespace"].":".$this->params["title"]);
     $wikiPage = \WikiPage::factory($this->title);
-    $url = $GLOBALS['wgDataspectsSearchSpacyURL']."/escam-annotations";
+    $url = $GLOBALS['wgDataspectsSpacyURL']."/escam-annotations";
     $ch = curl_init($url);
     $revision = $wikiPage->getRevision();
     if(!empty($revision)) {

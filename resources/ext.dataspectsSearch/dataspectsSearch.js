@@ -142,7 +142,7 @@ const defaultToAuthorizedSources = (helper) => {
 onPageLoadComplete();
 
 $(function () {
-  if (!mw.config.get("wgDataspectsSearchSearchURL")) {
+  if (!mw.config.get("wgDataspectsSearchURL")) {
     return;
   }
   const { SearchResultMatcher } = require("./searchResultMatcher.js");
@@ -153,10 +153,10 @@ $(function () {
   // UI elements from Neo4j
   n4j.numberOfNodes("#numberOfNeo4jNodes");
   const search = instantsearch({
-    indexName: mw.config.get("wgDataspectsSearchIndex"),
+    indexName: mw.config.get("wgDataspectsIndex"),
     searchClient: instantMeiliSearch(
-      mw.config.get("wgDataspectsSearchSearchURL"),
-      mw.config.get("wgDataspectsSearchSearchKey")
+      mw.config.get("wgDataspectsSearchURL"),
+      mw.config.get("wgDataspectsSearchKey")
     ),
     searchFunction(helper) {
       /*

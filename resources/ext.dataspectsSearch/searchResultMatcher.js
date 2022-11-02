@@ -8,7 +8,7 @@ const {
   SMWCindyKateSearchResult,
 } = require("./searchResultClasses/sMWCindyKate.js");
 const {
-  WikiDataspectsSearchResult,
+  WikiDataspectsResult,
 } = require("./searchResultClasses/wikiDataspects.js");
 const {
   SearchFacetSearchResult,
@@ -54,9 +54,9 @@ SearchResultMatcher = class {
         this.searchResultClassName = searchResultClassName;
         theClass = new SMWCindyKateSearchResult(this.hit, this.isCompact);
         break;
-      case "WikiDataspectsSearchResult":
+      case "WikiDataspectsResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new WikiDataspectsSearchResult(this.hit, this.isCompact);
+        theClass = new WikiDataspectsResult(this.hit, this.isCompact);
         break;
       case "SearchFacetSearchResult":
         this.searchResultClassName = searchResultClassName;

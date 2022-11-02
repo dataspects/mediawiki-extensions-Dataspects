@@ -28,7 +28,7 @@ class DataspectsTikaJob extends \Job {
     foreach(MediaWikiServices::getInstance()->getRepoGroup()->findFiles([$this->title]) as $name => $file) {
       $file_path_str = $file->getLocalRefPath();
       $fh_res = fopen($file_path_str, 'r');
-      $url = $GLOBALS['wgDataspectsSearchTikaURL']."/rmeta";
+      $url = $GLOBALS['wgDataspectsTikaURL']."/rmeta";
       $ch = curl_init($url);
       curl_setopt_array($ch, array(
         CURLOPT_PUT => 1,

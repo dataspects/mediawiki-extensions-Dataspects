@@ -1,6 +1,6 @@
 <?php
 
-class SpecialDataspectsSearch extends SpecialPage {
+class SpecialDataspects extends SpecialPage {
 	function __construct() {
 		parent::__construct( 'Dataspects' );
 	}
@@ -48,13 +48,13 @@ class SpecialDataspectsSearch extends SpecialPage {
 		</table>' );
 		$output->addJsConfigVars(array(
 			'wgServer' => $GLOBALS['wgServer'],
-			'wgDataspectsSearchIndex' => $GLOBALS['wgDataspectsSearchIndex'],
-			'wgDataspectsSearchSearchKey' => $GLOBALS['wgDataspectsSearchSearchKey'],
-			'wgDataspectsSearchSearchURL' => $GLOBALS['wgDataspectsSearchSearchURL'],
-			'wgDataspectsSearchNeo4jURL' =>  $GLOBALS['wgDataspectsSearchNeo4jURL'],
-			'wgDataspectsSearchNeo4jUsername' =>  $GLOBALS['wgDataspectsSearchNeo4jUsername'],
-			'wgDataspectsSearchNeo4jPassword' =>  $GLOBALS['wgDataspectsSearchNeo4jPassword'],
-			'wgDataspectsSearchNeo4jDatabase' =>  $GLOBALS['wgDataspectsSearchNeo4jDatabase'],
+			'wgDataspectsIndex' => $GLOBALS['wgDataspectsIndex'],
+			'wgDataspectsSearchKey' => $GLOBALS['wgDataspectsSearchKey'],
+			'wgDataspectsSearchURL' => $GLOBALS['wgDataspectsSearchURL'],
+			'wgDataspectsNeo4jURL' =>  $GLOBALS['wgDataspectsNeo4jURL'],
+			'wgDataspectsNeo4jUsername' =>  $GLOBALS['wgDataspectsNeo4jUsername'],
+			'wgDataspectsNeo4jPassword' =>  $GLOBALS['wgDataspectsNeo4jPassword'],
+			'wgDataspectsNeo4jDatabase' =>  $GLOBALS['wgDataspectsNeo4jDatabase'],
 			'sources' => $this->sources(),
 			'user' => $this->getUser()->getName()
 		));
@@ -94,11 +94,11 @@ class SpecialDataspectsSearch extends SpecialPage {
 	private function sources() {
 		if(count($this->getUser()->getGroups()) > 0) {
 			if($this->getUser()->getName() == "Lex") {
-				return $GLOBALS['wgDataspectsSearchSourcesForLex'];	
+				return $GLOBALS['wgDataspectsSourcesForLex'];	
 			}
-			return $GLOBALS['wgDataspectsSearchSourcesForAuthenticated'];
+			return $GLOBALS['wgDataspectsSourcesForAuthenticated'];
 		}
-		return $GLOBALS['wgDataspectsSearchSourcesForAnonymous'];
+		return $GLOBALS['wgDataspectsSourcesForAnonymous'];
 	}
 
 	private function logInMessage() {

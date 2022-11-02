@@ -7,7 +7,7 @@ use MediaWiki\MediaWikiServices;
 
 use ManualLogEntry;
 
-class DataspectsSearchFeed {
+class DataspectsFeed {
 
   public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient) {
     $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
@@ -15,7 +15,7 @@ class DataspectsSearchFeed {
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     
-    $this->index = $meiliClient->index($GLOBALS['wgDataspectsSearchIndex']);
+    $this->index = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
     $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
@@ -29,7 +29,7 @@ class DataspectsSearchFeed {
 
   static function deleteFromDatastore($id) {
 		// Run this code immediately rather than through a job.
-		$url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgDataspectsSearchID']."/pages/".$id;
+		$url = $GLOBALS['wgDataspectsApiURL'].$GLOBALS['wgDataspectsID']."/pages/".$id;
 		$req = \MWHttpRequest::factory(
 		$url,
 		[
@@ -237,7 +237,7 @@ class DataspectsSearchFeed {
 		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
 		// fclose($h);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
-    echo $GLOBALS['wgDataspectsSearchWriteURL'].":".$GLOBALS['wgDataspectsSearchIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
+    echo $GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }

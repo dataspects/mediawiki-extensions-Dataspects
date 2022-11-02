@@ -1,6 +1,6 @@
 [gerrit]
 host=gerrit.wikimedia.org
 port=29418
-project=mediawiki/extensions/DataspectsSearchForMediaWiki.git
+project=mediawiki/extensions/DataspectsForMediaWiki.git
 track=1
 defaultrebase=0
