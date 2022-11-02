@@ -14,7 +14,7 @@ const { DSNeo4j } = require("./DSneo4j.js");
 var isCompact = false;
 var initialPageLoad = true;
 var theDs0__sources = [];
-window.n4j = new DSNeo4j(); //FIXME: ok to be global?
+const n4j = new DSNeo4j(); //FIXME: ok to be global?
 
 const getUrlParameter = (sParam) => {
   var sPageURL = window.location.search.substring(1),
@@ -139,195 +139,211 @@ const defaultToAuthorizedSources = (helper) => {
   });
 };
 
-onPageLoadComplete();
+/**
+ * Special:Dataspects ONLY!
+ */
 
-$(function () {
-  if (!mw.config.get("wgDataspectsSearchURL")) {
-    return;
-  }
-  const { SearchResultMatcher } = require("./searchResultMatcher.js");
+if (
+  window.location.href ==
+  mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+) {
+  $(function () {
+    if (!mw.config.get("wgDataspectsSearchURL")) {
+      return;
+    }
+    const { SearchResultMatcher } = require("./searchResultMatcher.js");
 
-  require("./instant-meilisearch.umd.js");
-  require("./instantsearch.production.min.js");
+    require("./instant-meilisearch.umd.js");
+    require("./instantsearch.production.min.js");
 
-  // UI elements from Neo4j
-  n4j.numberOfNodes("#numberOfNeo4jNodes");
-  const search = instantsearch({
-    indexName: mw.config.get("wgDataspectsIndex"),
-    searchClient: instantMeiliSearch(
-      mw.config.get("wgDataspectsSearchURL"),
-      mw.config.get("wgDataspectsSearchKey")
-    ),
-    searchFunction(helper) {
-      /*
+    const search = instantsearch({
+      indexName: mw.config.get("wgDataspectsIndex"),
+      searchClient: instantMeiliSearch(
+        mw.config.get("wgDataspectsSearchURL"),
+        mw.config.get("wgDataspectsSearchKey")
+      ),
+      searchFunction(helper) {
+        /*
         This code is executed on page load as well as "as-you-type"
       */
-      configureThisSearch(helper);
-      if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
-        // FXIME!
-        helper.search();
-      } else {
-        alert("You have to select one or more source(s).");
-      }
-      setCurrentHelper(helper);
-      getCurrentHelperAndUpdateUI();
-    },
-  });
-  search.addWidgets([
-    instantsearch.widgets.configure({
-      attributesToSnippet: ["ds0__text"],
-      hitsPerPage: 20,
-    }),
-    instantsearch.widgets.searchBox({
-      container: "#searchbox",
-      showReset: false,
-      showSubmit: false,
-    }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#topic-types-hierarchical-menu",
-      attributes: [
-        "eppo0__hasEntityType.1v10",
-        "eppo0__hasEntityType.1v11",
-        "eppo0__hasEntityType.1v12",
-      ],
-      templates: {
-        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge eppo0__hasEntityType">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
-      },
-      limit: 50,
-      cssClasses: {
-        root: "no-root-bullet-in-list",
-      },
-    }),
-    instantsearch.widgets.refinementList({
-      container: "#sources-refinement-list",
-      attribute: "ds0__source",
-      transformItems(items, { results }) {
-        if (initialPageLoad) {
-          // In order to always show all sources (disjunctively),
-          // we initialize theDs0__sources on initialPageLoad to all sources.
-          // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
-
-          // FIXME: The following merely confines the options list to the authorized sources.
-          // It does not restrict the helper's disjunctiveFacetsRefinements!
-          // This could be done if we were able to access the helper here.
-          theDs0__sources = items
-            .filter((item) => {
-              if (mw.config.get("sources").includes(item.value)) {
-                return true;
-              }
-              return false;
-            })
-            .map((item) => {
-              return item;
-            });
-          initialPageLoad = false;
+        configureThisSearch(helper);
+        if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
+          // FXIME!
+          helper.search();
+        } else {
+          alert("You have to select one or more source(s).");
         }
-        // enforceAuthorizedSources(helper);
-        return theDs0__sources;
+        setCurrentHelper(helper);
+        getCurrentHelperAndUpdateUI();
       },
-      cssClasses: {
-        root: "sources-refinement-list",
-      },
-    }),
-    instantsearch.widgets.refinementList({
-      container: "#mw0__namespace-menu",
-      attribute: "mw0__namespace",
-      showMore: true,
-      showMoreLimit: 20,
-      limit: 1,
-      cssClasses: {
-        root: "mw0__namespace-menu",
-      },
-    }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#sea-kay-menu",
-      attributes: [
-        "ck0__containsCognitiveKeyword.1v10",
-        "ck0__containsCognitiveKeyword.1v11",
-      ],
-      templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
-      },
-      cssClasses: {
-        root: "no-root-bullet-in-list",
-      },
-      limit: 50,
-    }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#actions-menu",
-      attributes: ["ds0__featuresAction.1v10", "ds0__featuresAction.1v11"],
-      templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__featuresAction"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
-      },
-      cssClasses: {
-        root: "no-root-bullet-in-list",
-      },
-      limit: 50,
-    }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#selected-aspects-menu",
-      attributes: ["ds0__specialAspect.1v10", "ds0__specialAspect.1v11"],
-      templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__specialAspect"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
-      },
-      cssClasses: {
-        root: "no-root-bullet-in-list",
-      },
-      limit: 50,
-    }),
-    instantsearch.widgets.hierarchicalMenu({
-      container: "#all-predicates-menu",
-      attributes: [
-        "ds0__allPredicates.1v10",
-        "ds0__allPredicates.1v11",
-        "ds0__allPredicates.1v12",
-      ],
-      templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
-      },
-      cssClasses: {
-        root: "no-root-bullet-in-list",
-      },
-      limit: 1000,
-    }),
-    // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
-    instantsearch.widgets.infiniteHits({
-      container: "#hits",
-      templates: {
-        item(hit) {
-          /**
-           * ds1:implements: Match SearchResult class against hit/env profile
-           * We have:
-           *  1) a hit JSON from Meilisearch and
-           *  2) an environment JSON from the browser.
-           * These are matched against profiles.json in order to load
-           * the correct SearchResult subclass or default SearchResult class.
-           */
-          var srm = new SearchResultMatcher(
-            hit,
-            isCompact,
-            JSON.parse(
-              window.localStorage.getItem("dataspectsSearchFacet")
-            ).environment,
-            instantsearch
-          );
-          console.info(
-            "Returning " + hit.name + " using " + srm.searchResultClassName
-          );
-          return srm.searchResult();
+    });
+    search.addWidgets([
+      instantsearch.widgets.configure({
+        attributesToSnippet: ["ds0__text"],
+        hitsPerPage: 20,
+      }),
+      instantsearch.widgets.searchBox({
+        container: "#searchbox",
+        showReset: false,
+        showSubmit: false,
+      }),
+      instantsearch.widgets.hierarchicalMenu({
+        container: "#topic-types-hierarchical-menu",
+        attributes: [
+          "eppo0__hasEntityType.1v10",
+          "eppo0__hasEntityType.1v11",
+          "eppo0__hasEntityType.1v12",
+        ],
+        templates: {
+          item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge eppo0__hasEntityType">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
         },
-        empty:
-          "No results for <q>{{ query }}</q> or no results for your authorization level.",
-      },
-      transformItems(items, { results }) {
-        return items.map((item, index) => {
-          return {
-            ...item,
-            position: { index, page: results.page },
-          };
-        });
-      },
-    }),
-  ]);
-  search.start();
-})();
+        limit: 50,
+        cssClasses: {
+          root: "no-root-bullet-in-list",
+        },
+      }),
+      instantsearch.widgets.refinementList({
+        container: "#sources-refinement-list",
+        attribute: "ds0__source",
+        transformItems(items, { results }) {
+          if (initialPageLoad) {
+            // In order to always show all sources (disjunctively),
+            // we initialize theDs0__sources on initialPageLoad to all sources.
+            // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
+
+            // FIXME: The following merely confines the options list to the authorized sources.
+            // It does not restrict the helper's disjunctiveFacetsRefinements!
+            // This could be done if we were able to access the helper here.
+            theDs0__sources = items
+              .filter((item) => {
+                if (mw.config.get("sources").includes(item.value)) {
+                  return true;
+                }
+                return false;
+              })
+              .map((item) => {
+                return item;
+              });
+            initialPageLoad = false;
+          }
+          // enforceAuthorizedSources(helper);
+          return theDs0__sources;
+        },
+        cssClasses: {
+          root: "sources-refinement-list",
+        },
+      }),
+      instantsearch.widgets.refinementList({
+        container: "#mw0__namespace-menu",
+        attribute: "mw0__namespace",
+        showMore: true,
+        showMoreLimit: 20,
+        limit: 1,
+        cssClasses: {
+          root: "mw0__namespace-menu",
+        },
+      }),
+      instantsearch.widgets.hierarchicalMenu({
+        container: "#sea-kay-menu",
+        attributes: [
+          "ck0__containsCognitiveKeyword.1v10",
+          "ck0__containsCognitiveKeyword.1v11",
+        ],
+        templates: {
+          item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        },
+        cssClasses: {
+          root: "no-root-bullet-in-list",
+        },
+        limit: 50,
+      }),
+      instantsearch.widgets.hierarchicalMenu({
+        container: "#actions-menu",
+        attributes: ["ds0__featuresAction.1v10", "ds0__featuresAction.1v11"],
+        templates: {
+          item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__featuresAction"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        },
+        cssClasses: {
+          root: "no-root-bullet-in-list",
+        },
+        limit: 50,
+      }),
+      instantsearch.widgets.hierarchicalMenu({
+        container: "#selected-aspects-menu",
+        attributes: ["ds0__specialAspect.1v10", "ds0__specialAspect.1v11"],
+        templates: {
+          item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__specialAspect"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        },
+        cssClasses: {
+          root: "no-root-bullet-in-list",
+        },
+        limit: 50,
+      }),
+      instantsearch.widgets.hierarchicalMenu({
+        container: "#all-predicates-menu",
+        attributes: [
+          "ds0__allPredicates.1v10",
+          "ds0__allPredicates.1v11",
+          "ds0__allPredicates.1v12",
+        ],
+        templates: {
+          item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        },
+        cssClasses: {
+          root: "no-root-bullet-in-list",
+        },
+        limit: 1000,
+      }),
+      // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
+      instantsearch.widgets.infiniteHits({
+        container: "#hits",
+        templates: {
+          item(hit) {
+            /**
+             * ds1:implements: Match SearchResult class against hit/env profile
+             * We have:
+             *  1) a hit JSON from Meilisearch and
+             *  2) an environment JSON from the browser.
+             * These are matched against profiles.json in order to load
+             * the correct SearchResult subclass or default SearchResult class.
+             */
+            var srm = new SearchResultMatcher(
+              hit,
+              isCompact,
+              JSON.parse(
+                window.localStorage.getItem("dataspectsSearchFacet")
+              ).environment,
+              instantsearch
+            );
+            console.info(
+              "Returning " + hit.name + " using " + srm.searchResultClassName
+            );
+            return srm.searchResult();
+          },
+          empty:
+            "No results for <q>{{ query }}</q> or no results for your authorization level.",
+        },
+        transformItems(items, { results }) {
+          return items.map((item, index) => {
+            return {
+              ...item,
+              position: { index, page: results.page },
+            };
+          });
+        },
+      }),
+    ]);
+    search.start();
+  })();
+}
+
+/**
+ * Special:DataspectsBackstage ONLY!
+ */
+
+if (
+  window.location.href ==
+  mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+) {
+  n4j.numberOfNodes("#numberOfNeo4jNodes");
+}

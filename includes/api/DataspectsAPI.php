@@ -1,21 +1,20 @@
 <?php
 
-
 class DataspectsAPI extends ApiBase {
 
 	private $mInstalledExtensions = [];
 
 	public function __construct( $query, $moduleName ) {
+		wfDebug("sad");
 		parent::__construct( $query, $moduleName );
-        $this->dsNeo4j = new MediaWiki\Extension\Dataspects\DSNeo4j();
+		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
 	}
 
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$queryType = $params['querytype'];
 		$user = $this->getUser();
-
-        if ( $queryType == null ) {
+		if ( $queryType == null ) {
 			throw new MWException( wfMessage( 'querytypenull' ) );
 		}
 		// FIXME: security concerns: injection, api call parameters?

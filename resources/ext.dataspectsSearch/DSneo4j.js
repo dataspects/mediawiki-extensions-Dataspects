@@ -13,7 +13,11 @@ DSNeo4j = class {
         querytype: "numberofnodes",
       })
       .done(function (data) {
+        console.debug(data);
         $(name).text(data.data.numberofnodes);
+      })
+      .fail(function (data) {
+        console.error(data);
       });
   };
 
@@ -26,6 +30,9 @@ DSNeo4j = class {
       })
       .done(function (data) {
         putVisNetwork(data.data.templatecallssubgraph, name);
+      })
+      .fail(function (data) {
+        console.error(data);
       });
   };
 };

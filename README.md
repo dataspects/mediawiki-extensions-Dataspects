@@ -91,7 +91,7 @@ Allows per-MediaWiki-namespace indexing
 
 ### Fixme
 
-1. Add to Canasta MediaWiki container: `sudo docker exec mwstakeorgdevclone_web_1 bash -c 'composer require meilisearch/meilisearch-php guzzlehttp/guzzle http-interop/http-factory-guzzle:^1.0'`
+1. Add to Canasta MediaWiki container: `composer require --with-all-dependencies meilisearch/meilisearch-php:0.25.0 symfony/http-client laudis/neo4j-php-client`
 
 ## Test
 ```bash
@@ -100,6 +100,7 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
   extensions/Dataspects/tests/phpunit/unit/DataspectsTest.php
 ```
 
+Debug API: https://localhost/w/api.php
 ## Develop
 
 1. `image: getmeili/meilisearch:v0.28.1`<br/>`image: apache/tika:2.4.1-full`
