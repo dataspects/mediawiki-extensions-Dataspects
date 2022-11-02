@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\DataspectsSearch;
+namespace MediaWiki\Extension\Dataspects;
 
 $basePath = getenv( 'MW_INSTALL_PATH' ) !== false ? getenv( 'MW_INSTALL_PATH' ) : __DIR__ . '/../../..';
 require_once $basePath . '/maintenance/Maintenance.php';

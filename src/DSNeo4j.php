@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MediaWiki\Extension\DataspectsSearch;
+namespace MediaWiki\Extension\Dataspects;
 
 use Laudis\Neo4j\Authentication\Authenticate;
 use Laudis\Neo4j\ClientBuilder;

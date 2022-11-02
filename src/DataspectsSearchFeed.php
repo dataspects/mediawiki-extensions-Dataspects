@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MediaWiki\Extension\DataspectsSearch;
+namespace MediaWiki\Extension\Dataspects;
 
 use MediaWiki\MediaWikiServices;
 

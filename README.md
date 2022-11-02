@@ -2,7 +2,7 @@
 
 dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
 
-[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html)
+[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html)
 
 ```mermaid
 flowchart LR
@@ -46,7 +46,7 @@ linkStyle 1,4 stroke:#00ff00
 ## LocalSettings.php
 
 ```php
-wfLoadExtension( 'DataspectsSearch' );
+wfLoadExtension( 'Dataspects' );
 $wgDataspectsSearchTikaURL = "http://tika:9998";
 $wgDataspectsSearchWriteURL = "http://meili:7700";
 $wgDataspectsSearchSearchURL = "http://localhost:7700";
@@ -63,7 +63,7 @@ $wgDataspectsSearchMediaWikiIDPrefix = "dscan"; # together with the page ID, thi
 
 # This will direct full text searches to dataspects
 $wgDisableTextSearch = true;
-$wgSearchForwardUrl = "/wiki/Special:DataspectsSearch?q=$1";
+$wgSearchForwardUrl = "/wiki/Special:Dataspects?q=$1";
 ```
 
 ## Keys
@@ -85,7 +85,7 @@ See https://github.com/dataspects/DataspectsSearchCLI
 ## Manual indexing
 
 Allows per-MediaWiki-namespace indexing
-`sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/DataspectsSearch/maintenance/feedAll.php'`
+`sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/Dataspects/maintenance/feedAll.php'`
 
 ## Example: configure dataspects for [Canasta](https://canasta.wiki/)
 
@@ -97,7 +97,7 @@ Allows per-MediaWiki-namespace indexing
 ```bash
 sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
-  extensions/DataspectsSearch/tests/phpunit/unit/DataspectsSearchTest.php
+  extensions/Dataspects/tests/phpunit/unit/DataspectsSearchTest.php
 ```
 
 ## Develop
@@ -106,7 +106,7 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
 2. Clone the test data: https://mwstakeorg.dataspects.com/wiki/C1728772915
 3. `$wgDataspectsSearchSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchSearchKey = "masterKey";`<br/>
 `$wgDataspectsSearchWriteKey = "masterKey";`       
-1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsSearchCLI<br/>E.g. `php extensions/DataspectsSearch/maintenance/feedOne.php`
+1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsSearchCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
 1. Update JS code: LEX2208021344
 
 
@@ -147,4 +147,4 @@ lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ yarn add \
                                                             @meilisearch/instant-meilisearch instantsearch.js vis-network
 
 **Copy into place, e.g.**
-lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/vis-network/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/DataspectsSearch/resources/ext.dataspectsSearch/
+lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/vis-network/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/Dataspects/resources/ext.dataspectsSearch/

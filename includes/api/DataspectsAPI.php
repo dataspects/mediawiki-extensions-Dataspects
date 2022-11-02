@@ -7,7 +7,7 @@ class DataspectsAPI extends ApiBase {
 
 	public function __construct( $query, $moduleName ) {
 		parent::__construct( $query, $moduleName );
-        $this->dsNeo4j = new MediaWiki\Extension\DataspectsSearch\DSNeo4j();
+        $this->dsNeo4j = new MediaWiki\Extension\Dataspects\DSNeo4j();
 	}
 
 	public function execute() {
@@ -58,7 +58,7 @@ class DataspectsAPI extends ApiBase {
 	}
 
 	private function processHTML($html) {
-		$hp = new MediaWiki\Extension\DataspectsSearch\HTMLProcessor($html);
+		$hp = new MediaWiki\Extension\Dataspects\HTMLProcessor($html);
 		return $hp->processAndReturnHTML();
 	}
 	

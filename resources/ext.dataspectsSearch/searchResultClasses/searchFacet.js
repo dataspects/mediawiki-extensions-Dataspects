@@ -36,7 +36,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
     return (
       "<a href='" +
       mw.config.get("wgServer") +
-      "/wiki/Special:DataspectsSearch?helper=" +
+      "/wiki/Special:Dataspects?helper=" +
       this.annotationByPredicate("Ds0:instantsearchHelper") +
       "' style='display:block;'>Activate this search facet</a>"
     );

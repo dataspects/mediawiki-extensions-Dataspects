@@ -1,8 +1,8 @@
 {
-  "name": "DataspectsSearch",
-  "version": "0.2.3",
+  "name": "Dataspects",
+  "version": "0.3.0",
   "author": ["Lex Sulzer"],
-  "url": "https://www.mediawiki.org/wiki/Extension:DataspectsSearch",
+  "url": "https://www.mediawiki.org/wiki/Extension:Dataspects",
   "license-name": "GPL-2.0-or-later",
   "descriptionmsg": "dataspectssearch-desc",
   "type": "other",
@@ -10,10 +10,10 @@
     "MediaWiki": ">= 1.35.0"
   },
   "AutoloadNamespaces": {
-    "MediaWiki\\Extension\\DataspectsSearch\\": "src/"
+    "MediaWiki\\Extension\\Dataspects\\": "src/"
   },
   "SpecialPages": {
-    "DataspectsSearch": "SpecialDataspectsSearch"
+    "Dataspects": "SpecialDataspectsSearch"
   },
   "AutoloadClasses": {
     "SpecialDataspectsSearch": "includes/specials/SpecialDataspectsSearch.php",
@@ -21,7 +21,7 @@
   },
   "HookHandlers": {
     "DataspectsSearchHooks": {
-      "class": "MediaWiki\\Extension\\DataspectsSearch\\Hooks"
+      "class": "MediaWiki\\Extension\\Dataspects\\Hooks"
     }
   },
   "Hooks": {
@@ -29,12 +29,12 @@
     "BeforePageDisplay": "DataspectsSearchHooks"
   },
   "MessagesDirs": {
-    "DataspectsSearch": ["i18n"]
+    "Dataspects": ["i18n"]
   },
   "ResourceModules": {
     "ext.dataspectsSearch": {
       "localBasePath": "resources/ext.dataspectsSearch",
-      "remoteExtPath": "DataspectsSearch/resources/ext.dataspectsSearch",
+      "remoteExtPath": "Dataspects/resources/ext.dataspectsSearch",
       "dependencies": [],
       "styles": ["dataspectsSearch.css"],
       "packageFiles": [
@@ -59,9 +59,9 @@
     }
   },
   "JobClasses": {
-    "dataspectsTikaJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsTikaJob",
-    "dataspectsSpacyJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsSpacyJob",
-    "dataspectsIndexJob": "MediaWiki\\Extension\\DataspectsSearch\\DataspectsIndexJob"
+    "dataspectsTikaJob": "MediaWiki\\Extension\\Dataspects\\DataspectsTikaJob",
+    "dataspectsSpacyJob": "MediaWiki\\Extension\\Dataspects\\DataspectsSpacyJob",
+    "dataspectsIndexJob": "MediaWiki\\Extension\\Dataspects\\DataspectsIndexJob"
   },
   "LogTypes": ["dataspects"],
   "LogNames": {

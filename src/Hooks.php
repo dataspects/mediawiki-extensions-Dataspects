@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\DataspectsSearch;
+namespace MediaWiki\Extension\Dataspects;
 
 use ManualLogEntry;
 use Title;

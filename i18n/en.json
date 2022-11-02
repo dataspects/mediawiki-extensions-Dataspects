@@ -5,8 +5,8 @@
   "log-name-dataspects": "dataspects log",
   "logentry-dataspects-main": "$1 $2 $3 $4",
   "dataspects-header": "dataspects Log",
-  "dataspectssearch": "dataspects",
-  "dataspectssearch-desc": "dataspects interface for MediaWiki",
-  "dataspectssearchbackstage": "dataspects Backstage",
-  "dataspectssearchbackstage-desc": "dataspects Backstage for MediaWiki"
+  "dataspects": "dataspects",
+  "dataspects-desc": "dataspects interface for MediaWiki",
+  "dataspectsbackstage": "dataspects Backstage",
+  "dataspectsbackstage-desc": "dataspects Backstage for MediaWiki"
 }

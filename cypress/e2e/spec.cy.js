@@ -2,7 +2,7 @@ describe("dataspects", () => {
   let login = ["lex", "globi2000globi"];
   it("should load the dataspects page", () => {
     cy.mediawiki_login(login[0], login[1]);
-    cy.visit("/wiki/Special:DataspectsSearch");
+    cy.visit("/wiki/Special:Dataspects");
     cy.takeScreenshot("dataspects-Search-page");
     cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
     cy.takeScreenshot("instant-search-results");

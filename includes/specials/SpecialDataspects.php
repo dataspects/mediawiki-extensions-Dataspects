@@ -2,7 +2,7 @@
 
 class SpecialDataspectsSearch extends SpecialPage {
 	function __construct() {
-		parent::__construct( 'DataspectsSearch' );
+		parent::__construct( 'Dataspects' );
 	}
 
 	function execute( $par ) {
@@ -18,7 +18,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 					<div id="hits"></div>
 				</td>
 				<td style="width:33%; padding-left:30px;">
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsSearch" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/DataspectsSearch/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <span id="saveFacetLink"></span> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
 					<ul class="accordion">
 						<li>
 							<a class="toggle" href=#>Saved search facets</a>
@@ -84,7 +84,7 @@ class SpecialDataspectsSearch extends SpecialPage {
 		$html = array("<ul>");
 		foreach($searchFacets as $searchFacet) {
 			$pageLink = "<a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a>";
-			$activateLink = "<a href='".$GLOBALS['wgServer']."/wiki/Special:DataspectsSearch?helper=".$searchFacet["Ds0:instantsearchHelper"]."'>Activate</a>";
+			$activateLink = "<a href='".$GLOBALS['wgServer']."/wiki/Special:Dataspects?helper=".$searchFacet["Ds0:instantsearchHelper"]."'>Activate</a>";
 			$html[] = "<li>".$pageLink." (".$activateLink.")</li>";
 		}
 		$html[] = "</ul>";

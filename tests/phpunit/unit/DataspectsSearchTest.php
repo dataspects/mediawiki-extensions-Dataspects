@@ -1,8 +1,8 @@
 <?php
 
-namespace MediaWiki\Extension\DataspectsSearch\Tests;
+namespace MediaWiki\Extension\Dataspects\Tests;
 
-use MediaWiki\Extension\DataspectsSearch\DataspectsSearchFeed;
+use MediaWiki\Extension\Dataspects\DataspectsSearchFeed;
 
 class DataspectsSearchTest extends \MediaWikiUnitTestCase {
 

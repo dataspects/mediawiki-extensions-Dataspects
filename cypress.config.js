@@ -5,7 +5,7 @@ module.exports = {
     },
     baseUrl: "https://localhost",
     screenshotsFolder:
-      "/home/lex/mwstakeorgdevclone/extensions/DataspectsSearch/readme_images",
+      "/home/lex/mwstakeorgdevclone/extensions/Dataspects/readme_images",
     video: true,
   },
 };

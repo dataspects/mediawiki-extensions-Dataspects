@@ -1,5 +1,5 @@
 {
-  "name": "DataspectsSearch",
+  "name": "Dataspects",
   "private": true,
   "scripts": {
     "test": "grunt test"
