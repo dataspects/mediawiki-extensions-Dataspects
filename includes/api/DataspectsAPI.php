@@ -28,7 +28,9 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
 				break;
 			case 'initializetopictype':
-				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized') );
+				$topictype_name = $params['topictype_name'];
+				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );
+				$this->initializeTopicType($topictype_name);
 				break;
 			default:
 			# code...
@@ -37,11 +39,47 @@ class DataspectsAPI extends ApiBase {
 		
 	}
 
+	private function initializeTopicType($topictype_name) {
+		$editSummary = 'Created by dataspectsapi:initializetopictype';
+		
+		$title = Title::newFromText($topictype_name);
+		if ( !is_null( $title ) && !$title->isKnown() && $title->canExist() ){
+			$page = new WikiPage( $title );
+			$content = ContentHandler::makeContent( '{{TopicType}}', $title );
+			$page->doEditContent( $content, $editSummary );
+		}
+
+		$title = Title::newFromText("Template:".$topictype_name);
+		if ( !is_null( $title ) && !$title->isKnown() && $title->canExist() ){
+			$page = new WikiPage( $title );
+			$content = ContentHandler::makeContent( '<includeonly>{{TopicMetaTemplate|eppo0:hasEntityTitle={{{eppo0:hasEntityTitle|}}}|eppo0:hasEntityBlurb={{{eppo0:hasEntityBlurb|}}}|eppo0:hasEntityType='.$topictype_name.'}}</includeonly>', $title );
+			$page->doEditContent( $content, $editSummary );
+		}
+
+		$title = Title::newFromText("Form:".$topictype_name);
+		if ( !is_null( $title ) && !$title->isKnown() && $title->canExist() ){
+			$page = new WikiPage( $title );
+			$content = ContentHandler::makeContent( '{{{info|add title=New '.$topictype_name.'|edit title=Edit '.$topictype_name.'|page name='.$topictype_name.' "<'.$topictype_name.'[eppo0:hasEntityTitle]>"}}}
+			{{FormHeader|'.$topictype_name.'}}
+			{{StandardFormSections}}
+			{{FormFooter|'.$topictype_name.'}}', $title );
+			$page->doEditContent( $content, $editSummary );
+		}
+
+		$title = Title::newFromText("Category:".$topictype_name);
+		if ( !is_null( $title ) && !$title->isKnown() && $title->canExist() ){
+			$page = new WikiPage( $title );
+			$content = ContentHandler::makeContent( '{{TopicTypeCategory}}', $title );
+			$page->doEditContent( $content, $editSummary );
+		}
+	}
+
     protected function getAllowedParams() {
         return [
             'querytype' => null,
 			'name' => null,
-			'mw0__apiParseTextURL' => null
+			'mw0__apiParseTextURL' => null,
+			'topictype_name' => null
         ];
     }
 

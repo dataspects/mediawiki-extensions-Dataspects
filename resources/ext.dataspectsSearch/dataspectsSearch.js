@@ -1,5 +1,5 @@
 require("./helpers.js");
-
+require("mediawiki.api");
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -348,12 +348,19 @@ if (
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();
-      console.debug($("#topictype_name").val());
-
-      // var x = $("form").serializeArray();
-      // $.each(x, function (i, field) {
-      //   $("#results").append(field.name + ":" + field.value + " ");
-      // });
+      const api = new mw.Api();
+      api
+        .get({
+          action: "dataspectsapi",
+          querytype: "initializetopictype",
+          topictype_name: $("#topictype_name").val(),
+        })
+        .done(function (data) {
+          console.debug(JSON.stringify(data.data, null, 2));
+        })
+        .fail(function (data) {
+          console.error(data);
+        });
     });
   });
 }
