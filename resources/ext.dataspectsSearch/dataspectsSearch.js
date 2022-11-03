@@ -142,7 +142,6 @@ const defaultToAuthorizedSources = (helper) => {
 /**
  * Special:Dataspects ONLY!
  */
-
 if (
   window.location.href ==
   mw.config.get("wgServer") + "/wiki/Special:Dataspects"
@@ -346,4 +345,15 @@ if (
   mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
 ) {
   n4j.numberOfNodes("#numberOfNeo4jNodes");
+  $(document).ready(function () {
+    $("#initializetopictype_form").submit(function (event) {
+      event.preventDefault();
+      console.debug($("#topictype_name").val());
+
+      // var x = $("form").serializeArray();
+      // $.each(x, function (i, field) {
+      //   $("#results").append(field.name + ":" + field.value + " ");
+      // });
+    });
+  });
 }

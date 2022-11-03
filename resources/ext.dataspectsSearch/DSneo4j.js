@@ -13,7 +13,6 @@ DSNeo4j = class {
         querytype: "numberofnodes",
       })
       .done(function (data) {
-        console.debug(data);
         $(name).text(data.data.numberofnodes);
       })
       .fail(function (data) {

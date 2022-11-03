@@ -5,7 +5,6 @@ class DataspectsAPI extends ApiBase {
 	private $mInstalledExtensions = [];
 
 	public function __construct( $query, $moduleName ) {
-		wfDebug("sad");
 		parent::__construct( $query, $moduleName );
 		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
 	}
@@ -27,6 +26,9 @@ class DataspectsAPI extends ApiBase {
 				break;
 			case 'originalpagecontent':
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
+				break;
+			case 'initializetopictype':
+				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized') );
 				break;
 			default:
 			# code...
