@@ -21,7 +21,7 @@ class DataspectsTikaJob extends \Job {
   }
 
   public function run() {
-    wfDebug("### RUNNING: dataspectsTikaJob ".$this->params["namespace"].":".$this->params["title"]);
+    wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsTikaJob ".$this->params["namespace"].":".$this->params["title"]);
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
     $attachments = array();

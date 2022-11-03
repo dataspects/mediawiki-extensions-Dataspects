@@ -5,10 +5,10 @@ SearchResult = class {
    * https://wiki.dataspects.com/wiki/C0332407119
    *
    */
-  constructor(hit, isCompact) {
+  constructor(hit, n4j) {
     this.hit = hit;
     this.api = new mw.Api();
-    this.isCompact = isCompact;
+    this.n4j = n4j;
   }
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!

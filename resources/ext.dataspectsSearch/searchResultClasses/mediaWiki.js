@@ -1,6 +1,6 @@
 MediaWikiSearchResult = class extends SearchResult {
-  constructor(hit) {
-    super(hit);
+  constructor(hit, n4j) {
+    super(hit, n4j);
   }
 
   resultIcon = (hit) => {

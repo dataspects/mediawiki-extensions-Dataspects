@@ -308,11 +308,11 @@ if (
              */
             var srm = new SearchResultMatcher(
               hit,
-              isCompact,
               JSON.parse(
                 window.localStorage.getItem("dataspectsSearchFacet")
               ).environment,
-              instantsearch
+              instantsearch,
+              n4j
             );
             console.info(
               "Returning " + hit.name + " using " + srm.searchResultClassName
