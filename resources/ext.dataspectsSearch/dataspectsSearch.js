@@ -356,7 +356,7 @@ if (
           topictype_name: $("#topictype_name").val(),
         })
         .done(function (data) {
-          console.debug(JSON.stringify(data.data, null, 2));
+          $("#initializetopictype_result").text(data.data.status);
         })
         .fail(function (data) {
           console.error(data);

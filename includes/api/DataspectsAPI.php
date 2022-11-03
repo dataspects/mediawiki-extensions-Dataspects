@@ -29,8 +29,8 @@ class DataspectsAPI extends ApiBase {
 				break;
 			case 'initializetopictype':
 				$topictype_name = $params['topictype_name'];
-				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );
 				$this->initializeTopicType($topictype_name);
+				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );
 				break;
 			default:
 			# code...
