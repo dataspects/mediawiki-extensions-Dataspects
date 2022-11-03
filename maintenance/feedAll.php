@@ -27,6 +27,12 @@ class DMFFeedAll extends \Maintenance {
 			];
 			switch($title->getNamespace()) {
 				case 0:
+				case 4:
+				case 10:
+				case 106:
+				case 102:
+				case 108:
+				case 828:
 					// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
 					// \JobQueueGroup::singleton()->push($job);
 					$job = new DataspectsIndexJob("dataspectsIndexJob", $params);

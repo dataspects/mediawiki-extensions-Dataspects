@@ -53,7 +53,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         <label for="topictype">Topic type name: </label> 
                         <input type="text" id="topictype_name"><br />
                         <span id="initializetopictype_result"></span><br/>
-                        <input id="initializetopictype_send" type="submit" value="send"> <input type = "reset"> 
+                        <input id="initializetopictype_send" type="submit" value="Initialize">
                     </p> 
                 </form> ';
     }
