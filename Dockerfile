@@ -1,4 +1,3 @@
-# Docker file for a slim Ubuntu-based Python3 image
 FROM ghcr.io/canastawiki/canasta:1.2.0
 
 RUN cd $MW_HOME \
