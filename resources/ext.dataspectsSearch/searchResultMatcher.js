@@ -22,7 +22,7 @@ SearchResultMatcher = class {
     this.n4j = n4j;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
-    this.info = new SearchResultMatchInfo();
+    this.info = new SearchResultMatchInfo(this.hit);
     this.environment = environment;
     this.defaultSearchResultClass = "SearchResult";
     this.searchResultClass = this.getSearchResultClass();
@@ -153,10 +153,43 @@ SearchResultMatchError = class {
 
 SearchResultMatchInfo = class {
   #messageValue;
-  constructor() {}
+  constructor(hit) {
+    this.hit = hit;
+  }
+
+  xago = (timestamp) => {
+    const date = new Date();
+    const now = Math.floor(date.getTime() / 1000);
+    const difference = Math.floor(now - timestamp);
+    let output = "";
+    if (difference < 60) {
+      output = difference + " seconds ago";
+    } else if (difference < 3600) {
+      output = Math.floor(difference / 60) + " minutes ago";
+    } else if (difference < 86400) {
+      output = Math.floor(difference / 3600) + " hours ago";
+    } else if (difference < 2620800) {
+      output = Math.floor(difference / 86400) + " days ago";
+    } else if (difference < 31449600) {
+      output = Math.floor(difference / 2620800) + " months ago";
+    } else {
+      output = Math.floor(difference / 31449600) + " years ago";
+    }
+    return output;
+  };
+
   set message(m) {
     if (m) {
-      this.#messageValue = '<div class="hitInfo" title="' + m + '">?</div>';
+      this.#messageValue =
+        '<div class="hitInfo">' +
+        (this.hit.release_timestamp
+          ? "<span class='hitAgo'>" +
+            this.xago(this.hit.release_timestamp) +
+            "</span>"
+          : "") +
+        '<span title="' +
+        m +
+        '">?</span></div>';
     }
   }
 

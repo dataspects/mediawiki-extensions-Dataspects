@@ -50,7 +50,7 @@
 .hitAlert, .hitInfo {
     width:10px;
     float:right;
-    text-align: center;
+    text-align: right;
     border-radius: 3px;
     padding:2px;
     cursor: pointer;
@@ -60,6 +60,12 @@
 }
 .hitInfo {
     color:#ccc;
+    width:120px;
+}
+
+.hitAgo {
+    margin-right: 5px;
+    color: gray
 }
 
 .dataspectsTable {
