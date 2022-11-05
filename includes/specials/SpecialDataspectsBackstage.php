@@ -31,6 +31,12 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         '.$this->currentConfiguration().'
                     </td>
 				</tr>
+                <tr>
+                    <td><b>Index</b></td>
+                    <td >
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </td>
+				</tr>
 			</table>' );
 		$output->addJsConfigVars(array(
 			'wgServer' => $GLOBALS['wgServer'],

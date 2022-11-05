@@ -18,6 +18,7 @@
   "dependencies": {
     "@meilisearch/instant-meilisearch": "^0.8.1",
     "algoliasearch": "^4.14.2",
+    "chart.js": "^3.9.1",
     "instantsearch.js": "^4.43.1"
   }
 }
