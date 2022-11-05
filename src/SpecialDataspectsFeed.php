@@ -31,6 +31,7 @@ class SpecialDataspectsFeed {
       "mw0__outgoingLinks" => $this->dsf->mw0__outgoingLinks,
       "mw0__incomingLinks" => $this->dsf->mw0__incomingLinks,
       "mw0__images" => $this->dsf->mw0__images,
+      "release_timestamp" => time(),
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
