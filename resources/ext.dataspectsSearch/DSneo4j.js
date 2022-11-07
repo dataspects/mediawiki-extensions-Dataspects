@@ -28,9 +28,9 @@ DSNeo4j = class {
         querytype: "releasetimestampxago",
       })
       .done(function (data) {
-        console.debug(JSON.stringify(data.data.releasetimestampxago, null, 2));
         const ctx = $("#myChart");
         const myChart = new Chart(ctx, {
+          plugins: [ChartDataLabels],
           type: "bar",
           data: {
             labels: data.data.releasetimestampxago.labels,
@@ -46,6 +46,12 @@ DSNeo4j = class {
             scales: {
               y: {
                 beginAtZero: true,
+              },
+            },
+            plugins: {
+              datalabels: {
+                anchor: "end",
+                align: "top",
               },
             },
           },

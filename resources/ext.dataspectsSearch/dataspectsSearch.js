@@ -1,6 +1,7 @@
 require("./helpers.js");
 require("mediawiki.api");
 require("./chart.js");
+require("./chartjs-plugin-datalabels.js");
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
