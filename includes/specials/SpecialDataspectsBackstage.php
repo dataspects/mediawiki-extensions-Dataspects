@@ -15,6 +15,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                 <tr>
                     <td style="width:20%;"><b>Initialize topic type</b></td>
                     <td>
+                        <b>Check <a href="'.$GLOBALS['wgServer'].'/wiki/EPPO">existing topic types</a> before intitializing a new one!</b>
                         '.$this->initializeTopicType().'
                     </td>
 				</tr>
@@ -28,6 +29,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     <td><b>Data feeding</b></td>
                     <td >
                         <canvas id="myChart" width="400" height="200"></canvas>
+                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=#LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>#LEX2211071526</code></a>
                     </td>
 				</tr>
 			</table>' );

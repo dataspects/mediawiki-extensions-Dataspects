@@ -52,6 +52,9 @@ DSNeo4j = class {
               datalabels: {
                 anchor: "end",
                 align: "top",
+                formatter: function (value, context) {
+                  return value + " page" + (value > 1 ? "s" : "");
+                },
               },
             },
           },
