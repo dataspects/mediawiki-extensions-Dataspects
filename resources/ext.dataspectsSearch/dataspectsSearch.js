@@ -118,11 +118,13 @@ saveFacetLink = (args) => {
 };
 
 const configureThisSearch = (helper) => {
+  console.debug("me");
   if (initialPageLoad) {
     defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
     if (getUrlParameter("q")) {
       helper.state.query = getUrlParameter("q"); // This populates the search input
     } else if (getUrlParameter("helper")) {
+      console.debug("me");
       helper.setState(
         JSON.parse(
           getUrlParameter("helper")
@@ -143,9 +145,11 @@ const defaultToAuthorizedSources = (helper) => {
 /**
  * Special:Dataspects ONLY!
  */
+console.debug(mw.config.get("wgServer"));
 if (
-  window.location.href ==
-  mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+  window.location.href.startsWith(
+    mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+  )
 ) {
   $(function () {
     if (!mw.config.get("wgDataspectsSearchURL")) {
@@ -342,8 +346,9 @@ if (
  */
 
 if (
-  window.location.href ==
-  mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+  window.location.href.startsWith(
+    mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+  )
 ) {
   const ctx = $("#myChart");
   const myChart = new Chart(ctx, {
