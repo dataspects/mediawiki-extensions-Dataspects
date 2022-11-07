@@ -21,6 +21,22 @@ DSNeo4j = class {
       });
   };
 
+  firstXCharacters = (firstXCharacters) => {
+    this.api
+      .get({
+        action: "dataspectsapi",
+        querytype: "firstxcharacters",
+        firstxcharacters: firstXCharacters,
+      })
+      .done(function (data) {
+        console.debug(JSON.stringify(data.data.firstxcharacters, null, 2));
+      })
+      .fail(function (data) {
+        console.error("firstxcharacters");
+        console.error(data);
+      });
+  };
+
   releaseTimestampXago = () => {
     this.api
       .get({

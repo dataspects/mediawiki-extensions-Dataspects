@@ -117,7 +117,7 @@ class DSNeo4j {
                           WHEN difference < 3600 THEN [difference / 60 + CASE WHEN difference / 60 > 1 THEN " minutes ago" ELSE " minute ago" END, id(mwp)]
                           WHEN difference < 86400 THEN [difference / 3600 + CASE WHEN difference / 3600 > 1 THEN " hours ago" ELSE " hour ago" END, id(mwp)]
                           WHEN difference < 2620800 THEN [difference / 86400 + CASE WHEN difference / 86400 > 1 THEN " days ago" ELSE " day ago" END, id(mwp)]
-                          WHEN difference < 31449600 THEN [difference / 2620800 + CASE WHEN difference / 2620800 > 1 THEN " monhs ago" ELSE " month ago" END, id(mwp)]
+                          WHEN difference < 31449600 THEN [difference / 2620800 + CASE WHEN difference / 2620800 > 1 THEN " months ago" ELSE " month ago" END, id(mwp)]
                           ELSE difference / 31449600 + [CASE WHEN difference / 31449600 > 1 THEN " years ago" ELSE " year ago" END, id(mwp)]
                       END
                   ) AS buckets
@@ -133,6 +133,29 @@ class DSNeo4j {
       $xagos[ "datasets" ][] = $result->get("count");
     }
     return $xagos;
+  }
+
+  public function firstXCharacters($firstXCharacters) {
+    $results = $this->query([
+      "query" => '
+        MATCH       (mwp:MediaWikiPage)
+        WITH        collect(DISTINCT [substring(mwp.name, 0, $firstXCharacters), id(mwp)]) AS buckets,
+                    mwp AS mwp
+        ORDER BY    mwp.name
+        UNWIND      buckets AS bucket
+            RETURN  DISTINCT bucket[0]  AS firstXCharacters,
+                    count(bucket[1])    AS count
+      ',
+      "params" => [
+        "firstXCharacters" => $firstXCharacters
+      ]
+    ]);
+    $data = [ "labels" => [], "datasets" => [] ];
+    foreach ($results as $result) {
+      $data[ "labels" ][] = $result->get("firstXCharacters");
+      $data[ "datasets" ][] = $result->get("count");
+    }
+    return $data;
   }
 
   private function templateTransactions($mediaWikiPage) {
