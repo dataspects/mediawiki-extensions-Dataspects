@@ -143,14 +143,23 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 /**
- * Special:Dataspects ONLY!
+ * Switch by special page type
  */
-console.debug(mw.config.get("wgServer"));
 if (
+  window.location.href.startsWith(
+    mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+  )
+) {
+  handleSpecialDataspectsBackstage();
+} else if (
   window.location.href.startsWith(
     mw.config.get("wgServer") + "/wiki/Special:Dataspects"
   )
 ) {
+  handleSpecialDataspects();
+}
+
+function handleSpecialDataspects() {
   $(function () {
     if (!mw.config.get("wgDataspectsSearchURL")) {
       return;
@@ -341,15 +350,7 @@ if (
   })();
 }
 
-/**
- * Special:DataspectsBackstage ONLY!
- */
-
-if (
-  window.location.href.startsWith(
-    mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
-  )
-) {
+function handleSpecialDataspectsBackstage() {
   const ctx = $("#myChart");
   const myChart = new Chart(ctx, {
     type: "bar",
