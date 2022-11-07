@@ -39,40 +39,39 @@ SearchResultMatcher = class {
   };
 
   searchResultClassMappings = (searchResultClassName) => {
-    var theClass = null;
     this.error.message = false;
     switch (searchResultClassName) {
       case "SearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SearchResult(this.hit, this.n4j);
+        return new SearchResult(this.hit, this.n4j);
         break;
       case "ElementSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new ElementSearchResult(this.hit, this.n4j);
+        return new ElementSearchResult(this.hit, this.n4j);
         break;
       case "SMWCindyKateSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SMWCindyKateSearchResult(this.hit, this.n4j);
+        return new SMWCindyKateSearchResult(this.hit, this.n4j);
         break;
       case "WikiDataspectsResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new WikiDataspectsResult(this.hit, this.n4j);
+        return new WikiDataspectsResult(this.hit, this.n4j);
         break;
       case "SearchFacetSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new SearchFacetSearchResult(this.hit, this.n4j);
+        return new SearchFacetSearchResult(this.hit, this.n4j);
         break;
       case "MediaWikiSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new MediaWikiSearchResult(this.hit, this.n4j);
+        return new MediaWikiSearchResult(this.hit, this.n4j);
         break;
       case "MediaWikiMetaPageSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new MediaWikiMetaPageSearchResult(this.hit, this.n4j);
+        return new MediaWikiMetaPageSearchResult(this.hit, this.n4j);
         break;
       case "CodeSearchResult":
         this.searchResultClassName = searchResultClassName;
-        theClass = new CodeSearchResult(this.hit, this.n4j);
+        return new CodeSearchResult(this.hit, this.n4j);
         break;
       default:
         this.error.message =
@@ -80,9 +79,8 @@ SearchResultMatcher = class {
           searchResultClassName +
           " requested by profile match but not found. Reverting to SearchResult class.";
         this.searchResultClassName = "SearchResult";
-        theClass = new SearchResult(this.hit, this.n4j);
+        return new SearchResult(this.hit, this.n4j);
     }
-    return theClass;
   };
 
   profilesMatch = (profile) => {
@@ -100,17 +98,30 @@ SearchResultMatcher = class {
   };
 
   getSearchResultClass = () => {
-    var theClass = this.searchResultClassMappings(
-      this.defaultSearchResultClass
-    );
     for (const key in Object.keys(profiles)) {
       if (this.profilesMatch(profiles[key])) {
-        theClass = this.searchResultClassMappings(
+        /**
+         * We check the hit against the profiles. THE FIRST THAT MATCHES IS USED!
+         * So, more general profiles need to be placed at the end of profiles.json.
+         * E.g. mw0__namespace is more specific than ds0__source, so in profiles.json:
+         * [
+         *  {
+         *    "hit": {
+         *      "mw0__namespace": ...
+         *    }
+         *  },
+         *  {
+         *    "hit": {
+         *      "ds0__source": ...
+         *    }
+         *  }
+         * ]
+         */
+        return this.searchResultClassMappings(
           profiles[key].searchResultClassName
         );
       }
     }
-    return theClass;
   };
 
   firstContainsSecond = (object1, object2) => {

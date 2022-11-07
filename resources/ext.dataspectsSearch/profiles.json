@@ -10,30 +10,6 @@
   },
   {
     "hit": {
-      "ds0__source": "https://mwstake.org/mwstake/wiki/"
-    },
-    "searchResultClassName": "MediaWikiSearchResult"
-  },
-  {
-    "hit": {
-      "ds0__source": "https://wiki.dataspects.com/wiki/"
-    },
-    "searchResultClassName": "WikiDataspectsResult"
-  },
-  {
-    "hit": {
-      "ds0__source": "https://smw-cindykate.com/wiki/"
-    },
-    "searchResultClassName": "SMWCindyKateSearchResult"
-  },
-  {
-    "hit": {
-      "ds0__source": "Element"
-    },
-    "searchResultClassName": "ElementSearchResult"
-  },
-  {
-    "hit": {
       "eppo0__hasEntityType": "SearchFacet"
     },
     "searchResultClassName": "SearchFacetSearchResult"
@@ -67,5 +43,29 @@
       "ds0__source": "Code"
     },
     "searchResultClassName": "CodeSearchResult"
+  },
+  {
+    "hit": {
+      "ds0__source": "https://mwstake.org/mwstake/wiki/"
+    },
+    "searchResultClassName": "MediaWikiSearchResult"
+  },
+  {
+    "hit": {
+      "ds0__source": "https://wiki.dataspects.com/wiki/"
+    },
+    "searchResultClassName": "WikiDataspectsResult"
+  },
+  {
+    "hit": {
+      "ds0__source": "https://smw-cindykate.com/wiki/"
+    },
+    "searchResultClassName": "SMWCindyKateSearchResult"
+  },
+  {
+    "hit": {
+      "ds0__source": "Element"
+    },
+    "searchResultClassName": "ElementSearchResult"
   }
 ]
