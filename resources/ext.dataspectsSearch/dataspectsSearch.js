@@ -1,5 +1,6 @@
 require("./helpers.js");
 require("mediawiki.api");
+require("./chart.js");
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -140,12 +141,23 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 /**
- * Special:Dataspects ONLY!
+ * Switch by special page type
  */
 if (
-  window.location.href ==
-  mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+  window.location.href.startsWith(
+    mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+  )
 ) {
+  handleSpecialDataspectsBackstage();
+} else if (
+  window.location.href.startsWith(
+    mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+  )
+) {
+  handleSpecialDataspects();
+}
+
+function handleSpecialDataspects() {
   $(function () {
     if (!mw.config.get("wgDataspectsSearchURL")) {
       return;
@@ -336,15 +348,10 @@ if (
   })();
 }
 
-/**
- * Special:DataspectsBackstage ONLY!
- */
-
-if (
-  window.location.href ==
-  mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
-) {
+function handleSpecialDataspectsBackstage() {
   n4j.numberOfNodes("#numberOfNeo4jNodes");
+  n4j.releaseTimestampXago();
+
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();

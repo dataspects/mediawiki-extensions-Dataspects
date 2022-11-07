@@ -24,6 +24,9 @@ class DataspectsAPI extends ApiBase {
 			case 'templatecallssubgraph':
 				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $this->dsNeo4j->templateCallsSubgraph($params['name']) ) );
 				break;
+			case 'releasetimestampxago':
+				$this->getResult()->addValue(null, "data", array( 'releasetimestampxago' => $this->dsNeo4j->releaseTimestampXago()) );
+				break;
 			case 'originalpagecontent':
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
 				break;

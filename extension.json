@@ -55,6 +55,7 @@
         "./instantsearch.production.min.js",
         "./DSneo4j.js",
         "./vis-network.min.js",
+        "./chart.js",
         "./helpers.js"
       ],
       "messages": []

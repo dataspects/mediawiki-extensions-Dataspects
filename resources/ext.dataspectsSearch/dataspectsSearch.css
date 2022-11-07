@@ -41,6 +41,8 @@
 
 .hit {
     margin-bottom: 60px;
+    max-width: 800px;
+    overflow-x: hidden;
 }
 
 .compactHit {
