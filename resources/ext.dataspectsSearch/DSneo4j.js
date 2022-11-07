@@ -16,6 +16,42 @@ DSNeo4j = class {
         $(name).text(data.data.numberofnodes);
       })
       .fail(function (data) {
+        console.error("numberofnodes");
+        console.error(data);
+      });
+  };
+
+  releaseTimestampXago = () => {
+    this.api
+      .get({
+        action: "dataspectsapi",
+        querytype: "releasetimestampxago",
+      })
+      .done(function (data) {
+        console.debug(JSON.stringify(data.data.releasetimestampxago, null, 2));
+        const ctx = $("#myChart");
+        const myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: data.data.releasetimestampxago.labels,
+            datasets: [
+              {
+                label: "When were how many pages indexed?",
+                data: data.data.releasetimestampxago.datasets,
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      })
+      .fail(function (data) {
         console.error(data);
       });
   };

@@ -22,19 +22,21 @@ class DSNeo4j {
   }
 
   public function addPageToNeo4j($mediaWikiPage) {
+    // wfDebug($mediaWikiPage);
     // print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
     $coreProperties = '{
-      name: $mw0__rawUrl
+      name: $mw0__rawUrl,
+      release_timestamp: $release_timestamp
     }';
     $queries = [
         [
             "query" => '
                 CALL apoc.merge.node(
                   [ "MediaWikiPage" ],
-                  '.$coreProperties.',  // identProps
-                  {},                   // props
-                  '.$coreProperties.'   // onMatchProps
+                  { name: $mw0__rawUrl }, // identProps
+                  '.$coreProperties.',    // props
+                  '.$coreProperties.'     // onMatchProps
                 )
                 YIELD node
                 RETURN node
@@ -99,6 +101,36 @@ class DSNeo4j {
       ];
     }
     return $graphData;
+  }
+
+  public function releaseTimestampXago() {
+    $results = $this->query([
+      "query" => '
+        MATCH   (mwp:MediaWikiPage)
+        WITH    (timestamp() / 1000) - mwp.release_timestamp AS difference,
+                mwp AS mwp
+        WITH    collect(
+                    DISTINCT CASE
+                        WHEN difference < 60 THEN [difference + CASE WHEN difference > 1 THEN " seconds ago" ELSE " second ago" END, id(mwp)]
+                        WHEN difference < 3600 THEN [difference / 60 + CASE WHEN difference / 60 > 1 THEN " minutes ago" ELSE " minute ago" END, id(mwp)]
+                        WHEN difference < 86400 THEN [difference / 3600 + CASE WHEN difference / 3600 > 1 THEN " hours ago" ELSE " hour ago" END, id(mwp)]
+                        WHEN difference < 2620800 THEN [difference / 86400 + CASE WHEN difference / 86400 > 1 THEN " days ago" ELSE " day ago" END, id(mwp)]
+                        WHEN difference < 31449600 THEN [difference / 2620800 + CASE WHEN difference / 2620800 > 1 THEN " monhs ago" ELSE " month ago" END, id(mwp)]
+                        ELSE difference / 31449600 + [CASE WHEN difference / 31449600 > 1 THEN " years ago" ELSE " year ago" END, id(mwp)]
+                    END
+                ) AS buckets
+        UNWIND  buckets AS bucket
+            RETURN  DISTINCT bucket[0] AS ago,
+                    count(bucket[1]) AS count
+      ',
+      "params" => []
+    ]);
+    $xagos = [ "labels" => [], "datasets" => [] ];
+    foreach ($results as $result) {
+      $xagos[ "labels" ][] = $result->get("ago");
+      $xagos[ "datasets" ][] = $result->get("count");
+    }
+    return $xagos;
   }
 
   private function templateTransactions($mediaWikiPage) {

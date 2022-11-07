@@ -10,21 +10,14 @@ class SpecialDataspectsBackstage extends SpecialPage {
 		$output = $this->getOutput();
 		$this->setHeaders();
 		$output->addHTML( '
+            <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
             <table class="dataspectsTable dataspectsBackstageTable">
                 <tr>
-                    <td><b>Initialize topic type</b></td>
+                    <td style="width:20%;"><b>Initialize topic type</b></td>
                     <td>
                         '.$this->initializeTopicType().'
                     </td>
 				</tr>
-                <tr>
-                    <td style="width:20%;">
-                        <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b>
-                    </td>
-                    <td>
-                        <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
-                    </td>
-                </tr>
                 <tr>
                     <td><b>Current configuration</b></td>
                     <td>
@@ -32,9 +25,9 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     </td>
 				</tr>
                 <tr>
-                    <td><b>Index</b></td>
+                    <td><b>Data feeding</b></td>
                     <td >
-                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <canvas id="myChart" width="400" height="200"></canvas>
                     </td>
 				</tr>
 			</table>' );
