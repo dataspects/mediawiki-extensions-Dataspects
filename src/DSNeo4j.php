@@ -106,7 +106,7 @@ class DSNeo4j {
   public function releaseTimestampXago() {
     $results = $this->query([
       "query" => '
-        // #LEX2211071526
+        // LEX2211071526
         MATCH     (mwp:MediaWikiPage)
         WITH      (timestamp() / 1000) - mwp.release_timestamp AS difference,
                   mwp AS mwp
