@@ -16,9 +16,12 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 			"namespace" => $title->getNamespace(),
 			"title" => $title->getBaseText()
 		];
+		wfDebug("### onPageSaveComplete REGISTER: ".$params["namespace"].":".$params["title"]);
 		switch($title->getNamespace()) {
 			case 0:
-				$job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
+				// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
+				// \JobQueueGroup::singleton()->push($job);
+				$job = new DataspectsIndexJob("dataspectsIndexJob", $params);
 				\JobQueueGroup::singleton()->push($job);
 			break;
       		case 6:

@@ -147,7 +147,7 @@ class DSNeo4j {
                     count(bucket[1])    AS count
       ',
       "params" => [
-        "firstXCharacters" => $firstXCharacters
+        "firstXCharacters" => (int) $firstXCharacters
       ]
     ]);
     $data = [ "labels" => [], "datasets" => [] ];
