@@ -34,9 +34,15 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
 				break;
 			case 'initializetopictype':
-				$topictype_name = $params['topictype_name'];
-				$this->initializeTopicType($topictype_name);
-				$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );
+				if(in_array("writeapi", $user->getRights())){
+					$topictype_name = $params['topictype_name'];
+					$this->initializeTopicType($topictype_name);
+					$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );
+				} else {
+					$errorMessage = "initializetopictype not permitted for ".$user->getName();
+					wfDebug("### "+$errorMessage);
+					$this->getResult()->addValue(null, "data", array( 'status' => $errorMessage, 'topictype_name' => $topictype_name) );
+				}
 				break;
 			default:
 			# code...
