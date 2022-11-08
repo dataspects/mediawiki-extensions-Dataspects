@@ -28,10 +28,14 @@
   },
   "Hooks": {
     "PageSaveComplete": "DataspectsHooks",
-    "BeforePageDisplay": "DataspectsHooks"
+    "BeforePageDisplay": "DataspectsHooks",
+    "ParserFirstCallInit": "DataspectsHooks"
   },
   "MessagesDirs": {
     "Dataspects": ["i18n"]
+  },
+  "ExtensionMessagesFiles": {
+    "DataspectsMagic": "Dataspects.i18n.php"
   },
   "ResourceModules": {
     "ext.dataspectsSearch": {

@@ -42,4 +42,14 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 		$out->addModules( 'ext.dataspectsSearch' ); // FIXME: this should not place all modules!
 	}
 
+	public static function onParserFirstCallInit( \Parser $parser ) {
+		$parser->setFunctionHook( 'numberOfWords', [ self::class, 'renderNumberOfWords' ] );
+	}
+
+	public static function renderNumberOfWords( \Parser $parser, $param0 = '' ) {
+		$words = explode(" ", $param0);
+		$output = "<i>$param0</i> contains ".count($words)." words.";
+		return $output;
+	}
+
 }
