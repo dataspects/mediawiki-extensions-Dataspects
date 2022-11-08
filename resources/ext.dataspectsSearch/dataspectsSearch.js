@@ -352,7 +352,7 @@ function handleSpecialDataspects() {
 function handleSpecialDataspectsBackstage() {
   n4j.numberOfNodes("#numberOfNeo4jNodes");
   n4j.releaseTimestampXago();
-  n4j.firstXCharacters(15);
+  n4j.firstXCharacters(20, "name");
 
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {

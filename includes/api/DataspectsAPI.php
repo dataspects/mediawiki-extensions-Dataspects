@@ -25,7 +25,7 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $this->dsNeo4j->templateCallsSubgraph($params['name']) ) );
 				break;
 			case 'firstxcharacters':
-				$this->getResult()->addValue(null, "data", array( 'firstxcharacters' => $this->dsNeo4j->firstXCharacters($params['firstxcharacters']) ) );
+				$this->getResult()->addValue(null, "data", array( 'firstxcharacters' => $this->dsNeo4j->firstXCharacters($params['firstxcharacters'], $params['property']) ) );
 				break;
 			case 'releasetimestampxago':
 				$this->getResult()->addValue(null, "data", array( 'releasetimestampxago' => $this->dsNeo4j->releaseTimestampXago()) );
@@ -86,7 +86,8 @@ class DataspectsAPI extends ApiBase {
 			'name' => null,
 			'mw0__apiParseTextURL' => null,
 			'topictype_name' => null,
-			'firstxcharacters' => null
+			'firstxcharacters' => null,
+			'property' => null
         ];
     }
 

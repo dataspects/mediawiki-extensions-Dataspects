@@ -26,10 +26,17 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     </td>
 				</tr>
                 <tr>
+                    <td><b>Values</b></td>
+                    <td >
+                        <canvas id="firstXCharacters"></canvas>
+                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071526</code></a>
+                    </td>
+				</tr>
+                <tr>
                     <td><b>Data feeding</b></td>
                     <td >
-                        <canvas id="myChart" width="400" height="200"></canvas>
-                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071526</code></a>
+                        <canvas id="releaseTimestampXago"></canvas>
+                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071527</code></a>
                     </td>
 				</tr>
 			</table>' );

@@ -135,19 +135,22 @@ class DSNeo4j {
     return $xagos;
   }
 
-  public function firstXCharacters($firstXCharacters) {
+  public function firstXCharacters($firstXCharacters, $property) {
     $results = $this->query([
       "query" => '
+        // LEX2211071527
+        // toString() is so that we can also query for non-string props
         MATCH       (mwp:MediaWikiPage)
-        WITH        collect(DISTINCT [substring(mwp.name, 0, $firstXCharacters), id(mwp)]) AS buckets,
+        WITH        collect(DISTINCT [substring(toString(mwp[$property]), 0, $firstXCharacters), id(mwp)]) AS buckets,
                     mwp AS mwp
-        ORDER BY    mwp.name
+        ORDER BY    toString(mwp[$property])
         UNWIND      buckets AS bucket
             RETURN  DISTINCT bucket[0]  AS firstXCharacters,
                     count(bucket[1])    AS count
       ',
       "params" => [
-        "firstXCharacters" => (int) $firstXCharacters
+        "firstXCharacters" => (int) $firstXCharacters,
+        "property" => $property
       ]
     ]);
     $data = [ "labels" => [], "datasets" => [] ];

@@ -21,15 +21,38 @@ DSNeo4j = class {
       });
   };
 
-  firstXCharacters = (firstXCharacters) => {
+  firstXCharacters = (firstXCharacters, property) => {
     this.api
       .get({
         action: "dataspectsapi",
         querytype: "firstxcharacters",
         firstxcharacters: firstXCharacters,
+        property: property,
       })
       .done(function (data) {
-        console.debug(JSON.stringify(data.data.firstxcharacters, null, 2));
+        const ctx = $("#firstXCharacters");
+        const myChart = new Chart(ctx, {
+          plugins: [ChartDataLabels],
+          type: "bar",
+          data: {
+            labels: data.data.firstxcharacters.labels,
+            datasets: [
+              {
+                label:
+                  "How many pages share the first " +
+                  firstXCharacters +
+                  " characters in their '" +
+                  property +
+                  "' property?",
+                data: data.data.firstxcharacters.datasets,
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+          },
+        });
       })
       .fail(function (data) {
         console.error("firstxcharacters");
@@ -44,7 +67,7 @@ DSNeo4j = class {
         querytype: "releasetimestampxago",
       })
       .done(function (data) {
-        const ctx = $("#myChart");
+        const ctx = $("#releaseTimestampXago");
         const myChart = new Chart(ctx, {
           plugins: [ChartDataLabels],
           type: "bar",
