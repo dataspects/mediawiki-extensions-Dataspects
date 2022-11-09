@@ -1,5 +1,6 @@
 <?php
 
+# See https://www.mediawiki.org/wiki/Best_practices_for_extensions ;)
 
 namespace MediaWiki\Extension\Dataspects;
 
@@ -26,6 +27,13 @@ class SeaKay {
     // $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';
   }
 
+  public function markup($html) {
+    return preg_replace_callback_array(
+        $this->ckMatchers(),
+        $html
+    );
+  }
+
   public function regex() {
     return str_replace("@@@SEAKAYKEYWORDS@@@", implode("|", array_keys($this->cognitiveKeywords)), $this->basicRegex);
   }
@@ -48,13 +56,6 @@ class SeaKay {
         };
     }
     return $ckMatchers;
-  }
-
-  public function markup($html) {
-    return preg_replace_callback_array(
-        $this->ckMatchers(),
-        $html
-    );
   }
 
 }

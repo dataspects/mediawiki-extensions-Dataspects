@@ -47,9 +47,7 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 	}
 
 	public static function renderNumberOfWords( \Parser $parser, $param0 = '' ) {
-		$words = explode(" ", $param0);
-		$output = "<i>$param0</i> contains ".count($words)." words.";
-		return $output;
+		return TextAccounting::numberOfWords($param0);
 	}
 
 }

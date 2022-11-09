@@ -1,24 +1,24 @@
 <?php
 
-namespace MediaWiki\Extension\Dataspects\Tests;
+# https://www.mediawiki.org/wiki/Manual:PHP_unit_testing/Writing_unit_tests_for_extensions
 
-use MediaWiki\Extension\Dataspects\DataspectsFeed;
+namespace MediaWiki\Extension\Dataspects;
+use MediaWiki\MediaWikiServices;
 
 class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$title = \Title::newFromText("Main Page");
-		$this->dsf = new DataspectsFeed($title);
 	}
 
 	protected function tearDown(): void {
 		parent::tearDown();
 	}
 
-	public function testGetNamespace() {
-		echo $this->dsf;
-		// $name = $this->dsf->getNamespace(0);
-		// $this->assertTrue( true, "Just a test." );
+	public function testRenderNumberOfWords() {
+		$str = "We are learning how to code.";
+		$output = TextAccounting::numberOfWords($str);
+		echo "\nEcho info like this...\n";
+		$this->assertEquals( $output, "<i>$str</i> contains 6 words." );
 	}
 }
