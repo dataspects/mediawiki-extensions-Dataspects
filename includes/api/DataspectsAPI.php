@@ -22,7 +22,12 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
 			case 'templatecallssubgraph':
-				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $this->dsNeo4j->templateCallsSubgraph($params['name']) ) );
+				try {
+					$templatecallssubgraph = $this->dsNeo4j->templateCallsSubgraph($params['name']);
+				} catch (Exception $ex) {
+					$templatecallssubgraph = "Error";
+				}
+				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $templatecallssubgraph ) );
 				break;
 			case 'firstxcharacters':
 				$this->getResult()->addValue(null, "data", array( 'firstxcharacters' => $this->dsNeo4j->firstXCharacters($params['firstxcharacters'], $params['property']) ) );

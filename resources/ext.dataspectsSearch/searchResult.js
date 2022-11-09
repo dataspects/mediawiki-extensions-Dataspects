@@ -168,7 +168,7 @@ SearchResult = class {
         .map((category) => {
           return (
             '<a href="' +
-            mw.config.get("wgServer") +
+            currentDeFactoWgServer() +
             "/wiki/Category:" +
             category +
             '"><span class="eppo0__category">' +
@@ -195,7 +195,7 @@ SearchResult = class {
         .map((annotation) => {
           return (
             '<tr><td><a href="' +
-            mw.config.get("wgServer") +
+            currentDeFactoWgServer() +
             "/wiki/Property:" +
             annotation.predicate +
             '">' +

@@ -6,7 +6,7 @@ CodeSearchResult = class extends SearchResult {
   resultIcon = (hit) => {
     return (
       "<img class='resultIcon' src='" +
-      mw.config.get("wgServer") +
+      currentDeFactoWgServer() +
       "/w/images/0/0e/Vscodelogo.png'>"
     );
   };
@@ -21,7 +21,7 @@ CodeSearchResult = class extends SearchResult {
         .map((annotation) => {
           return (
             '<tr><td><a href="' +
-            mw.config.get("wgServer") +
+            currentDeFactoWgServer() +
             "/wiki/Property:" +
             annotation.predicate +
             '" class="blinking">' +

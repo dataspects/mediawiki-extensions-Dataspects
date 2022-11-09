@@ -6,7 +6,7 @@ MediaWikiSearchResult = class extends SearchResult {
   resultIcon = (hit) => {
     return (
       "<img class='resultIcon' src='" +
-      mw.config.get("wgServer") +
+      currentDeFactoWgServer() +
       "/w/images/a/a9/Mediawikilogo.png'>"
     );
   };
