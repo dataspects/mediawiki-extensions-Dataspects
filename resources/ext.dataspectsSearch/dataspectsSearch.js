@@ -106,7 +106,7 @@ const getCurrentHelperAndUpdateUI = () => {
 saveFacetLink = (args) => {
   return (
     "<a href='" +
-    mw.config.get("wgServer") +
+    currentDeFactoWgServer() +
     "/wiki/Special:FormEdit/SearchFacet" +
     "?" +
     Object.keys(args)
@@ -140,19 +140,18 @@ const defaultToAuthorizedSources = (helper) => {
     helper.addDisjunctiveFacetRefinement("ds0__source", source);
   });
 };
-
 /**
  * Switch by special page type
  */
 if (
   window.location.href.startsWith(
-    mw.config.get("wgServer") + "/wiki/Special:DataspectsBackstage"
+    currentDeFactoWgServer() + "/wiki/Special:DataspectsBackstage"
   )
 ) {
   handleSpecialDataspectsBackstage();
 } else if (
   window.location.href.startsWith(
-    mw.config.get("wgServer") + "/wiki/Special:Dataspects"
+    currentDeFactoWgServer() + "/wiki/Special:Dataspects"
   )
 ) {
   handleSpecialDataspects();
@@ -306,7 +305,7 @@ function handleSpecialDataspects() {
         },
         limit: 1000,
       }),
-      // FIXME: ${mw.config.get("wgServer")}/wiki/ by variable
+      // FIXME: ${currentDeFactoWgServer()}/wiki/ by variable
       instantsearch.widgets.infiniteHits({
         container: "#hits",
         templates: {

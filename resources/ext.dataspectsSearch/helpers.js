@@ -4,3 +4,7 @@ ifURLreturnAnchorTag = (str) => {
   }
   return str;
 };
+
+currentDeFactoWgServer = () => {
+  return window.location.protocol + "//" + window.location.hostname;
+};
