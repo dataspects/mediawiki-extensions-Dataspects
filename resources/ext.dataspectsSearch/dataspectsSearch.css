@@ -1,273 +1,267 @@
 .badge {
-    border-radius: 2px;
-    padding:2px;
+  border-radius: 2px;
+  padding: 2px;
 }
 .eppo0__hasEntityType {
-    background-color: lightgreen;
-    font-weight: bold;
-    margin-right: 3px;
+  background-color: lightgreen;
+  font-weight: bold;
+  margin-right: 3px;
 }
 .ms-count {
-    background-color: #E8E8E8;
-    padding: 3px;
-    border-radius: 3px;
+  background-color: #e8e8e8;
+  padding: 3px;
+  border-radius: 3px;
 }
 .eppo0__hasEntityTitle {
-    font-weight: bold;
-    margin-right: 3px;
+  font-weight: bold;
+  margin-right: 3px;
 }
 
 .eppo0__hasEntityBlurb {
-    background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 .eppo0__category {
-    color: grey;
+  color: grey;
 }
 
 .eppo0__hasAnnotations {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
-.eppo0__hasAnnotations>tbody>tr>td {
-    vertical-align: top;
+.eppo0__hasAnnotations > tbody > tr > td {
+  vertical-align: top;
 }
 
 .codeAspects {
-    border:1px solid #1E86D6;
-    background-color: lightskyblue;
-    font-size:20px
+  border: 1px solid #1e86d6;
+  background-color: lightskyblue;
+  font-size: 20px;
 }
 
 .hit {
-    margin-bottom: 60px;
-    max-width: 800px;
-    overflow-x: hidden;
+  margin-bottom: 60px;
+  max-width: 800px;
+  overflow-x: hidden;
 }
 
 .compactHit {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
-.hitAlert, .hitInfo {
-    width:10px;
-    float:right;
-    text-align: right;
-    border-radius: 3px;
-    padding:2px;
-    cursor: pointer;
+.hitAlert,
+.hitInfo {
+  width: 10px;
+  float: right;
+  text-align: right;
+  border-radius: 3px;
+  padding: 2px;
+  cursor: help;
 }
 .hitAlert {
-    background-color: orange;
+  background-color: orange;
 }
 .hitInfo {
-    color:#ccc;
-    width:120px;
+  color: #ccc;
+  width: 120px;
 }
 
 .hitAgo {
-    margin-right: 5px;
-    color: gray
+  margin-right: 5px;
+  color: gray;
 }
 
 .dataspectsTable {
-    width:100%;
+  width: 100%;
 }
 
-.dataspectsTable>tbody>tr>td {
-    vertical-align: top;
-    padding: 20px 20px 20px 0px;
-    
+.dataspectsTable > tbody > tr > td {
+  vertical-align: top;
+  padding: 20px 20px 20px 0px;
 }
 
-.dataspectsBackstageTable>tbody>tr>td {
-    border: 1px solid lightblue;
-    padding: 0px;
+.dataspectsBackstageTable > tbody > tr > td {
+  border: 1px solid lightblue;
+  padding: 0px;
 }
 
 .mw0__rawUrl {
-    font-size:12px;
-    color:darkgreen !important;
-    padding:3px 0px 0px 0px;
-    display:block;
+  font-size: 12px;
+  color: darkgreen !important;
+  padding: 3px 0px 0px 0px;
+  display: block;
 }
 
-
-
-.mw0__attachment>tbody>tr>td {
-    vertical-align: top;
-    
+.mw0__attachment > tbody > tr > td {
+  vertical-align: top;
 }
 
 .mw0__attachmentsText {
-    padding: 10px;
-    background-color: #eee;
+  padding: 10px;
+  background-color: #eee;
 }
 
-
-
 .seaKay {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .CASE {
-    color:orange
+  color: orange;
 }
 
-.FACT, .CONS {
-    color: red
+.FACT,
+.CONS {
+  color: red;
 }
 
-.OPTION, .PROS {
-    color: green
+.OPTION,
+.PROS {
+  color: green;
 }
 
 .SCENARIOS {
-    font-size:20px;
+  font-size: 20px;
 }
 
 .parsedPageText {
-    height:400px;
-    width: 890px;
-    max-width:890px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    border-color:gray;
-    border-style: solid;
-    border-width:1px;
-    display: none;
-    box-shadow: -10px -10px 5px lightgray;
+  height: 400px;
+  width: 890px;
+  max-width: 890px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-color: gray;
+  border-style: solid;
+  border-width: 1px;
+  display: none;
+  box-shadow: -10px -10px 5px lightgray;
 }
 
 .ds0__featuresAction {
-    background-color: orange;
-    font-weight: bold;
+  background-color: orange;
+  font-weight: bold;
 }
-
-
 
 #hierarchicalMenus {
-    width: 100%;
-    background-color: #E9FFFF;
+  width: 100%;
+  background-color: #e9ffff;
 }
 
-#hierarchicalMenus>tbody>tr>td {
-    vertical-align: top;
-    padding: 0px;
-    margin:0px;
+#hierarchicalMenus > tbody > tr > td {
+  vertical-align: top;
+  padding: 0px;
+  margin: 0px;
 }
 
 .mw0__namespace {
-    background-color: #eee;
-    color:#666;
-    border:1px solid #999;
-    padding:3px;
-    border-radius: 3px;
-    margin-left:5px;
+  background-color: #eee;
+  color: #666;
+  border: 1px solid #999;
+  padding: 3px;
+  border-radius: 3px;
+  margin-left: 5px;
 }
 
 .resultIcon {
-    height:20px;
-    margin-right:3px;
+  height: 20px;
+  margin-right: 3px;
 }
 
 .annotationObjectLiteral {
-    max-height: 200px;
-    max-width: 890px;
-    overflow-x: auto;
-    overflow-y: auto;
+  max-height: 200px;
+  max-width: 890px;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 #currentHelper {
-    height: 200px;
-    overflow-y: scroll;
+  height: 200px;
+  overflow-y: scroll;
 }
 
 .visjsGraph {
-    height:400px;
-    box-shadow: -10px -10px 5px lightgray;
+  height: 400px;
+  box-shadow: -10px -10px 5px lightgray;
 }
 
-
-.accordion, .sources-refinement-list > ul, .mw0__namespace-menu > ul, .no-root-bullet-in-list > ul {
-    list-style: none;
-    margin: 0px;
-    
+.accordion,
+.sources-refinement-list > ul,
+.mw0__namespace-menu > ul,
+.no-root-bullet-in-list > ul {
+  list-style: none;
+  margin: 0px;
 }
-
-
 
 ul .inner {
-    /* padding-left: 1em; */
-    overflow: hidden;
-    display: none;
+  /* padding-left: 1em; */
+  overflow: hidden;
+  display: none;
 }
 
 ul li {
-    margin: 0.5em 0;
+  margin: 0.5em 0;
 }
 
 ul li a.toggle {
-    width: 100%;
-    display: block;
-    background: rgba(0, 0, 0, 0.78);
-    color: #fefefe;
-    padding: 5px;
-    border-radius: 0.15em;
-    transition: background 0.3s ease;
+  width: 100%;
+  display: block;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fefefe;
+  padding: 5px;
+  border-radius: 0.15em;
+  transition: background 0.3s ease;
 }
 
 ul li a.toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 #searchbox {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .searchResultBody {
-    margin-left:30px;
+  margin-left: 30px;
 }
 
 #intro {
-    margin-left: 28px;
-    font-style: italic;
+  margin-left: 28px;
+  font-style: italic;
 }
 
 .ais-Pagination {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .ais-Pagination > ul > li {
-    display: inline-block;
+  display: inline-block;
 }
 
-.ais-Pagination>ul>li>.ais-Pagination-link {
-    padding:5px;
+.ais-Pagination > ul > li > .ais-Pagination-link {
+  padding: 5px;
 }
 
 .blinking {
-    animation: blinkingText 1.2s infinite;
+  animation: blinkingText 1.2s infinite;
 }
 
 @keyframes blinkingText {
-    0% {
-        color: #000;
-    }
+  0% {
+    color: #000;
+  }
 
-    49% {
-        color: #000;
-    }
+  49% {
+    color: #000;
+  }
 
-    60% {
-        color: transparent;
-    }
+  60% {
+    color: transparent;
+  }
 
-    99% {
-        color: transparent;
-    }
+  99% {
+    color: transparent;
+  }
 
-    100% {
-        color: #000;
-    }
+  100% {
+    color: #000;
+  }
 }

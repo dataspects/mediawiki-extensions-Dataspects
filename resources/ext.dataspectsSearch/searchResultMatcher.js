@@ -168,25 +168,35 @@ SearchResultMatchInfo = class {
     this.hit = hit;
   }
 
+  #pluralizer = (output) => {
+    return output > 1 ? "s" : "";
+  };
+
   xago = (timestamp) => {
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
     const difference = Math.floor(now - timestamp);
-    let output = "";
+    var output = "";
+    var unit = "";
     if (difference < 60) {
-      output = difference + " seconds ago";
+      output = difference;
+      unit = "second" + this.#pluralizer(output);
     } else if (difference < 3600) {
-      output = Math.floor(difference / 60) + " minutes ago";
+      output = Math.floor(difference / 60);
+      unit = "minute" + this.#pluralizer(output);
     } else if (difference < 86400) {
-      output = Math.floor(difference / 3600) + " hours ago";
+      output = Math.floor(difference / 3600);
+      unit = "hour" + this.#pluralizer(output);
     } else if (difference < 2620800) {
-      output = Math.floor(difference / 86400) + " days ago";
+      output = Math.floor(difference / 86400);
+      unit = "day" + this.#pluralizer(output);
     } else if (difference < 31449600) {
-      output = Math.floor(difference / 2620800) + " months ago";
+      output = Math.floor(difference / 2620800);
+      unit = "month" + this.#pluralizer(output);
     } else {
       output = Math.floor(difference / 31449600) + " years ago";
     }
-    return output;
+    return output + " " + unit;
   };
 
   set message(m) {
@@ -198,7 +208,7 @@ SearchResultMatchInfo = class {
             this.xago(this.hit.release_timestamp) +
             "</span>"
           : "") +
-        '<span title="' +
+        '<span class="searchResultClassName" title="' +
         m +
         '">?</span></div>';
     }
