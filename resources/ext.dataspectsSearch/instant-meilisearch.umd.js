@@ -58,7 +58,7 @@
         function verb(n) { return function (v) { return step([n, v]); }; }
         function step(op) {
             if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
+            while (g && (g = 0, op[0] && (_ = 0)), _) try {
                 if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
                 if (y = 0, t) op = [op[0] & 2, t.value];
                 switch (op[0]) {
@@ -114,40 +114,32 @@
             formData: 'FormData' in self,
             arrayBuffer: 'ArrayBuffer' in self
           };
-
           function isDataView(obj) {
             return obj && DataView.prototype.isPrototypeOf(obj);
           }
-
           if (support.arrayBuffer) {
             var viewClasses = ['[object Int8Array]', '[object Uint8Array]', '[object Uint8ClampedArray]', '[object Int16Array]', '[object Uint16Array]', '[object Int32Array]', '[object Uint32Array]', '[object Float32Array]', '[object Float64Array]'];
-
             var isArrayBufferView = ArrayBuffer.isView || function (obj) {
               return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1;
             };
           }
-
           function normalizeName(name) {
             if (typeof name !== 'string') {
               name = String(name);
             }
-
             if (/[^a-z0-9\-#$%&'*+.^_`|~]/i.test(name)) {
               throw new TypeError('Invalid character in header field name');
             }
-
             return name.toLowerCase();
           }
-
           function normalizeValue(value) {
             if (typeof value !== 'string') {
               value = String(value);
             }
-
             return value;
-          } // Build a destructive iterator for the value list
+          }
 
-
+          // Build a destructive iterator for the value list
           function iteratorFor(items) {
             var iterator = {
               next: function () {
@@ -158,19 +150,15 @@
                 };
               }
             };
-
             if (support.iterable) {
               iterator[Symbol.iterator] = function () {
                 return iterator;
               };
             }
-
             return iterator;
           }
-
           function Headers(headers) {
             this.map = {};
-
             if (headers instanceof Headers) {
               headers.forEach(function (value, name) {
                 this.append(name, value);
@@ -185,31 +173,25 @@
               }, this);
             }
           }
-
           Headers.prototype.append = function (name, value) {
             name = normalizeName(name);
             value = normalizeValue(value);
             var oldValue = this.map[name];
             this.map[name] = oldValue ? oldValue + ', ' + value : value;
           };
-
           Headers.prototype['delete'] = function (name) {
             delete this.map[normalizeName(name)];
           };
-
           Headers.prototype.get = function (name) {
             name = normalizeName(name);
             return this.has(name) ? this.map[name] : null;
           };
-
           Headers.prototype.has = function (name) {
             return this.map.hasOwnProperty(normalizeName(name));
           };
-
           Headers.prototype.set = function (name, value) {
             this.map[normalizeName(name)] = normalizeValue(value);
           };
-
           Headers.prototype.forEach = function (callback, thisArg) {
             for (var name in this.map) {
               if (this.map.hasOwnProperty(name)) {
@@ -217,7 +199,6 @@
               }
             }
           };
-
           Headers.prototype.keys = function () {
             var items = [];
             this.forEach(function (value, name) {
@@ -225,7 +206,6 @@
             });
             return iteratorFor(items);
           };
-
           Headers.prototype.values = function () {
             var items = [];
             this.forEach(function (value) {
@@ -233,7 +213,6 @@
             });
             return iteratorFor(items);
           };
-
           Headers.prototype.entries = function () {
             var items = [];
             this.forEach(function (value, name) {
@@ -241,56 +220,45 @@
             });
             return iteratorFor(items);
           };
-
           if (support.iterable) {
             Headers.prototype[Symbol.iterator] = Headers.prototype.entries;
           }
-
           function consumed(body) {
             if (body.bodyUsed) {
               return Promise.reject(new TypeError('Already read'));
             }
-
             body.bodyUsed = true;
           }
-
           function fileReaderReady(reader) {
             return new Promise(function (resolve, reject) {
               reader.onload = function () {
                 resolve(reader.result);
               };
-
               reader.onerror = function () {
                 reject(reader.error);
               };
             });
           }
-
           function readBlobAsArrayBuffer(blob) {
             var reader = new FileReader();
             var promise = fileReaderReady(reader);
             reader.readAsArrayBuffer(blob);
             return promise;
           }
-
           function readBlobAsText(blob) {
             var reader = new FileReader();
             var promise = fileReaderReady(reader);
             reader.readAsText(blob);
             return promise;
           }
-
           function readArrayBufferAsText(buf) {
             var view = new Uint8Array(buf);
             var chars = new Array(view.length);
-
             for (var i = 0; i < view.length; i++) {
               chars[i] = String.fromCharCode(view[i]);
             }
-
             return chars.join('');
           }
-
           function bufferClone(buf) {
             if (buf.slice) {
               return buf.slice(0);
@@ -300,13 +268,10 @@
               return view.buffer;
             }
           }
-
           function Body() {
             this.bodyUsed = false;
-
             this._initBody = function (body) {
               this._bodyInit = body;
-
               if (!body) {
                 this._bodyText = '';
               } else if (typeof body === 'string') {
@@ -318,15 +283,14 @@
               } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
                 this._bodyText = body.toString();
               } else if (support.arrayBuffer && support.blob && isDataView(body)) {
-                this._bodyArrayBuffer = bufferClone(body.buffer); // IE 10-11 can't handle a DataView body.
-
+                this._bodyArrayBuffer = bufferClone(body.buffer);
+                // IE 10-11 can't handle a DataView body.
                 this._bodyInit = new Blob([this._bodyArrayBuffer]);
               } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
                 this._bodyArrayBuffer = bufferClone(body);
               } else {
                 this._bodyText = body = Object.prototype.toString.call(body);
               }
-
               if (!this.headers.get('content-type')) {
                 if (typeof body === 'string') {
                   this.headers.set('content-type', 'text/plain;charset=UTF-8');
@@ -337,15 +301,12 @@
                 }
               }
             };
-
             if (support.blob) {
               this.blob = function () {
                 var rejected = consumed(this);
-
                 if (rejected) {
                   return rejected;
                 }
-
                 if (this._bodyBlob) {
                   return Promise.resolve(this._bodyBlob);
                 } else if (this._bodyArrayBuffer) {
@@ -356,7 +317,6 @@
                   return Promise.resolve(new Blob([this._bodyText]));
                 }
               };
-
               this.arrayBuffer = function () {
                 if (this._bodyArrayBuffer) {
                   return consumed(this) || Promise.resolve(this._bodyArrayBuffer);
@@ -365,14 +325,11 @@
                 }
               };
             }
-
             this.text = function () {
               var rejected = consumed(this);
-
               if (rejected) {
                 return rejected;
               }
-
               if (this._bodyBlob) {
                 return readBlobAsText(this._bodyBlob);
               } else if (this._bodyArrayBuffer) {
@@ -383,48 +340,38 @@
                 return Promise.resolve(this._bodyText);
               }
             };
-
             if (support.formData) {
               this.formData = function () {
                 return this.text().then(decode);
               };
             }
-
             this.json = function () {
               return this.text().then(JSON.parse);
             };
-
             return this;
-          } // HTTP methods whose capitalization should be normalized
+          }
 
-
+          // HTTP methods whose capitalization should be normalized
           var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
-
           function normalizeMethod(method) {
             var upcased = method.toUpperCase();
             return methods.indexOf(upcased) > -1 ? upcased : method;
           }
-
           function Request(input, options) {
             options = options || {};
             var body = options.body;
-
             if (input instanceof Request) {
               if (input.bodyUsed) {
                 throw new TypeError('Already read');
               }
-
               this.url = input.url;
               this.credentials = input.credentials;
-
               if (!options.headers) {
                 this.headers = new Headers(input.headers);
               }
-
               this.method = input.method;
               this.mode = input.mode;
               this.signal = input.signal;
-
               if (!body && input._bodyInit != null) {
                 body = input._bodyInit;
                 input.bodyUsed = true;
@@ -432,31 +379,24 @@
             } else {
               this.url = String(input);
             }
-
             this.credentials = options.credentials || this.credentials || 'same-origin';
-
             if (options.headers || !this.headers) {
               this.headers = new Headers(options.headers);
             }
-
             this.method = normalizeMethod(options.method || this.method || 'GET');
             this.mode = options.mode || this.mode || null;
             this.signal = options.signal || this.signal;
             this.referrer = null;
-
             if ((this.method === 'GET' || this.method === 'HEAD') && body) {
               throw new TypeError('Body not allowed for GET or HEAD requests');
             }
-
             this._initBody(body);
           }
-
           Request.prototype.clone = function () {
             return new Request(this, {
               body: this._bodyInit
             });
           };
-
           function decode(body) {
             var form = new FormData();
             body.trim().split('&').forEach(function (bytes) {
@@ -469,16 +409,14 @@
             });
             return form;
           }
-
           function parseHeaders(rawHeaders) {
-            var headers = new Headers(); // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
+            var headers = new Headers();
+            // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
             // https://tools.ietf.org/html/rfc7230#section-3.2
-
             var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
             preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
               var parts = line.split(':');
               var key = parts.shift().trim();
-
               if (key) {
                 var value = parts.join(':').trim();
                 headers.append(key, value);
@@ -486,26 +424,20 @@
             });
             return headers;
           }
-
           Body.call(Request.prototype);
-
           function Response(bodyInit, options) {
             if (!options) {
               options = {};
             }
-
             this.type = 'default';
             this.status = options.status === undefined ? 200 : options.status;
             this.ok = this.status >= 200 && this.status < 300;
             this.statusText = 'statusText' in options ? options.statusText : 'OK';
             this.headers = new Headers(options.headers);
             this.url = options.url || '';
-
             this._initBody(bodyInit);
           }
-
           Body.call(Response.prototype);
-
           Response.prototype.clone = function () {
             return new Response(this._bodyInit, {
               status: this.status,
@@ -514,7 +446,6 @@
               url: this.url
             });
           };
-
           Response.error = function () {
             var response = new Response(null, {
               status: 0,
@@ -523,14 +454,11 @@
             response.type = 'error';
             return response;
           };
-
           var redirectStatuses = [301, 302, 303, 307, 308];
-
           Response.redirect = function (url, status) {
             if (redirectStatuses.indexOf(status) === -1) {
               throw new RangeError('Invalid status code');
             }
-
             return new Response(null, {
               status: status,
               headers: {
@@ -538,9 +466,7 @@
               }
             });
           };
-
           exports.DOMException = self.DOMException;
-
           try {
             new exports.DOMException();
           } catch (err) {
@@ -550,25 +476,19 @@
               var error = Error(message);
               this.stack = error.stack;
             };
-
             exports.DOMException.prototype = Object.create(Error.prototype);
             exports.DOMException.prototype.constructor = exports.DOMException;
           }
-
           function fetch(input, init) {
             return new Promise(function (resolve, reject) {
               var request = new Request(input, init);
-
               if (request.signal && request.signal.aborted) {
                 return reject(new exports.DOMException('Aborted', 'AbortError'));
               }
-
               var xhr = new XMLHttpRequest();
-
               function abortXhr() {
                 xhr.abort();
               }
-
               xhr.onload = function () {
                 var options = {
                   status: xhr.status,
@@ -579,38 +499,29 @@
                 var body = 'response' in xhr ? xhr.response : xhr.responseText;
                 resolve(new Response(body, options));
               };
-
               xhr.onerror = function () {
                 reject(new TypeError('Network request failed'));
               };
-
               xhr.ontimeout = function () {
                 reject(new TypeError('Network request failed'));
               };
-
               xhr.onabort = function () {
                 reject(new exports.DOMException('Aborted', 'AbortError'));
               };
-
               xhr.open(request.method, request.url, true);
-
               if (request.credentials === 'include') {
                 xhr.withCredentials = true;
               } else if (request.credentials === 'omit') {
                 xhr.withCredentials = false;
               }
-
               if ('responseType' in xhr && support.blob) {
                 xhr.responseType = 'blob';
               }
-
               request.headers.forEach(function (value, name) {
                 xhr.setRequestHeader(name, value);
               });
-
               if (request.signal) {
                 request.signal.addEventListener('abort', abortXhr);
-
                 xhr.onreadystatechange = function () {
                   // DONE (success or failure)
                   if (xhr.readyState === 4) {
@@ -618,20 +529,16 @@
                   }
                 };
               }
-
               xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit);
             });
           }
-
           fetch.polyfill = true;
-
           if (!self.fetch) {
             self.fetch = fetch;
             self.Headers = Headers;
             self.Request = Request;
             self.Response = Response;
           }
-
           exports.Headers = Headers;
           exports.Request = Request;
           exports.Response = Response;
@@ -648,7 +555,22 @@
       (function (global, factory) {
         factory(exports, browserPolyfill) ;
       })(commonjsGlobal, function (exports) {
-        /*! *****************************************************************************
+
+        // Type definitions for meilisearch
+        // Project: https://github.com/meilisearch/meilisearch-js
+        // Definitions by: qdequele <quentin@meilisearch.com> <https://github.com/meilisearch>
+        // Definitions: https://github.com/meilisearch/meilisearch-js
+        // TypeScript Version: ^3.8.3
+
+        /*
+         * SEARCH PARAMETERS
+         */
+        var MatchingStrategies = {
+          ALL: 'all',
+          LAST: 'last'
+        };
+
+        /******************************************************************************
         Copyright (c) Microsoft Corporation.
           Permission to use, copy, modify, and/or distribute this software for any
         purpose with or without fee is hereby granted.
@@ -660,7 +582,6 @@
         OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
         PERFORMANCE OF THIS SOFTWARE.
         ***************************************************************************** */
-
         /* global Reflect, Promise */
 
         var extendStatics = function (d, b) {
@@ -671,42 +592,32 @@
           } || function (d, b) {
             for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
           };
-
           return extendStatics(d, b);
         };
-
         function __extends(d, b) {
           if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
           extendStatics(d, b);
-
           function __() {
             this.constructor = d;
           }
-
           d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
         }
-
         var __assign = function () {
           __assign = Object.assign || function __assign(t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
               s = arguments[i];
-
               for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
             }
-
             return t;
           };
-
           return __assign.apply(this, arguments);
         };
-
         function __awaiter(thisArg, _arguments, P, generator) {
           function adopt(value) {
             return value instanceof P ? value : new P(function (resolve) {
               resolve(value);
             });
           }
-
           return new (P || (P = Promise))(function (resolve, reject) {
             function fulfilled(value) {
               try {
@@ -715,7 +626,6 @@
                 reject(e);
               }
             }
-
             function rejected(value) {
               try {
                 step(generator["throw"](value));
@@ -723,29 +633,26 @@
                 reject(e);
               }
             }
-
             function step(result) {
               result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
             }
-
             step((generator = generator.apply(thisArg, _arguments || [])).next());
           });
         }
-
         function __generator(thisArg, body) {
           var _ = {
-            label: 0,
-            sent: function () {
-              if (t[0] & 1) throw t[1];
-              return t[1];
+              label: 0,
+              sent: function () {
+                if (t[0] & 1) throw t[1];
+                return t[1];
+              },
+              trys: [],
+              ops: []
             },
-            trys: [],
-            ops: []
-          },
-              f,
-              y,
-              t,
-              g;
+            f,
+            y,
+            t,
+            g;
           return g = {
             next: verb(0),
             "throw": verb(1),
@@ -753,78 +660,59 @@
           }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
             return this;
           }), g;
-
           function verb(n) {
             return function (v) {
               return step([n, v]);
             };
           }
-
           function step(op) {
             if (f) throw new TypeError("Generator is already executing.");
-
             while (_) try {
               if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
               if (y = 0, t) op = [op[0] & 2, t.value];
-
               switch (op[0]) {
                 case 0:
                 case 1:
                   t = op;
                   break;
-
                 case 4:
                   _.label++;
                   return {
                     value: op[1],
                     done: false
                   };
-
                 case 5:
                   _.label++;
                   y = op[1];
                   op = [0];
                   continue;
-
                 case 7:
                   op = _.ops.pop();
-
                   _.trys.pop();
-
                   continue;
-
                 default:
                   if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
                     _ = 0;
                     continue;
                   }
-
                   if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
                     _.label = op[1];
                     break;
                   }
-
                   if (op[0] === 6 && _.label < t[1]) {
                     _.label = t[1];
                     t = op;
                     break;
                   }
-
                   if (t && _.label < t[2]) {
                     _.label = t[2];
-
                     _.ops.push(op);
-
                     break;
                   }
-
                   if (t[2]) _.ops.pop();
-
                   _.trys.pop();
-
                   continue;
               }
-
               op = body.call(thisArg, _);
             } catch (e) {
               op = [6, e];
@@ -832,7 +720,6 @@
             } finally {
               f = t = 0;
             }
-
             if (op[0] & 5) throw op[1];
             return {
               value: op[0] ? op[1] : void 0,
@@ -840,32 +727,24 @@
             };
           }
         }
-
-        var MeiliSearchCommunicationError =
-        /** @class */
+        var MeiliSearchCommunicationError = /** @class */
         function (_super) {
           __extends(MeiliSearchCommunicationError, _super);
-
           function MeiliSearchCommunicationError(message, body, url, stack) {
             var _this = this;
-
             var _a, _b, _c;
-
             _this = _super.call(this, message) || this; // Make errors comparison possible. ex: error instanceof MeiliSearchCommunicationError.
 
             Object.setPrototypeOf(_this, MeiliSearchCommunicationError.prototype);
             _this.name = 'MeiliSearchCommunicationError';
-
             if (body instanceof Response) {
               _this.message = body.statusText;
               _this.statusCode = body.status;
             }
-
             if (body instanceof Error) {
               _this.errno = body.errno;
               _this.code = body.code;
             }
-
             if (stack) {
               _this.stack = stack;
               _this.stack = (_a = _this.stack) === null || _a === void 0 ? void 0 : _a.replace(/(TypeError|FetchError)/, _this.name);
@@ -876,21 +755,15 @@
                 Error.captureStackTrace(_this, MeiliSearchCommunicationError);
               }
             }
-
             return _this;
           }
-
           return MeiliSearchCommunicationError;
         }(Error);
-
-        var MeiliSearchApiError =
-        /** @class */
+        var MeiliSearchApiError = /** @class */
         function (_super) {
           __extends(class_1, _super);
-
           function class_1(error, status) {
             var _this = _super.call(this, error.message) || this; // Make errors comparison possible. ex: error instanceof MeiliSearchApiError.
-
 
             Object.setPrototypeOf(_this, MeiliSearchApiError.prototype);
             _this.name = 'MeiliSearchApiError';
@@ -899,17 +772,13 @@
             _this.link = error.link;
             _this.message = error.message;
             _this.httpStatus = status;
-
             if (Error.captureStackTrace) {
               Error.captureStackTrace(_this, MeiliSearchApiError);
             }
-
             return _this;
           }
-
           return class_1;
         }(Error);
-
         function httpResponseErrorHandler(response) {
           return __awaiter(this, void 0, void 0, function () {
             var responseBody;
@@ -917,149 +786,128 @@
               switch (_a.label) {
                 case 0:
                   if (!!response.ok) return [3
-                  /*break*/
-                  , 5];
+                  /*break*/, 5];
                   responseBody = void 0;
                   _a.label = 1;
-
                 case 1:
                   _a.trys.push([1, 3,, 4]);
-
                   return [4
-                  /*yield*/
-                  , response.json()];
-
+                  /*yield*/, response.json()];
                 case 2:
                   // If it is not possible to parse the return body it means there is none
                   // In which case it is a communication error with the Meilisearch instance
                   responseBody = _a.sent();
                   return [3
-                  /*break*/
-                  , 4];
-
+                  /*break*/, 4];
                 case 3:
                   _a.sent(); // Not sure on how to test this part of the code.
 
-
                   throw new MeiliSearchCommunicationError(response.statusText, response, response.url);
-
                 case 4:
                   // If the body is parsable, then it means Meilisearch returned a body with
                   // information on the error.
                   throw new MeiliSearchApiError(responseBody, response.status);
-
                 case 5:
                   return [2
-                  /*return*/
-                  , response];
+                  /*return*/, response];
               }
             });
           });
         }
-
         function httpErrorHandler(response, stack, url) {
           if (response.name !== 'MeiliSearchApiError') {
             throw new MeiliSearchCommunicationError(response.message, response, url, stack);
           }
-
           throw response;
         }
-
-        var MeiliSearchError =
-        /** @class */
+        var MeiliSearchError = /** @class */
         function (_super) {
           __extends(MeiliSearchError, _super);
-
           function MeiliSearchError(message) {
             var _this = _super.call(this, message) || this; // Make errors comparison possible. ex: error instanceof MeiliSearchError.
 
-
             Object.setPrototypeOf(_this, MeiliSearchError.prototype);
             _this.name = 'MeiliSearchError';
-
             if (Error.captureStackTrace) {
               Error.captureStackTrace(_this, MeiliSearchError);
             }
-
             return _this;
           }
-
           return MeiliSearchError;
         }(Error);
-
-        var MeiliSearchTimeOutError =
-        /** @class */
+        var MeiliSearchTimeOutError = /** @class */
         function (_super) {
           __extends(MeiliSearchTimeOutError, _super);
-
           function MeiliSearchTimeOutError(message) {
             var _this = _super.call(this, message) || this; // Make errors comparison possible. ex: error instanceof MeiliSearchTimeOutError.
 
-
             Object.setPrototypeOf(_this, MeiliSearchTimeOutError.prototype);
             _this.name = 'MeiliSearchTimeOutError';
-
             if (Error.captureStackTrace) {
               Error.captureStackTrace(_this, MeiliSearchTimeOutError);
             }
-
             return _this;
           }
-
           return MeiliSearchTimeOutError;
         }(Error);
+
         /**
          * Removes undefined entries from object
          */
 
-
         function removeUndefinedFromObject(obj) {
           return Object.entries(obj).reduce(function (acc, curEntry) {
             var key = curEntry[0],
-                val = curEntry[1];
+              val = curEntry[1];
             if (val !== undefined) acc[key] = val;
             return acc;
           }, {});
         }
-
         function sleep(ms) {
           return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
               switch (_a.label) {
                 case 0:
                   return [4
-                  /*yield*/
-                  , new Promise(function (resolve) {
+                  /*yield*/, new Promise(function (resolve) {
                     return setTimeout(resolve, ms);
                   })];
-
                 case 1:
                   return [2
-                  /*return*/
-                  , _a.sent()];
+                  /*return*/, _a.sent()];
               }
             });
           });
         }
-
         function addProtocolIfNotPresent(host) {
           if (!(host.startsWith('https://') || host.startsWith('http://'))) {
             return "http://".concat(host);
           }
-
           return host;
         }
-
         function addTrailingSlash(url) {
           if (!url.endsWith('/')) {
             url += '/';
           }
-
           return url;
         }
-
-        var PACKAGE_VERSION = '0.28.0';
-
+        var PACKAGE_VERSION = '0.30.0';
+        function toQueryParams(parameters) {
+          var params = Object.keys(parameters);
+          var queryParams = params.reduce(function (acc, key) {
+            var _a, _b, _c;
+            var value = parameters[key];
+            if (value === undefined) {
+              return acc;
+            } else if (Array.isArray(value)) {
+              return __assign(__assign({}, acc), (_a = {}, _a[key] = value.join(','), _a));
+            } else if (value instanceof Date) {
+              return __assign(__assign({}, acc), (_b = {}, _b[key] = value.toISOString(), _b));
+            }
+            return __assign(__assign({}, acc), (_c = {}, _c[key] = value, _c));
+          }, {});
+          return queryParams;
+        }
         function constructHostURL(host) {
           try {
             host = addProtocolIfNotPresent(host);
@@ -1069,7 +917,6 @@
             throw new MeiliSearchError('The provided host is not valid.');
           }
         }
-
         function createHeaders(config) {
           var agentHeader = 'X-Meilisearch-Client';
           var packageAgent = "Meilisearch JavaScript (v".concat(PACKAGE_VERSION, ")");
@@ -1080,11 +927,9 @@
           if (config.apiKey) {
             headers['Authorization'] = "Bearer ".concat(config.apiKey);
           }
-
           if (!config.headers[contentType]) {
             headers['Content-Type'] = 'application/json';
           } // Creates the custom user agent with information on the package used.
-
 
           if (config.clientAgents && Array.isArray(config.clientAgents)) {
             var clients = config.clientAgents.concat(packageAgent);
@@ -1095,16 +940,12 @@
           } else {
             headers[agentHeader] = packageAgent;
           }
-
           return headers;
         }
-
-        var HttpRequests =
-        /** @class */
+        var HttpRequests = /** @class */
         function () {
           function HttpRequests(config) {
             this.headers = createHeaders(config);
-
             try {
               var host = constructHostURL(config.host);
               this.url = new URL(host);
@@ -1112,20 +953,18 @@
               throw new MeiliSearchError('The provided host is not valid.');
             }
           }
-
           HttpRequests.prototype.request = function (_a) {
             var method = _a.method,
-                url = _a.url,
-                params = _a.params,
-                body = _a.body,
-                config = _a.config;
+              url = _a.url,
+              params = _a.params,
+              body = _a.body,
+              config = _a.config;
             return __awaiter(this, void 0, void 0, function () {
               var constructURL, queryParams_1, response, parsedBody, e_1, stack;
               return __generator(this, function (_b) {
                 switch (_b.label) {
                   case 0:
                     constructURL = new URL(url, this.url);
-
                     if (params) {
                       queryParams_1 = new URLSearchParams();
                       Object.keys(params).filter(function (x) {
@@ -1135,48 +974,36 @@
                       });
                       constructURL.search = queryParams_1.toString();
                     }
-
                     _b.label = 1;
-
                   case 1:
                     _b.trys.push([1, 4,, 5]);
-
                     return [4
-                    /*yield*/
-                    , fetch(constructURL.toString(), __assign(__assign({}, config), {
+                    /*yield*/, fetch(constructURL.toString(), __assign(__assign({}, config), {
                       method: method,
                       body: JSON.stringify(body),
                       headers: this.headers
                     })).then(function (res) {
                       return httpResponseErrorHandler(res);
                     })];
-
                   case 2:
                     response = _b.sent();
                     return [4
-                    /*yield*/
-                    , response.json()["catch"](function () {
+                    /*yield*/, response.json()["catch"](function () {
                       return undefined;
                     })];
-
                   case 3:
                     parsedBody = _b.sent();
                     return [2
-                    /*return*/
-                    , parsedBody];
-
+                    /*return*/, parsedBody];
                   case 4:
                     e_1 = _b.sent();
                     stack = e_1.stack;
                     httpErrorHandler(e_1, stack, constructURL.toString());
                     return [3
-                    /*break*/
-                    , 5];
-
+                    /*break*/, 5];
                   case 5:
                     return [2
-                    /*return*/
-                    ];
+                    /*return*/];
                 }
               });
             });
@@ -1188,124 +1015,130 @@
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.request({
+                    /*yield*/, this.request({
                       method: 'GET',
                       url: url,
                       params: params,
                       config: config
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
-
           HttpRequests.prototype.post = function (url, data, params, config) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.request({
+                    /*yield*/, this.request({
                       method: 'POST',
                       url: url,
                       body: data,
                       params: params,
                       config: config
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
-
           HttpRequests.prototype.put = function (url, data, params, config) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.request({
+                    /*yield*/, this.request({
                       method: 'PUT',
                       url: url,
                       body: data,
                       params: params,
                       config: config
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
-
           HttpRequests.prototype.patch = function (url, data, params, config) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.request({
+                    /*yield*/, this.request({
                       method: 'PATCH',
                       url: url,
                       body: data,
                       params: params,
                       config: config
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
-
           HttpRequests.prototype["delete"] = function (url, data, params, config) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.request({
+                    /*yield*/, this.request({
                       method: 'DELETE',
                       url: url,
                       body: data,
                       params: params,
                       config: config
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
-
           return HttpRequests;
         }();
-
-        var TaskClient =
-        /** @class */
+        var EnqueuedTask = /** @class */
+        function () {
+          function EnqueuedTask(task) {
+            this.taskUid = task.taskUid;
+            this.indexUid = task.indexUid;
+            this.status = task.status;
+            this.type = task.type;
+            this.enqueuedAt = new Date(task.enqueuedAt);
+          }
+          return EnqueuedTask;
+        }();
+        var Task = /** @class */
+        function () {
+          function Task(task) {
+            this.indexUid = task.indexUid;
+            this.status = task.status;
+            this.type = task.type;
+            this.uid = task.uid;
+            this.details = task.details;
+            this.canceledBy = task.canceledBy;
+            this.error = task.error;
+            this.duration = task.duration;
+            this.startedAt = new Date(task.startedAt);
+            this.enqueuedAt = new Date(task.enqueuedAt);
+            this.finishedAt = new Date(task.finishedAt);
+          }
+          return Task;
+        }();
+        var TaskClient = /** @class */
         function () {
           function TaskClient(config) {
             this.httpRequest = new HttpRequests(config);
@@ -1318,22 +1151,19 @@
            * @returns { Promise<Task> }
            */
 
-
           TaskClient.prototype.getTask = function (uid) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, taskItem;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "tasks/".concat(uid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
+                    taskItem = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new Task(taskItem)];
                 }
               });
             });
@@ -1346,35 +1176,26 @@
            * @returns {Promise<TasksResults>} - Promise containing all tasks
            */
 
-
           TaskClient.prototype.getTasks = function (parameters) {
-            var _a, _b, _c;
-
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
-              var url, queryParams;
-              return __generator(this, function (_d) {
-                switch (_d.label) {
+              var url, tasks;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
                   case 0:
                     url = "tasks";
-                    queryParams = {
-                      indexUid: (_a = parameters === null || parameters === void 0 ? void 0 : parameters.indexUid) === null || _a === void 0 ? void 0 : _a.join(','),
-                      type: (_b = parameters === null || parameters === void 0 ? void 0 : parameters.type) === null || _b === void 0 ? void 0 : _b.join(','),
-                      status: (_c = parameters === null || parameters === void 0 ? void 0 : parameters.status) === null || _c === void 0 ? void 0 : _c.join(','),
-                      from: parameters.from,
-                      limit: parameters.limit
-                    };
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, removeUndefinedFromObject(queryParams))];
-
+                    /*yield*/, this.httpRequest.get(url, toQueryParams(parameters))];
                   case 1:
+                    tasks = _a.sent();
                     return [2
-                    /*return*/
-                    , _d.sent()];
+                    /*return*/, __assign(__assign({}, tasks), {
+                      results: tasks.results.map(function (task) {
+                        return new Task(task);
+                      })
+                    })];
                 }
               });
             });
@@ -1388,14 +1209,12 @@
            * @returns {Promise<Task>} Promise returning a task after it has been processed
            */
 
-
           TaskClient.prototype.waitForTask = function (taskUid, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               var startingTime, response;
               return __generator(this, function (_e) {
@@ -1403,35 +1222,23 @@
                   case 0:
                     startingTime = Date.now();
                     _e.label = 1;
-
                   case 1:
                     if (!(Date.now() - startingTime < timeOutMs)) return [3
-                    /*break*/
-                    , 4];
+                    /*break*/, 4];
                     return [4
-                    /*yield*/
-                    , this.getTask(taskUid)];
-
+                    /*yield*/, this.getTask(taskUid)];
                   case 2:
                     response = _e.sent();
                     if (!["enqueued"
-                    /* TASK_ENQUEUED */
-                    , "processing"
-                    /* TASK_PROCESSING */
-                    ].includes(response.status)) return [2
-                    /*return*/
-                    , response];
+                    /* TASK_ENQUEUED */, "processing"
+                    /* TASK_PROCESSING */].includes(response.status)) return [2
+                    /*return*/, response];
                     return [4
-                    /*yield*/
-                    , sleep(intervalMs)];
-
+                    /*yield*/, sleep(intervalMs)];
                   case 3:
                     _e.sent();
-
                     return [3
-                    /*break*/
-                    , 1];
-
+                    /*break*/, 1];
                   case 4:
                     throw new MeiliSearchTimeOutError("timeout of ".concat(timeOutMs, "ms has exceeded on process ").concat(taskUid, " when waiting a task to be resolved."));
                 }
@@ -1447,58 +1254,105 @@
            * @returns {Promise<Task[]>} Promise returning a list of tasks after they have been processed
            */
 
-
           TaskClient.prototype.waitForTasks = function (taskUids, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               var tasks, _i, taskUids_1, taskUid, task;
-
               return __generator(this, function (_e) {
                 switch (_e.label) {
                   case 0:
                     tasks = [];
                     _i = 0, taskUids_1 = taskUids;
                     _e.label = 1;
-
                   case 1:
                     if (!(_i < taskUids_1.length)) return [3
-                    /*break*/
-                    , 4];
+                    /*break*/, 4];
                     taskUid = taskUids_1[_i];
                     return [4
-                    /*yield*/
-                    , this.waitForTask(taskUid, {
+                    /*yield*/, this.waitForTask(taskUid, {
                       timeOutMs: timeOutMs,
                       intervalMs: intervalMs
                     })];
-
                   case 2:
                     task = _e.sent();
                     tasks.push(task);
                     _e.label = 3;
-
                   case 3:
                     _i++;
                     return [3
-                    /*break*/
-                    , 1];
-
+                    /*break*/, 1];
                   case 4:
                     return [2
-                    /*return*/
-                    , tasks];
+                    /*return*/, tasks];
                 }
               });
             });
           };
+          /**
+           * Cancel a list of enqueued or processing tasks.
+           * @memberof Tasks
+           * @method cancelTasks
+           * @param {CancelTasksQuery} [parameters={}] - Parameters to filter the tasks.
+           *
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
 
+          TaskClient.prototype.cancelTasks = function (parameters) {
+            if (parameters === void 0) {
+              parameters = {};
+            }
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "tasks/cancel";
+                    return [4
+                    /*yield*/, this.httpRequest.post(url, {}, toQueryParams(parameters))];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
+              });
+            });
+          };
+          /**
+           * Delete a list tasks.
+           * @memberof Tasks
+           * @method deleteTasks
+           * @param {DeleteTasksQuery} [parameters={}] - Parameters to filter the tasks.
+           *
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          TaskClient.prototype.deleteTasks = function (parameters) {
+            if (parameters === void 0) {
+              parameters = {};
+            }
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "tasks";
+                    return [4
+                    /*yield*/, this.httpRequest["delete"](url, {}, toQueryParams(parameters))];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
+              });
+            });
+          };
           return TaskClient;
         }();
+
         /*
          * Bundle: MeiliSearch / Indexes
          * Project: MeiliSearch - Javascript API
@@ -1506,9 +1360,7 @@
          * Copyright: 2019, MeiliSearch
          */
 
-
-        var Index =
-        /** @class */
+        var Index = /** @class */
         function () {
           /**
            * @param {Config} config Request configuration options
@@ -1535,7 +1387,6 @@
            * @returns {Promise<SearchResponse<T>>} Promise containing the search response
            */
 
-
           Index.prototype.search = function (query, options, config) {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -1544,15 +1395,12 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/search");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.post(url, removeUndefinedFromObject(__assign({
+                    /*yield*/, this.httpRequest.post(url, removeUndefinedFromObject(__assign({
                       q: query
                     }, options)), undefined, config)];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -1568,21 +1416,17 @@
            * @returns {Promise<SearchResponse<T>>} Promise containing the search response
            */
 
-
           Index.prototype.searchGet = function (query, options, config) {
             var _a, _b, _c, _d, _e;
-
             return __awaiter(this, void 0, void 0, function () {
               var url, parseFilter, getParams;
               return __generator(this, function (_f) {
                 switch (_f.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/search");
-
                     parseFilter = function parseFilter(filter) {
                       if (typeof filter === 'string') return filter;else if (Array.isArray(filter)) throw new MeiliSearchError('The filter query parameter should be in string format when using searchGet');else return undefined;
                     };
-
                     getParams = __assign(__assign({
                       q: query
                     }, options), {
@@ -1594,13 +1438,10 @@
                       attributesToHighlight: (_e = options === null || options === void 0 ? void 0 : options.attributesToHighlight) === null || _e === void 0 ? void 0 : _e.join(',')
                     });
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, removeUndefinedFromObject(getParams), config)];
-
+                    /*yield*/, this.httpRequest.get(url, removeUndefinedFromObject(getParams), config)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _f.sent()];
+                    /*return*/, _f.sent()];
                 }
               });
             });
@@ -1616,7 +1457,6 @@
            * @returns {Promise<IndexObject>} Promise containing index information
            */
 
-
           Index.prototype.getRawInfo = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url, res;
@@ -1625,17 +1465,14 @@
                   case 0:
                     url = "indexes/".concat(this.uid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     res = _a.sent();
                     this.primaryKey = res.primaryKey;
                     this.updatedAt = new Date(res.updatedAt);
                     this.createdAt = new Date(res.createdAt);
                     return [2
-                    /*return*/
-                    , res];
+                    /*return*/, res];
                 }
               });
             });
@@ -1647,22 +1484,17 @@
            * @returns {Promise<this>} Promise to the current Index object with updated information
            */
 
-
           Index.prototype.fetchInfo = function () {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.getRawInfo()];
-
+                    /*yield*/, this.getRawInfo()];
                   case 1:
                     _a.sent();
-
                     return [2
-                    /*return*/
-                    , this];
+                    /*return*/, this];
                 }
               });
             });
@@ -1674,24 +1506,19 @@
            * @returns {Promise<string | undefined>} Promise containing the Primary Key of the index
            */
 
-
           Index.prototype.fetchPrimaryKey = function () {
             return __awaiter(this, void 0, void 0, function () {
               var _a;
-
               return __generator(this, function (_b) {
                 switch (_b.label) {
                   case 0:
                     _a = this;
                     return [4
-                    /*yield*/
-                    , this.getRawInfo()];
-
+                    /*yield*/, this.getRawInfo()];
                   case 1:
                     _a.primaryKey = _b.sent().primaryKey;
                     return [2
-                    /*return*/
-                    , this.primaryKey];
+                    /*return*/, this.primaryKey];
                 }
               });
             });
@@ -1704,25 +1531,29 @@
            * @param {string} uid Unique identifier of the Index
            * @param {IndexOptions} options Index options
            * @param {Config} config Request configuration options
-           * @returns {Promise<Index<T>>} Newly created Index object
+           * @returns {Promise<EnqueuedTask>} Newly created Index object
            */
-
 
           Index.create = function (uid, options, config) {
             if (options === void 0) {
               options = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
-              var url, req;
+              var url, req, task;
               return __generator(this, function (_a) {
-                url = "indexes";
-                req = new HttpRequests(config);
-                return [2
-                /*return*/
-                , req.post(url, __assign(__assign({}, options), {
-                  uid: uid
-                }))];
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes";
+                    req = new HttpRequests(config);
+                    return [4
+                    /*yield*/, req.post(url, __assign(__assign({}, options), {
+                      uid: uid
+                    }))];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
               });
             });
           };
@@ -1734,22 +1565,20 @@
            * @returns {Promise<this>} Promise to the current Index object with updated information
            */
 
-
           Index.prototype.update = function (data) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest.patch(url, data)];
-
+                    /*yield*/, this.httpRequest.patch(url, data)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -1761,22 +1590,19 @@
            * @returns {Promise<void>} Promise which resolves when index is deleted successfully
            */
 
-
           Index.prototype["delete"] = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -1794,26 +1620,21 @@
            * @returns {Promise<TasksResults>} - Promise containing all tasks
            */
 
-
           Index.prototype.getTasks = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.getTasks(__assign(__assign({}, parameters), {
-                      indexUid: [this.uid]
+                    /*yield*/, this.tasks.getTasks(__assign(__assign({}, parameters), {
+                      indexUids: [this.uid]
                     }))];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -1828,20 +1649,16 @@
            * @returns {Promise<Task>} - Promise containing a task
            */
 
-
           Index.prototype.getTask = function (taskUid) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.getTask(taskUid)];
-
+                    /*yield*/, this.tasks.getTask(taskUid)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -1857,29 +1674,24 @@
            * @returns {Promise<Task[]>} - Promise containing an array of tasks
            */
 
-
           Index.prototype.waitForTasks = function (taskUids, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_e) {
                 switch (_e.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.waitForTasks(taskUids, {
+                    /*yield*/, this.tasks.waitForTasks(taskUids, {
                       timeOutMs: timeOutMs,
                       intervalMs: intervalMs
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _e.sent()];
+                    /*return*/, _e.sent()];
                 }
               });
             });
@@ -1895,29 +1707,24 @@
            * @returns {Promise<Task>} - Promise containing an array of tasks
            */
 
-
           Index.prototype.waitForTask = function (taskUid, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_e) {
                 switch (_e.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.waitForTask(taskUid, {
+                    /*yield*/, this.tasks.waitForTask(taskUid, {
                       timeOutMs: timeOutMs,
                       intervalMs: intervalMs
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _e.sent()];
+                    /*return*/, _e.sent()];
                 }
               });
             });
@@ -1932,7 +1739,6 @@
            * @returns {Promise<IndexStats>} Promise containing object with stats of the index
            */
 
-
           Index.prototype.getStats = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -1941,13 +1747,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/stats");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -1964,39 +1767,30 @@
            * @returns {Promise<DocumentsResults<T>>>} Promise containing Document responses
            */
 
-
           Index.prototype.getDocuments = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               var url, fields;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents");
-
                     fields = function () {
                       var _a;
-
                       if (Array.isArray(parameters === null || parameters === void 0 ? void 0 : parameters.fields)) {
                         return (_a = parameters === null || parameters === void 0 ? void 0 : parameters.fields) === null || _a === void 0 ? void 0 : _a.join(',');
                       }
-
                       return undefined;
                     }();
-
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, removeUndefinedFromObject(__assign(__assign({}, parameters), {
+                    /*yield*/, this.httpRequest.get(url, removeUndefinedFromObject(__assign(__assign({}, parameters), {
                       fields: fields
                     })))];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2011,7 +1805,6 @@
            * @returns {Promise<Document<T>>} Promise containing Document response
            */
 
-
           Index.prototype.getDocument = function (documentId, parameters) {
             return __awaiter(this, void 0, void 0, function () {
               var url, fields;
@@ -2019,27 +1812,20 @@
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents/").concat(documentId);
-
                     fields = function () {
                       var _a;
-
                       if (Array.isArray(parameters === null || parameters === void 0 ? void 0 : parameters.fields)) {
                         return (_a = parameters === null || parameters === void 0 ? void 0 : parameters.fields) === null || _a === void 0 ? void 0 : _a.join(',');
                       }
-
                       return undefined;
                     }();
-
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, removeUndefinedFromObject(__assign(__assign({}, parameters), {
+                    /*yield*/, this.httpRequest.get(url, removeUndefinedFromObject(__assign(__assign({}, parameters), {
                       fields: fields
                     })))];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2052,25 +1838,22 @@
            * @param {Array<Document<T>>} documents Array of Document objects to add/replace
            * @param {DocumentOptions} options? Options on document addition
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.addDocuments = function (documents, options) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.post(url, documents, options)];
-
+                    /*yield*/, this.httpRequest.post(url, documents, options)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2086,46 +1869,34 @@
            * @returns {Promise<EnqueuedTasks>} Promise containing array of enqueued task objects for each batch
            */
 
-
           Index.prototype.addDocumentsInBatches = function (documents, batchSize, options) {
             if (batchSize === void 0) {
               batchSize = 1000;
             }
-
             return __awaiter(this, void 0, void 0, function () {
               var updates, i, _a, _b;
-
               return __generator(this, function (_c) {
                 switch (_c.label) {
                   case 0:
                     updates = [];
                     i = 0;
                     _c.label = 1;
-
                   case 1:
                     if (!(i < documents.length)) return [3
-                    /*break*/
-                    , 4];
+                    /*break*/, 4];
                     _b = (_a = updates).push;
                     return [4
-                    /*yield*/
-                    , this.addDocuments(documents.slice(i, i + batchSize), options)];
-
+                    /*yield*/, this.addDocuments(documents.slice(i, i + batchSize), options)];
                   case 2:
                     _b.apply(_a, [_c.sent()]);
-
                     _c.label = 3;
-
                   case 3:
                     i += batchSize;
                     return [3
-                    /*break*/
-                    , 1];
-
+                    /*break*/, 1];
                   case 4:
                     return [2
-                    /*return*/
-                    , updates];
+                    /*return*/, updates];
                 }
               });
             });
@@ -2136,25 +1907,22 @@
            * @method updateDocuments
            * @param {Array<Document<Partial<T>>>} documents Array of Document objects to add/update
            * @param {DocumentOptions} options? Options on document update
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateDocuments = function (documents, options) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, documents, options)];
-
+                    /*yield*/, this.httpRequest.put(url, documents, options)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2170,46 +1938,34 @@
            * @returns {Promise<EnqueuedTasks>} Promise containing array of enqueued task objects for each batch
            */
 
-
           Index.prototype.updateDocumentsInBatches = function (documents, batchSize, options) {
             if (batchSize === void 0) {
               batchSize = 1000;
             }
-
             return __awaiter(this, void 0, void 0, function () {
               var updates, i, _a, _b;
-
               return __generator(this, function (_c) {
                 switch (_c.label) {
                   case 0:
                     updates = [];
                     i = 0;
                     _c.label = 1;
-
                   case 1:
                     if (!(i < documents.length)) return [3
-                    /*break*/
-                    , 4];
+                    /*break*/, 4];
                     _b = (_a = updates).push;
                     return [4
-                    /*yield*/
-                    , this.updateDocuments(documents.slice(i, i + batchSize), options)];
-
+                    /*yield*/, this.updateDocuments(documents.slice(i, i + batchSize), options)];
                   case 2:
                     _b.apply(_a, [_c.sent()]);
-
                     _c.label = 3;
-
                   case 3:
                     i += batchSize;
                     return [3
-                    /*break*/
-                    , 1];
-
+                    /*break*/, 1];
                   case 4:
                     return [2
-                    /*return*/
-                    , updates];
+                    /*return*/, updates];
                 }
               });
             });
@@ -2219,25 +1975,23 @@
            * @memberof Index
            * @method deleteDocument
            * @param {string | number} documentId Id of Document to delete
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.deleteDocument = function (documentId) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents/").concat(documentId);
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2247,25 +2001,22 @@
            * @memberof Index
            * @method deleteDocuments
            * @param {string[] | number[]} documentsIds Array of Document Ids to delete
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.deleteDocuments = function (documentsIds) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents/delete-batch");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.post(url, documentsIds)];
-
+                    /*yield*/, this.httpRequest.post(url, documentsIds)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2274,25 +2025,23 @@
            * Delete all documents of an index
            * @memberof Index
            * @method deleteAllDocuments
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.deleteAllDocuments = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/documents");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2307,7 +2056,6 @@
            * @returns {Promise<Settings>} Promise containing Settings object
            */
 
-
           Index.prototype.getSettings = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2316,13 +2064,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2333,25 +2078,23 @@
            * @memberof Index
            * @method updateSettings
            * @param {Settings} settings Object containing parameters with their updated values
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateSettings = function (settings) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.patch(url, settings)];
-
+                    /*yield*/, this.httpRequest.patch(url, settings)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueued = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2360,25 +2103,98 @@
            * Reset settings.
            * @memberof Index
            * @method resetSettings
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetSettings = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
+                    /*yield*/, this.httpRequest["delete"](url)];
+                  case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
+                    return [2
+                    /*return*/, task];
+                }
+              });
+            });
+          }; ///
+          /// PAGINATION SETTINGS
+          ///
 
+          /**
+           * Get the pagination settings.
+           * @memberof Index
+           * @method getPagination
+           * @returns {Promise<PaginationSetting>} Promise containing object of pagination settings
+           */
+
+          Index.prototype.getPagination = function () {
+            return __awaiter(this, void 0, void 0, function () {
+              var url;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/pagination");
+                    return [4
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
+                }
+              });
+            });
+          };
+          /**
+           * Update the pagination settings.
+           * @memberof Index
+           * @method updatePagination
+           * @param {PaginationSettings} pagination Pagination object
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          Index.prototype.updatePagination = function (pagination) {
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/pagination");
+                    return [4
+                    /*yield*/, this.httpRequest.patch(url, pagination)];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
+              });
+            });
+          };
+          /**
+           * Reset the pagination settings.
+           * @memberof Index
+           * @method resetPagination
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          Index.prototype.resetPagination = function () {
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/pagination");
+                    return [4
+                    /*yield*/, this.httpRequest["delete"](url)];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2393,7 +2209,6 @@
            * @returns {Promise<object>} Promise containing object of synonym mappings
            */
 
-
           Index.prototype.getSynonyms = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2402,13 +2217,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/synonyms");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2418,25 +2230,22 @@
            * @memberof Index
            * @method updateSynonyms
            * @param {Synonyms} synonyms Mapping of synonyms with their associated words
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateSynonyms = function (synonyms) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/synonyms");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, synonyms)];
-
+                    /*yield*/, this.httpRequest.put(url, synonyms)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2445,25 +2254,23 @@
            * Reset the synonym list to be empty again
            * @memberof Index
            * @method resetSynonyms
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetSynonyms = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/synonyms");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2478,7 +2285,6 @@
            * @returns {Promise<string[]>} Promise containing array of stop-words
            */
 
-
           Index.prototype.getStopWords = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2487,13 +2293,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/stop-words");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2503,25 +2306,22 @@
            * @memberof Index
            * @method updateStopWords
            * @param {StopWords} stopWords Array of strings that contains the stop-words.
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateStopWords = function (stopWords) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/stop-words");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, stopWords)];
-
+                    /*yield*/, this.httpRequest.put(url, stopWords)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2530,25 +2330,23 @@
            * Reset the stop-words list to be empty again
            * @memberof Index
            * @method resetStopWords
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetStopWords = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/stop-words");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2563,7 +2361,6 @@
            * @returns {Promise<string[]>} Promise containing array of ranking-rules
            */
 
-
           Index.prototype.getRankingRules = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2572,13 +2369,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/ranking-rules");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2588,25 +2382,22 @@
            * @memberof Index
            * @method updateRankingRules
            * @param {RankingRules} rankingRules Array that contain ranking rules sorted by order of importance.
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateRankingRules = function (rankingRules) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/ranking-rules");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, rankingRules)];
-
+                    /*yield*/, this.httpRequest.put(url, rankingRules)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2615,25 +2406,23 @@
            * Reset the ranking rules list to its default value
            * @memberof Index
            * @method resetRankingRules
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetRankingRules = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/ranking-rules");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2648,7 +2437,6 @@
            * @returns {Promise<string | null>} Promise containing the distinct-attribute of the index
            */
 
-
           Index.prototype.getDistinctAttribute = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2657,13 +2445,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/distinct-attribute");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2673,25 +2458,22 @@
            * @memberof Index
            * @method updateDistinctAttribute
            * @param {DistinctAttribute} distinctAttribute Field name of the distinct-attribute
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateDistinctAttribute = function (distinctAttribute) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/distinct-attribute");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, distinctAttribute)];
-
+                    /*yield*/, this.httpRequest.put(url, distinctAttribute)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2700,25 +2482,23 @@
            * Reset the distinct-attribute.
            * @memberof Index
            * @method resetDistinctAttribute
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetDistinctAttribute = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/distinct-attribute");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2733,7 +2513,6 @@
            * @returns {Promise<string[]>} Promise containing an array of filterable-attributes
            */
 
-
           Index.prototype.getFilterableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2742,13 +2521,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/filterable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2758,25 +2534,22 @@
            * @memberof Index
            * @method updateFilterableAttributes
            * @param {FilterableAttributes} filterableAttributes Array of strings containing the attributes that can be used as filters at query time
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateFilterableAttributes = function (filterableAttributes) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/filterable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, filterableAttributes)];
-
+                    /*yield*/, this.httpRequest.put(url, filterableAttributes)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2785,25 +2558,23 @@
            * Reset the filterable-attributes.
            * @memberof Index
            * @method resetFilterableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetFilterableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/filterable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2818,7 +2589,6 @@
            * @returns {Promise<string[]>} Promise containing array of sortable-attributes
            */
 
-
           Index.prototype.getSortableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2827,13 +2597,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/sortable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2843,25 +2610,22 @@
            * @memberof Index
            * @method updateSortableAttributes
            * @param {SortableAttributes} sortableAttributes Array of strings containing the attributes that can be used to sort search results at query time
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateSortableAttributes = function (sortableAttributes) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/sortable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, sortableAttributes)];
-
+                    /*yield*/, this.httpRequest.put(url, sortableAttributes)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2870,25 +2634,23 @@
            * Reset the sortable-attributes.
            * @memberof Index
            * @method resetSortableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetSortableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/sortable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2903,7 +2665,6 @@
            * @returns {Promise<string[]>} Promise containing array of searchable-attributes
            */
 
-
           Index.prototype.getSearchableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2912,13 +2673,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/searchable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -2928,25 +2686,22 @@
            * @memberof Index
            * @method updateSearchableAttributes
            * @param {SearchableAttributes} searchableAttributes Array of strings that contains searchable attributes sorted by order of importance(most to least important)
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateSearchableAttributes = function (searchableAttributes) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/searchable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, searchableAttributes)];
-
+                    /*yield*/, this.httpRequest.put(url, searchableAttributes)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -2955,25 +2710,23 @@
            * Reset the searchable-attributes.
            * @memberof Index
            * @method resetSearchableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetSearchableAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/searchable-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -2988,7 +2741,6 @@
            * @returns {Promise<string[]>} Promise containing array of displayed-attributes
            */
 
-
           Index.prototype.getDisplayedAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -2997,13 +2749,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/displayed-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3013,25 +2762,22 @@
            * @memberof Index
            * @method updateDisplayedAttributes
            * @param {DisplayedAttributes} displayedAttributes Array of strings that contains attributes of an index to display
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.updateDisplayedAttributes = function (displayedAttributes) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/displayed-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.put(url, displayedAttributes)];
-
+                    /*yield*/, this.httpRequest.put(url, displayedAttributes)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -3040,25 +2786,23 @@
            * Reset the displayed-attributes.
            * @memberof Index
            * @method resetDisplayedAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued task
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
            */
-
 
           Index.prototype.resetDisplayedAttributes = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/displayed-attributes");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -3073,7 +2817,6 @@
            * @returns {Promise<string[]>} Promise containing the typo tolerance settings.
            */
 
-
           Index.prototype.getTypoTolerance = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3082,13 +2825,10 @@
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/typo-tolerance");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3101,22 +2841,20 @@
            * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued update
            */
 
-
           Index.prototype.updateTypoTolerance = function (typoTolerance) {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/typo-tolerance");
                     return [4
-                    /*yield*/
-                    , this.httpRequest.patch(url, typoTolerance)];
-
+                    /*yield*/, this.httpRequest.patch(url, typoTolerance)];
                   case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, task];
                 }
               });
             });
@@ -3128,29 +2866,102 @@
            * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued update
            */
 
-
           Index.prototype.resetTypoTolerance = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "indexes/".concat(this.uid, "/settings/typo-tolerance");
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
+                    /*yield*/, this.httpRequest["delete"](url)];
+                  case 1:
+                    task = _a.sent();
+                    task.enqueuedAt = new Date(task.enqueuedAt);
+                    return [2
+                    /*return*/, task];
+                }
+              });
+            });
+          }; ///
+          /// FACETING
+          ///
 
+          /**
+           * Get the faceting settings.
+           * @memberof Index
+           * @method getFaceting
+           * @returns {Promise<Faceting>} Promise containing object of faceting index settings
+           */
+
+          Index.prototype.getFaceting = function () {
+            return __awaiter(this, void 0, void 0, function () {
+              var url;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/faceting");
+                    return [4
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
           };
+          /**
+           * Update the faceting settings.
+           * @memberof Index
+           * @method updateFaceting
+           * @param {Faceting} faceting Faceting index settings object
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
 
+          Index.prototype.updateFaceting = function (faceting) {
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/faceting");
+                    return [4
+                    /*yield*/, this.httpRequest.patch(url, faceting)];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
+              });
+            });
+          };
+          /**
+           * Reset the faceting settings.
+           * @memberof Index
+           * @method resetFaceting
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          Index.prototype.resetFaceting = function () {
+            return __awaiter(this, void 0, void 0, function () {
+              var url, task;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = "indexes/".concat(this.uid, "/settings/faceting");
+                    return [4
+                    /*yield*/, this.httpRequest["delete"](url)];
+                  case 1:
+                    task = _a.sent();
+                    return [2
+                    /*return*/, new EnqueuedTask(task)];
+                }
+              });
+            });
+          };
           return Index;
         }();
+
         /*
          * Bundle: MeiliSearch
          * Project: MeiliSearch - Javascript API
@@ -3158,9 +2969,7 @@
          * Copyright: 2019, MeiliSearch
          */
 
-
-        var Client =
-        /** @class */
+        var Client = /** @class */
         function () {
           /**
            * Creates new MeiliSearch instance
@@ -3180,7 +2989,6 @@
            * @returns {Index<T>} Instance of Index
            */
 
-
           Client.prototype.index = function (indexUid) {
             return new Index(this.config, indexUid);
           };
@@ -3194,13 +3002,11 @@
            * @returns {Promise<Index<T>>} Promise returning Index instance
            */
 
-
           Client.prototype.getIndex = function (indexUid) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 return [2
-                /*return*/
-                , new Index(this.config, indexUid).fetchInfo()];
+                /*return*/, new Index(this.config, indexUid).fetchInfo()];
               });
             });
           };
@@ -3213,13 +3019,11 @@
            * @returns {Promise<IndexObject>} Promise returning index information
            */
 
-
           Client.prototype.getRawIndex = function (indexUid) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 return [2
-                /*return*/
-                , new Index(this.config, indexUid).getRawInfo()];
+                /*return*/, new Index(this.config, indexUid).getRawInfo()];
               });
             });
           };
@@ -3232,32 +3036,25 @@
            * @returns {Promise<IndexesResults<Index[]>>} Promise returning array of raw index information
            */
 
-
           Client.prototype.getIndexes = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               var rawIndexes, indexes;
-
               var _this = this;
-
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.getRawIndexes(parameters)];
-
+                    /*yield*/, this.getRawIndexes(parameters)];
                   case 1:
                     rawIndexes = _a.sent();
                     indexes = rawIndexes.results.map(function (index) {
                       return new Index(_this.config, index.uid, index.primaryKey);
                     });
                     return [2
-                    /*return*/
-                    , __assign(__assign({}, rawIndexes), {
+                    /*return*/, __assign(__assign({}, rawIndexes), {
                       results: indexes
                     })];
                 }
@@ -3273,12 +3070,10 @@
            * @returns {Promise<IndexesResults<IndexObject[]>>} Promise returning array of raw index information
            */
 
-
           Client.prototype.getRawIndexes = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               var url;
               return __generator(this, function (_a) {
@@ -3286,13 +3081,10 @@
                   case 0:
                     url = "indexes";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, parameters)];
-
+                    /*yield*/, this.httpRequest.get(url, parameters)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3307,24 +3099,19 @@
            * @returns {Promise<Index<T>>} Promise returning Index instance
            */
 
-
           Client.prototype.createIndex = function (uid, options) {
             if (options === void 0) {
               options = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , Index.create(uid, options, this.config)];
-
+                    /*yield*/, Index.create(uid, options, this.config)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3339,24 +3126,19 @@
            * @returns {Promise<Index<T>>} Promise returning Index instance after updating
            */
 
-
           Client.prototype.updateIndex = function (uid, options) {
             if (options === void 0) {
               options = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , new Index(this.config, uid).update(options)];
-
+                    /*yield*/, new Index(this.config, uid).update(options)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3369,20 +3151,16 @@
            * @returns {Promise<void>} Promise which resolves when index is deleted successfully
            */
 
-
           Client.prototype.deleteIndex = function (uid) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , new Index(this.config, uid)["delete"]()];
-
+                    /*yield*/, new Index(this.config, uid)["delete"]()];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3395,7 +3173,6 @@
            * @returns {Promise<boolean>} Promise which resolves to true when index exists and is deleted successfully, otherwise false if it does not exist
            */
 
-
           Client.prototype.deleteIndexIfExists = function (uid) {
             return __awaiter(this, void 0, void 0, function () {
               var e_1;
@@ -3403,35 +3180,48 @@
                 switch (_a.label) {
                   case 0:
                     _a.trys.push([0, 2,, 3]);
-
                     return [4
-                    /*yield*/
-                    , this.deleteIndex(uid)];
-
+                    /*yield*/, this.deleteIndex(uid)];
                   case 1:
                     _a.sent();
-
                     return [2
-                    /*return*/
-                    , true];
-
+                    /*return*/, true];
                   case 2:
                     e_1 = _a.sent();
-
                     if (e_1.code === "index_not_found"
-                    /* INDEX_NOT_FOUND */
-                    ) {
+                    /* INDEX_NOT_FOUND */) {
                       return [2
-                      /*return*/
-                      , false];
+                      /*return*/, false];
                     }
-
                     throw e_1;
-
                   case 3:
                     return [2
-                    /*return*/
-                    ];
+                    /*return*/];
+                }
+              });
+            });
+          };
+          /**
+           * Swaps a list of index tuples.
+           *
+           * @memberof MeiliSearch
+           * @method swapIndexes
+           * @param {SwapIndexesParams} params - List of indexes tuples to swap.
+           * @returns {Promise<EnqueuedTask>} - Promise returning object of the enqueued task
+           */
+
+          Client.prototype.swapIndexes = function (params) {
+            return __awaiter(this, void 0, void 0, function () {
+              var url;
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    url = '/swap-indexes';
+                    return [4
+                    /*yield*/, this.httpRequest.post(url, params)];
+                  case 1:
+                    return [2
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3448,24 +3238,19 @@
            * @returns {Promise<TasksResults>} - Promise returning all tasks
            */
 
-
           Client.prototype.getTasks = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.getTasks(parameters)];
-
+                    /*yield*/, this.tasks.getTasks(parameters)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3478,20 +3263,16 @@
            * @returns {Promise<Task>} - Promise returning a task
            */
 
-
           Client.prototype.getTask = function (taskUid) {
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.getTask(taskUid)];
-
+                    /*yield*/, this.tasks.getTask(taskUid)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3507,29 +3288,24 @@
            * @returns {Promise<Task[]>} - Promise returning an array of tasks
            */
 
-
           Client.prototype.waitForTasks = function (taskUids, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_e) {
                 switch (_e.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.waitForTasks(taskUids, {
+                    /*yield*/, this.tasks.waitForTasks(taskUids, {
                       timeOutMs: timeOutMs,
                       intervalMs: intervalMs
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _e.sent()];
+                    /*return*/, _e.sent()];
                 }
               });
             });
@@ -3546,29 +3322,73 @@
            * @returns {Promise<Task>} - Promise returning an array of tasks
            */
 
-
           Client.prototype.waitForTask = function (taskUid, _a) {
             var _b = _a === void 0 ? {} : _a,
-                _c = _b.timeOutMs,
-                timeOutMs = _c === void 0 ? 5000 : _c,
-                _d = _b.intervalMs,
-                intervalMs = _d === void 0 ? 50 : _d;
-
+              _c = _b.timeOutMs,
+              timeOutMs = _c === void 0 ? 5000 : _c,
+              _d = _b.intervalMs,
+              intervalMs = _d === void 0 ? 50 : _d;
             return __awaiter(this, void 0, void 0, function () {
               return __generator(this, function (_e) {
                 switch (_e.label) {
                   case 0:
                     return [4
-                    /*yield*/
-                    , this.tasks.waitForTask(taskUid, {
+                    /*yield*/, this.tasks.waitForTask(taskUid, {
                       timeOutMs: timeOutMs,
                       intervalMs: intervalMs
                     })];
-
                   case 1:
                     return [2
-                    /*return*/
-                    , _e.sent()];
+                    /*return*/, _e.sent()];
+                }
+              });
+            });
+          };
+          /**
+           * Cancel a list of enqueued or processing tasks.
+           * @memberof MeiliSearch
+           * @method cancelTasks
+           * @param {CancelTasksQuery} [parameters={}] - Parameters to filter the tasks.
+           *
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          Client.prototype.cancelTasks = function (parameters) {
+            return __awaiter(this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    return [4
+                    /*yield*/, this.tasks.cancelTasks(parameters)];
+                  case 1:
+                    return [2
+                    /*return*/, _a.sent()];
+                }
+              });
+            });
+          };
+          /**
+           * Delete a list of tasks.
+           * @memberof MeiliSearch
+           * @method deleteTasks
+           * @param {DeleteTasksQuery} [parameters={}] - Parameters to filter the tasks.
+           *
+           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           */
+
+          Client.prototype.deleteTasks = function (parameters) {
+            if (parameters === void 0) {
+              parameters = {};
+            }
+            return __awaiter(this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    return [4
+                    /*yield*/, this.tasks.deleteTasks(parameters)];
+                  case 1:
+                    return [2
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3585,26 +3405,28 @@
            * @returns {Promise<KeysResults>} Promise returning an object with keys
            */
 
-
           Client.prototype.getKeys = function (parameters) {
             if (parameters === void 0) {
               parameters = {};
             }
-
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, keys;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "keys";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url, parameters)];
-
+                    /*yield*/, this.httpRequest.get(url, parameters)];
                   case 1:
+                    keys = _a.sent();
+                    keys.results = keys.results.map(function (key) {
+                      return __assign(__assign({}, key), {
+                        createdAt: new Date(key.createdAt),
+                        updateAt: new Date(key.updateAt)
+                      });
+                    });
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, keys];
                 }
               });
             });
@@ -3618,7 +3440,6 @@
            * @returns {Promise<Key>} Promise returning a key
            */
 
-
           Client.prototype.getKey = function (keyOrUid) {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3627,13 +3448,10 @@
                   case 0:
                     url = "keys/".concat(keyOrUid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3647,7 +3465,6 @@
            * @returns {Promise<Key>} Promise returning a key
            */
 
-
           Client.prototype.createKey = function (options) {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3656,13 +3473,10 @@
                   case 0:
                     url = "keys";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.post(url, options)];
-
+                    /*yield*/, this.httpRequest.post(url, options)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3677,7 +3491,6 @@
            * @returns {Promise<Key>} Promise returning a key
            */
 
-
           Client.prototype.updateKey = function (keyOrUid, options) {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3686,13 +3499,10 @@
                   case 0:
                     url = "keys/".concat(keyOrUid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest.patch(url, options)];
-
+                    /*yield*/, this.httpRequest.patch(url, options)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3706,7 +3516,6 @@
            * @returns {Promise<Void>}
            */
 
-
           Client.prototype.deleteKey = function (keyOrUid) {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3715,13 +3524,10 @@
                   case 0:
                     url = "keys/".concat(keyOrUid);
                     return [4
-                    /*yield*/
-                    , this.httpRequest["delete"](url)];
-
+                    /*yield*/, this.httpRequest["delete"](url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3736,7 +3542,6 @@
            * @returns {Promise<Health>} Promise returning an object with health details
            */
 
-
           Client.prototype.health = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3745,13 +3550,10 @@
                   case 0:
                     url = "health";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3763,7 +3565,6 @@
            * @returns {Promise<boolean>} Promise returning a boolean
            */
 
-
           Client.prototype.isHealthy = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3771,30 +3572,20 @@
                 switch (_a.label) {
                   case 0:
                     _a.trys.push([0, 2,, 3]);
-
                     url = "health";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     _a.sent();
-
                     return [2
-                    /*return*/
-                    , true];
-
+                    /*return*/, true];
                   case 2:
                     _a.sent();
-
                     return [2
-                    /*return*/
-                    , false];
-
+                    /*return*/, false];
                   case 3:
                     return [2
-                    /*return*/
-                    ];
+                    /*return*/];
                 }
               });
             });
@@ -3809,7 +3600,6 @@
            * @returns {Promise<Stats>} Promise returning object of all the stats
            */
 
-
           Client.prototype.getStats = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3818,13 +3608,10 @@
                   case 0:
                     url = "stats";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3839,7 +3626,6 @@
            * @returns {Promise<Version>} Promise returning object with version details
            */
 
-
           Client.prototype.getVersion = function () {
             return __awaiter(this, void 0, void 0, function () {
               var url;
@@ -3848,13 +3634,10 @@
                   case 0:
                     url = "version";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.get(url)];
-
+                    /*yield*/, this.httpRequest.get(url)];
                   case 1:
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, _a.sent()];
                 }
               });
             });
@@ -3869,22 +3652,19 @@
            * @returns {Promise<EnqueuedTask>} Promise returning object of the enqueued task
            */
 
-
           Client.prototype.createDump = function () {
             return __awaiter(this, void 0, void 0, function () {
-              var url;
+              var url, task;
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
                     url = "dumps";
                     return [4
-                    /*yield*/
-                    , this.httpRequest.post(url)];
-
+                    /*yield*/, this.httpRequest.post(url)];
                   case 1:
+                    task = _a.sent();
                     return [2
-                    /*return*/
-                    , _a.sent()];
+                    /*return*/, new EnqueuedTask(task)];
                 }
               });
             });
@@ -3904,28 +3684,22 @@
            * @returns {String} The token in JWT format.
            */
 
-
           Client.prototype.generateTenantToken = function (_apiKeyUid, _searchRules, _options) {
             var error = new Error();
             throw new Error("Meilisearch: failed to generate a tenant token. Generation of a token only works in a node environment \n ".concat(error.stack, "."));
           };
-
           return Client;
         }();
-
-        var MeiliSearch =
-        /** @class */
+        var MeiliSearch = /** @class */
         function (_super) {
           __extends(MeiliSearch, _super);
-
           function MeiliSearch(config) {
             return _super.call(this, config) || this;
           }
-
           return MeiliSearch;
         }(Client);
-
         exports.Index = Index;
+        exports.MatchingStrategies = MatchingStrategies;
         exports.MeiliSearch = MeiliSearch;
         exports.MeiliSearchApiError = MeiliSearchApiError;
         exports.MeiliSearchCommunicationError = MeiliSearchCommunicationError;
@@ -3966,21 +3740,29 @@
         }, '');
     }
 
-    /**
-     * @param  {number} dividend
-     * @param  {number} divisor
-     * @returns number
-     */
-    function ceiledDivision(dividend, divisor) {
-        if (divisor > 0) {
-            var NumberPages = Math.ceil(dividend / divisor); // total number of pages rounded up to the next largest integer.
-            return NumberPages;
-        }
-        return 0;
-    }
-
     function isPureObject(data) {
         return typeof data === 'object' && !Array.isArray(data) && data !== null;
+    }
+
+    /**
+     * apiKey callback definition
+     * @callback apiKeyCallback
+     * @returns {string} - The apiKey to use
+     */
+    /**
+     * Validates host and apiKey parameters, throws if invalid
+     * @param hostUrl
+     * @param apiKey
+     */
+    function validateInstantMeiliSearchParams(hostUrl, apiKey) {
+        // Validate host url
+        if (typeof hostUrl !== 'string') {
+            throw new TypeError('Provided hostUrl value (1st parameter) is not a string, expected string');
+        }
+        // Validate api key
+        if (typeof apiKey !== 'string' && typeof apiKey !== 'function') {
+            throw new TypeError('Provided apiKey value (2nd parameter) is not a string or a function, expected string or function');
+        }
     }
 
     /**
@@ -4095,24 +3877,22 @@
              */
             searchResponse: function (searchContext, searchParams) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var placeholderSearch, query, pagination, paginationCache, key, cachedResponse, facetsCache, searchResponse;
+                    var placeholderSearch, query, key, cachedResponse, cachedFacets, searchResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 placeholderSearch = searchContext.placeholderSearch, query = searchContext.query;
-                                pagination = searchContext.pagination;
-                                paginationCache = searchContext.finitePagination ? {} : pagination;
                                 key = cache.formatKey([
                                     searchParams,
                                     searchContext.indexUid,
                                     searchContext.query,
-                                    paginationCache,
+                                    searchContext.pagination,
                                 ]);
                                 cachedResponse = cache.getEntry(key);
                                 // Check if specific request is already cached with its associated search response.
                                 if (cachedResponse)
                                     return [2 /*return*/, cachedResponse];
-                                facetsCache = extractFacets(searchContext, searchParams);
+                                cachedFacets = extractFacets(searchContext, searchParams);
                                 return [4 /*yield*/, client
                                         .index(searchContext.indexUid)
                                         .search(searchContext.query, searchParams)
@@ -4121,7 +3901,7 @@
                             case 1:
                                 searchResponse = _a.sent();
                                 // Add missing facets back into facetDistribution
-                                searchResponse.facetDistribution = addMissingFacets(facetsCache, searchResponse.facetDistribution);
+                                searchResponse.facetDistribution = addMissingFacets(cachedFacets, searchResponse.facetDistribution);
                                 // query can be: empty string, undefined or null
                                 // all of them are falsy's
                                 if (!placeholderSearch && !query) {
@@ -4362,6 +4142,32 @@
         return mergeFilters(transformedFilter, transformedNumericFilter, filters || '');
     }
 
+    function setScrollPagination(hitsPerPage, page, query, placeholderSearch) {
+        if (!placeholderSearch && query === '') {
+            return {
+                limit: 0,
+                offset: 0
+            };
+        }
+        return {
+            limit: hitsPerPage + 1,
+            offset: page * hitsPerPage
+        };
+    }
+    function setFinitePagination(hitsPerPage, page, query, placeholderSearch) {
+        if (!placeholderSearch && query === '') {
+            return {
+                hitsPerPage: 0,
+                page: page + 1
+            };
+        }
+        else {
+            return {
+                hitsPerPage: hitsPerPage,
+                page: page + 1
+            };
+        }
+    }
     /**
      * Adapts instantsearch.js and instant-meilisearch options
      * to meilisearch search query parameters.
@@ -4372,7 +4178,7 @@
      */
     function MeiliParamsCreator(searchContext) {
         var meiliSearchParams = {};
-        var facets = searchContext.facets, attributesToSnippet = searchContext.attributesToSnippet, snippetEllipsisText = searchContext.snippetEllipsisText, attributesToRetrieve = searchContext.attributesToRetrieve, filters = searchContext.filters, numericFilters = searchContext.numericFilters, facetFilters = searchContext.facetFilters, attributesToHighlight = searchContext.attributesToHighlight, highlightPreTag = searchContext.highlightPreTag, highlightPostTag = searchContext.highlightPostTag, placeholderSearch = searchContext.placeholderSearch, query = searchContext.query, finitePagination = searchContext.finitePagination, sort = searchContext.sort, pagination = searchContext.pagination, matchingStrategy = searchContext.matchingStrategy;
+        var facets = searchContext.facets, attributesToSnippet = searchContext.attributesToSnippet, snippetEllipsisText = searchContext.snippetEllipsisText, attributesToRetrieve = searchContext.attributesToRetrieve, filters = searchContext.filters, numericFilters = searchContext.numericFilters, facetFilters = searchContext.facetFilters, attributesToHighlight = searchContext.attributesToHighlight, highlightPreTag = searchContext.highlightPreTag, highlightPostTag = searchContext.highlightPostTag, placeholderSearch = searchContext.placeholderSearch, query = searchContext.query, sort = searchContext.sort, pagination = searchContext.pagination, matchingStrategy = searchContext.matchingStrategy;
         return {
             getParams: function () {
                 return meiliSearchParams;
@@ -4424,24 +4230,15 @@
                 }
             },
             addPagination: function () {
-                // Limit based on pagination preferences
-                if ((!placeholderSearch && query === '') ||
-                    pagination.paginationTotalHits === 0) {
-                    meiliSearchParams.limit = 0;
-                }
-                else if (finitePagination) {
-                    meiliSearchParams.limit = pagination.paginationTotalHits;
+                if (pagination.finite) {
+                    var _a = setFinitePagination(pagination.hitsPerPage, pagination.page, query, placeholderSearch), hitsPerPage = _a.hitsPerPage, page = _a.page;
+                    meiliSearchParams.hitsPerPage = hitsPerPage;
+                    meiliSearchParams.page = page;
                 }
                 else {
-                    var limit = (pagination.page + 1) * pagination.hitsPerPage + 1;
-                    // If the limit is bigger than the total hits accepted
-                    // force the limit to that amount
-                    if (limit > pagination.paginationTotalHits) {
-                        meiliSearchParams.limit = pagination.paginationTotalHits;
-                    }
-                    else {
-                        meiliSearchParams.limit = limit;
-                    }
+                    var _b = setScrollPagination(pagination.hitsPerPage, pagination.page, query, placeholderSearch), limit = _b.limit, offset = _b.offset;
+                    meiliSearchParams.limit = limit;
+                    meiliSearchParams.offset = offset;
                 }
             },
             addSort: function () {
@@ -4490,22 +4287,6 @@
         meilisearchParams.addGeoSearchRules();
         meilisearchParams.addMatchingStrategy();
         return meilisearchParams.getParams();
-    }
-
-    /**
-     * Slice the requested hits based on the pagination position.
-     *
-     * @param  {Record<string} hits
-     * @param  {number} page
-     * @param  {number} hitsPerPage
-     * @returns {Array}
-     */
-    function adaptPagination(hits, page, hitsPerPage) {
-        if (hitsPerPage < 0) {
-            throw new TypeError('Value too small for "hitsPerPage" parameter, expected integer between 0 and 9223372036854775807');
-        }
-        var start = page * hitsPerPage;
-        return hits.slice(start, start + hitsPerPage);
     }
 
     /**
@@ -4583,30 +4364,37 @@
      * @returns {Array<Record<string, any>>}
      */
     function adaptGeoResponse(hits) {
+        var _a;
         for (var i = 0; i < hits.length; i++) {
+            var objectID = "".concat(i + Math.random() * 1000000);
             if (hits[i]._geo) {
-                hits[i]._geoloc = {
-                    lat: hits[i]._geo.lat,
-                    lng: hits[i]._geo.lng
-                };
-                hits[i].objectID = "".concat(i + Math.random() * 1000000);
-                delete hits[i]._geo;
+                hits[i]._geoloc = hits[i]._geo;
+                hits[i].objectID = objectID;
+            }
+            if ((_a = hits[i]._formatted) === null || _a === void 0 ? void 0 : _a._geo) {
+                hits[i]._formatted._geoloc = hits[i]._formatted._geo;
+                hits[i]._formatted.objectID = objectID;
             }
         }
         return hits;
     }
 
     /**
-     * @param  {Array<Record<string} hits
+     * @param  {MeiliSearchResponse<Record<string, any>>} searchResponse
      * @param  {SearchContext} searchContext
-     * @param  {PaginationContext} paginationContext
-     * @returns {any}
+     * @returns {Array<Record<string, any>>}
      */
-    function adaptHits(hits, searchContext, paginationContext) {
+    function adaptHits(searchResponse, searchContext) {
         var primaryKey = searchContext.primaryKey;
-        var hitsPerPage = paginationContext.hitsPerPage, page = paginationContext.page;
-        var paginatedHits = adaptPagination(hits, page, hitsPerPage);
-        var adaptedHits = paginatedHits.map(function (hit) {
+        var hits = searchResponse.hits;
+        var _a = searchContext.pagination, finite = _a.finite, hitsPerPage = _a.hitsPerPage;
+        // if the length of the hits is bigger than the hitsPerPage
+        // It means that there is still pages to come as we append limit by hitsPerPage + 1
+        // In which case we still need to remove the additional hit returned by Meilisearch
+        if (!finite && hits.length > hitsPerPage) {
+            hits.splice(hits.length - 1, 1);
+        }
+        var adaptedHits = hits.map(function (hit) {
             // Creates Hit object compliant with InstantSearch
             if (Object.keys(hit).length > 0) {
                 var formattedHit = hit._formatted; hit._matchesPosition; var documentFields = __rest(hit, ["_formatted", "_matchesPosition"]);
@@ -4622,43 +4410,74 @@
         return adaptedHits;
     }
 
+    function adaptTotalHits(searchResponse) {
+        var _a = searchResponse.hitsPerPage, hitsPerPage = _a === void 0 ? 0 : _a, _b = searchResponse.totalPages, totalPages = _b === void 0 ? 0 : _b, estimatedTotalHits = searchResponse.estimatedTotalHits, totalHits = searchResponse.totalHits;
+        if (estimatedTotalHits != null) {
+            return estimatedTotalHits;
+        }
+        else if (totalHits != null) {
+            return totalHits;
+        }
+        // Should not happen but safeguarding just in case
+        return hitsPerPage * totalPages;
+    }
+
+    function adaptNbPages(searchResponse, hitsPerPage) {
+        if (searchResponse.totalPages != null) {
+            return searchResponse.totalPages;
+        }
+        // Avoid dividing by 0
+        if (hitsPerPage === 0) {
+            return 0;
+        }
+        var _a = searchResponse.limit, limit = _a === void 0 ? 20 : _a, _b = searchResponse.offset, offset = _b === void 0 ? 0 : _b, hits = searchResponse.hits;
+        var additionalPage = hits.length >= limit ? 1 : 0;
+        return offset / hitsPerPage + 1 + additionalPage;
+    }
+    function adaptPaginationParameters(searchResponse, paginationState) {
+        var hitsPerPage = paginationState.hitsPerPage, page = paginationState.page;
+        var nbPages = adaptNbPages(searchResponse, hitsPerPage);
+        return {
+            page: page,
+            nbPages: nbPages,
+            hitsPerPage: hitsPerPage
+        };
+    }
+
     /**
      * Adapt search response from Meilisearch
      * to search response compliant with instantsearch.js
      *
-     * @param  {MeiliSearchResponse<Record<string} searchResponse
+     * @param  {MeiliSearchResponse<Record<string>>} searchResponse
      * @param  {SearchContext} searchContext
-     * @param  {PaginationContext} paginationContext
      * @returns {{ results: Array<AlgoliaSearchResponse<T>> }}
      */
     function adaptSearchResponse(searchResponse, searchContext) {
         var searchResponseOptionals = {};
-        var facets = searchResponse.facetDistribution;
-        var pagination = searchContext.pagination;
-        var nbPages = ceiledDivision(searchResponse.hits.length, pagination.hitsPerPage);
-        var hits = adaptHits(searchResponse.hits, searchContext, pagination);
-        var estimatedTotalHits = searchResponse.estimatedTotalHits;
-        var processingTimeMs = searchResponse.processingTimeMs;
-        var query = searchResponse.query;
-        var hitsPerPage = pagination.hitsPerPage, page = pagination.page;
+        var processingTimeMs = searchResponse.processingTimeMs, query = searchResponse.query, facets = searchResponse.facetDistribution;
+        var _a = adaptPaginationParameters(searchResponse, searchContext.pagination), hitsPerPage = _a.hitsPerPage, page = _a.page, nbPages = _a.nbPages;
+        var hits = adaptHits(searchResponse, searchContext);
+        var nbHits = adaptTotalHits(searchResponse);
         // Create response object compliant with InstantSearch
-        var adaptedSearchResponse = __assign({ index: searchContext.indexUid, hitsPerPage: hitsPerPage, page: page, facets: facets, nbPages: nbPages, nbHits: estimatedTotalHits, processingTimeMS: processingTimeMs, query: query, hits: hits, params: '', exhaustiveNbHits: false }, searchResponseOptionals);
+        var adaptedSearchResponse = __assign({ index: searchContext.indexUid, hitsPerPage: hitsPerPage, page: page, facets: facets, nbPages: nbPages, nbHits: nbHits, processingTimeMS: processingTimeMs, query: query, hits: hits, params: '', exhaustiveNbHits: false }, searchResponseOptionals);
         return {
             results: [adaptedSearchResponse]
         };
     }
 
     /**
-     * @param  {AlgoliaMultipleQueriesQuery} searchRequest
-     * @param  {Context} options
+     * Create the current state of the pagination
+     *
+     * @param  {boolean} [finite]
+     * @param  {number} [hitsPerPage]
+     * @param  {number} [page]
      * @returns {SearchContext}
      */
-    function createPaginationContext(_a) {
-        var paginationTotalHits = _a.paginationTotalHits, hitsPerPage = _a.hitsPerPage, page = _a.page;
+    function createPaginationState(finite, hitsPerPage, page) {
         return {
-            paginationTotalHits: paginationTotalHits != null ? paginationTotalHits : 200,
             hitsPerPage: hitsPerPage === undefined ? 20 : hitsPerPage,
-            page: page || 0
+            page: page || 0,
+            finite: !!finite
         };
     }
 
@@ -4671,12 +4490,8 @@
         // Split index name and possible sorting rules
         var _a = searchRequest.indexName.split(':'), indexUid = _a[0], sortByArray = _a.slice(1);
         var instantSearchParams = searchRequest.params;
-        var pagination = createPaginationContext({
-            paginationTotalHits: options.paginationTotalHits,
-            hitsPerPage: instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.hitsPerPage,
-            page: instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.page
-        });
-        var searchContext = __assign(__assign(__assign({}, options), instantSearchParams), { sort: sortByArray.join(':') || '', indexUid: indexUid, pagination: pagination, defaultFacetDistribution: defaultFacetDistribution || {}, placeholderSearch: options.placeholderSearch !== false, keepZeroFacets: !!options.keepZeroFacets, finitePagination: !!options.finitePagination });
+        var paginationState = createPaginationState(options.finitePagination, instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.hitsPerPage, instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.page);
+        var searchContext = __assign(__assign(__assign({}, options), instantSearchParams), { sort: sortByArray.join(':') || '', indexUid: indexUid, pagination: paginationState, defaultFacetDistribution: defaultFacetDistribution || {}, placeholderSearch: options.placeholderSearch !== false, keepZeroFacets: !!options.keepZeroFacets });
         return searchContext;
     }
 
@@ -4720,9 +4535,6 @@
                         defaultSearchContext = __assign(__assign({}, searchContext), { 
                             // placeholdersearch true to ensure a request is made
                             placeholderSearch: true, 
-                            // Set paginationTotalHits to ensure limit is set to 0
-                            // in order to retrieve 0 documents during the default search request
-                            pagination: __assign(__assign({}, searchContext.pagination), { paginationTotalHits: 0 }), 
                             // query set to empty to ensure retrieving the default facetdistribution
                             query: '' });
                         meilisearchParams = MeiliParamsCreator(defaultSearchContext);
@@ -4737,7 +4549,7 @@
         });
     }
 
-    var PACKAGE_VERSION = '0.9.0';
+    var PACKAGE_VERSION = '0.10.1';
 
     var constructClientAgents = function (clientAgents) {
         if (clientAgents === void 0) { clientAgents = []; }
@@ -4746,16 +4558,24 @@
     };
 
     /**
-     * Instanciate SearchClient required by instantsearch.js.
-     *
+     * apiKey callback definition
+     * @callback apiKeyCallback
+     * @returns {string} - The apiKey to use
+     */
+    /**
+     * Instantiate SearchClient required by instantsearch.js.
      * @param  {string} hostUrl
-     * @param  {string} apiKey
+     * @param  {string | apiKeyCallback} apiKey
      * @param  {InstantMeiliSearchOptions={}} meiliSearchOptions
      * @returns {InstantMeiliSearchInstance}
      */
     function instantMeiliSearch(hostUrl, apiKey, instantMeiliSearchOptions) {
         if (apiKey === void 0) { apiKey = ''; }
         if (instantMeiliSearchOptions === void 0) { instantMeiliSearchOptions = {}; }
+        // Validate parameters
+        validateInstantMeiliSearchParams(hostUrl, apiKey);
+        // Resolve possible function to get apiKey
+        apiKey = getApiKey(apiKey);
         var clientAgents = constructClientAgents(instantMeiliSearchOptions.clientAgents);
         var meilisearchClient = new meilisearch_umd.MeiliSearch({
             host: hostUrl,
@@ -4818,6 +4638,22 @@
                 });
             }
         };
+    }
+    /**
+     * Resolves apiKey if it is a function
+     * @param  {string | apiKeyCallback} apiKey
+     * @returns {string} api key value
+     */
+    function getApiKey(apiKey) {
+        // If apiKey is function, call it to get the apiKey
+        if (typeof apiKey === 'function') {
+            var apiKeyFnValue = apiKey();
+            if (typeof apiKeyFnValue !== 'string') {
+                throw new TypeError('Provided apiKey function (2nd parameter) did not return a string, expected string');
+            }
+            return apiKeyFnValue;
+        }
+        return apiKey;
     }
 
     exports.MatchingStrategies = void 0;
