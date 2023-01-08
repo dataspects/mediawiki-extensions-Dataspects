@@ -11,19 +11,13 @@ class SpecialDataspectsBackstage extends SpecialPage {
 		$output = $this->getOutput();
 		$this->setHeaders();
 		$output->addHTML( '
-            <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
+            <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects#Features" style="background-color:yellow;">Features</a> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a>
             <table class="dataspectsTable dataspectsBackstageTable">
                 <tr>
                     <td style="width:20%;"><b>Initialize topic type</b></td>
                     <td>
                         <b>Check <a href="'.$GLOBALS['wgServer'].'/wiki/EPPO">existing topic types</a> before intitializing a new one!</b>
                         '.$this->initializeTopicType().'
-                    </td>
-				</tr>
-                <tr>
-                    <td><b>Features</b></td>
-                    <td>
-                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects">https://github.com/dataspects/mediawiki-extensions-Dataspects</a>
                     </td>
 				</tr>
                 <tr>
@@ -63,6 +57,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
 	}
 
     private function initializeTopicType() {
+        # LEX230108161000
         return '<form id="initializetopictype_form">  
                     <p> 
                         <label for="topictype">Topic type name: </label> 

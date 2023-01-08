@@ -39,8 +39,16 @@ linkStyle 1,4 stroke:#00ff00
 - implements **[Algolia's InstantSearch](https://github.com/meilisearch/instant-meilisearch)**
 - provides **meta data on search results**: currently 'last indexed' and 'searchResultClass', see [LEX230108155400](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108155400)
 - formats the controlled use of **[cognitive keywords (CoKe)](https://wiki.dataspects.com/wiki/C1537999723)**, see [LEX230108160200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108160200)
+- **save search facets**, see [LEX230108163200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108163200), currently requires https://mwstakeorg.dataspects.com/wiki/SearchFacet
+- show **original page contents** under search results
+- enable **multiple sources**
+- search includes **non-article pages** (i.e. templates, forms, etc.), see [onPageSaveComplete](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=onPageSaveComplete)
+  - reveal nested template calls graphically, see [LEX230108161800](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108161800)
+- extracts and indexes metadata and text from uploaded files, see [DataspectsTikaJob](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=DataspectsTikaJob)
 
 ### [Special:DataspectsBackstage](https://mwstakeorg.dataspects.com/wiki/Special:DataspectsBackstage)
+
+- initialize new [EPPO topic types](https://mwstakeorg.dataspects.com/wiki/EPPO), see [LEX230108161000](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108161000)
 
 ## **PENDING**
 

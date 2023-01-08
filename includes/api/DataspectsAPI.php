@@ -56,6 +56,7 @@ class DataspectsAPI extends ApiBase {
 		
 	}
 
+	# LEX230108161000
 	private function initializeTopicType($topictype_name) {
 		$editSummary = 'Created by dataspectsapi:initializetopictype';
 		
