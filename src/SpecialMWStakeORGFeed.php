@@ -9,7 +9,7 @@ class SpecialMWStakeORGFeed {
     $this->dsf = $dataspectsSearchFeed;
     $this->title = $title;
     $this->wikiPage = \WikiPage::factory($title);
-    $this->sk = new SeaKay();
+    $this->sk = new CoKe();
   }
 
   function analyzeSeaKay($mediaWikiPage) {

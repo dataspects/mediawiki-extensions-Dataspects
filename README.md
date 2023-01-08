@@ -26,7 +26,7 @@ flowchart LR
   userAgent<-->mediawiki
   mediawiki<-->|<b>update content</b><br/>wgDataspectsWriteKey|meilisearch
   mediawiki<-->|analyze content|tika
-  
+
 classDef default text-align:left;
 linkStyle 0,3 stroke:#ff0000
 linkStyle 1,4 stroke:#00ff00
@@ -34,14 +34,20 @@ linkStyle 1,4 stroke:#00ff00
 
 ## Features
 
-* [Concept "SeaKay"](https://wiki.dataspects.com/wiki/C1537999723)
+### [Special:Dataspects](https://mwstakeorg.dataspects.com/wiki/Special:Dataspects)
+
+- implements **[Algolia's InstantSearch](https://github.com/meilisearch/instant-meilisearch)**
+- provides **meta data on search results**: currently 'last indexed' and 'searchResultClass', see [LEX230108155400](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108155400)
+- formats the controlled use of **[cognitive keywords (CoKe)](https://wiki.dataspects.com/wiki/C1537999723)**, see [LEX230108160200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108160200)
+
+### [Special:DataspectsBackstage](https://mwstakeorg.dataspects.com/wiki/Special:DataspectsBackstage)
 
 ## **PENDING**
 
-* onPageSave index CRUD hooks
-* Logging
-* Testing
-* Delete docs from indexes?
+- onPageSave index CRUD hooks
+- Logging
+- Testing
+- Delete docs from indexes?
 
 ## LocalSettings.php
 
@@ -70,17 +76,17 @@ $wgSearchForwardUrl = "/wiki/Special:Dataspects?q=$1";
 
 See https://github.com/dataspects/DataspectsCLI
 
-* `create-mediawiki-keys.sh`
-* `get-all-keys.sh`
+- `create-mediawiki-keys.sh`
+- `get-all-keys.sh`
 
 ## Indexes
 
 See https://github.com/dataspects/DataspectsCLI
 
-* `create-mediawiki-indexes.sh`
-* `list-all-indexes.sh`
-* `update-mediawiki-indexes-settings.sh`
-* `mediawiki-settings.sh`
+- `create-mediawiki-indexes.sh`
+- `list-all-indexes.sh`
+- `update-mediawiki-indexes-settings.sh`
+- `mediawiki-settings.sh`
 
 ## Manual indexing
 
@@ -94,6 +100,7 @@ Allows per-MediaWiki-namespace indexing
 1. Add to Canasta MediaWiki container: `composer require --with-all-dependencies meilisearch/meilisearch-php:0.25.0 symfony/http-client laudis/neo4j-php-client`
 
 ## Test
+
 ```bash
 sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
 root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
@@ -101,15 +108,15 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
 ```
 
 Debug API: https://localhost/w/api.php
+
 ## Develop
 
 1. `image: getmeili/meilisearch:v0.28.1`<br/>`image: apache/tika:2.4.1-full`
 2. Clone the test data: https://mwstakeorg.dataspects.com/wiki/C1728772915
 3. `$wgDataspectsSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchKey = "masterKey";`<br/>
-`$wgDataspectsWriteKey = "masterKey";`       
-1. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
-1. Update JS code: LEX2208021344
-
+   `$wgDataspectsWriteKey = "masterKey";`
+4. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
+5. Update JS code: LEX2208021344
 
 ### Tika
 
@@ -130,8 +137,8 @@ tail -f  apache2/error_log.current
 ```
 
 ## See also
-* https://www.digitalocean.com/community/tutorials/how-to-run-a-meilisearch-frontend-using-instantsearch-on-ubuntu-22-04
 
+- https://www.digitalocean.com/community/tutorials/how-to-run-a-meilisearch-frontend-using-instantsearch-on-ubuntu-22-04
 
 ## Upgrade JS libraries
 
@@ -145,7 +152,7 @@ npm install -g yarn
 
 **yarn add the libs**
 lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ yarn add \
-                                                            @meilisearch/instant-meilisearch instantsearch.js vis-network
+ @meilisearch/instant-meilisearch instantsearch.js vis-network
 
 **Copy into place, e.g.**
 lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/vis-network/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/Dataspects/resources/ext.dataspectsSearch/

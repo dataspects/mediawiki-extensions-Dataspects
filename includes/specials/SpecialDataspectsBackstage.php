@@ -21,6 +21,12 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     </td>
 				</tr>
                 <tr>
+                    <td><b>Features</b></td>
+                    <td>
+                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects">https://github.com/dataspects/mediawiki-extensions-Dataspects</a>
+                    </td>
+				</tr>
+                <tr>
                     <td><b>Current configuration</b></td>
                     <td>
                         '.$this->currentConfiguration().'

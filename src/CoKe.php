@@ -4,24 +4,25 @@
 
 namespace MediaWiki\Extension\Dataspects;
 
-class SeaKay {
+# LEX230108160200
+class CoKe {
 
   public function __construct() {
     $this->cognitiveKeywords = array(
-        "CASE"              => "<span class='seaKay CASE'>@@@MATCHES0@@@</span>",
-        "SCENARIOS"         => "<span class='seaKay SCENARIOS'>@@@MATCHES0@@@</span>",
-        "FACT"              => "<span class='seaKay FACT'>@@@MATCHES0@@@</span>",
-        "OPTION"            => "<span class='seaKay OPTION'>@@@MATCHES0@@@</span>",
-        "SYSTEM BEHAVIOR"   => "<span class='seaKay SYSTEM_BEHAVIOR'>@@@MATCHES0@@@</span>",
-        "EXAMPLE"           => "<span class='seaKay EXAMPLE'>@@@MATCHES0@@@</span>",
-        "ACT"               => "<span class='seaKay ACT'>@@@MATCHES0@@@</span>",
-        "ASPECT"            => "<span class='seaKay ASPECT'>@@@MATCHES0@@@</span>",
-        "DECIDE"            => "<span class='seaKay DECIDE'>@@@MATCHES0@@@</span>",
-        "ACTION"            => "<span class='seaKay ACTION'>@@@MATCHES0@@@</span>",
-        "PROS"              => "<span class='seaKay PROS'>@@@MATCHES0@@@</span>",
-        "CONS"              => "<span class='seaKay CONS'>@@@MATCHES0@@@</span>",
-        "QUESTION"              => "<span class='seaKay QUESTION'>@@@MATCHES0@@@</span>",
-        "METAPHOR"              => "<span class='seaKay METAPHOR'>@@@MATCHES0@@@</span>"
+        "CASE"              => "<span class='coKe CASE'>@@@MATCHES0@@@</span>",
+        "SCENARIOS"         => "<span class='coKe SCENARIOS'>@@@MATCHES0@@@</span>",
+        "FACT"              => "<span class='coKe FACT'>@@@MATCHES0@@@</span>",
+        "OPTION"            => "<span class='coKe OPTION'>@@@MATCHES0@@@</span>",
+        "SYSTEM BEHAVIOR"   => "<span class='coKe SYSTEM_BEHAVIOR'>@@@MATCHES0@@@</span>",
+        "EXAMPLE"           => "<span class='coKe EXAMPLE'>@@@MATCHES0@@@</span>",
+        "ACT"               => "<span class='coKe ACT'>@@@MATCHES0@@@</span>",
+        "ASPECT"            => "<span class='coKe ASPECT'>@@@MATCHES0@@@</span>",
+        "DECIDE"            => "<span class='coKe DECIDE'>@@@MATCHES0@@@</span>",
+        "ACTION"            => "<span class='coKe ACTION'>@@@MATCHES0@@@</span>",
+        "PROS"              => "<span class='coKe PROS'>@@@MATCHES0@@@</span>",
+        "CONS"              => "<span class='coKe CONS'>@@@MATCHES0@@@</span>",
+        "QUESTION"              => "<span class='coKe QUESTION'>@@@MATCHES0@@@</span>",
+        "METAPHOR"              => "<span class='coKe METAPHOR'>@@@MATCHES0@@@</span>"
     );
     $this->basicRegex = '/[=;#:*]+ *(@@@SEAKAYKEYWORDS@@@) *[\n:>]+/';
     // $this->regex = '/[;#:*]+ *('.implode("|", array_keys($this->cognitiveKeywords)).') *[\n:>]+/';

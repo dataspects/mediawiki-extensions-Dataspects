@@ -29,7 +29,10 @@ SearchResultMatcher = class {
   }
 
   searchResult = () => {
-    this.info.message = "searchResultClassName: " + this.searchResultClassName;
+    this.info.message =
+      "This item is displayed using searchResultClass '" +
+      this.searchResultClassName +
+      "'";
     return this.searchResultClass.searchResult(
       this.hit,
       this.error,
@@ -162,6 +165,7 @@ SearchResultMatchError = class {
   }
 };
 
+// LEX230108155400
 SearchResultMatchInfo = class {
   #messageValue;
   constructor(hit) {
@@ -201,11 +205,14 @@ SearchResultMatchInfo = class {
 
   set message(m) {
     if (m) {
+      const xago = this.xago(this.hit.release_timestamp);
       this.#messageValue =
         '<div class="hitInfo">' +
         (this.hit.release_timestamp
-          ? "<span class='hitAgo'>" +
-            this.xago(this.hit.release_timestamp) +
+          ? '<span class="hitAgo" title="This item las last indexed ' +
+            xago +
+            ' ago">' +
+            xago +
             "</span>"
           : "") +
         '<span class="searchResultClassName" title="' +

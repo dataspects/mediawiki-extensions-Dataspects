@@ -7,7 +7,7 @@ class Semantologics {
 
   public function __construct($mediaWikiPage) {
     $this->mediaWikiPage = $mediaWikiPage;
-    $this->sk = new SeaKay();
+    $this->sk = new CoKe();
     $this->annotations = array(
         "/(can +be +managed)/" => array(
             "predicate"         => "ds0:canBeManaged",
