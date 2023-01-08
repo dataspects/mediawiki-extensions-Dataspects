@@ -26,15 +26,15 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         '.$this->currentConfiguration().'
                     </td>
 				</tr>
-                <tr>
-                    <td><b>Values</b></td>
+                <tr><!-- LEX230108165201 -->
+                    <td><b>Values</b> (statistics on data sources)</td>
                     <td >
                         <canvas id="firstXCharacters"></canvas>
                         <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071526</code></a>
                     </td>
 				</tr>
-                <tr>
-                    <td><b>Data feeding</b></td>
+                <tr><!-- LEX230108165200 -->
+                    <td><b>Data feeding</b> (statistics on indexing activity)</td>
                     <td >
                         <canvas id="releaseTimestampXago"></canvas>
                         <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071527</code></a>
@@ -68,6 +68,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                 </form> ';
     }
 
+    # LEX230108165600
     private function currentConfiguration() {
         return '<table>
                     <tbody>

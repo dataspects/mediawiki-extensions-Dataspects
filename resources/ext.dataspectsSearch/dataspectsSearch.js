@@ -37,6 +37,7 @@ const getUrlParameter = (sParam) => {
 };
 
 // Is this Jquery code at the right place and properly implemented?
+// LEX230108165801
 $("#originalPageContent").click(function () {
   if ($("#originalPageContent").prop("checked")) {
     $(this).text("Hide original page contents");
@@ -47,6 +48,7 @@ $("#originalPageContent").click(function () {
   }
 });
 
+// LEX230108165800
 $("#compactList").click(function () {
   if ($("#compactList").prop("checked")) {
     $(".searchResultBody").css("display", "none");
@@ -103,6 +105,7 @@ const getCurrentHelperAndUpdateUI = () => {
   $("#saveFacetLink").html(saveFacetLink(args));
 };
 
+// LEX230108163200
 saveFacetLink = (args) => {
   return (
     "<a href='" +

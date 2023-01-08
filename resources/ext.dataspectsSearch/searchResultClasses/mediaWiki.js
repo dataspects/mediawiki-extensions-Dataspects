@@ -25,6 +25,7 @@ MediaWikiSearchResult = class extends SearchResult {
     );
   };
 
+  // LEX230108165801
   parsedPageText = (hit) => {
     if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
       this.api

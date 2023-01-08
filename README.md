@@ -40,7 +40,8 @@ linkStyle 1,4 stroke:#00ff00
 - provides **meta data on search results**: currently 'last indexed' and 'searchResultClass', see [LEX230108155400](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108155400)
 - formats the controlled use of **[cognitive keywords (CoKe)](https://wiki.dataspects.com/wiki/C1537999723)**, see [LEX230108160200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108160200)
 - **save search facets**, see [LEX230108163200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108163200), currently requires https://mwstakeorg.dataspects.com/wiki/SearchFacet
-- show **original page contents** under search results
+- show **original page contents** under search results, see [LEX230108165801](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165801)
+- compact search results, see [LEX230108165800](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165800)
 - enable **multiple sources**
 - search includes **non-article pages** (i.e. templates, forms, etc.), see [onPageSaveComplete](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=onPageSaveComplete)
   - reveal nested template calls graphically, see [LEX230108161800](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108161800)
@@ -48,14 +49,15 @@ linkStyle 1,4 stroke:#00ff00
 
 ### [Special:DataspectsBackstage](https://mwstakeorg.dataspects.com/wiki/Special:DataspectsBackstage)
 
-- initialize new [EPPO topic types](https://mwstakeorg.dataspects.com/wiki/EPPO), see [LEX230108161000](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108161000)
+- initialize new **[EPPO topic types](https://mwstakeorg.dataspects.com/wiki/EPPO)**, see [LEX230108161000](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108161000)
+- see **statistics on indexing activity**, see [LEX230108165200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165200)
+- see **statistics on data sources**, see [LEX230108165201](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165201)
+- check current **dataspects configuration**, see [LEX230108165600](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165600)
 
 ## **PENDING**
 
-- onPageSave index CRUD hooks
-- Logging
 - Testing
-- Delete docs from indexes?
+- Delete docs from indexes
 
 ## LocalSettings.php
 
