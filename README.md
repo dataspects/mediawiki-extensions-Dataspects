@@ -8,10 +8,13 @@ dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) 
 flowchart LR
 
   subgraph Docker on server
-    mediawiki("<b>MediaWiki</b>
-    - LocalSettings.php")
+    mediawiki("<b>MediaWiki API</b>
+    - LocalSettings.php
+    - <a href='https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi'>dataspectsapi</a>")
     meilisearch("<b>Meilisearch</b>")
     tika("<b>Tika</b>")
+    spacy("<b>spaCy</b>")
+    neo4j("<b>Neo4j</b>")
   end
 
   subgraph Internet
@@ -26,13 +29,17 @@ flowchart LR
   userAgent<-->mediawiki
   mediawiki<-->|<b>update content</b><br/>wgDataspectsWriteKey|meilisearch
   mediawiki<-->|analyze content|tika
+  mediawiki<-->|analyze content|spacy
+  mediawiki<-->|<b>update content</b>|neo4j
 
 classDef default text-align:left;
-linkStyle 0,3 stroke:#ff0000
-linkStyle 1,4 stroke:#00ff00
+linkStyle 0,3,6 stroke:#ff0000
+linkStyle 1,4,5 stroke:#00ff00
 ```
 
 ## Features
+
+- [DataspectsAPI](https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/main/includes/api/DataspectsAPI.php) | [dataspectsapi](https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi)
 
 ### [Special:Dataspects](https://mwstakeorg.dataspects.com/wiki/Special:Dataspects)
 

@@ -46,10 +46,6 @@ class SpecialDataspectsBackstage extends SpecialPage {
 			'wgDataspectsIndex' => $GLOBALS['wgDataspectsIndex'],
 			'wgDataspectsSearchKey' => $GLOBALS['wgDataspectsSearchKey'],
 			'wgDataspectsSearchURL' => $GLOBALS['wgDataspectsSearchURL'],
-			'wgDataspectsNeo4jURL' =>  $GLOBALS['wgDataspectsNeo4jURL'],
-			'wgDataspectsNeo4jUsername' =>  $GLOBALS['wgDataspectsNeo4jUsername'],
-			'wgDataspectsNeo4jPassword' =>  $GLOBALS['wgDataspectsNeo4jPassword'],
-			'wgDataspectsNeo4jDatabase' =>  $GLOBALS['wgDataspectsNeo4jDatabase'],
 			'sources' => $this->sources(),
 			'user' => $this->getUser()->getName()
 		));
