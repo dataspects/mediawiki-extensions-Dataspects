@@ -1,11 +1,11 @@
 <?php
 
-
 namespace MediaWiki\Extension\Dataspects;
 
 class HTMLProcessor {
 
   public function __construct($html) {
+    wfDebug("### HTMLProcessor ".str_replace("\n", "", $html));
     $this->html = $html;
   }
 

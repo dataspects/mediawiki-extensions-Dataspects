@@ -128,7 +128,6 @@ class DataspectsFeed {
       $this->wikitext = '';
     } else {
       $content = $revision->getContent( \Revision::RAW ); // \Revision::RAW = get the text regardless of permissions
-
       $this->wikitext = \ContentHandler::getContentText( $content );
     }
   }

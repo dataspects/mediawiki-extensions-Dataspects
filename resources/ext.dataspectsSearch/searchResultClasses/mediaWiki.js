@@ -27,24 +27,25 @@ MediaWikiSearchResult = class extends SearchResult {
 
   // LEX230108165801
   parsedPageText = (hit) => {
-    if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
-      this.api
-        .get({
-          action: "dataspectsapi",
-          querytype: "originalpagecontent",
-          mw0__apiParseTextURL: hit.mw0__apiParseTextURL,
-        })
-        .done(function (data) {
-          $("#" + hit.id).html(data.data.originalpagecontent);
-        });
-    } else {
-      $("#" + hit.id).html(
-        "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
-      );
-      console.debug(
-        "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
-      );
-    }
+    // FIXME: This must be run only when opening "Show original page contents"
+    // if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
+    //   this.api
+    //     .get({
+    //       action: "dataspectsapi",
+    //       querytype: "originalpagecontent",
+    //       mw0__apiParseTextURL: hit.mw0__apiParseTextURL,
+    //     })
+    //     .done(function (data) {
+    //       $("#" + hit.id).html(data.data.originalpagecontent);
+    //     });
+    // } else {
+    //   $("#" + hit.id).html(
+    //     "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
+    //   );
+    //   console.debug(
+    //     "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
+    //   );
+    // }
   };
 
   parsedPageTextFieldset = () => {

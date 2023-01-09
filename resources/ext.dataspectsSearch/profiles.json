@@ -52,6 +52,12 @@
   },
   {
     "hit": {
+      "ds0__source": "//www.mediawiki.org/wiki/"
+    },
+    "searchResultClassName": "MediaWikiSearchResult"
+  },
+  {
+    "hit": {
       "ds0__source": "https://wiki.dataspects.com/wiki/"
     },
     "searchResultClassName": "WikiDataspectsResult"

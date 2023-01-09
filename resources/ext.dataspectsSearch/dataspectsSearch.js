@@ -192,7 +192,7 @@ function handleSpecialDataspects() {
   });
   search.addWidgets([
     instantsearch.widgets.configure({
-      attributesToSnippet: ["ds0__text"],
+      // attributesToSnippet: ["ds0__text"],
       hitsPerPage: 20,
     }),
     instantsearch.widgets.searchBox({
@@ -320,6 +320,7 @@ function handleSpecialDataspects() {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
+          console.log(JSON.stringify(hit, null, 2));
           var srm = new SearchResultMatcher(
             hit,
             JSON.parse(
