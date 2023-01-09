@@ -200,7 +200,8 @@ SearchResultMatchInfo = class {
       output = Math.floor(difference / 2620800);
       unit = "month" + this.#pluralizer(output);
     } else {
-      output = Math.floor(difference / 31449600) + " years ago";
+      output = Math.floor(difference / 31449600);
+      unit = "year" + this.#pluralizer(output);
     }
     return output + " " + unit;
   };
@@ -211,12 +212,12 @@ SearchResultMatchInfo = class {
       this.#messageValue =
         '<div class="hitInfo">' +
         (this.hit.release_timestamp
-          ? '<span class="hitAgo" title="This item las last indexed ' +
+          ? '<span class="hitAgo" title="This item was last indexed ' +
             xago +
             ' ago">' +
             xago +
             "</span>"
-          : "") +
+          : '<span class="hitAgo" title="Missing this.hit.release_timestamp">release_timestamp</span>') +
         '<span class="searchResultClassName" title="' +
         m +
         '">?</span></div>';
