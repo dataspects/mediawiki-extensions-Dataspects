@@ -41,7 +41,55 @@ SearchResultMatcher = class {
     );
   };
 
-  searchResultClassMappings = (searchResultClassName) => {
+  getSearchResultClass = () => {
+    for (const key in Object.keys(profiles)) {
+      if (this.#profilesMatch(profiles[key])) {
+        /**
+         * We check the hit against the profiles. THE FIRST THAT MATCHES IS USED!
+         * So, more general profiles need to be placed at the end of profiles.json.
+         * E.g. mw0__namespace is more specific than ds0__source, so in profiles.json:
+         * [
+         *  {
+         *    "hit": {
+         *      "mw0__namespace": ...
+         *    }
+         *  },
+         *  {
+         *    "hit": {
+         *      "ds0__source": ...
+         *    }
+         *  }
+         * ]
+         */
+        return this.#searchResultClassMappings(
+          profiles[key].searchResultClassName
+        );
+      }
+    }
+    return this.#defaultSearchResultClass();
+  };
+
+  #defaultSearchResultClass = () => {
+    this.error.message = "ERROR: No searchResultClass found!";
+    this.searchResultClassName = "SearchResult";
+    return new SearchResult(this.hit, this.n4j);
+  };
+
+  #profilesMatch = (profile) => {
+    if ("environment" in profile) {
+      if (
+        this.#firstContainsSecond(this.hit, profile.hit) &&
+        this.#firstContainsSecond(this.environment, profile.environment)
+      ) {
+        return true;
+      }
+    } else if (this.#firstContainsSecond(this.hit, profile.hit)) {
+      return true;
+    }
+    return false;
+  };
+
+  #searchResultClassMappings = (searchResultClassName) => {
     this.error.message = false;
     switch (searchResultClassName) {
       case "SearchResult":
@@ -77,57 +125,11 @@ SearchResultMatcher = class {
         return new CodeSearchResult(this.hit, this.n4j);
         break;
       default:
-        this.error.message =
-          "ERROR: SearchResult subclass " +
-          searchResultClassName +
-          " requested by profile match but not found. Reverting to SearchResult class.";
-        this.searchResultClassName = "SearchResult";
-        return new SearchResult(this.hit, this.n4j);
+        return this.#defaultSearchResultClass();
     }
   };
 
-  profilesMatch = (profile) => {
-    if ("environment" in profile) {
-      if (
-        this.firstContainsSecond(this.hit, profile.hit) &&
-        this.firstContainsSecond(this.environment, profile.environment)
-      ) {
-        return true;
-      }
-    } else if (this.firstContainsSecond(this.hit, profile.hit)) {
-      return true;
-    }
-    return false;
-  };
-
-  getSearchResultClass = () => {
-    for (const key in Object.keys(profiles)) {
-      if (this.profilesMatch(profiles[key])) {
-        /**
-         * We check the hit against the profiles. THE FIRST THAT MATCHES IS USED!
-         * So, more general profiles need to be placed at the end of profiles.json.
-         * E.g. mw0__namespace is more specific than ds0__source, so in profiles.json:
-         * [
-         *  {
-         *    "hit": {
-         *      "mw0__namespace": ...
-         *    }
-         *  },
-         *  {
-         *    "hit": {
-         *      "ds0__source": ...
-         *    }
-         *  }
-         * ]
-         */
-        return this.searchResultClassMappings(
-          profiles[key].searchResultClassName
-        );
-      }
-    }
-  };
-
-  firstContainsSecond = (object1, object2) => {
+  #firstContainsSecond = (object1, object2) => {
     // ds1:implements: FIXME: match on annotations array containing annotation fragment(s)
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
@@ -137,7 +139,7 @@ SearchResultMatcher = class {
       const val2 = object2[key];
       const areObjects = this.isObject(val1) && this.isObject(val2);
       if (
-        (areObjects && !this.firstContainsSecond(val1, val2)) ||
+        (areObjects && !this.#firstContainsSecond(val1, val2)) ||
         (!areObjects && val1 !== val2)
       ) {
         return false;

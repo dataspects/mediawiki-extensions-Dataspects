@@ -39,7 +39,9 @@ linkStyle 1,4,5 stroke:#00ff00
 
 ## Features
 
+- [EPPO](https://mwstakeorg.dataspects.com/wiki/EPPO) | [Namespaces](https://mwstakeorg.dataspects.com/wiki/Namespaces)
 - [DataspectsAPI](https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/main/includes/api/DataspectsAPI.php) | [dataspectsapi](https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi)
+- Explain a facet: [Module:ExplainFacet](https://mwstakeorg.dataspects.com/wiki/Module:ExplainFacet) | [Aspect "The MWStake story"](https://mwstakeorg.dataspects.com/wiki/Aspect_%22The_MWStake_story%22)
 
 ### [Special:Dataspects](https://mwstakeorg.dataspects.com/wiki/Special:Dataspects)
 
