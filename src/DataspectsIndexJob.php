@@ -24,7 +24,7 @@ class DataspectsIndexJob extends \Job {
   // https://docs.php-http.org/en/latest/clients.html
 
   public function run() {
-    wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]);
+    wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
     $dsNeo4j = new DSNeo4j();
     try { # FIXME
 			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
@@ -33,7 +33,7 @@ class DataspectsIndexJob extends \Job {
 		}
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-    $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient);
+    $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $this->params);
     $dmwf->sendToDatastore();
     return true;
   }

@@ -6,7 +6,6 @@ class SpecialDataspectsBackstage extends SpecialPage {
 	}
 
 	function execute( $par ) {
-        wfDebug("### me");
         $request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();

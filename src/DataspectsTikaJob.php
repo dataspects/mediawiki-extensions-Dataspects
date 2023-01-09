@@ -51,14 +51,24 @@ class DataspectsTikaJob extends \Job {
           "thumbURL"  => $GLOBALS['wgServer'].$file->getThumbUrl() # FIXME
         );
       } else {
-        wfDebug("#DATASPECTS: No response from ".$url);
+        wfDebug("### DATASPECTS: No response from ".$url);
       }
     }
+    wfDebug("### DATASPECTS: Finished analyzing ".count($attachments)." attachments for ".$this->params["namespace"].":".$this->params["title"]);
+    $tempFileName = $GLOBALS["wgTmpDirectory"]."/".uniqid().".json";
+    $this->writeTempFile($tempFileName, $attachments);
+    $this->params["tempFileName"] = $tempFileName;
     // $job = new DataspectsSpacyJob("dataspectsSpacyJob", array_merge($this->params, [ "attachments" => $attachments ]));
 		// \JobQueueGroup::singleton()->push($job);
-    $job = new DataspectsIndexJob("dataspectsIndexJob", $params);
+    $job = new DataspectsIndexJob("dataspectsIndexJob", $this->params);
     \JobQueueGroup::singleton()->push($job);
     return true;
+  }
+
+  private function writeTempFile($tempFileName, $attachments) {
+    $tempFile = fopen($tempFileName, "w") or die("Unable to open file!");
+    fwrite($tempFile, json_encode($attachments));
+    fclose($tempFile);
   }
 
 }

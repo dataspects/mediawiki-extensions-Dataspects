@@ -9,7 +9,7 @@ use ManualLogEntry;
 
 class DataspectsFeed {
 
-  public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient) {
+  public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient, $params) {
     $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
     $this->title = $title;
     $this->user = $user;
@@ -25,6 +25,7 @@ class DataspectsFeed {
     $this->mw0__templates = [];
     $this->mw0__templates_by_regex = [];
     $this->mw0__images = [];
+    $this->params = $params;
   }
 
   static function deleteFromDatastore($id) {
@@ -60,6 +61,7 @@ class DataspectsFeed {
     */
     $this->parsedWikitext = null;
     switch($this->title->mNamespace) {
+      // api.php?action=query&meta=siteinfo&siprop=namespaces
       case 0:
         $this->getCategories();
         $this->getWikitext();
@@ -70,15 +72,16 @@ class DataspectsFeed {
         $this->getIncomingAndOutgoingLinks();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
         break;
-      case 6:
+      case 6: // File
         $this->getCategories();
         $this->getWikitext();
         $this->getParse();
+        // In case of a file, we merge the File:File.png parsed wikitext and the file's content extracted by TIKA
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
+        $this->parsedWikitext .= $this->fileContent();
         $this->sdf->getMediaWikiPageAnnotations();
         $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        // $this->getAttachments();
         $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
 	      break;
       case 4:
@@ -195,11 +198,10 @@ class DataspectsFeed {
     }
   }
 
-  private function getAttachments() {
-    
+  private function fileContent() {
+    $phpArray = $this->readTempFile($this->params["tempFileName"]);
+    return " ".$phpArray[0]->text;
   }
-
-  
 
   // private function updatePage($pageID) {
   //   $req = \MWHttpRequest::factory(
@@ -240,6 +242,19 @@ class DataspectsFeed {
     echo $GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
+  }
+
+  private function readTempFile($tempFileName) {
+    $tempFile = fopen($tempFileName, "r") or die("Unable to open file!");
+    $json = fread($tempFile, filesize($tempFileName));
+    fclose($tempFile);
+    $status = unlink($tempFileName);    
+    if($status){  
+      wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob: deleted ".$tempFileName);
+    } else {  
+      wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob: ERROR deleting ".$tempFileName);
+    }  
+    return json_decode($json);
   }
 
 
