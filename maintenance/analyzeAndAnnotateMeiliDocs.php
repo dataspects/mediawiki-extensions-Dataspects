@@ -14,7 +14,6 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 	public function execute() {
 
         $this->limit = 10;
-        $this->counter = 1;
         
         $meiliSearchClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsSearchKey'], new HttplugClient());
         $this->searchIndex = $meiliSearchClient->index($GLOBALS['wgDataspectsIndex']);
@@ -30,10 +29,10 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
          * 2.   Define $hit manipulations in private function myJob($hit) {...}
          * 3.   Run $this->analyzeAndAnnotateMeiliDocs("myJob");
          */
-        $query = "Zoom";
+        $query = "";
         $filter = [
             [
-                "ds0__source = 'https://mwstake.org/mwstake/wiki/'"
+                "ds0__source = 'https://www.mediawiki.org/wiki/'"
             ]
         ];
         $this->analyzeAndAnnotateMeiliDocs("myJob", $query, $filter);
@@ -41,17 +40,53 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 	}
 
     private function myJob($hit) {
+        $hit = $this->usedInPackageAndOrFarm($hit);
+        // $hit = $this->removeAnnotationsByPredicate($hit, "ds0:usedInPackageAndOrFarm");
         // print_r($hit);
-        // echo $this->counter." ".$hit["id"]."\n";
         // $hit = $this->addToArrayField($hit, "eppo0__categories", "Lex");
-        $hit = $this->removeFromArrayField($hit, "eppo0__categories", "Lex");
+        // $hit = $this->removeFromArrayField($hit, "eppo0__categories", "Lex");
         // wfDebug("### ANALYZE: ".$hit["id"]);
+        return $hit;
+    }
+
+    private function usedInPackageAndOrFarm($hit) {
+        $capture = $this->getSingleRegexCapture($hit["mw0__wikiText"], "/{{Used by\|(.*=1)+}}/");
+        if($capture != "") {
+            foreach (explode("|", $capture) as $value) {
+                $annotation = [
+                    "subject"   => $hit["mw0__rawUrl"],
+                    "predicate" => "ds0:usedInPackageAndOrFarm",
+                    "objectLiteral"    => explode("=", $value)[0]
+                ];
+                if(!in_array($annotation, $hit["annotations"])) {
+                    echo "Added annotation to ".$hit["mw0__rawUrl"]."\n";
+                    $hit["annotations"][] = $annotation;
+                }
+            }
+        }
         return $hit;
     }
 
     /**
      * Helper functions
      */
+
+    private function removeAnnotationsByPredicate($hit, $predicate) {
+        $hit["annotations"] = array_filter($hit["annotations"], function($annotation) use($predicate) {
+            return $annotation["predicate"] != $predicate;
+        });
+        return $hit;
+    }
+
+    private function getSingleRegexCapture($field, $regex) {
+        preg_match_all($regex, $field, $matches);
+        if(array_key_exists(1, $matches)) {
+            if (count($matches[1]) > 0) {
+                return $matches[1][0];
+            }
+        }
+        return "";
+    }
 
     private function addToArrayField($hit, $field, $newValue) {
         $hit[$field][] = $newValue;
@@ -89,7 +124,6 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         )->getHits();
         $countHits = count($hits);
         foreach ($hits as $hit) {
-            $this->counter++;
             $hit = $this->$func($hit);
             $this->writeIndex->addDocuments([$hit]);
         }
