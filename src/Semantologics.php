@@ -7,6 +7,7 @@ class Semantologics {
 
   public function __construct($mediaWikiPage) {
     $this->mediaWikiPage = $mediaWikiPage;
+    // LEX230108160200
     $this->sk = new CoKe();
     $this->annotations = array(
         "/(can +be +managed)/" => array(
@@ -29,17 +30,6 @@ class Semantologics {
     );
   }
 
-  private function transclusionLogics($match) {
-    $elements = explode("|", $match);
-    $pageLink = "<a href='".$GLOBALS['wgServer']."/wiki/".$elements[0]."'>".$elements[0]."</a>";
-    if(array_key_exists(1, $elements)) {
-        // If section $elements[1] is transcluded
-        return "Section <b>".$elements[1]."</b> from ".$pageLink;
-    }
-    // If whole page is transcluded
-    return $pageLink;
-  }
-
   # LEX200122141600
   public function process() {
     foreach($this->annotations as $regex => $data) {
@@ -49,6 +39,7 @@ class Semantologics {
                 foreach($matches[1] as $match) {
                     $object = $match;
                     if(array_key_exists("objectHandler", $data)) {
+                        // Dynamic function name
                         $func = $data["objectHandler"];
                         $object = $this->$func($match);
                     }
@@ -69,5 +60,15 @@ class Semantologics {
     return $this->mediaWikiPage;
   }
 
+  private function transclusionLogics($match) {
+    $elements = explode("|", $match);
+    $pageLink = "<a href='".$GLOBALS['wgServer']."/wiki/".$elements[0]."'>".$elements[0]."</a>";
+    if(array_key_exists(1, $elements)) {
+        // If section $elements[1] is transcluded
+        return "Section <b>".$elements[1]."</b> from ".$pageLink;
+    }
+    // If whole page is transcluded
+    return $pageLink;
+  }
 
 }
