@@ -10,8 +10,8 @@ require_once $basePath . '/maintenance/Maintenance.php';
 class DMFFeedOne extends \Maintenance {
 
 	public function execute() {
-		// $title = \Title::newFromText('File:TWebC.png');
-		$title = \Title::newFromText('Software "Canasta"');
+		$title = \Title::newFromText('File:TWebC.png');
+		// $title = \Title::newFromText('Software "Canasta"');
 		$this->feedOne($title);
 	}
 

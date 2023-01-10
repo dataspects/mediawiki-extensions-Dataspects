@@ -150,8 +150,6 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         }
     }
 
-    
-
 }
 
 $maintClass = AnalyzeAndAnnotateMeiliDocs::class;

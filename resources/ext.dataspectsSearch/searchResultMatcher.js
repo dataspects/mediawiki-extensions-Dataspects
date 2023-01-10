@@ -5,6 +5,9 @@ const {
   MediaWikiMetaPageSearchResult,
 } = require("./searchResultClasses/mediaWikiMetaPage.js");
 const {
+  MediaWikiFileSearchResult,
+} = require("./searchResultClasses/mediaWikiFile.js");
+const {
   SMWCindyKateSearchResult,
 } = require("./searchResultClasses/sMWCindyKate.js");
 const {
@@ -119,6 +122,10 @@ SearchResultMatcher = class {
       case "MediaWikiMetaPageSearchResult":
         this.searchResultClassName = searchResultClassName;
         return new MediaWikiMetaPageSearchResult(this.hit, this.n4j);
+        break;
+      case "MediaWikiFileSearchResult":
+        this.searchResultClassName = searchResultClassName;
+        return new MediaWikiFileSearchResult(this.hit, this.n4j);
         break;
       case "CodeSearchResult":
         this.searchResultClassName = searchResultClassName;

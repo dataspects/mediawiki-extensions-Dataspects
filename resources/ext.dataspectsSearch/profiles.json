@@ -28,6 +28,12 @@
   },
   {
     "hit": {
+      "mw0__namespace": "File"
+    },
+    "searchResultClassName": "MediaWikiFileSearchResult"
+  },
+  {
+    "hit": {
       "mw0__namespace": "Module"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
@@ -52,7 +58,7 @@
   },
   {
     "hit": {
-      "ds0__source": "//www.mediawiki.org/wiki/"
+      "ds0__source": "https://www.mediawiki.org/wiki/"
     },
     "searchResultClassName": "MediaWikiSearchResult"
   },

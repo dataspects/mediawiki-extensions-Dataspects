@@ -50,6 +50,7 @@
         "./searchResult.js",
         "./searchResultClasses/element.js",
         "./searchResultClasses/mediaWiki.js",
+        "./searchResultClasses/mediaWikiFile.js",
         "./searchResultClasses/mediaWikiMetaPage.js",
         "./searchResultClasses/sMWCindyKate.js",
         "./searchResultClasses/wikiDataspects.js",

@@ -193,7 +193,7 @@ function handleSpecialDataspects() {
   search.addWidgets([
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
-      attributesToSnippet: ["ds0__text"],
+      attributesToSnippet: ["eppo0__hasEntityTitle", "ds0__text"],
       hitsPerPage: 20,
     }),
     instantsearch.widgets.searchBox({

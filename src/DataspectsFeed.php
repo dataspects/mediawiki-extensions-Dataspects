@@ -199,6 +199,7 @@ class DataspectsFeed {
 
   private function fileContent() {
     $phpArray = $this->readTempFile($this->params["tempFileName"]);
+    wfDebug("### thumbURL: ".$phpArray[0]->thumbURL);
     return " ".$phpArray[0]->text;
   }
 
