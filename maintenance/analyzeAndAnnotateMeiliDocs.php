@@ -23,6 +23,9 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         $this->writeIndex = $meiliWriteClient->index($GLOBALS['wgDataspectsIndex']);
         
         /**
+         * INSTRUCTIONS
+         * ------------
+         * 
          * 1.   Define $query and $filter
          * 2.   Define $hit manipulations in private function myJob($hit) {...}
          * 3.   Run $this->analyzeAndAnnotateMeiliDocs("myJob");
@@ -40,8 +43,8 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
     private function myJob($hit) {
         // print_r($hit);
         // echo $this->counter." ".$hit["id"]."\n";
-        // $hit = $this->addCategory($hit, "Lex");
-        $hit = $this->removeCategory($hit, "Lex");
+        // $hit = $this->addToArrayField($hit, "eppo0__categories", "Lex");
+        $hit = $this->removeFromArrayField($hit, "eppo0__categories", "Lex");
         // wfDebug("### ANALYZE: ".$hit["id"]);
         return $hit;
     }
@@ -50,14 +53,14 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
      * Helper functions
      */
 
-    private function addCategory($hit, $newCategory) {
-        $hit["eppo0__categories"][] = $newCategory;
+    private function addToArrayField($hit, $field, $newValue) {
+        $hit[$field][] = $newValue;
         return $hit;
     }
 
-    private function removeCategory($hit, $oldCategory) {
-        $hit["eppo0__categories"] = array_filter($hit["eppo0__categories"], function($category) use ($oldCategory) {
-            return $category !== $oldCategory;
+    private function removeFromArrayField($hit, $field, $oldValue) {
+        $hit[$field] = array_filter($hit[$field], function($value) use ($oldValue) {
+            return $value !== $oldValue;
         });
         return $hit;
     }
