@@ -30,7 +30,7 @@ class SpecialDataspects extends SpecialPage {
 								<tr><td><b>Sources</b><div id="sources-refinement-list"></div></td></tr>
 								<tr><td colspan="2"><hr/></td></tr>
 								<tr><td id="topic-types-hierarchical-menu"></td></tr>
-								<tr><td id="sea-kay-menu"></td></tr>
+								<tr><td id="coke-menu"></td></tr>
 								<tr><td id="actions-menu"></td></tr>
 								<tr><td><b>MediaWiki Namespaces</b><div id="mw0__namespace-menu"></div></td></tr>
 							</tbody>

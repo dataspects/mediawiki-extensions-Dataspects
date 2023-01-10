@@ -61,6 +61,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                 if(!in_array($annotation, $hit["annotations"])) {
                     echo "Added annotation to ".$hit["mw0__rawUrl"]."\n";
                     $hit["annotations"][] = $annotation;
+                    $hit = $this->addToDs0AllPredicates($hit, $annotation);
                 }
             }
         }
@@ -70,6 +71,23 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
     /**
      * Helper functions
      */
+
+    private function addToDs0AllPredicates($hit, $annotation) {
+        $hit["ds0__allPredicates.1v11"] = array_merge(
+            $hit["ds0__allPredicates.1v11"],
+            [
+              "All Predicates > ".$annotation["predicate"]
+            ],
+        );
+        // FIXME: considerTruncatingObjectLiteral()
+        $hit["ds0__allPredicates.1v12"] = array_merge(
+            $hit["ds0__allPredicates.1v12"],
+            [
+                "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
+            ],
+        );
+        return $hit;
+    }
 
     private function removeAnnotationsByPredicate($hit, $predicate) {
         $hit["annotations"] = array_filter($hit["annotations"], function($annotation) use($predicate) {

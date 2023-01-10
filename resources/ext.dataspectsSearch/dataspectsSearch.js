@@ -258,7 +258,7 @@ function handleSpecialDataspects() {
       },
     }),
     instantsearch.widgets.hierarchicalMenu({
-      container: "#sea-kay-menu",
+      container: "#coke-menu",
       attributes: [
         "ck0__containsCognitiveKeyword.1v10",
         "ck0__containsCognitiveKeyword.1v11",
