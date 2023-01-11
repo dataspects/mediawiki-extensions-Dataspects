@@ -65,11 +65,7 @@ SearchResult = class {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<div>" +
-      this.ds0__text(instantsearch) +
-      "</div>" +
-      // this.mw0__attachment(instantsearch) +
-      this.annotations()
+      "<div>" + this.ds0__text(instantsearch) + "</div>" + this.annotations()
     );
   };
 
@@ -111,31 +107,6 @@ SearchResult = class {
 
   myURLEncode = (url) => {
     return url.replaceAll(" ", "_");
-  };
-
-  mw0__attachment = (instantsearch) => {
-    //FIXME: handle non-image displays
-    if (["File"].includes(this.hit.mw0__namespace)) {
-      return (
-        "<fieldset><legend>" +
-        this.hit.mw0__attachment.type +
-        "</legend>" +
-        '<table class="mw0__attachment"><tr><td><a href="' +
-        this.hit.mw0__rawUrl +
-        '"><img src="' +
-        this.myURLEncode(
-          this.hit.mw0__attachment.thumbURL + "/120px-" + this.hit.name
-        ) +
-        '"></a></td><td><div class="mw0__attachmentsText">' +
-        instantsearch.snippet({
-          attribute: "mw0__attachment.text",
-          highlightedTagName: "mark",
-          hit: this.hit,
-        }) +
-        "</div></td></tr></table></fieldset>"
-      ); // FIXME: img!
-    }
-    return "";
   };
 
   eppo0__hasEntityType = () => {

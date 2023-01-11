@@ -16,7 +16,7 @@ class Hooks implements 	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
 			"namespace" => $title->getNamespace(),
 			"title" => $title->getBaseText()
 		];
-		wfDebug("### onPageSaveComplete REGISTER: ".$params["namespace"].":".$params["title"]);
+		wfDebug("### onPageSaveComplete REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 		switch($title->getNamespace()) {
 			case 0:
 				// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);

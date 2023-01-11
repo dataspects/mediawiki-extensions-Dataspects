@@ -21,7 +21,7 @@ class DataspectsTikaJob extends \Job {
   }
 
   public function run() {
-    wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsTikaJob ".$this->params["namespace"].":".$this->params["title"]);
+    wfDebug("### MediaWiki Job Queue __>__: ### RUNNING: dataspectsTikaJob ".$this->params["namespace"].":".$this->params["title"]);
     // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
     // https://www.mediawiki.org/wiki/Manual:WikiPage.php
     $attachments = array();
@@ -54,7 +54,7 @@ class DataspectsTikaJob extends \Job {
         wfDebug("### DATASPECTS: No response from ".$url);
       }
     }
-    wfDebug("### DATASPECTS: Finished analyzing ".count($attachments)." attachments for ".$this->params["namespace"].":".$this->params["title"]);
+    wfDebug("### DATASPECTS __>__: Finished analyzing ".count($attachments)." attachments for ".$this->params["namespace"].":".$this->params["title"]);
     $tempFileName = $GLOBALS["wgTmpDirectory"]."/".uniqid().".json";
     $this->writeTempFile($tempFileName, $attachments);
     $this->params["tempFileName"] = $tempFileName;

@@ -78,7 +78,7 @@ class DataspectsFeed {
         $this->getParse();
         // In case of a file, we merge the File:File.png parsed wikitext and the file's content extracted by TIKA
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
-        $this->parsedWikitext .= $this->fileContent();
+        $this->getAttachmentsData();
         $this->sdf->getMediaWikiPageAnnotations();
         $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
@@ -197,10 +197,17 @@ class DataspectsFeed {
     }
   }
 
-  private function fileContent() {
+  private function getAttachmentsData() {
     $phpArray = $this->readTempFile($this->params["tempFileName"]);
-    wfDebug("### thumbURL: ".$phpArray[0]->thumbURL);
-    return " ".$phpArray[0]->text;
+    $mergedContent = "";
+    foreach ($phpArray as $attachmentData) {
+      $mergedContent .= " ".$attachmentData->text; // FIXME: map function?
+    }
+    $attachments = [
+      "mergedContent" => $mergedContent,
+      "files" => $phpArray
+    ];
+    $this->attachments = $attachments;
   }
 
   // private function updatePage($pageID) {
@@ -250,9 +257,9 @@ class DataspectsFeed {
     fclose($tempFile);
     $status = unlink($tempFileName);    
     if($status){  
-      wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob: deleted ".$tempFileName);
+      wfDebug("### MediaWiki Job Queue __>__: ### RUNNING: dataspectsIndexJob: deleted ".$tempFileName);
     } else {  
-      wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob: ERROR deleting ".$tempFileName);
+      wfDebug("### MediaWiki Job Queue __>__: ### RUNNING: dataspectsIndexJob: ERROR deleting ".$tempFileName);
     }  
     return json_decode($json);
   }

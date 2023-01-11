@@ -24,7 +24,7 @@ class DataspectsIndexJob extends \Job {
   // https://docs.php-http.org/en/latest/clients.html
 
   public function run() {
-    wfDebug("### MediaWiki Job Queue ### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
+    wfDebug("### __>__ MediaWiki Job Queue ### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
     $dsNeo4j = new DSNeo4j();
     try { # FIXME
 			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());

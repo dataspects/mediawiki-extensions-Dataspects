@@ -23,7 +23,7 @@ class SpecialDataspectsFeed {
       "mw0__rawUrl" => $this->title->getInternalURL(),
       "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->dsf->wikitext),
-      "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext),
+      "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
       "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
       "mw0__sections" => $this->dsf->mw0__sections,
       "mw0__templates" => $this->dsf->mw0__templates,
@@ -158,14 +158,9 @@ class SpecialDataspectsFeed {
   }
 
   private function processAttachments($mediaWikiPage) {
-    if(count($this->dsf->attachments) > 0) {
+    if(count($this->dsf->attachments["files"]) > 0) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
-        "mw0__attachment" => [
-          "text" => $this->dsf->attachments[0]["text"],
-          "type" => $this->dsf->attachments[0]["type"],
-          "thumbURL" => $this->dsf->attachments[0]["thumbURL"]
-        ],
-        "ds0__source.1v13" => "Source > ".$GLOBALS['wgSourceURL']." > ".$this->dsf->getNamespace($this->title->mNamespace)." > ".$this->dsf->attachments[0]["type"]
+        "mw0__attachments" => $this->dsf->attachments["files"]
       ]);
     }
     return $mediaWikiPage;
