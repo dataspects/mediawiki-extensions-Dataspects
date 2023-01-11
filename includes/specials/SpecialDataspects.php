@@ -48,6 +48,7 @@ class SpecialDataspects extends SpecialPage {
 			'wgDataspectsIndex' => $GLOBALS['wgDataspectsIndex'],
 			'wgDataspectsSearchKey' => $GLOBALS['wgDataspectsSearchKey'],
 			'wgDataspectsSearchURL' => $GLOBALS['wgDataspectsSearchURL'],
+			'wgDataspectsAttributesToSnippet' => $GLOBALS['wgDataspectsAttributesToSnippet'],
 			'sources' => $this->sources(),
 			'user' => $this->getUser()->getName()
 		));

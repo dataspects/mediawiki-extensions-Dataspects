@@ -193,8 +193,8 @@ function handleSpecialDataspects() {
   search.addWidgets([
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
-      attributesToSnippet: ["eppo0__hasEntityTitle", "ds0__text"],
-      hitsPerPage: 20,
+      attributesToSnippet: mw.config.get("wgDataspectsAttributesToSnippet"),
+      hitsPerPage: 5,
     }),
     instantsearch.widgets.searchBox({
       container: "#searchbox",

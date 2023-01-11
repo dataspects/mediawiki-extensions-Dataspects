@@ -33,7 +33,9 @@ SearchResultMatcher = class {
 
   searchResult = () => {
     this.info.message =
-      "This item is displayed using searchResultClass '" +
+      "Item " +
+      this.hit.id +
+      " is displayed using searchResultClass '" +
       this.searchResultClassName +
       "'";
     return this.searchResultClass.searchResult(
@@ -219,7 +221,9 @@ SearchResultMatchInfo = class {
       this.#messageValue =
         '<div class="hitInfo">' +
         (this.hit.release_timestamp
-          ? '<span class="hitAgo" title="This item was last indexed ' +
+          ? '<span class="hitAgo" title="Item ' +
+            this.hit.id +
+            " was last indexed " +
             xago +
             ' ago">' +
             xago +

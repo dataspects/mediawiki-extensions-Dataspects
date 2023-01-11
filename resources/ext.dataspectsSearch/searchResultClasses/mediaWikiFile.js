@@ -39,7 +39,7 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
         );
       });
     }
-    return "AA";
+    return "";
   };
 };
 
