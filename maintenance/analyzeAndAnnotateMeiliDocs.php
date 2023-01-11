@@ -13,7 +13,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 
 	public function execute() {
 
-        $this->limit = 10;
+        $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
         
         $meiliSearchClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsSearchKey'], new HttplugClient());
         $this->searchIndex = $meiliSearchClient->index($GLOBALS['wgDataspectsIndex']);
@@ -29,17 +29,39 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
          * 2.   Define $hit manipulations in private function myJob($hit) {...}
          * 3.   Run $this->analyzeAndAnnotateMeiliDocs("myJob");
          */
-        $query = "";
-        $filter = [
-            [
-                "ds0__source = 'https://www.mediawiki.org/wiki/'"
-            ]
-        ];
-        $this->analyzeAndAnnotateMeiliDocs("myJob", $query, $filter);
+        /**
+         * Set $doWrite to true to write analyzed and annotated docs back to Meilisearch
+         */
+        $doWrite = true;
 
+        # JOBS
+        ######
+        
+        # jobName, query, filter
+        
+        // $this->analyzeAndAnnotateMeiliDocs("processExtensionPagesFromMediaWikiOrg", "", [
+        //     [
+        //         "ds0__source = 'https://www.mediawiki.org/wiki/'"
+        //     ]
+        // ], $doWrite);
+        
+        $this->analyzeAndAnnotateMeiliDocs("processElementMessages", "", [
+            [
+                "ds0__source = 'Element'"
+            ]
+        ], $doWrite);
 	}
 
-    private function myJob($hit) {
+    /**
+     * Job functions
+     */
+
+    private function processElementMessages($hit) {
+        $hit = $this->escamAnnotations($hit, $hit["ds0__text"]);
+        return $hit;
+    }
+
+    private function processExtensionPagesFromMediaWikiOrg($hit) {
         $hit = $this->usedInPackageAndOrFarm($hit);
         // $hit = $this->removeAnnotationsByPredicate($hit, "ds0:usedInPackageAndOrFarm");
         // print_r($hit);
@@ -48,6 +70,10 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         // wfDebug("### ANALYZE: ".$hit["id"]);
         return $hit;
     }
+
+    /**
+     * Helper functions
+     */
 
     private function usedInPackageAndOrFarm($hit) {
         $capture = $this->getSingleRegexCapture($hit["mw0__wikiText"], "/{{Used by\|(.*=1)+}}/");
@@ -58,34 +84,70 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                     "predicate" => "ds0:usedInPackageAndOrFarm",
                     "objectLiteral"    => explode("=", $value)[0]
                 ];
-                if(!in_array($annotation, $hit["annotations"])) {
-                    echo "Added annotation to ".$hit["mw0__rawUrl"]."\n";
-                    $hit["annotations"][] = $annotation;
-                    $hit = $this->addToDs0AllPredicates($hit, $annotation);
-                }
+                $hit = $this->addAnnotation($hit, $annotation);
+                $hit = $this->addToDs0AllPredicates($hit, $annotation);
             }
         }
         return $hit;
     }
 
-    /**
-     * Helper functions
-     */
+    private function escamAnnotations($hit, $text) {
+        // Endpoint, see LEX230111144200
+        $url = $GLOBALS['wgDataspectsSpacyURL']."/escam-annotations";
+        $spaCyInsight = $this->spaCy($text, $url);
+        foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {
+            $annotation = [
+                "subject"   => $hit["mw0__rawUrl"],
+                "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
+                "objectLiteral" => true
+            ];
+            $hit = $this->addAnnotation($hit, $annotation);
+            $hit = $this->addToDs0AllPredicates($hit, $annotation);
+        }
+        return $hit;
+    }
 
     private function addToDs0AllPredicates($hit, $annotation) {
-        $hit["ds0__allPredicates.1v11"] = array_merge(
-            $hit["ds0__allPredicates.1v11"],
-            [
-              "All Predicates > ".$annotation["predicate"]
-            ],
-        );
+        if($hit["ds0__allPredicates.1v11"]) {
+            $hit["ds0__allPredicates.1v11"] = array_merge(
+                $hit["ds0__allPredicates.1v11"],
+                [
+                  "All Predicates > ".$annotation["predicate"]
+                ],
+            );
+        } else {
+            $hit["ds0__allPredicates.1v11"] = [
+                "All Predicates > ".$annotation["predicate"]
+            ];
+        }
+        
         // FIXME: considerTruncatingObjectLiteral()
-        $hit["ds0__allPredicates.1v12"] = array_merge(
-            $hit["ds0__allPredicates.1v12"],
-            [
+        if($hit["ds0__allPredicates.1v12"]) {
+            $hit["ds0__allPredicates.1v12"] = array_merge(
+                $hit["ds0__allPredicates.1v12"],
+                [
+                    "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
+                ],
+            );
+        } else {
+            $hit["ds0__allPredicates.1v12"] = [
                 "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
-            ],
-        );
+            ];
+        }
+        return $hit;
+    }
+
+    private function addAnnotation($hit, $annotation) {
+        $logMessage = "Added annotation to ".$hit["eppo0__hasEntityTitle"]."\n";
+        if($hit["annotations"]) {
+            if(!in_array($annotation, $hit["annotations"])) {
+                $hit["annotations"][] = $annotation;
+                echo $logMessage;
+            }
+        } else {
+            $hit["annotations"] = [$annotation];
+            echo $logMessage;
+        }
         return $hit;
     }
 
@@ -122,12 +184,26 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
      * Internals
      */
 
-	private function analyzeAndAnnotateMeiliDocs($func, $query, $filter) {
+    private function spaCy($text, $url) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, array(
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => json_encode(['text' => $text]),
+            // CURLOPT_VERBOSE => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false, // FIXME
+            CURLOPT_SSL_VERIFYHOST => false
+        ));
+        $data = (array) json_decode(curl_exec($ch), true);
+        return $data;
+    }
+
+	private function analyzeAndAnnotateMeiliDocs($func, $query, $filter, $doWrite) {
         // Recurse
-        $searchResult = $this->getSearchResult(0, $func, $query, $filter);
+        $searchResult = $this->getSearchResult(0, $func, $query, $filter, $doWrite);
 	}
 
-    private function getSearchResult($offset, $func, $query, $filter) {
+    private function getSearchResult($offset, $func, $query, $filter, $doWrite = false) {
         /**
          * FIXME: maxTotalHits is preventing running through all items
          * https://docs.meilisearch.com/reference/api/settings.html?#pagination
@@ -142,8 +218,17 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         )->getHits();
         $countHits = count($hits);
         foreach ($hits as $hit) {
+            /**
+             * Here we run the passed in function
+             */
             $hit = $this->$func($hit);
-            $this->writeIndex->addDocuments([$hit]);
+            /**
+             * Then we write the document to the index, FIXME: batch?
+             */
+            if($doWrite) {
+                echo "### Write '".$hit["eppo0__hasEntityTitle"]."'...\n";
+                $this->writeIndex->addDocuments([$hit]);
+            }
         }
         if($countHits > 0) {
             $this->getSearchResult($offset + $this->limit, $func, $query, $filter);
