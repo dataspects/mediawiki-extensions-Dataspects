@@ -27,22 +27,21 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         $meiliWriteClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
         $this->writeIndex = $meiliWriteClient->index($GLOBALS['wgDataspectsIndex']);
         
+        $job = $this->getOption( 'job', 'dummyJob' );
+
         /**
          * INSTRUCTIONS
          * ------------
          * 
-         * 1.   Define $query and $filter
-         * 2.   Define $hit manipulations in private function myJob($hit) {...}
-         * 3.   Run $this->analyzeAndAnnotateMeiliDocs("myJob");
-         */
-        /**
+         * 1.   Define $hit manipulations in private function myJob($hit) {...}
+         * 2.   Define $query and $filter in $jobs["myJob"]
+         * 3.   Run .../w# php extensions/Dataspects/maintenance/analyzeAndAnnotateMeiliDocs.php --job=myJob
+         *
          * Set $doWrite to true to write analyzed and annotated docs back to Meilisearch
+         * 
          */
+        // FIXME: make option
         $doWrite = false;
-        $job = $this->getOption( 'job', 'dummyJob' );
-
-        # JOBS
-        ######
         
         $jobs = [
             "processElementMessages" => [
@@ -64,15 +63,39 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
             "dummyJob" => [
                 "query" => "",
                 "filter" => []
+            ],
+            "removeDuplicateFieldValues" => [
+                "query" => "",
+                "filter" => [
+                    [
+                        "ds0__source = 'Element'"
+                    ]
+                ]
             ]
         ];
 
-        $this->analyzeAndAnnotateMeiliDocs($job, $jobs[$job]["query"], $jobs[$job]["filter"], $doWrite);
+        if(array_key_exists($job, $jobs)) {
+            $this->analyzeAndAnnotateMeiliDocs($job, $jobs[$job]["query"], $jobs[$job]["filter"], $doWrite);
+        } else {
+            echo "WARNING: Job '$job' not found in jobs: ".join(", ", array_keys($jobs))."\n";
+        }
 	}
 
     /**
      * Job functions
      */
+
+    private function removeDuplicateFieldValues($hit) {
+        $fields = [
+            "ds0__allPredicates.1v11", "ds0__allPredicates.1v12"
+        ];
+        foreach ($fields as $field) {
+            if($hit[$field]) {
+                $hit[$field] = array_unique($hit[$field]);
+            }
+        }
+        return $hit;
+    }
 
     private function processElementMessages($hit) {
         $hit = $this->escamAnnotations($hit, $hit["ds0__text"]);
