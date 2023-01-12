@@ -14,6 +14,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
     public function __construct() {
 		parent::__construct();
 		$this->addOption( 'job', 'Job to execute', true );
+        $this->addOption( 'doWrite', 'Write to Meilisearch?', true );
 		$this->requireExtension( 'Dataspects' );
 	}
 
@@ -28,6 +29,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         $this->writeIndex = $meiliWriteClient->index($GLOBALS['wgDataspectsIndex']);
         
         $job = $this->getOption( 'job', 'dummyJob' );
+        $doWrite = $this->getOption( 'doWrite', false );
 
         /**
          * INSTRUCTIONS
@@ -36,12 +38,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
          * 1.   Define $hit manipulations in private function myJob($hit) {...}
          * 2.   Define $query and $filter in $jobs["myJob"]
          * 3.   Run .../w# php extensions/Dataspects/maintenance/analyzeAndAnnotateMeiliDocs.php --job=myJob
-         *
-         * Set $doWrite to true to write analyzed and annotated docs back to Meilisearch
-         * 
          */
-        // FIXME: make option
-        $doWrite = false;
         
         $jobs = [
             "processElementMessages" => [
@@ -50,7 +47,8 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                     [
                         "ds0__source = 'Element'"
                     ]
-                ]
+                ],
+                "doWrite" => $doWrite
             ],
             "processExtensionPagesFromMediaWikiOrg" => [
                 "query" => "",
@@ -58,7 +56,8 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                     [
                         "ds0__source = 'https://www.mediawiki.org/wiki/'"
                     ]
-                ]
+                ],
+                "doWrite" => $doWrite
             ],
             "dummyJob" => [
                 "query" => "",
@@ -70,12 +69,13 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                     [
                         "ds0__source = 'Element'"
                     ]
-                ]
+                ],
+                "doWrite" => $doWrite
             ]
         ];
 
         if(array_key_exists($job, $jobs)) {
-            $this->analyzeAndAnnotateMeiliDocs($job, $jobs[$job]["query"], $jobs[$job]["filter"], $doWrite);
+            $this->analyzeAndAnnotateMeiliDocs($job, $jobs[$job]["query"], $jobs[$job]["filter"], $jobs[$job]["doWrite"]);
         } else {
             echo "WARNING: Job '$job' not found in jobs: ".join(", ", array_keys($jobs))."\n";
         }
@@ -141,14 +141,16 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         // Endpoint, see LEX230111144200
         $url = $GLOBALS['wgDataspectsSpacyURL']."/escam-annotations";
         $spaCyInsight = $this->spaCy($text, $url);
-        foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {
-            $annotation = [
-                "subject"   => $hit["mw0__rawUrl"],
-                "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
-                "objectLiteral" => true
-            ];
-            $hit = $this->addAnnotation($hit, $annotation);
-            $hit = $this->addToDs0AllPredicates($hit, $annotation);
+        if(array_key_exists("annotations", $spaCyInsight)) {
+            foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {
+                $annotation = [
+                    "subject"   => $hit["mw0__rawUrl"],
+                    "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
+                    "objectLiteral" => true
+                ];
+                $hit = $this->addAnnotation($hit, $annotation);
+                $hit = $this->addToDs0AllPredicates($hit, $annotation);
+            }
         }
         return $hit;
     }
@@ -235,7 +237,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         curl_setopt_array($ch, array(
             CURLOPT_POST => 1,
             CURLOPT_POSTFIELDS => json_encode(['text' => $text]),
-            // CURLOPT_VERBOSE => true,
+            CURLOPT_VERBOSE => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false, // FIXME
             CURLOPT_SSL_VERIFYHOST => false
@@ -271,7 +273,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
             /**
              * Then we write the document to the index, FIXME: batch?
              */
-            if($doWrite) {
+            if($doWrite === 'true') {
                 echo "### Write '".$hit["eppo0__hasEntityTitle"]."'...\n";
                 $this->writeIndex->addDocuments([$hit]);
             }
