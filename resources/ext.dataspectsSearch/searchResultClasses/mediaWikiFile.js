@@ -1,6 +1,7 @@
 MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
   constructor(hit, n4j) {
     super(hit, n4j);
+    this.typesHavingViewer = ["image/png"];
   }
 
   searchResultBody = (hit, instantsearch) => {
@@ -25,17 +26,22 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
           "<fieldset><legend>" +
           attachment.type +
           "</legend>" +
-          '<table class="mw0__attachment"><tr><td><a href="' +
-          this.hit.mw0__rawUrl +
-          '"><img src="' +
-          this.myURLEncode(attachment.thumbURL + "/120px-" + this.hit.name) +
-          '"></a></td><td><div class="mw0__attachmentsText">' +
-          instantsearch.snippet({
-            attribute: "mw0__attachment.text",
-            highlightedTagName: "mark",
-            hit: this.hit,
-          }) +
-          "</div></td></tr></table></fieldset>"
+          (this.typesHavingViewer.includes(attachment.type)
+            ? '<table class="mw0__attachment"><tr><td><a href="' +
+              this.hit.mw0__rawUrl +
+              '"><img src="' +
+              this.myURLEncode(
+                attachment.thumbURL + "/120px-" + this.hit.name
+              ) +
+              '"></a></td><td><div class="mw0__attachmentsText">' +
+              instantsearch.snippet({
+                attribute: "mw0__attachment.text",
+                highlightedTagName: "mark",
+                hit: this.hit,
+              }) +
+              "</div></td></tr></table>"
+            : "No viewer available") +
+          "</fieldset>"
         );
       });
     }
