@@ -11,6 +11,12 @@ require_once $basePath . '/maintenance/Maintenance.php';
 
 class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 
+    public function __construct() {
+		parent::__construct();
+		$this->addOption( 'job', 'Job to execute', true );
+		$this->requireExtension( 'Dataspects' );
+	}
+
 	public function execute() {
 
         $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
@@ -32,24 +38,36 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         /**
          * Set $doWrite to true to write analyzed and annotated docs back to Meilisearch
          */
-        $doWrite = true;
+        $doWrite = false;
+        $job = $this->getOption( 'job', 'dummyJob' );
 
         # JOBS
         ######
         
-        # jobName, query, filter
-        
-        // $this->analyzeAndAnnotateMeiliDocs("processExtensionPagesFromMediaWikiOrg", "", [
-        //     [
-        //         "ds0__source = 'https://www.mediawiki.org/wiki/'"
-        //     ]
-        // ], $doWrite);
-        
-        $this->analyzeAndAnnotateMeiliDocs("processElementMessages", "", [
-            [
-                "ds0__source = 'Element'"
+        $jobs = [
+            "processElementMessages" => [
+                "query" => "",
+                "filter" => [
+                    [
+                        "ds0__source = 'Element'"
+                    ]
+                ]
+            ],
+            "processExtensionPagesFromMediaWikiOrg" => [
+                "query" => "",
+                "filter" => [
+                    [
+                        "ds0__source = 'https://www.mediawiki.org/wiki/'"
+                    ]
+                ]
+            ],
+            "dummyJob" => [
+                "query" => "",
+                "filter" => []
             ]
-        ], $doWrite);
+        ];
+
+        $this->analyzeAndAnnotateMeiliDocs($job, $jobs[$job]["query"], $jobs[$job]["filter"], $doWrite);
 	}
 
     /**
@@ -68,6 +86,11 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         // $hit = $this->addToArrayField($hit, "eppo0__categories", "Lex");
         // $hit = $this->removeFromArrayField($hit, "eppo0__categories", "Lex");
         // wfDebug("### ANALYZE: ".$hit["id"]);
+        return $hit;
+    }
+
+    private function dummyJob($hit) {
+        echo "dummyJob job function";
         return $hit;
     }
 
