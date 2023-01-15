@@ -14,7 +14,7 @@ $analyzeJobs = [];
 foreach (get_declared_classes() as $declaredClass) {
     if(startsWith($declaredClass, "MediaWiki\Extension\Dataspects\AnalyzeJobs\\")) {
         $dcp = explode("\\", $declaredClass);
-        $analyzeJobs[] = [end($dcp) => get_class_methods($declaredClass)];
+        $analyzeJobs[end($dcp)] = get_class_methods($declaredClass);
     }
 }
-print_r($analyzeJobs);
+echo json_encode($analyzeJobs);

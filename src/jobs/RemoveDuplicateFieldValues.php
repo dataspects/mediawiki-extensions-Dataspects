@@ -18,7 +18,6 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
         ];
         foreach ($fields as $field) {
             if($hit[$field]) {
-                echo $hit[$field][0];
                 $hit[$field] = array_unique($hit[$field]);
             }
         }
