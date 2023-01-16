@@ -7,11 +7,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
     public function __construct($meilisearchConfig, $doWrite) {
         parent::__construct($meilisearchConfig, $doWrite);
         $this->query = "";
-        $this->filter = [
-            [
-                "ds0__source = 'Element'"
-            ]
-        ];
+        $this->filter = [];
 	}
 
     public function execute() {
@@ -24,7 +20,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
         ];
         foreach ($fields as $field) {
             if(array_key_exists($field, $hit)) {
-                $this->log("considering $field");
+                wfDebug("RemoveDuplicateFieldValues: considering $field");
                 $hit[$field] = array_unique($hit[$field]);
             }
         }

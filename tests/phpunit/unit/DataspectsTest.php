@@ -11,8 +11,10 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	private $testDocuments = [
 		[
 			"id" => "dataspectsTestDoc1673881510",
+			"eppo0__hasEntityTitle" => "testDoc",
 			"release_timestamp" => "1673881510",
-			"ds0__source" => "DataspectsTest"
+			"ds0__source" => "DataspectsTest",
+			"ds0__specialAspect.1v11" => [ "One", "One" ]
 		]
 	];
 
@@ -20,10 +22,10 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		parent::setUp();
 		$this->meilisearchConfig = [
 			"wgDataspectsSearchURL" => getenv("DS_MEILISEARCH_SERVER"),
-			"wgDataspectsSearchKey" => getenv("DS_MEILISEARCH_SEARCH_KEY"),
+			"wgDataspectsSearchKey" => getenv("DS_MEILISEARCH_TESTINDEX_KEY"),
 			"wgDataspectsWriteURL" => getenv("DS_MEILISEARCH_SERVER"),
-			"wgDataspectsWriteKey" => getenv("DS_MEILISEARCH_WRITE_KEY"),
-			"wgDataspectsIndex" => getenv("DS_MEILISEARCH_INDEX")
+			"wgDataspectsWriteKey" => getenv("DS_MEILISEARCH_TESTINDEX_KEY"),
+			"wgDataspectsIndex" => "testindex"
 		];
 		require_once __DIR__."/../../../src/AnalyzeAndAnnotateMeiliDocsJob.php";
         foreach (glob(__DIR__."/../../../src/jobs/*.php") as $filename) {
@@ -44,12 +46,14 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testAll() {
-		$this->testAddedDocuments();
-		$this->testRemoveDuplicateFieldValues();
+		$hits = $this->testAddedDocuments();
+		$this->testRemoveDuplicateFieldValues($hits);
 	}
 
 	private function testAddedDocuments() {
-		$this->assertCount(1, $this->hitsForsearchForReleaseTimestamp("1673881510"));
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(1, $hits);
+		return $hits;
 	}
 
 	private function hitsForsearchForReleaseTimestamp($timestamp) {
@@ -66,8 +70,13 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		return $hits;
 	}
 
-	private function testRemoveDuplicateFieldValues() {
-		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, true);
+	private function testRemoveDuplicateFieldValues($hits) {
+		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, "true");
+		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
+		$job->execute();
+		sleep(3);
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(1, $hits[0]["ds0__specialAspect.1v11"]);
 	}
 
 	private function addTestDocuments() {

@@ -52,6 +52,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 
             $jobClass = "MediaWiki\Extension\Dataspects\AnalyzeJobs\\$job";
             if(class_exists($jobClass)) {
+                
                 $jobInstance = new $jobClass($this->meilisearchConfig, $doWrite);
                 $jobInstance->execute();
             } else {
