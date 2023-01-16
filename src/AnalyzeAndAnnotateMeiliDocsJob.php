@@ -6,15 +6,15 @@ use \MeiliSearch\Client;
 
 class AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($doWrite) {
+    public function __construct($meilisearchConfig, $doWrite) {
         $this->doWrite = $doWrite;
         $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
 
-        $meiliSearchClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey'], new HttplugClient());
-        $this->searchIndex = $meiliSearchClient->index($GLOBALS['wgDataspectsIndex']);
+        $meiliSearchClient = new \MeiliSearch\Client($meilisearchConfig['wgDataspectsSearchURL'], $meilisearchConfig['wgDataspectsSearchKey'], new HttplugClient());
+        $this->searchIndex = $meiliSearchClient->index($meilisearchConfig['wgDataspectsIndex']);
         
-        $meiliWriteClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
-        $this->writeIndex = $meiliWriteClient->index($GLOBALS['wgDataspectsIndex']);
+        $meiliWriteClient = new \MeiliSearch\Client($meilisearchConfig['wgDataspectsWriteURL'], $meilisearchConfig['wgDataspectsWriteKey'], new HttplugClient());
+        $this->writeIndex = $meiliWriteClient->index($meilisearchConfig['wgDataspectsIndex']);
 
 	}
 

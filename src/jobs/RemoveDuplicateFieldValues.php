@@ -4,8 +4,8 @@ namespace MediaWiki\Extension\Dataspects\AnalyzeJobs;
 
 class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($doWrite) {
-        parent::__construct($doWrite);
+    public function __construct($meilisearchConfig, $doWrite) {
+        parent::__construct($meilisearchConfig, $doWrite);
         $this->query = "";
         $this->filter = [
             [

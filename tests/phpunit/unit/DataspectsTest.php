@@ -18,10 +18,23 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->meiliSearchClient = new \MeiliSearch\Client(getenv('DS_MEILISEARCH_SERVER'), getenv('DS_MEILISEARCH_SEARCH_KEY'), new HttplugClient());
-        $this->searchIndex = $this->meiliSearchClient->index(getenv('DS_MEILISEARCH_INDEX'));
-		$this->meiliWriteClient = new \MeiliSearch\Client(getenv('DS_MEILISEARCH_SERVER'), getenv('DS_MEILISEARCH_WRITE_KEY'), new HttplugClient());
-        $this->writeIndex = $this->meiliWriteClient->index(getenv('DS_MEILISEARCH_INDEX'));
+		$this->meilisearchConfig = [
+			"wgDataspectsSearchURL" => getenv("DS_MEILISEARCH_SERVER"),
+			"wgDataspectsSearchKey" => getenv("DS_MEILISEARCH_SEARCH_KEY"),
+			"wgDataspectsWriteURL" => getenv("DS_MEILISEARCH_SERVER"),
+			"wgDataspectsWriteKey" => getenv("DS_MEILISEARCH_WRITE_KEY"),
+			"wgDataspectsIndex" => getenv("DS_MEILISEARCH_INDEX")
+		];
+		require_once __DIR__."/../../../src/AnalyzeAndAnnotateMeiliDocsJob.php";
+        foreach (glob(__DIR__."/../../../src/jobs/*.php") as $filename) {
+            require_once $filename;
+        }
+		$this->meiliSearchClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsSearchURL'], $this->meilisearchConfig['wgDataspectsSearchKey'], new HttplugClient());
+        $this->searchIndex = $this->meiliSearchClient->index($this->meilisearchConfig['wgDataspectsIndex']);
+		
+		$this->meiliWriteClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsWriteURL'], $this->meilisearchConfig['wgDataspectsWriteKey'], new HttplugClient());
+		$this->writeIndex = $this->meiliWriteClient->index($this->meilisearchConfig['wgDataspectsIndex']);
+		
 		$this->addTestDocuments();
 	}
 
@@ -31,6 +44,11 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testAll() {
+		$this->testAddedDocuments();
+		$this->testRemoveDuplicateFieldValues();
+	}
+
+	private function testAddedDocuments() {
 		$this->assertCount(1, $this->hitsForsearchForReleaseTimestamp("1673881510"));
 	}
 
@@ -46,6 +64,10 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
             ]
         )->getHits();
 		return $hits;
+	}
+
+	private function testRemoveDuplicateFieldValues() {
+		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, true);
 	}
 
 	private function addTestDocuments() {
