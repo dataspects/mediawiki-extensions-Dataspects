@@ -114,35 +114,6 @@ class SpecialDataspectsFeed {
     return $mediaWikiPage;
   }
 
-  public function selectedAspects($mediaWikiPage) {
-    foreach($mediaWikiPage["annotations"] as $annotation) {
-      if (in_array($annotation["predicate"], array_keys($GLOBALS['wgSelectedAspects']))) {
-        // Initialize
-        $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__specialAspect", "Selected Aspects");
-        // Add aspects
-        $mediaWikiPage["ds0__specialAspect.1v11"] = array_merge(
-          $mediaWikiPage["ds0__specialAspect.1v11"],
-          [
-            "Selected Aspects > ".$GLOBALS['wgSelectedAspects'][$annotation["predicate"]]["title"],
-          ]
-        );
-      }
-    }
-    return $mediaWikiPage;
-  }
-
-  private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
-    // For hierarchicalMenus, it starts at *.1v10
-    if(!array_key_exists($predicate.".1v10", $mediaWikiPage)) {
-      $mediaWikiPage = array_merge($mediaWikiPage, [
-        $predicate.".1v10" => $title,
-        $predicate.".1v11" => array(),
-        $predicate.".1v12" => array(),
-      ]);
-    }
-    return $mediaWikiPage;
-  }
-
   private function considerTruncatingObjectLiteral($objectLiteral) {
     // ds1:implements: object literal value truncation
     $length = 20;

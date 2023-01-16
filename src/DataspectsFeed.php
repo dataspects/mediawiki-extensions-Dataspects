@@ -115,7 +115,6 @@ class DataspectsFeed {
     }
     $this->semantologics = new Semantologics($this->mediaWikiPage);
     $this->mediaWikiPage = $this->semantologics->process();
-    $this->mediaWikiPage = $this->sdf->selectedAspects($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
     $this->addPageToMeilisearch();
     $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);

@@ -1,5 +1,8 @@
 <?php
 
+# https://doc.wikimedia.org/oojs-ui/master/php/annotated.html
+# https://www.mediawiki.org/wiki/OOUI/Using_OOUI_in_MediaWiki
+
 class SpecialDataspectsBackstage extends SpecialPage {
 	function __construct() {
 		parent::__construct( 'DataspectsBackstage' );
@@ -8,6 +11,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
 	function execute( $par ) {
         $request = $this->getRequest();
 		$output = $this->getOutput();
+        $output->enableOOUI();
 		$this->setHeaders();
 		$output->addHTML( '
             <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects#Features" style="background-color:yellow;">Features</a> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a> | <code>~$ ./mwstakeorg__status.sh</code>

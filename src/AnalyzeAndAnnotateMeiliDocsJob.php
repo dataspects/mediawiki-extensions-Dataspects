@@ -10,7 +10,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         $this->doWrite = $doWrite;
         $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
 
-        $meiliSearchClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsSearchKey'], new HttplugClient());
+        $meiliSearchClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsSearchURL'], $GLOBALS['wgDataspectsSearchKey'], new HttplugClient());
         $this->searchIndex = $meiliSearchClient->index($GLOBALS['wgDataspectsIndex']);
         
         $meiliWriteClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
@@ -37,14 +37,16 @@ class AnalyzeAndAnnotateMeiliDocsJob {
             ]
         )->getHits();
         $countHits = count($hits);
-        foreach ($hits as $hit) {
-            $hit = $this->hitFunction($hit);
-            /**
-             * Then we write the document to the index, FIXME: batch?
-             */
-            if($this->doWrite === 'true') {
-                echo "### Write '".$hit["eppo0__hasEntityTitle"]."'...\n";
-                $this->writeIndex->addDocuments([$hit]);
+        foreach ($hits as $originalHit) {
+            $consideredHit = $this->hitFunction($originalHit);
+            if(!empty($this->arrayDeepCompare($originalHit, $consideredHit, $strict = true))) {
+                /**
+                 * Then we write the document to the index, FIXME: batch?
+                 */
+                if($this->doWrite === 'true') {
+                    echo "### Write '".$consideredHit["eppo0__hasEntityTitle"]."'...\n";
+                    $this->writeIndex->addDocuments([$consideredHit]);
+                }
             }
         }
         if($countHits > 0) {
@@ -127,8 +129,6 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         return $hit;
     }
 
-    
-
     protected function addToArrayField($hit, $field, $newValue) {
         $hit[$field][] = $newValue;
         return $hit;
@@ -143,6 +143,49 @@ class AnalyzeAndAnnotateMeiliDocsJob {
 
     protected function log($message) {
         echo static::class.": '$message'\n";
+    }
+
+    protected function arrayDeepCompare($array1, $array2, $strict = true) {
+        if (!is_array($array1)) {
+            throw new \InvalidArgumentException('$array1 must be an array!');
+        }
+
+        if (!is_array($array2)) {
+            return $array1;
+        }
+
+        $result = array();
+
+        foreach ($array1 as $key => $value) {
+            if (!array_key_exists($key, $array2)) {
+                $result[$key] = $value;
+                continue;
+            }
+
+            if (is_array($value) && count($value) > 0) {
+                $recursiveArrayDiff = $this->arrayDeepCompare($value, $array2[$key], $strict);
+
+                if (count($recursiveArrayDiff) > 0) {
+                    $result[$key] = $recursiveArrayDiff;
+                }
+
+                continue;
+            }
+
+            $value1 = $value;
+            $value2 = $array2[$key];
+
+            if ($strict ? is_float($value1) && is_float($value2) : is_float($value1) || is_float($value2)) {
+                $value1 = (string) $value1;
+                $value2 = (string) $value2;
+            }
+
+            if ($strict ? $value1 !== $value2 : $value1 != $value2) {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
 }

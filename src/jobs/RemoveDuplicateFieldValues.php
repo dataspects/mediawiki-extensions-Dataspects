@@ -20,10 +20,10 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
 
     protected function hitFunction($hit) {
         $fields = [
-            "ds0__allPredicates.1v11", "ds0__allPredicates.1v12"
+            "ds0__allPredicates.1v11", "ds0__allPredicates.1v12", "ds0__specialAspect.1v11"
         ];
         foreach ($fields as $field) {
-            if($hit[$field]) {
+            if(array_key_exists($field, $hit)) {
                 $this->log("considering $field");
                 $hit[$field] = array_unique($hit[$field]);
             }

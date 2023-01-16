@@ -1,5 +1,8 @@
 <?php
 
+# https://doc.wikimedia.org/oojs-ui/master/php/annotated.html
+# https://www.mediawiki.org/wiki/OOUI/Using_OOUI_in_MediaWiki
+
 class SpecialDataspects extends SpecialPage {
 	function __construct() {
 		parent::__construct( 'Dataspects' );
@@ -8,6 +11,12 @@ class SpecialDataspects extends SpecialPage {
 	function execute( $par ) {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
+		$output->enableOOUI();
+		$btn = new OOUI\ButtonWidget( [
+			'label' => 'Click me!',
+			'href' => 'https://example.com',
+		] );
+		$output->addHTML( "$btn" );
 		$this->setHeaders();
 		$output->addHTML( '<table class="dataspectsTable">
 			<tr>
