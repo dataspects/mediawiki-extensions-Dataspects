@@ -8,6 +8,7 @@ use \MeiliSearch\Client; // https://meilisearch.github.io/meilisearch-php/namesp
 
 class DataspectsTest extends \MediaWikiUnitTestCase {
 
+	# Meili doc at LEX200122141600
 	private $testDocuments = [
 		[
 			// Unique in index
@@ -100,7 +101,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	protected function tearDown(): void {
-		$this->deleteTestDocuments();
 		parent::tearDown();
 	}
 
@@ -112,8 +112,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	public function testSearch() {
 		$this->initializeTestIndex();
-		# Meili doc at LEX200122141600
-		// $this->addTestDocuments();
+		$this->addTestDocuments();
+		
 		// $hits = $this->searchIndex->search(
         //     "asd",
         //     [
@@ -131,6 +131,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		// Delete?
 		if(in_array($this->meilisearchConfig['wgDataspectsIndex'], $indexUids)) {
 			$this->meiliSearchClient->deleteIndex($this->meilisearchConfig['wgDataspectsIndex']);
+			sleep(1);
 		}
 		// Create!
 		$this->meiliSearchClient->createIndex($this->meilisearchConfig['wgDataspectsIndex']);
@@ -177,11 +178,9 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	private function addTestDocuments() {
 		$this->writeIndex->addDocuments($this->testDocuments);
-		sleep(5);
+		sleep(1);
+		$hits = $this->testAddedDocuments();
+		$this->assertCount(count($this->testDocuments), $hits);
 	}
 
-	private function deleteTestDocuments() {
-		$ids = array_map(function ($doc) {return $doc["id"]; }, $this->testDocuments);
-		$this->writeIndex->deleteDocuments($ids);
-	}
 }
