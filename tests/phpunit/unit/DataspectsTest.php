@@ -215,7 +215,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		sleep(1);
 		$testindex = $this->meiliSearchClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
 		// Settings!
-		$settings = (array) json_decode(file_get_contents(__DIR__."/testindexsettings.json"));
+		$settings = (array) json_decode(file_get_contents(__DIR__."/../../../src/indexsettings.json"));
 		$testindex->updateSettings($settings);
 		sleep(1);
 		$this->assertEquals("eppo0__hasEntityTitle", $testindex->getSettings()["searchableAttributes"][0]);
