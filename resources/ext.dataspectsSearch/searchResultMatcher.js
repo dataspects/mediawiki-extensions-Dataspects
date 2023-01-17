@@ -1,4 +1,4 @@
-const { SearchResult } = require("./searchResult.js");
+const { SearchResult } = require("./searchResultClasses/searchResult.js");
 const { ElementSearchResult } = require("./searchResultClasses/element.js");
 const { MediaWikiSearchResult } = require("./searchResultClasses/mediaWiki.js");
 const {
@@ -52,11 +52,11 @@ SearchResultMatcher = class {
         /**
          * We check the hit against the profiles. THE FIRST THAT MATCHES IS USED!
          * So, more general profiles need to be placed at the end of profiles.json.
-         * E.g. mw0__namespace is more specific than ds0__source, so in profiles.json:
+         * E.g. ds0__sourceNamespace is more specific than ds0__source, so in profiles.json:
          * [
          *  {
          *    "hit": {
-         *      "mw0__namespace": ...
+         *      "ds0__sourceNamespace": ...
          *    }
          *  },
          *  {

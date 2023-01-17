@@ -32,8 +32,8 @@ class SpecialDataspectsFeed {
       ## Categories from processCategories()
       ## Content
       "ds0__contentSource" => trim($this->dsf->wikitext),
-			"ds0__contentHTML" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
-			"ds0__contentText" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
+			"ds0__contentHTML" => $this->ds0__contentText($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
+			"ds0__contentText" => $this->ds0__contentText($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
       ## Content sections
       "ds0__contentSections" => $this->dsf->mw0__sections,
       ## Parse source link
@@ -154,7 +154,7 @@ class SpecialDataspectsFeed {
     return $objectLiteral;
   }
 
-  private function ds0__text($parsedWikitext) {
+  private function ds0__contentText($parsedWikitext) {
     $hp = new HTMLProcessor($parsedWikitext);
 		return $hp->processAndReturnText();
   }

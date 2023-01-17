@@ -7,7 +7,7 @@ WikiDataspectsResult = class extends MediaWikiSearchResult {
     // FIXME: snippet in dynamic nested field
     return (
       '<span class="eppo0__hasEntityTitle"><a href="' +
-      this.hit.mw0__rawUrl +
+      this.hit.eppo0__hasEntityURL +
       '">' +
       this.annotationByPredicate("HasEntityTypeAndEntityTitle") +
       "</a></span>"

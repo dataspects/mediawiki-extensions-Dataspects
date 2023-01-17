@@ -14,7 +14,7 @@ MediaWikiSearchResult = class extends SearchResult {
   searchResultBody = (hit, instantsearch) => {
     return (
       "<div>" +
-      this.ds0__text(instantsearch) +
+      this.ds0__contentText(instantsearch) +
       "</div>" +
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
@@ -43,7 +43,7 @@ MediaWikiSearchResult = class extends SearchResult {
     //     "<p>SORRY: ds0__sourceParseTextURL is not defined for this entity.</p>"
     //   );
     //   console.debug(
-    //     "ds0__sourceParseTextURL is not defined for " + hit.mw0__rawUrl
+    //     "ds0__sourceParseTextURL is not defined for " + hit.eppo0__hasEntityURL
     //   );
     // }
   };

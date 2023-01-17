@@ -47,7 +47,7 @@
         "./dataspectsSearch.js",
         "./searchResultMatcher.js",
         "./profiles.json",
-        "./searchResult.js",
+        "./searchResultClasses/searchResult.js",
         "./searchResultClasses/element.js",
         "./searchResultClasses/mediaWiki.js",
         "./searchResultClasses/mediaWikiFile.js",

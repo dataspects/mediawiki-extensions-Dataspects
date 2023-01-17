@@ -248,13 +248,13 @@ function handleSpecialDataspects() {
       },
     }),
     instantsearch.widgets.refinementList({
-      container: "#mw0__namespace-menu",
-      attribute: "mw0__namespace",
+      container: "#ds0__sourceNamespace-menu",
+      attribute: "ds0__sourceNamespace",
       showMore: true,
       showMoreLimit: 20,
       limit: 1,
       cssClasses: {
-        root: "mw0__namespace-menu",
+        root: "ds0__sourceNamespace-menu",
       },
     }),
     instantsearch.widgets.hierarchicalMenu({

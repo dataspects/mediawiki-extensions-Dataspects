@@ -16,31 +16,31 @@
   },
   {
     "hit": {
-      "mw0__namespace": "Template"
+      "ds0__sourceNamespace": "Template"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },
   {
     "hit": {
-      "mw0__namespace": "Form"
+      "ds0__sourceNamespace": "Form"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },
   {
     "hit": {
-      "mw0__namespace": "File"
+      "ds0__sourceNamespace": "File"
     },
     "searchResultClassName": "MediaWikiFileSearchResult"
   },
   {
     "hit": {
-      "mw0__namespace": "Module"
+      "ds0__sourceNamespace": "Module"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },
   {
     "hit": {
-      "mw0__namespace": "Concept"
+      "ds0__sourceNamespace": "Concept"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
   },

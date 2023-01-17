@@ -55,9 +55,9 @@ SearchResult = class {
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle(instantsearch) +
       this.eppo0__categories() +
-      this.mw0__namespace() +
+      this.ds0__sourceNamespace() +
       "</td></tr><tr><td></td><td>" +
-      this.mw0__rawUrl() +
+      this.eppo0__hasEntityURL() +
       this.eppo0__hasEntityBlurb() +
       "</td></tr></table>"
     );
@@ -65,7 +65,10 @@ SearchResult = class {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      "<div>" + this.ds0__text(instantsearch) + "</div>" + this.annotations()
+      "<div>" +
+      this.ds0__contentText(instantsearch) +
+      "</div>" +
+      this.annotations()
     );
   };
 
@@ -75,10 +78,10 @@ SearchResult = class {
       highlightedTagName: "mark",
       hit: this.hit,
     });
-    if (this.hit.mw0__rawUrl) {
+    if (this.hit.eppo0__hasEntityURL) {
       return (
         '<a href="' +
-        this.hit.mw0__rawUrl +
+        this.hit.eppo0__hasEntityURL +
         '" class="eppo0__hasEntityTitle">' +
         iss +
         "</a>"
@@ -87,19 +90,19 @@ SearchResult = class {
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
 
-  mw0__rawUrl = () => {
-    return this.hit.mw0__rawUrl
+  eppo0__hasEntityURL = () => {
+    return this.hit.eppo0__hasEntityURL
       ? '<a href="' +
-          this.hit.mw0__rawUrl +
-          '" class="mw0__rawUrl">' +
-          this.hit.mw0__rawUrl +
+          this.hit.eppo0__hasEntityURL +
+          '" class="eppo0__hasEntityURL">' +
+          this.hit.eppo0__hasEntityURL +
           "</a>"
       : "";
   };
 
-  ds0__text = (instantsearch) => {
+  ds0__contentText = (instantsearch) => {
     return instantsearch.snippet({
-      attribute: "ds0__text",
+      attribute: "ds0__contentText",
       highlightedTagName: "mark",
       hit: this.hit,
     });
@@ -194,10 +197,15 @@ SearchResult = class {
     return "";
   };
 
-  mw0__namespace = () => {
-    if (this.hit.mw0__namespace && this.hit.mw0__namespace != "Main") {
+  ds0__sourceNamespace = () => {
+    if (
+      this.hit.ds0__sourceNamespace &&
+      this.hit.ds0__sourceNamespace != "Main"
+    ) {
       return (
-        "<span class='mw0__namespace'>" + this.hit.mw0__namespace + "</span>"
+        "<span class='ds0__sourceNamespace'>" +
+        this.hit.ds0__sourceNamespace +
+        "</span>"
       );
     }
     return "";

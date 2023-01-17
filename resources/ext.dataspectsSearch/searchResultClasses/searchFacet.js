@@ -11,9 +11,9 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
       this.eppo0__hasEntityType() +
       this.eppo0__hasEntityTitle() +
       this.eppo0__categories() +
-      this.mw0__namespace() +
+      this.ds0__sourceNamespace() +
       "</td></tr><tr><td></td><td>" +
-      this.mw0__rawUrl() +
+      this.eppo0__hasEntityURL() +
       this.eppo0__hasEntityBlurb() +
       this.activateLink() +
       "</td></tr></table>"
@@ -22,7 +22,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
 
   searchResultBody = (hit, instantsearch) => {
     return (
-      this.ds0__text(instantsearch) +
+      this.ds0__contentText(instantsearch) +
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
@@ -48,10 +48,10 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
       highlightedTagName: "mark",
       hit: this.hit,
     });
-    if (this.hit.mw0__rawUrl) {
+    if (this.hit.eppo0__hasEntityURL) {
       return (
         '<a href="' +
-        this.hit.mw0__rawUrl +
+        this.hit.eppo0__hasEntityURL +
         '" class="eppo0__hasEntityTitle" style="background-color:#CCFFCC;">' +
         iss +
         "</a>"

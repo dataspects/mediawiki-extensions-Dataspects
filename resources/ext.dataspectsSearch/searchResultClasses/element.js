@@ -16,9 +16,9 @@ ElementSearchResult = class extends SearchResult {
       "&rarr; " +
       this.createMetaPageLink() +
       "<div>" +
-      this.mw0__rawUrl() +
+      this.eppo0__hasEntityURL() +
       "<div>" +
-      this.ds0__text(instantsearch) +
+      this.ds0__contentText(instantsearch) +
       "</div>" +
       // this.mw0__attachment(instantsearch) +
       this.annotations()
@@ -52,9 +52,9 @@ ElementSearchResult = class extends SearchResult {
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
 
-  ds0__text = (instantsearch) => {
+  ds0__contentText = (instantsearch) => {
     // FIXME: highlight but don't snippet! (https://www.algolia.com/doc/api-reference/widgets/highlight/js/)
-    return this.hit.ds0__text;
+    return this.hit.ds0__contentText;
   };
 
   createMetaPageLink = () => {
@@ -62,7 +62,10 @@ ElementSearchResult = class extends SearchResult {
     var eppo0__hasEntityTitle = "Topic";
     var args = {
       "eppo0:hasEntityTitle": this.hit.eppo0__hasEntityTitle,
-      "eppo0:hasEntityBlurb": this.hit.ds0__text.replaceAll("'", "&#39;"), // FIXME
+      "eppo0:hasEntityBlurb": this.hit.ds0__contentText.replaceAll(
+        "'",
+        "&#39;"
+      ), // FIXME
     };
     var backlink =
       "Annotation[1][AnnotationPredicate]=ds0:copiedFromElementMessage&Annotation[1][AnnotationObject]=" +

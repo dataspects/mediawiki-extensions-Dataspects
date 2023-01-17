@@ -7,9 +7,9 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
   searchResultBody = (hit, instantsearch) => {
     return (
       "<div>" +
-      this.ds0__text(instantsearch) +
+      this.ds0__contentText(instantsearch) +
       "</div>" +
-      this.mw0__attachments(hit, instantsearch) +
+      this.ds0__attachments(hit, instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
       "<script>" +
@@ -18,24 +18,24 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
     );
   };
 
-  mw0__attachments = (hit, instantsearch) => {
+  ds0__attachments = (hit, instantsearch) => {
     //FIXME: handle non-image displays
-    if (this.hit.mw0__attachments) {
-      return this.hit.mw0__attachments.map((attachment) => {
+    if (this.hit.ds0__attachments) {
+      return this.hit.ds0__attachments.map((attachment) => {
         return (
           "<fieldset><legend>" +
           attachment.type +
           "</legend>" +
           (this.typesHavingViewer.includes(attachment.type)
             ? '<table class="mw0__attachment"><tr><td><a href="' +
-              this.hit.mw0__rawUrl +
+              this.hit.eppo0__hasEntityURL +
               '"><img src="' +
               this.myURLEncode(
                 attachment.thumbURL + "/120px-" + this.hit.name
               ) +
-              '"></a></td><td><div class="mw0__attachmentsText">' +
+              '"></a></td><td><div class="ds0__attachmentsText">' +
               instantsearch.snippet({
-                attribute: "mw0__attachment.text",
+                attribute: "mw0__attachments.text",
                 highlightedTagName: "mark",
                 hit: this.hit,
               }) +

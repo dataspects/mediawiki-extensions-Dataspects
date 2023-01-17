@@ -85,7 +85,7 @@
   padding: 20px;
 }
 
-.mw0__rawUrl {
+.eppo0__hasEntityURL {
   font-size: 12px;
   color: darkgreen !important;
   padding: 3px 0px 0px 0px;
@@ -96,7 +96,7 @@
   vertical-align: top;
 }
 
-.mw0__attachmentsText {
+.ds0__attachmentsText {
   padding: 10px;
   background-color: #eee;
 }
@@ -152,7 +152,7 @@
   margin: 0px;
 }
 
-.mw0__namespace {
+.ds0__sourceNamespace {
   background-color: #eee;
   color: #666;
   border: 1px solid #999;
@@ -185,7 +185,7 @@
 
 .accordion,
 .sources-refinement-list > ul,
-.mw0__namespace-menu > ul,
+.ds0__sourceNamespace-menu > ul,
 .no-root-bullet-in-list > ul {
   list-style: none;
   margin: 0px;

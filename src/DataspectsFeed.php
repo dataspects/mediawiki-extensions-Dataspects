@@ -240,7 +240,7 @@ class DataspectsFeed {
 
   private function addPageToMeilisearch() {
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
-    wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n");
+    wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["eppo0__hasEntityURL"]."\n");
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }

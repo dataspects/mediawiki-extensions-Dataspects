@@ -26,7 +26,7 @@ class DSNeo4j {
     // print_r($mediaWikiPage);
     // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
     $coreProperties = '{
-      name: $mw0__rawUrl,
+      name: $eppo0__hasEntityURL,
       release_timestamp: $release_timestamp
     }';
     $queries = [
@@ -34,7 +34,7 @@ class DSNeo4j {
             "query" => '
                 CALL apoc.merge.node(
                   [ "MediaWikiPage" ],
-                  { name: $mw0__rawUrl }, // identProps
+                  { name: $eppo0__hasEntityURL }, // identProps
                   '.$coreProperties.',    // props
                   '.$coreProperties.'     // onMatchProps
                 )
@@ -46,7 +46,7 @@ class DSNeo4j {
     ];
     $queries = array_merge($queries, $this->templateTransactions($mediaWikiPage));
     $this->update($queries);
-    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$mediaWikiPage["mw0__rawUrl"]."\n";
+    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$mediaWikiPage["eppo0__hasEntityURL"]."\n";
   }
 
   public function numberOfNodes() {
@@ -198,8 +198,8 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subName" => $mediaWikiPage["mw0__rawUrl"],
-          "objName" => $this->mw0__rawUrl($fullTemplateName)
+          "subName" => $mediaWikiPage["eppo0__hasEntityURL"],
+          "objName" => $this->eppo0__hasEntityURL($fullTemplateName)
         ]
       ];
     }
@@ -234,7 +234,7 @@ class DSNeo4j {
 
   }
 
-  private function mw0__rawUrl($someName) {
+  private function eppo0__hasEntityURL($someName) {
     return $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']).$someName;
   }
 

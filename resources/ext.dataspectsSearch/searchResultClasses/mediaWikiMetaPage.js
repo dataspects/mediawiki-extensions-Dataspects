@@ -3,12 +3,12 @@ MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
     super(hit, n4j);
   }
 
-  ds0__text = (instantsearch) => {
+  ds0__contentText = (instantsearch) => {
     // LEX230108161800
-    this.n4j.testGraph(this.hit.mw0__rawUrl);
+    this.n4j.testGraph(this.hit.eppo0__hasEntityURL);
     return (
       "<div id='" +
-      this.hit.mw0__rawUrl +
+      this.hit.eppo0__hasEntityURL +
       "' class='visjsGraph'></div>" +
       "<pre>" +
       instantsearch.snippet({
