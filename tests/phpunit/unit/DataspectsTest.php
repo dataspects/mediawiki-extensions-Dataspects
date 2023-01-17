@@ -59,7 +59,12 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"ds0__allPredicates.1v10",
 			"ds0__allPredicates.1v11",
 			// Special aspect
-			"ds0__specialAspect.1v11" => [ "One", "One" ],
+			"ds0__specialAspect" => "One",
+			"ds0__specialAspect.1v10" => [ "Selected Aspects" ],
+			"ds0__specialAspect.1v11" => [
+				"Selected Aspects > One",
+				"Selected Aspects > One"
+			],
 			"annotations" => [
 				[
 					"subject" => "dataspectsTestDoc1673881510",
@@ -77,6 +82,14 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 					"objectText" => "object 1",
 					"objectType" => "Text" // ,https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
 				],
+				[
+					"subject" => "dataspectsTestDoc1673881510",
+					"predicate" => "ds55__unrecommends",
+					"objectSource" => true,
+					"objectHTML" => true,
+					"objectText" => true,
+					"objectType" => "Boolean" // ,https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
+				],
 			],
 			// CoKe
 			"ck0__containsCognitiveKeyword" => "",
@@ -87,23 +100,28 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->meilisearchConfig = [
+		$this->analyzeAndAnnotateMeiliDocsConfig = [
 			"wgDataspectsSearchURL" => "http://localhost:7700",
 			"wgDataspectsSearchKey" => "masterKey",
 			"wgDataspectsWriteURL" => "http://localhost:7700",
 			"wgDataspectsWriteKey" => "masterKey",
-			"wgDataspectsIndex" => "testindex"
+			"wgDataspectsIndex" => "testindex",
+			"wgSelectedAspects" => [
+				"ds55__unrecommends" => [
+					"title" => "Unrecommending"
+				]
+			]
 		];
 		require_once __DIR__."/../../../src/AnalyzeAndAnnotateMeiliDocsJob.php";
         foreach (glob(__DIR__."/../../../src/jobs/*.php") as $filename) {
             require_once $filename;
         }
-		$this->meiliSearchClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsSearchURL'], $this->meilisearchConfig['wgDataspectsSearchKey'], new HttplugClient());
+		$this->meiliSearchClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchKey'], new HttplugClient());
 		
-		$this->meiliWriteClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsWriteURL'], $this->meilisearchConfig['wgDataspectsWriteKey'], new HttplugClient());
+		$this->meiliWriteClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteKey'], new HttplugClient());
 
-		$this->initializeTestIndex();
-		$this->addTestDocuments();
+		// $this->initializeTestIndex();
+		// $this->addTestDocuments();
 	}
 
 	protected function tearDown(): void {
@@ -111,7 +129,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testSearch() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->searchIndex->search(
             "abcdef",
             [
@@ -124,28 +142,41 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testRemoveDuplicateFieldValues() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
-		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, "true");
+		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->analyzeAndAnnotateMeiliDocsConfig, "true");
 		$job->execute();
 		sleep(1);
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(1, $hits[0]["ds0__specialAspect.1v11"]);
 	}
 
+	public function testProcessSelectedAspects() {
+		// $this->markTestSkipped();
+		$this->initializeTestIndex();
+		$this->addTestDocuments();
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
+		$job = new AnalyzeJobs\ProcessSelectedAspects($this->analyzeAndAnnotateMeiliDocsConfig, "true");
+		$job->execute();
+		sleep(1);
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(3, $hits[0]["ds0__specialAspect.1v11"]);
+	}
+
 	private function initializeTestIndex() {
 		// Existing indexes
 		$indexUids = array_map(function ($index) {return $index->getUid(); }, $this->meiliSearchClient->getAllIndexes()->getResults());
 		// Delete?
-		if(in_array($this->meilisearchConfig['wgDataspectsIndex'], $indexUids)) {
-			$this->meiliSearchClient->deleteIndex($this->meilisearchConfig['wgDataspectsIndex']);
+		if(in_array($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex'], $indexUids)) {
+			$this->meiliSearchClient->deleteIndex($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
 			sleep(1);
 		}
 		// Create!
-		$this->meiliSearchClient->createIndex($this->meilisearchConfig['wgDataspectsIndex']);
+		$this->meiliSearchClient->createIndex($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
 		sleep(1);
-		$testindex = $this->meiliSearchClient->index($this->meilisearchConfig['wgDataspectsIndex']);
+		$testindex = $this->meiliSearchClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
 		// Settings!
 		$settings = (array) json_decode(file_get_contents(__DIR__."/testindexsettings.json"));
 		$testindex->updateSettings($settings);

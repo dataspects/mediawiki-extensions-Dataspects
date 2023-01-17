@@ -6,15 +6,16 @@ use \MeiliSearch\Client;
 
 class AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($meilisearchConfig, $doWrite) {
+    public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
+        $this->analyzeAndAnnotateMeiliDocsConfig = $analyzeAndAnnotateMeiliDocsConfig;
         $this->doWrite = $doWrite;
         $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
 
-        $meiliSearchClient = new \MeiliSearch\Client($meilisearchConfig['wgDataspectsSearchURL'], $meilisearchConfig['wgDataspectsSearchKey'], new HttplugClient());
-        $this->searchIndex = $meiliSearchClient->index($meilisearchConfig['wgDataspectsIndex']);
+        $meiliSearchClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchKey'], new HttplugClient());
+        $this->searchIndex = $meiliSearchClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
         
-        $meiliWriteClient = new \MeiliSearch\Client($meilisearchConfig['wgDataspectsWriteURL'], $meilisearchConfig['wgDataspectsWriteKey'], new HttplugClient());
-        $this->writeIndex = $meiliWriteClient->index($meilisearchConfig['wgDataspectsIndex']);
+        $meiliWriteClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteKey'], new HttplugClient());
+        $this->writeIndex = $meiliWriteClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
 
 	}
 
@@ -39,7 +40,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         $countHits = count($hits);
         foreach ($hits as $originalHit) {
             $consideredHit = $this->hitFunction($originalHit);
-            if(!empty($this->arrayDeepCompare($originalHit, $consideredHit, $strict = true))) {
+            if(!$this->arrayDeepCompare($originalHit, $consideredHit, $strict = true)) {
                 /**
                  * Then we write the document to the index, FIXME: batch?
                  */
@@ -145,47 +146,15 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         echo static::class.": '$message'\n";
     }
 
-    protected function arrayDeepCompare($array1, $array2, $strict = true) {
-        if (!is_array($array1)) {
-            throw new \InvalidArgumentException('$array1 must be an array!');
+    protected function arrayDeepCompare($array0, $array1) {
+        if (!is_array($array0) || !is_array($array1)) return $array1 === $array0;
+        foreach ($array0 as $key => $value) {
+            if (!$array1[$key] || !$this->arrayDeepCompare($array1[$key], $array0[$key])) return false;
         }
-
-        if (!is_array($array2)) {
-            return $array1;
-        }
-
-        $result = array();
-
         foreach ($array1 as $key => $value) {
-            if (!array_key_exists($key, $array2)) {
-                $result[$key] = $value;
-                continue;
-            }
-
-            if (is_array($value) && count($value) > 0) {
-                $recursiveArrayDiff = $this->arrayDeepCompare($value, $array2[$key], $strict);
-
-                if (count($recursiveArrayDiff) > 0) {
-                    $result[$key] = $recursiveArrayDiff;
-                }
-
-                continue;
-            }
-
-            $value1 = $value;
-            $value2 = $array2[$key];
-
-            if ($strict ? is_float($value1) && is_float($value2) : is_float($value1) || is_float($value2)) {
-                $value1 = (string) $value1;
-                $value2 = (string) $value2;
-            }
-
-            if ($strict ? $value1 !== $value2 : $value1 != $value2) {
-                $result[$key] = $value;
-            }
+            if (!$array0[$key] || !$this->arrayDeepCompare($array1[$key], $array0[$key])) return false;
         }
-
-        return $result;
+        return true;
     }
 
 }

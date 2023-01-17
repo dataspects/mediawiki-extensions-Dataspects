@@ -13,12 +13,13 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 
     public function __construct() {
 		parent::__construct();
-        $this->meilisearchConfig = [
+        $this->analyzeAndAnnotateMeiliDocsConfig = [
             "wgDataspectsSearchURL" => $GLOBALS["wgDataspectsSearchURL"],
             "wgDataspectsSearchKey" => $GLOBALS["wgDataspectsSearchKey"],
             "wgDataspectsWriteURL" => $GLOBALS["wgDataspectsWriteURL"],
             "wgDataspectsWriteKey" => $GLOBALS["wgDataspectsWriteKey"],
-            "wgDataspectsIndex" => $GLOBALS["wgDataspectsIndex"]
+            "wgDataspectsIndex" => $GLOBALS["wgDataspectsIndex"],
+            "wgSelectedAspects" => $GLOBALS["wgSelectedAspects"]
         ];
         require_once __DIR__."/../src/AnalyzeAndAnnotateMeiliDocsJob.php";
         foreach (glob(__DIR__."/../src/jobs/*.php") as $filename) {
@@ -52,8 +53,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
 
             $jobClass = "MediaWiki\Extension\Dataspects\AnalyzeJobs\\$job";
             if(class_exists($jobClass)) {
-                
-                $jobInstance = new $jobClass($this->meilisearchConfig, $doWrite);
+                $jobInstance = new $jobClass($this->analyzeAndAnnotateMeiliDocsConfig, $doWrite);
                 $jobInstance->execute();
             } else {
                 echo "WARNING: Job '$job' not found\n";
