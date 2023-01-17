@@ -4,8 +4,8 @@
     "eppo0__hasEntityBlurb",
     "ds0__contentSource",
     "ds0__contentText",
-    "mw0__namespace",
-    "mw0__attachment.text"
+    "ds0__sourceNamespace",
+    "ds0__attachments.text"
   ],
   "filterableAttributes": [
     "ds0__source",
@@ -25,8 +25,8 @@
     "ds0__specialAspect.1v11",
     "ds0__allPredicates.1v10",
     "ds0__allPredicates.1v11",
-    "mw0__namespace",
-    "mw0__attachment.type",
+    "ds0__sourceNamespace",
+    "ds0__attachments.type",
     "annotations.predicate",
     "annotations.objectLiteral",
     "escam0__sender",

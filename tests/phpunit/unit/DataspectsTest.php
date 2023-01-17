@@ -47,8 +47,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 				"http://localhost/wiki/wikidataspectsTestDoc1673881511"
 			],
 			// Attachments
-			"mw0__images" => [],
-			"mw0__attachments" => [],
+			"ds0__attachments" => [],
 			// Source
 			"ds0__source" => "dst Source URL",
 			"ds0__source.1v10" => "Source",
@@ -58,7 +57,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"ds0__allPredicates" => "All Predicates",
 			"ds0__allPredicates.1v10" => [],
 			"ds0__allPredicates.1v11" => [],
-			// Special aspect
+			// Special aspects
 			"ds0__specialAspect" => "One",
 			"ds0__specialAspect.1v10" => [ "Selected Aspects" ],
 			"ds0__specialAspect.1v11" => [

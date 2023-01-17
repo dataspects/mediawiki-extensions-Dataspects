@@ -17,21 +17,39 @@ class SpecialDataspectsFeed {
   # LEX200122141600
   function getMediaWikiPage() {
     $mediaWikiPage = [
+      ## Unique in index
       "id" => $GLOBALS['wgDataspectsMediaWikiIDPrefix']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
-      "eppo0__hasEntityTitle" => $this->title->mTextform,
-      "mw0__rawUrl" => $this->title->getInternalURL(),
-      "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
-      "mw0__wikitext" => trim($this->dsf->wikitext),
-      "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
-      "ds0__sourceParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
-      "mw0__sections" => $this->dsf->mw0__sections,
-      "mw0__templates" => $this->dsf->mw0__templates,
-      "mw0__templates_by_regex" => $this->dsf->mw0__templates_by_regex,
-      "mw0__outgoingLinks" => $this->dsf->mw0__outgoingLinks,
-      "mw0__incomingLinks" => $this->dsf->mw0__incomingLinks,
-      "mw0__images" => $this->dsf->mw0__images,
+      "eppo0__hasEntityURL" => $this->title->getInternalURL(),
+      ## Headers
+      "ds0__sourceID" => $this->title->getArticleID(),
+			"eppo0__hasEntityTitle" => $this->title->mTextform,
+      ## "eppo0__hasEntityBlurb" => "", // from processAnnotations()
+			"ds0__sourceNamespace" => $this->dsf->getNamespace($this->title->mNamespace),
+      ## Time
       "release_timestamp" => time(),
+      ## Entity type from processAnnotations()
+      ## Categories from processCategories()
+      ## Content
+      "ds0__contentSource" => trim($this->dsf->wikitext),
+			"ds0__contentHTML" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
+			"ds0__contentText" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
+      ## Content sections
+      "ds0__contentSections" => $this->dsf->mw0__sections,
+      ## Parse source link
+      "ds0__sourceParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
+      ## Templates
+      "ds0__templates" => $this->dsf->mw0__templates,
+      "ds0__templates_by_regex" => $this->dsf->mw0__templates_by_regex,
+      ## Links
+      "ds0__outgoingLinks" => $this->dsf->mw0__outgoingLinks,
+      "ds0__incomingLinks" => $this->dsf->mw0__incomingLinks,
+      ## Attachments from processAttachments()
+      ## Source from processSources()
+      ## Predicates from allPredicates()
+      ## Special aspects from class ProcessSelectedAspects
+      ## Annotations from processAnnotations()
+      ## CoKe from analyzeCoKe()
     ];
     $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
@@ -144,7 +162,7 @@ class SpecialDataspectsFeed {
   private function processAttachments($mediaWikiPage) {
     if(count($this->dsf->attachments["files"]) > 0) {
       $mediaWikiPage = array_merge($mediaWikiPage, [
-        "mw0__attachments" => $this->dsf->attachments["files"]
+        "ds0__attachments" => $this->dsf->attachments["files"]
       ]);
     }
     return $mediaWikiPage;
