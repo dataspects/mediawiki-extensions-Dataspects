@@ -30,7 +30,10 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
                 $annotation = [
                     "subject"   => $hit["name"],
                     "predicate" => "ds0:usedInPackageAndOrFarm",
-                    "objectLiteral"    => explode("=", $value)[0]
+                    "objectSource" => explode("=", $value)[0],
+                    "objectText" => explode("=", $value)[0],
+                    "objectHTML" => explode("=", $value)[0],
+                    "objectType" => "Text"
                 ];
                 $hit = $this->addAnnotation($hit, $annotation);
                 $hit = $this->addToDs0AllPredicates($hit, $annotation);

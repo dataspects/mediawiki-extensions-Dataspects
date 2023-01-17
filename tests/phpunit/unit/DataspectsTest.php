@@ -173,6 +173,14 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertEquals($hits[0]["ds0__allPredicates.1v10"][0], "All Predicates > ds0:usedInPackageAndOrFarm");
 		$this->assertEquals($hits[0]["ds0__allPredicates.1v11"][0], "All Predicates > ds0:usedInPackageAndOrFarm > abcdef");
+		$this->assertContains([
+			"subject"   => "http://localhost/wiki/wikidataspectsTestDoc1673881510",
+			"predicate" => "ds0:usedInPackageAndOrFarm",
+			"objectSource" => "abcdef",
+			"objectHTML" => "abcdef",
+			"objectText" => "abcdef",
+			"objectType" => "Text"
+		], $hits[0]["annotations"]);
 	}
 
 	public function testProcessElementMessages() {
@@ -184,6 +192,14 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertEquals($hits[0]["ds0__allPredicates.1v10"][0], "All Predicates > ds55__notRemembering");
 		$this->assertEquals($hits[0]["ds0__allPredicates.1v11"][0], "All Predicates > ds55__notRemembering > 1");
+		$this->assertContains([
+			"subject"   => "http://localhost/wiki/wikidataspectsTestDoc1673881510",
+			"predicate" => "ds55__notRemembering",
+			"objectSource" => true,
+			"objectHTML" => true,
+			"objectText" => true,
+			"objectType" => "Boolean"
+		], $hits[0]["annotations"]);
 	}
 
 	private function initializeTestIndex() {

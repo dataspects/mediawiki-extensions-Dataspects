@@ -93,17 +93,17 @@ class AnalyzeAndAnnotateMeiliDocsJob {
             ];
         }
         
-        // FIXME: considerTruncatingObjectLiteral()
+        // FIXME: considerTruncatingobjectText()
         if($hit["ds0__allPredicates.1v11"]) {
             $hit["ds0__allPredicates.1v11"] = array_merge(
                 $hit["ds0__allPredicates.1v11"],
                 [
-                    "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
+                    "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectText"]
                 ],
             );
         } else {
             $hit["ds0__allPredicates.1v11"] = [
-                "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
+                "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectText"]
             ];
         }
         return $hit;

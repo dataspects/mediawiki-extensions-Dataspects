@@ -29,7 +29,10 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
                 $annotation = [
                     "subject"   => $hit["name"],
                     "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
-                    "objectLiteral" => true
+                    "objectSource" => true,
+					"objectHTML" => true,
+					"objectText" => true,
+					"objectType" => "Boolean"
                 ];
                 $hit = $this->addAnnotation($hit, $annotation);
                 $hit = $this->addToDs0AllPredicates($hit, $annotation);
