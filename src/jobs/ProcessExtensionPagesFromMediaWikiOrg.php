@@ -7,11 +7,7 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
     public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
         parent::__construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite);
         $this->query = "";
-        $this->filter = [
-            [
-                "ds0__source = 'https://www.mediawiki.org/wiki/'"
-            ]
-        ];
+        $this->filter = [];
 	}
 
     public function execute() {
@@ -28,15 +24,14 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
     }
 
     private function usedInPackageAndOrFarm($hit) {
-        $capture = $this->getSingleRegexCapture($hit["mw0__wikiText"], "/{{Used by\|(.*=1)+}}/");
+        $capture = $this->getSingleRegexCapture($hit["ds0__contentSource"], "/{{Used by\|(.*=1)+}}/");
         if($capture != "") {
             foreach (explode("|", $capture) as $value) {
                 $annotation = [
-                    "subject"   => $hit["mw0__rawUrl"],
+                    "subject"   => $hit["name"],
                     "predicate" => "ds0:usedInPackageAndOrFarm",
                     "objectLiteral"    => explode("=", $value)[0]
                 ];
-                $this->log("considering ".$hit["mw0__rawUrl"]);
                 $hit = $this->addAnnotation($hit, $annotation);
                 $hit = $this->addToDs0AllPredicates($hit, $annotation);
             }

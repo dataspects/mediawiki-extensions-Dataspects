@@ -7,11 +7,7 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
     public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
         parent::__construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite);
         $this->query = "";
-        $this->filter = [
-            [
-                "ds0__source = 'Element'"
-            ]
-        ];
+        $this->filter = [];
 	}
 
     public function execute() {
@@ -19,19 +15,19 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
     }
 
     protected function hitFunction($hit) {
-        $this->log("considering ".$hit["id"]);
-        $hit = $this->escamAnnotations($hit, $hit["ds0__text"]);
+        wfDebug("considering ".$hit["id"]);
+        $hit = $this->escamAnnotations($hit, $hit["ds0__contentText"]);
         return $hit;
     }
 
     private function escamAnnotations($hit, $text) {
         // Endpoint, see LEX230111144200
-        $url = $GLOBALS['wgDataspectsSpacyURL']."/escam-annotations";
+        $url = $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSpacyURL']."/escam-annotations";
         $spaCyInsight = $this->spaCy($text, $url);
         if(array_key_exists("annotations", $spaCyInsight)) {
             foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {
                 $annotation = [
-                    "subject"   => $hit["mw0__rawUrl"],
+                    "subject"   => $hit["name"],
                     "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
                     "objectLiteral" => true
                 ];

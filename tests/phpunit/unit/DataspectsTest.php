@@ -29,9 +29,9 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			// Categories
 			"eppo0__categories" => [ "dst Category 0", "dst Category 1" ],
 			// Content
-			"ds0__contentSource" => "{{Template 0|abcdef}} text", // E.g. wikitext
+			"ds0__contentSource" => "{{Used by|abcdef=1}} text", // E.g. wikitext
 			"ds0__contentHTML" => "<b>abcdef</b> text",
-			"ds0__contentText" => "abcdef text", // Stripped HTML
+			"ds0__contentText" => "We don't remember abcdef text", // Stripped HTML
 			// Content sections
 			"ds0__contentSections" => [ "dst Content Section 0", "dst Content Section 1" ],
 			// Parse source link
@@ -56,8 +56,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"ds0__source.1v12" => "Source > dst Source URL > dst Source Namespace",
 			// Predicates
 			"ds0__allPredicates" => "All Predicates",
-			"ds0__allPredicates.1v10",
-			"ds0__allPredicates.1v11",
+			"ds0__allPredicates.1v10" => [],
+			"ds0__allPredicates.1v11" => [],
 			// Special aspect
 			"ds0__specialAspect" => "One",
 			"ds0__specialAspect.1v10" => [ "Selected Aspects" ],
@@ -101,6 +101,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->analyzeAndAnnotateMeiliDocsConfig = [
+			"wgDataspectsSpacyURL" => "http://localhost:8050",
 			"wgDataspectsSearchURL" => "http://localhost:7700",
 			"wgDataspectsSearchKey" => "masterKey",
 			"wgDataspectsWriteURL" => "http://localhost:7700",
@@ -120,8 +121,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		
 		$this->meiliWriteClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteKey'], new HttplugClient());
 
-		// $this->initializeTestIndex();
-		// $this->addTestDocuments();
+		$this->initializeTestIndex();
+		$this->addTestDocuments();
 	}
 
 	protected function tearDown(): void {
@@ -129,7 +130,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testSearch() {
-		$this->markTestSkipped();
+		// $this->markTestSkipped();
 		$hits = $this->searchIndex->search(
             "abcdef",
             [
@@ -142,7 +143,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testRemoveDuplicateFieldValues() {
-		$this->markTestSkipped();
+		// $this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
 		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->analyzeAndAnnotateMeiliDocsConfig, "true");
@@ -154,8 +155,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	public function testProcessSelectedAspects() {
 		// $this->markTestSkipped();
-		$this->initializeTestIndex();
-		$this->addTestDocuments();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
 		$job = new AnalyzeJobs\ProcessSelectedAspects($this->analyzeAndAnnotateMeiliDocsConfig, "true");
@@ -163,6 +162,28 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		sleep(1);
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(3, $hits[0]["ds0__specialAspect.1v11"]);
+	}
+
+	public function testProcessExtensionPagesFromMediaWikiOrg() {
+		// $this->markTestSkipped();
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$job = new AnalyzeJobs\ProcessExtensionPagesFromMediaWikiOrg($this->analyzeAndAnnotateMeiliDocsConfig, "true");
+		$job->execute();
+		sleep(1);
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertEquals($hits[0]["ds0__allPredicates.1v10"][0], "All Predicates > ds0:usedInPackageAndOrFarm");
+		$this->assertEquals($hits[0]["ds0__allPredicates.1v11"][0], "All Predicates > ds0:usedInPackageAndOrFarm > abcdef");
+	}
+
+	public function testProcessElementMessages() {
+		// $this->markTestSkipped();
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$job = new AnalyzeJobs\ProcessElementMessages($this->analyzeAndAnnotateMeiliDocsConfig, "true");
+		$job->execute();
+		sleep(1);
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertEquals($hits[0]["ds0__allPredicates.1v10"][0], "All Predicates > ds55__notRemembering");
+		$this->assertEquals($hits[0]["ds0__allPredicates.1v11"][0], "All Predicates > ds55__notRemembering > 1");
 	}
 
 	private function initializeTestIndex() {

@@ -14,6 +14,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
     public function __construct() {
 		parent::__construct();
         $this->analyzeAndAnnotateMeiliDocsConfig = [
+            "wgDataspectsSpacyURL" => $GLOBALS["wgDataspectsSpacyURL"],
             "wgDataspectsSearchURL" => $GLOBALS["wgDataspectsSearchURL"],
             "wgDataspectsSearchKey" => $GLOBALS["wgDataspectsSearchKey"],
             "wgDataspectsWriteURL" => $GLOBALS["wgDataspectsWriteURL"],

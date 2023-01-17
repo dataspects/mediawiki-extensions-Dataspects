@@ -70,11 +70,11 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         if($hit["annotations"]) {
             if(!in_array($annotation, $hit["annotations"])) {
                 $hit["annotations"][] = $annotation;
-                echo $logMessage;
+                wfDebug($logMessage);
             }
         } else {
             $hit["annotations"] = [$annotation];
-            echo $logMessage;
+            wfDebug($logMessage);
         }
         return $hit;
     }
