@@ -79,29 +79,29 @@ class AnalyzeAndAnnotateMeiliDocsJob {
     }
 
     protected function addToDs0AllPredicates($hit, $annotation) {
-        if($hit["ds0__allPredicates.1v11"]) {
-            $hit["ds0__allPredicates.1v11"] = array_merge(
-                $hit["ds0__allPredicates.1v11"],
+        if($hit["ds0__allPredicates.1v10"]) {
+            $hit["ds0__allPredicates.1v10"] = array_merge(
+                $hit["ds0__allPredicates.1v10"],
                 [
                   "All Predicates > ".$annotation["predicate"]
                 ],
             );
         } else {
-            $hit["ds0__allPredicates.1v11"] = [
+            $hit["ds0__allPredicates.1v10"] = [
                 "All Predicates > ".$annotation["predicate"]
             ];
         }
         
         // FIXME: considerTruncatingObjectLiteral()
-        if($hit["ds0__allPredicates.1v12"]) {
-            $hit["ds0__allPredicates.1v12"] = array_merge(
-                $hit["ds0__allPredicates.1v12"],
+        if($hit["ds0__allPredicates.1v11"]) {
+            $hit["ds0__allPredicates.1v11"] = array_merge(
+                $hit["ds0__allPredicates.1v11"],
                 [
                     "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
                 ],
             );
         } else {
-            $hit["ds0__allPredicates.1v12"] = [
+            $hit["ds0__allPredicates.1v11"] = [
                 "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectLiteral"]
             ];
         }

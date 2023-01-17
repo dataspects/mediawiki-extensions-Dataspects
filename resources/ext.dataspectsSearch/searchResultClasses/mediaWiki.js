@@ -28,22 +28,22 @@ MediaWikiSearchResult = class extends SearchResult {
   // LEX230108165801
   parsedPageText = (hit) => {
     // FIXME: This must be run only when opening "Show original page contents"
-    // if ("mw0__apiParseTextURL" in hit && hit.mw0__apiParseTextURL != "") {
+    // if ("ds0__sourceParseTextURL" in hit && hit.ds0__sourceParseTextURL != "") {
     //   this.api
     //     .get({
     //       action: "dataspectsapi",
     //       querytype: "originalpagecontent",
-    //       mw0__apiParseTextURL: hit.mw0__apiParseTextURL,
+    //       ds0__sourceParseTextURL: hit.ds0__sourceParseTextURL,
     //     })
     //     .done(function (data) {
     //       $("#" + hit.id).html(data.data.originalpagecontent);
     //     });
     // } else {
     //   $("#" + hit.id).html(
-    //     "<p>SORRY: mw0__apiParseTextURL is not defined for this entity.</p>"
+    //     "<p>SORRY: ds0__sourceParseTextURL is not defined for this entity.</p>"
     //   );
     //   console.debug(
-    //     "mw0__apiParseTextURL is not defined for " + hit.mw0__rawUrl
+    //     "ds0__sourceParseTextURL is not defined for " + hit.mw0__rawUrl
     //   );
     // }
   };

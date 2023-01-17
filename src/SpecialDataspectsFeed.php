@@ -24,7 +24,7 @@ class SpecialDataspectsFeed {
       "mw0__namespace" => $this->dsf->getNamespace($this->title->mNamespace),
       "mw0__wikitext" => trim($this->dsf->wikitext),
       "ds0__text" => $this->ds0__text($this->dsf->parsedWikitext)." ".$this->dsf->attachments["mergedContent"],
-      "mw0__apiParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
+      "ds0__sourceParseTextURL" => $GLOBALS['wgServer']."/w/api.php?action=parse&page=".$this->title->mTextform."&prop=text&disablelimitreport&format=json",
       "mw0__sections" => $this->dsf->mw0__sections,
       "mw0__templates" => $this->dsf->mw0__templates,
       "mw0__templates_by_regex" => $this->dsf->mw0__templates_by_regex,
@@ -37,7 +37,7 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->processCategories($mediaWikiPage);
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
-    $mediaWikiPage = $this->smwsof->analyzeSeaKay($mediaWikiPage);
+    $mediaWikiPage = $this->smwsof->analyzeCoKe($mediaWikiPage);
     return $mediaWikiPage;
   }
 
@@ -98,14 +98,14 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
     // Add predicates
     foreach($mediaWikiPage["annotations"] as $annotation) {
-      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v11"],
+      $mediaWikiPage["ds0__allPredicates.1v10"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v10"],
         [
           "All Predicates > ".$annotation["predicate"]
         ],
       );
-      $mediaWikiPage["ds0__allPredicates.1v12"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v12"],
+      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
+        $mediaWikiPage["ds0__allPredicates.1v11"],
         [
           "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectLiteral"])
         ],

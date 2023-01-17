@@ -36,7 +36,7 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'releasetimestampxago' => $this->dsNeo4j->releaseTimestampXago()) );
 				break;
 			case 'originalpagecontent':
-				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['mw0__apiParseTextURL'] )) );
+				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['ds0__sourceParseTextURL'] )) );
 				break;
 			case 'initializetopictype':
 				if(in_array("writeapi", $user->getRights())){
@@ -96,7 +96,7 @@ class DataspectsAPI extends ApiBase {
         return [
             'querytype' => null,
 			'name' => null,
-			'mw0__apiParseTextURL' => null,
+			'ds0__sourceParseTextURL' => null,
 			'topictype_name' => null,
 			'firstxcharacters' => null,
 			'property' => null

@@ -12,7 +12,7 @@ class SpecialMWStakeORGFeed {
     $this->sk = new CoKe();
   }
 
-  function analyzeSeaKay($mediaWikiPage) {
+  function analyzeCoKe($mediaWikiPage) {
     #IndexConfigSetting
     preg_match_all($this->sk->regex(), $mediaWikiPage["mw0__wikitext"], $matches);
     $cks = array_unique($matches[1]);

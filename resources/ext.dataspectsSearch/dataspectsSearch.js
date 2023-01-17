@@ -297,8 +297,8 @@ function handleSpecialDataspects() {
       container: "#all-predicates-menu",
       attributes: [
         "ds0__allPredicates.1v10",
+        "ds0__allPredicates.1v10",
         "ds0__allPredicates.1v11",
-        "ds0__allPredicates.1v12",
       ],
       templates: {
         item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
