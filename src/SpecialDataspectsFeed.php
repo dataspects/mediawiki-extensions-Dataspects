@@ -38,6 +38,7 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->processSources($mediaWikiPage);
     $mediaWikiPage = $this->processAttachments($mediaWikiPage);
     $mediaWikiPage = $this->smwsof->analyzeCoKe($mediaWikiPage);
+    wfDebug("### finished SpecialDataspectsFeed::mediaWikiPage");
     return $mediaWikiPage;
   }
 
@@ -113,6 +114,18 @@ class SpecialDataspectsFeed {
     }
     return $mediaWikiPage;
   }
+
+  private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
+        // For hierarchicalMenus, it starts at *.1v10
+        if(!array_key_exists($predicate, $mediaWikiPage)) {
+            $mediaWikiPage = array_merge($mediaWikiPage, [
+                $predicate => "",
+                $predicate.".1v10" => $title,
+                $predicate.".1v11" => array(),
+            ]);
+        }
+        return $mediaWikiPage;
+    }
 
   private function considerTruncatingObjectLiteral($objectLiteral) {
     // ds1:implements: object literal value truncation

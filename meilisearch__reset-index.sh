@@ -15,7 +15,21 @@ if [[ -z "$INDEX" ]]; then
   exit
 fi
 
-echo "Meili server and index: $MEILI_SERVER and $INDEX"
+# Delete
+echo "DELETE? Meili server and index: $MEILI_SERVER and $INDEX"
+read -p "Continue? (y/n)" -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    echo
+    exit
+fi
+curl --silent --insecure \
+  -X DELETE "$MEILI_SERVER/indexes/$INDEX" \
+  -H "Authorization: Bearer $MEILI_MASTER_KEY" \
+   | jq .
+
+# Create
+echo "CREATE? Meili server and index: $MEILI_SERVER and $INDEX"
 read -p "Continue? (y/n)" -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -33,7 +47,8 @@ curl --silent --insecure \
   }" \
   | jq .
 
-echo "Meili server and index: $MEILI_SERVER and $INDEX"
+# Settings
+echo "SETTINGS? Meili server and index: $MEILI_SERVER and $INDEX"
 read -p "Continue? (y/n)" -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then

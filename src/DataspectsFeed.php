@@ -15,7 +15,7 @@ class DataspectsFeed {
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     
-    $this->index = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
+    $this->index = $meiliClient->index("mwstakeorg");
     $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
@@ -238,14 +238,9 @@ class DataspectsFeed {
     }
   }
 
-  
-
   private function addPageToMeilisearch() {
-    // $h = fopen('/var/log/apache2/error.log', 'a');
-		// fwrite($h, $this->wikiPage->getTitle()->getBaseTitle()." by ".$this->user->getName()."\n");
-		// fclose($h);
     $result = $this->index->addDocuments([$this->mediaWikiPage]);
-    echo $GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n";
+    wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["mw0__rawUrl"]."\n");
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }

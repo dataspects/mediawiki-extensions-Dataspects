@@ -20,7 +20,7 @@ class DMFFeedOne extends \Maintenance {
 			"namespace" => $title->getNamespace(),
 			"title" => $title->getBaseText()
 		];
-		wfDebug("### REGISTER __>__: ".$params["namespace"].":".$params["title"]);
+		wfDebug("### __>__ Indexing Pipeline: REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 		switch($params["namespace"]) {
 			case 0:
 				// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);

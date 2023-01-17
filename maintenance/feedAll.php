@@ -25,6 +25,7 @@ class DMFFeedAll extends \Maintenance {
 			"namespace" => $title->getNamespace(),
 			"title" => $title->getBaseText()
 			];
+			wfDebug("### __>__ Indexing Pipeline: REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 			switch($title->getNamespace()) {
 				case 0:
 				case 4:

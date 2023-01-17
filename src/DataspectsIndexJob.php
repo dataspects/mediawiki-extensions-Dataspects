@@ -23,19 +23,19 @@ class DataspectsIndexJob extends \Job {
 
   // https://docs.php-http.org/en/latest/clients.html
 
-  public function run() {
-    wfDebug("### __>__ MediaWiki Job Queue ### RUNNING: dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
+  public function run() {    
     $dsNeo4j = new DSNeo4j();
+    wfDebug("### __>__ Indexing Pipeline: RUNNING dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
     try { # FIXME
-			$meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
+      $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
+      // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
+      // https://www.mediawiki.org/wiki/Manual:WikiPage.php
+      $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $this->params);
+      $dmwf->sendToDatastore();
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
-			echo 'Caught exception: ',  $e->getMessage(), "\n";
+			wfDebug('### Caught exception: ', $e->getMessage(), "\n");
 		}
-    // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
-    // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-    $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $this->params);
-    $dmwf->sendToDatastore();
-    return true;
+    return false;
   }
 
 }

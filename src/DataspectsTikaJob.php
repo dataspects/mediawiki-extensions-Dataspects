@@ -62,6 +62,7 @@ class DataspectsTikaJob extends \Job {
 		// \JobQueueGroup::singleton()->push($job);
     $job = new DataspectsIndexJob("dataspectsIndexJob", $this->params);
     \JobQueueGroup::singleton()->push($job);
+    wfDebug("### Pushed from TikaJob to IndexJob");
     return true;
   }
 
