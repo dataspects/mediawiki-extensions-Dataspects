@@ -26,12 +26,15 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"eppo0__hasEntityType" => "dst Topic Type",
 			"eppo0__hasEntityType.1v10" => "Topic Type",
 			"eppo0__hasEntityType.1v11" => "Topic Type > dst Topic Type",
-			// Content
+			// Categories
 			"eppo0__categories" => [ "dst Category 0", "dst Category 1" ],
-			"ds0__contentSource" => "{{Template 0|parameter}} text", // E.g. wikitext
-			"ds0__contentHTML" => "<b>parameter</b> text",
-			"ds0__contentText" => "parameter text", // Stripped HTML
+			// Content
+			"ds0__contentSource" => "{{Template 0|abcdef}} text", // E.g. wikitext
+			"ds0__contentHTML" => "<b>abcdef</b> text",
+			"ds0__contentText" => "abcdef text", // Stripped HTML
+			// Content sections
 			"ds0__contentSections" => [ "dst Content Section 0", "dst Content Section 1" ],
+			// Parse source link
 			"ds0__sourceParseTextURL" => "https://wiki.dataspects.com/w/api.php?action=parse&page=Main_Page&prop=text&disablelimitreport&format=json",
 			// Templates
 			"ds0__templates" => [ "Template 0" ],
@@ -98,31 +101,37 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$this->meiliSearchClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsSearchURL'], $this->meilisearchConfig['wgDataspectsSearchKey'], new HttplugClient());
 		
 		$this->meiliWriteClient = new \MeiliSearch\Client($this->meilisearchConfig['wgDataspectsWriteURL'], $this->meilisearchConfig['wgDataspectsWriteKey'], new HttplugClient());
+
+		$this->initializeTestIndex();
+		$this->addTestDocuments();
 	}
 
 	protected function tearDown(): void {
 		parent::tearDown();
 	}
 
-	// public function testAll() {
-	// 	$this->addTestDocuments();
-	// 	$hits = $this->testAddedDocuments();
-	// 	$this->testRemoveDuplicateFieldValues($hits);
-	// }
-
 	public function testSearch() {
-		$this->initializeTestIndex();
-		$this->addTestDocuments();
-		
-		// $hits = $this->searchIndex->search(
-        //     "asd",
-        //     [
-        //         "filter" => [],
-        //         "limit" => 10,
-        //         "offset" => 0
-        //     ]
-        // )->getHits();
-		// print_r($hits);
+		// $this->markTestSkipped();
+		$hits = $this->searchIndex->search(
+            "abcdef",
+            [
+                "filter" => [],
+                "limit" => 10,
+                "offset" => 0
+            ]
+        )->getHits();
+		$this->assertCount(1, $hits);
+	}
+
+	public function testRemoveDuplicateFieldValues() {
+		// $this->markTestSkipped();
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
+		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, "true");
+		$job->execute();
+		sleep(1);
+		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
+		$this->assertCount(1, $hits[0]["ds0__specialAspect.1v11"]);
 	}
 
 	private function initializeTestIndex() {
@@ -147,12 +156,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$this->writeIndex = $testindex;
 	}
 
-	private function testAddedDocuments() {
-		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
-		$this->assertCount(1, $hits);
-		return $hits;
-	}
-
 	private function hitsForsearchForReleaseTimestamp($timestamp) {
 		$hits = $this->searchIndex->search(
             "",
@@ -167,19 +170,10 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		return $hits;
 	}
 
-	private function testRemoveDuplicateFieldValues($hits) {
-		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->meilisearchConfig, "true");
-		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
-		$job->execute();
-		sleep(3);
-		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
-		$this->assertCount(1, $hits[0]["ds0__specialAspect.1v11"]);
-	}
-
 	private function addTestDocuments() {
 		$this->writeIndex->addDocuments($this->testDocuments);
 		sleep(1);
-		$hits = $this->testAddedDocuments();
+		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
 		$this->assertCount(count($this->testDocuments), $hits);
 	}
 

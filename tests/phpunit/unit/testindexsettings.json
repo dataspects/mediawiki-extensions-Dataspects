@@ -2,8 +2,8 @@
   "searchableAttributes": [
     "eppo0__hasEntityTitle",
     "eppo0__hasEntityBlurb",
-    "ds0__text",
-    "mw0__wikitext",
+    "ds0__contentSource",
+    "ds0__contentText",
     "mw0__namespace",
     "mw0__attachment.text"
   ],
