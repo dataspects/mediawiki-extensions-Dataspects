@@ -3,6 +3,8 @@
 # https://www.mediawiki.org/wiki/Composer/For_extensions#Installing_extensions
 
 namespace MediaWiki\Extension\Dataspects;
+use \Symfony\Component\HttpClient\HttplugClient;
+use \MeiliSearch\Client;
 
 $basePath = getenv( 'MW_INSTALL_PATH' ) !== false ? getenv( 'MW_INSTALL_PATH' ) : __DIR__ . '/../../..';
 require_once $basePath . '/maintenance/Maintenance.php';
@@ -24,14 +26,19 @@ class DMFFeedOne extends \Maintenance {
 		wfDebug("### __>__ Indexing Pipeline: REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 		switch($params["namespace"]) {
 			case 0:
-				// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
-				// \JobQueueGroup::singleton()->push($job);
-				$job = new DataspectsIndexJob("dataspectsIndexJob", $params);
-				\JobQueueGroup::singleton()->push($job);
+				$dsNeo4j = new DSNeo4j();
+                echo("### ".$params["namespace"].":".$params["title"]);
+                try { # FIXME
+                $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
+                $dmwf = new DataspectsFeed($title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $params);
+                $dmwf->sendToDatastore();
+                    } catch (\MeiliSearch\Exceptions\ApiException $e) {
+                        echo '### Caught exception: '.$e->getMessage()."\n";
+                    }
 			break;
       		case 6:
-				$job = new DataspectsTikaJob("dataspectsTikaJob", $params);
-				\JobQueueGroup::singleton()->push($job);
+				// $job = new DataspectsTikaJob("dataspectsTikaJob", $params);
+				// \JobQueueGroup::singleton()->push($job);
 			break;
 			default:
 				

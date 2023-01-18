@@ -117,29 +117,19 @@ class SpecialDataspectsFeed {
     $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
     // Add predicates
     foreach($mediaWikiPage["annotations"] as $annotation) {
-      $mediaWikiPage["ds0__allPredicates.1v10"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v10"],
-        [
-          "All Predicates > ".$annotation["predicate"]
-        ],
-      );
-      $mediaWikiPage["ds0__allPredicates.1v11"] = array_merge(
-        $mediaWikiPage["ds0__allPredicates.1v11"],
-        [
-          "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectLiteral"])
-        ],
-      );
+      $mediaWikiPage["ds0__allPredicates.1v11"][] = "All Predicates > ".$annotation["predicate"];
+      $mediaWikiPage["ds0__allPredicates.1v12"][] = "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectLiteral"]);
     }
     return $mediaWikiPage;
   }
 
   private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
-        // For hierarchicalMenus, it starts at *.1v10
+        // For hierarchicalMenus, it starts at *.1v10!
         if(!array_key_exists($predicate, $mediaWikiPage)) {
             $mediaWikiPage = array_merge($mediaWikiPage, [
-                $predicate => "",
-                $predicate.".1v10" => $title,
-                $predicate.".1v11" => array(),
+                $predicate.".1v10" => [$title],
+                $predicate.".1v11" => [],
+                $predicate.".1v12" => [],
             ]);
         }
         return $mediaWikiPage;
