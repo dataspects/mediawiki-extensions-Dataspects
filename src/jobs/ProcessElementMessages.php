@@ -4,8 +4,8 @@ namespace MediaWiki\Extension\Dataspects\AnalyzeJobs;
 
 class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
-        parent::__construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite);
+    public function __construct($globalsConfig, $doWrite) {
+        parent::__construct($globalsConfig, $doWrite);
         $this->query = "";
         $this->filter = [];
 	}
@@ -15,14 +15,14 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
     }
 
     protected function hitFunction($hit) {
-        wfDebug("considering ".$hit["id"]);
+        $this->log("considering ".$hit["id"]);
         $hit = $this->escamAnnotations($hit, $hit["ds0__contentText"]);
         return $hit;
     }
 
     private function escamAnnotations($hit, $text) {
         // Endpoint, see LEX230111144200
-        $url = $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSpacyURL']."/escam-annotations";
+        $url = $this->globalsConfig['wgDataspectsSpacyURL']."/escam-annotations";
         $spaCyInsight = $this->spaCy($text, $url);
         if(array_key_exists("annotations", $spaCyInsight)) {
             foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {

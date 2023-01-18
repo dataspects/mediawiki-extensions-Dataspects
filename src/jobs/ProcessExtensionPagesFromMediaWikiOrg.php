@@ -4,8 +4,8 @@ namespace MediaWiki\Extension\Dataspects\AnalyzeJobs;
 
 class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspects\AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
-        parent::__construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite);
+    public function __construct($globalsConfig, $doWrite) {
+        parent::__construct($globalsConfig, $doWrite);
         $this->query = "";
         $this->filter = [];
 	}
@@ -19,7 +19,7 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
         // $hit = $this->removeAnnotationsByPredicate($hit, "ds0:usedInPackageAndOrFarm");
         // $hit = $this->addToArrayField($hit, "eppo0__categories", "Lex");
         // $hit = $this->removeFromArrayField($hit, "eppo0__categories", "Lex");
-        // wfDebug("### ANALYZE: ".$hit["id"]);
+        // $this->log("### ANALYZE: ".$hit["id"]);
         return $hit;
     }
 

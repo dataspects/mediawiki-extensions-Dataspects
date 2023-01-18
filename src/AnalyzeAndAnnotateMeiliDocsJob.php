@@ -6,16 +6,18 @@ use \MeiliSearch\Client;
 
 class AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
-        $this->analyzeAndAnnotateMeiliDocsConfig = $analyzeAndAnnotateMeiliDocsConfig;
+    const OPT_NIA_IGNORE_ORDER = 0x00000001;
+
+    public function __construct($globalsConfig, $doWrite) {
+        $this->globalsConfig = $globalsConfig;
         $this->doWrite = $doWrite;
         $this->limit = 1000; // FIXME: Meilisearch's maxTotalHits for processing really all docs in the index! 
 
-        $meiliSearchClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsSearchKey'], new HttplugClient());
-        $this->searchIndex = $meiliSearchClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
+        $meiliSearchClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsSearchURL'], $this->globalsConfig['wgDataspectsSearchKey'], new HttplugClient());
+        $this->searchIndex = $meiliSearchClient->index($this->globalsConfig['wgDataspectsIndex']);
         
-        $meiliWriteClient = new \MeiliSearch\Client($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteURL'], $this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsWriteKey'], new HttplugClient());
-        $this->writeIndex = $meiliWriteClient->index($this->analyzeAndAnnotateMeiliDocsConfig['wgDataspectsIndex']);
+        $meiliWriteClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsWriteURL'], $this->globalsConfig['wgDataspectsWriteKey'], new HttplugClient());
+        $this->writeIndex = $meiliWriteClient->index($this->globalsConfig['wgDataspectsIndex']);
 
 	}
 
@@ -40,12 +42,12 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         $countHits = count($hits);
         foreach ($hits as $originalHit) {
             $consideredHit = $this->hitFunction($originalHit);
-            if(!$this->arrayDeepCompare($originalHit, $consideredHit, $strict = true)) {
+            if($this->hash($originalHit, 'sha1') != $this->hash($consideredHit, 'sha1')) {
                 /**
                  * Then we write the document to the index, FIXME: batch?
                  */
                 if($this->doWrite === 'true') {
-                    wfDebug("### Write '".$consideredHit["eppo0__hasEntityTitle"]."'...\n");
+                    $this->log("Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
                     $this->writeIndex->addDocuments([$consideredHit]);
                 }
             }
@@ -66,15 +68,15 @@ class AnalyzeAndAnnotateMeiliDocsJob {
     }
 
     protected function addAnnotation($hit, $annotation) {
-        $logMessage = "Added annotation to ".$hit["eppo0__hasEntityTitle"]."\n";
+        $logMessage = "Added annotation to ".$hit["eppo0__hasEntityTitle"];
         if($hit["annotations"]) {
             if(!in_array($annotation, $hit["annotations"])) {
                 $hit["annotations"][] = $annotation;
-                wfDebug($logMessage);
+                $this->log($logMessage);
             }
         } else {
             $hit["annotations"] = [$annotation];
-            wfDebug($logMessage);
+            $this->log($logMessage);
         }
         return $hit;
     }
@@ -143,18 +145,44 @@ class AnalyzeAndAnnotateMeiliDocsJob {
     }
 
     protected function log($message) {
-        echo static::class.": '$message'\n";
+        $m = "### ".static::class.": '$message'\n";
+        echo $m;
+        wfDebug($m);
     }
 
-    protected function arrayDeepCompare($array0, $array1) {
-        if (!is_array($array0) || !is_array($array1)) return $array1 === $array0;
-        foreach ($array0 as $key => $value) {
-            if (!$array1[$key] || !$this->arrayDeepCompare($array1[$key], $array0[$key])) return false;
+    private function hash(array $arr, callable $func, int $options = 0): string {
+        $flat = [];
+        self::arrayWalkRecursive($arr, function ($path, $value) use (& $flat, & $options) {
+            if (is_object($value)) {
+                $value = serialize($value);
+            }
+
+            if ($options & self::OPT_NIA_IGNORE_ORDER) {
+                $flat[$value] = '1';
+            } else {
+                $flat[implode('.', $path)] = $value;
+            }
+        });
+
+        ksort($flat);
+        $stub = '';
+        foreach ($flat as $k => $v) {
+            $stub .= $k . '=' . $v . ';';
         }
-        foreach ($array1 as $key => $value) {
-            if (!$array0[$key] || !$this->arrayDeepCompare($array1[$key], $array0[$key])) return false;
+
+        return call_user_func($func, $stub);
+    }
+
+    private function arrayWalkRecursive(array $arr, callable $walkFunc, array &$path = []) {
+        foreach ($arr as $key => $value) {
+            $path[] = $key;
+            if (is_array($value)) {
+                self::arrayWalkRecursive($value, $walkFunc, $path);
+            } else {
+                $walkFunc($path, $value);
+            }
+            array_pop($path);
         }
-        return true;
     }
 
 }

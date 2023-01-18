@@ -4,8 +4,8 @@ namespace MediaWiki\Extension\Dataspects\AnalyzeJobs;
 
 class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\AnalyzeAndAnnotateMeiliDocsJob {
 
-    public function __construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite) {
-        parent::__construct($analyzeAndAnnotateMeiliDocsConfig, $doWrite);
+    public function __construct($globalsConfig, $doWrite) {
+        parent::__construct($globalsConfig, $doWrite);
         $this->query = "";
         $this->filter = [];
 	}
@@ -18,9 +18,9 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
         $fields = [
             "ds0__allPredicates.1v10", "ds0__allPredicates.1v11", "ds0__specialAspect.1v11"
         ];
+        $this->log("considering fields ".join(", ", $fields)." for hit.name ".$hit["name"]);
         foreach ($fields as $field) {
             if(array_key_exists($field, $hit)) {
-                wfDebug("RemoveDuplicateFieldValues: considering $field");
                 $hit[$field] = array_unique($hit[$field]);
             }
         }
