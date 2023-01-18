@@ -11,12 +11,12 @@ class SpecialDataspects extends SpecialPage {
 	function execute( $par ) {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
-		$output->enableOOUI();
-		$btn = new OOUI\ButtonWidget( [
-			'label' => 'Click me!',
-			'href' => 'https://example.com',
-		] );
-		$output->addHTML( "$btn" );
+		// $output->enableOOUI();
+		// $btn = new OOUI\ButtonWidget( [
+		// 	'label' => 'Click me!',
+		// 	'href' => 'https://example.com',
+		// ] );
+		// $output->addHTML( "$btn" );
 		$this->setHeaders();
 		$output->addHTML( '<table class="dataspectsTable">
 			<tr>
