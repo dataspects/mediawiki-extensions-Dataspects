@@ -123,7 +123,9 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         </tr>
                         <tr>
                             <td>Config<br/><code>#IndexConfigSetting</code></td>
-                            <td><a href="https://github.com/dataspects/DataspectsSearch/tree/master/src">Indexing</a><br/><a href="https://github.com/dataspects/DataspectsSearch/tree/master/resources/ext.dataspectsSearch">UI</a><br/><a href="https://github.com/dataspects/DataspectsSearchCLI/blob/main/MediaWiki/update-mediawiki-indexes-settings.sh">Mappings</a></td>
+                            <td><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src">Indexing</a><br/>
+                                <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/resources/ext.dataspectsSearch">UI</a><br/>
+                                <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/main/src/indexsettings.json">Index settings</a></td>
                         </tr>
                         <tr>
                             <td>wgDataspectsSourcesForAuthenticated</td>
