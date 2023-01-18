@@ -18,7 +18,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
         $fields = [
             "ds0__allPredicates.1v10", "ds0__allPredicates.1v11", "ds0__specialAspect.1v11"
         ];
-        $this->log("considering fields ".join(", ", $fields)." for hit.name ".$hit["name"]);
+        $this->log(".", static::class."considering fields ".join(", ", $fields)." for hit.name ".$hit["name"]);
         foreach ($fields as $field) {
             if(array_key_exists($field, $hit)) {
                 $hit[$field] = array_unique($hit[$field]);

@@ -15,7 +15,7 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
     }
 
     protected function hitFunction($hit) {
-        $this->log("considering ".$hit["id"]);
+        $this->log(".", static::class."considering ".$hit["name"]);
         $hit = $this->escamAnnotations($hit, $hit["ds0__contentText"]);
         return $hit;
     }

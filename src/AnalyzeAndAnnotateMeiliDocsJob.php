@@ -18,7 +18,6 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         
         $meiliWriteClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsWriteURL'], $this->globalsConfig['wgDataspectsWriteKey'], new HttplugClient());
         $this->writeIndex = $meiliWriteClient->index($this->globalsConfig['wgDataspectsIndex']);
-
 	}
 
     protected function analyzeAndAnnotateMeiliDocs() {
@@ -47,7 +46,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
                  * Then we write the document to the index, FIXME: batch?
                  */
                 if($this->doWrite === 'true') {
-                    $this->log("Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
+                    $this->log("w", "Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
                     $this->writeIndex->addDocuments([$consideredHit]);
                 }
             }
@@ -72,41 +71,36 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         if($hit["annotations"]) {
             if(!in_array($annotation, $hit["annotations"])) {
                 $hit["annotations"][] = $annotation;
-                $this->log($logMessage);
+                $this->log("+a", $logMessage);
             }
         } else {
             $hit["annotations"] = [$annotation];
-            $this->log($logMessage);
+            $this->log("+a", $logMessage);
         }
         return $hit;
     }
 
     protected function addToDs0AllPredicates($hit, $annotation) {
-        if($hit["ds0__allPredicates.1v10"]) {
-            $hit["ds0__allPredicates.1v10"] = array_merge(
-                $hit["ds0__allPredicates.1v10"],
-                [
-                  "All Predicates > ".$annotation["predicate"]
-                ],
-            );
-        } else {
-            $hit["ds0__allPredicates.1v10"] = [
-                "All Predicates > ".$annotation["predicate"]
-            ];
-        }
-        
-        // FIXME: considerTruncatingobjectText()
+        // LEX230118142400
+        $hit["ds0__allPredicates.1v10"] = [ "All Predicates" ];
+        #
+        $v = "All Predicates > ".$annotation["predicate"];
         if($hit["ds0__allPredicates.1v11"]) {
-            $hit["ds0__allPredicates.1v11"] = array_merge(
-                $hit["ds0__allPredicates.1v11"],
-                [
-                    "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectText"]
-                ],
-            );
+            if(!in_array($v, $hit["ds0__allPredicates.1v11"])) {
+                $hit["ds0__allPredicates.1v11"][] = $v;
+            }
         } else {
-            $hit["ds0__allPredicates.1v11"] = [
-                "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectText"]
-            ];
+            $hit["ds0__allPredicates.1v11"] = [ $v ];
+        }
+        #
+        // FIXME: considerTruncatingobjectText()
+        $v = "All Predicates > ".$annotation["predicate"]." > ".$annotation["objectText"];
+        if($hit["ds0__allPredicates.1v12"]) {
+            if(!in_array($v, $hit["ds0__allPredicates.1v12"])) {
+                $hit["ds0__allPredicates.1v12"][] = $v;
+            }
+        } else {
+            $hit["ds0__allPredicates.1v12"] = [ $v ];
         }
         return $hit;
     }
@@ -144,10 +138,9 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         return $hit;
     }
 
-    protected function log($message) {
-        $m = "### ".static::class.": '$message'\n";
-        echo $m;
-        wfDebug($m);
+    protected function log($shortMessage, $longMessage = "") {
+        echo $shortMessage;
+        wfDebug("### ".$longMessage);
     }
 
     private function hash(array $arr, callable $func, int $options = 0): string {
