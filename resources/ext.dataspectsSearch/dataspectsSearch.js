@@ -243,6 +243,9 @@ function handleSpecialDataspects() {
         // enforceAuthorizedSources(helper);
         return theDs0__sources;
       },
+      templates: {
+        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge ds0__source">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
+      },
       cssClasses: {
         root: "sources-refinement-list",
       },
@@ -253,6 +256,9 @@ function handleSpecialDataspects() {
       showMore: true,
       showMoreLimit: 20,
       limit: 1,
+      templates: {
+        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="ds0__sourceNamespace">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
+      },
       cssClasses: {
         root: "ds0__sourceNamespace-menu",
       },
