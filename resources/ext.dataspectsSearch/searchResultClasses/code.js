@@ -27,7 +27,7 @@ CodeSearchResult = class extends SearchResult {
             '" class="blinking">' +
             annotation.predicate +
             "</a></td><td>::</td><td class='annotationObjectLiteral'>" +
-            this.objectLiteral(annotation) +
+            this.objectText(annotation) +
             "</td></tr>"
           );
         })

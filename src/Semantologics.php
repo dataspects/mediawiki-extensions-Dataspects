@@ -46,7 +46,7 @@ class Semantologics {
                     $this->mediaWikiPage["annotations"][] = array(
                         'subject' => $this->mediaWikiPage["name"],
                         'predicate' => $data["predicate"],
-                        'objectLiteral' => $object,
+                        'objectText' => $object,
                         'objectLiteralHTML' => $object,
                         'smwPropertyType' => 9
                     );

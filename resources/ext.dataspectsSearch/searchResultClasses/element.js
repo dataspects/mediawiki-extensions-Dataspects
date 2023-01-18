@@ -92,19 +92,19 @@ ElementSearchResult = class extends SearchResult {
     );
   };
 
-  objectLiteral = (annotation) => {
+  objectText = (annotation) => {
     if (annotation.predicate == "ds77__isReplyTo") {
       return (
         "<img class='resultIcon' src='" +
         currentDeFactoWgServer() +
         "/w/images/5/5c/Elementlogo.png'>&nbsp;<a href='" +
-        annotation.objectLiteral +
+        annotation.objectText +
         "'>" +
-        annotation.objectLiteral +
+        annotation.objectText +
         "</a>"
       );
     }
-    return annotation.objectLiteral;
+    return annotation.objectText;
   };
 };
 

@@ -175,7 +175,7 @@ SearchResult = class {
             '">' +
             annotation.predicate +
             "</a></td><td>::</td><td class='annotationObjectLiteral'>" +
-            this.objectLiteral(annotation) +
+            this.objectText(annotation) +
             "</td></tr>"
           );
         })
@@ -189,8 +189,8 @@ SearchResult = class {
     return "";
   };
 
-  objectLiteral = (annotation) => {
-    return ifURLreturnAnchorTag(annotation.objectLiteral);
+  objectText = (annotation) => {
+    return ifURLreturnAnchorTag(annotation.objectText);
   };
 
   createMetaPageLink = () => {
@@ -215,7 +215,7 @@ SearchResult = class {
     for (const key in Object.keys(this.hit.annotations)) {
       const annot = this.hit.annotations[key];
       if (annot.predicate == predicate) {
-        return annot.objectLiteral;
+        return annot.objectText;
       }
     }
     return this.hit.name;

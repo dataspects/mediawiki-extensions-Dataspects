@@ -64,6 +64,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 				"Selected Aspects > One",
 				"Selected Aspects > One"
 			],
+			// Annotations
 			"annotations" => [
 				[
 					"subject" => "dataspectsTestDoc1673881510",

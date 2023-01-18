@@ -78,7 +78,7 @@ class SpecialDataspectsFeed {
               $this->annotations[] = array(
                 'subject' => strtolower($this->title->getFullURL()),
                 'predicate' => $propertyName,
-                'objectLiteral' => $source,
+                'objectText' => $source,
                 'objectLiteralHTML' => $this->dsf->getParsedWikitext($source),
                 'smwPropertyType' => $object['type']
               );
@@ -103,7 +103,7 @@ class SpecialDataspectsFeed {
         foreach($property['dataitem'] as $object) {
           if(is_array($object)) {
             $this->annotations[$propertyName] = array(
-              'objectLiteral' => $object['item'],
+              'objectText' => $object['item'],
               'smwPropertyType' => $object['type']
             );
           }
@@ -118,7 +118,7 @@ class SpecialDataspectsFeed {
     // Add predicates
     foreach($mediaWikiPage["annotations"] as $annotation) {
       $mediaWikiPage["ds0__allPredicates.1v11"][] = "All Predicates > ".$annotation["predicate"];
-      $mediaWikiPage["ds0__allPredicates.1v12"][] = "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectLiteral"]);
+      $mediaWikiPage["ds0__allPredicates.1v12"][] = "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectText"]);
     }
     return $mediaWikiPage;
   }
@@ -135,13 +135,13 @@ class SpecialDataspectsFeed {
         return $mediaWikiPage;
     }
 
-  private function considerTruncatingObjectLiteral($objectLiteral) {
+  private function considerTruncatingObjectLiteral($objectText) {
     // ds1:implements: object literal value truncation
     $length = 20;
-    if (strlen($objectLiteral) > $length) {
-      return substr($objectLiteral, 0, $length)."...";
+    if (strlen($objectText) > $length) {
+      return substr($objectText, 0, $length)."...";
     }
-    return $objectLiteral;
+    return $objectText;
   }
 
   private function ds0__contentText($parsedWikitext) {
@@ -190,23 +190,23 @@ class SpecialDataspectsFeed {
         switch ($annotation["predicate"]) {
           case "Eppo0:hasEntityType":
             $mediaWikiPage = array_merge($mediaWikiPage, [
-              "eppo0__hasEntityType" => $annotation["objectLiteral"],
+              "eppo0__hasEntityType" => $annotation["objectText"],
               "eppo0__hasEntityType.1v10" => "Topic Type",
-              "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectLiteral"],
+              "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectText"],
             ]);
-            if($annotation["objectLiteral"] == "Event") {
+            if($annotation["objectText"] == "Event") {
               $mediaWikiPage = $this->specialCaseForIsEventType($mediaWikiPage);
             }
             break;
           case "Eppo0:hasEntityTitle":
             // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
             $mediaWikiPage = array_merge($mediaWikiPage, [
-              "eppo0__hasEntityTitle" => $annotation["objectLiteral"],
+              "eppo0__hasEntityTitle" => $annotation["objectText"],
             ]);
             break;
           case "Eppo0:hasEntityBlurb":
             $mediaWikiPage = array_merge($mediaWikiPage, [
-              "eppo0__hasEntityBlurb" => $annotation["objectLiteral"],
+              "eppo0__hasEntityBlurb" => $annotation["objectText"],
             ]);
             break;
           default:
@@ -233,7 +233,7 @@ class SpecialDataspectsFeed {
   private function getObjectByPredicateName($predicateName, $mediaWikiPage) {
     foreach ($this->annotations as $key => $annotation) {
       if($annotation["predicate"] == $predicateName) {
-        return $annotation["objectLiteral"];
+        return $annotation["objectText"];
       }
     }
     return $predicateName." not found for ".$mediaWikiPage['name'];

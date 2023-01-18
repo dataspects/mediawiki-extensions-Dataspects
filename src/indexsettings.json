@@ -29,7 +29,7 @@
     "ds0__sourceNamespace",
     "ds0__attachments.type",
     "annotations.predicate",
-    "annotations.objectLiteral",
+    "annotations.objectText",
     "escam0__sender",
     "escam0__room",
     "release_timestamp"
