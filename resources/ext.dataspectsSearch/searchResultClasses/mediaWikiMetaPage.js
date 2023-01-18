@@ -12,7 +12,7 @@ MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
       "' class='visjsGraph'></div>" +
       "<pre>" +
       instantsearch.snippet({
-        attribute: "mw0__wikitext",
+        attribute: "ds0__contentSource",
         highlightedTagName: "mark",
         hit: this.hit,
       }) +
