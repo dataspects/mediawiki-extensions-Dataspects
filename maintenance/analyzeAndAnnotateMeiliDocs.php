@@ -50,7 +50,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
                         
             $doWrite = $this->getOption( 'doWrite', false );
 
-            echo "Running '$job' with option 'doWrite=$doWrite'\n";
+            echo "\nRunning '$job' with option 'doWrite=$doWrite'\n";
 
             $jobClass = "MediaWiki\Extension\Dataspects\AnalyzeJobs\\$job";
             if(class_exists($jobClass)) {
@@ -59,6 +59,8 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
             } else {
                 echo "WARNING: Job '$job' not found\n";
             }
+
+            echo "\n";
         }
 	}
 

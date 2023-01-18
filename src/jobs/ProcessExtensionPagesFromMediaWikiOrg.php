@@ -15,6 +15,7 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
     }
 
     protected function hitFunction($hit) {
+        $this->log(".", static::class."considering ".$hit["name"]);
         $hit = $this->usedInPackageAndOrFarm($hit);
         // $hit = $this->removeAnnotationsByPredicate($hit, "ds0:usedInPackageAndOrFarm");
         // $hit = $this->addToArrayField($hit, "eppo0__categories", "Lex");

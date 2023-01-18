@@ -15,6 +15,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
     }
 
     protected function hitFunction($hit) {
+        $this->log(".", static::class."considering ".$hit["name"]);
         $fields = [
             "ds0__allPredicates.1v10", "ds0__allPredicates.1v11", "ds0__specialAspect.1v11"
         ];

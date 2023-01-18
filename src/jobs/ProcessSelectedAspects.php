@@ -15,6 +15,7 @@ class ProcessSelectedAspects extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
     }
 
     protected function hitFunction($hit) {
+        $this->log(".", static::class."considering ".$hit["name"]);
         $hit = $this->selectedAspects($hit);
         return $hit;
     }
@@ -49,7 +50,7 @@ class ProcessSelectedAspects extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
 
     private function addIfNotExists($hit, $field, $value) {
         if(!in_array($value, $hit[$field])){
-            $this->log("Added $value to $field of ".$hit['id']);
+            $this->log("+a", "Added $value to $field of ".$hit['id']);
             $hit[$field] = array_merge(
                 $hit[$field],
                 [

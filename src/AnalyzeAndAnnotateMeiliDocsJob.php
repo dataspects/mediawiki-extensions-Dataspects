@@ -46,7 +46,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
                  * Then we write the document to the index, FIXME: batch?
                  */
                 if($this->doWrite === 'true') {
-                    $this->log("w", "Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
+                    $this->log(">w", "Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
                     $this->writeIndex->addDocuments([$consideredHit]);
                 }
             }
