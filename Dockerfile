@@ -569,6 +569,8 @@ RUN set -x; \
 
 # Dataspects
 
+RUN aptitude install -y \
+	php7.4-sqlite3
 RUN cd $MW_HOME \
     && composer require --with-all-dependencies \
         meilisearch/meilisearch-php:0.26.1 \
