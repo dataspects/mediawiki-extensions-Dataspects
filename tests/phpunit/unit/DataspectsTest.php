@@ -54,9 +54,9 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"ds0__source.1v11" => "Source > dst Source URL",
 			"ds0__source.1v12" => "Source > dst Source URL > dst Source Namespace",
 			// Predicates
-			"ds0__allPredicates" => "All Predicates",
-			"ds0__allPredicates.1v10" => [],
+			"ds0__allPredicates.1v10" => [ "All Predicates" ], // For hierarchicalMenus, it starts at *.1v10!
 			"ds0__allPredicates.1v11" => [],
+			"ds0__allPredicates.1v12" => [],
 			// Special aspects
 			"ds0__specialAspect" => "One",
 			"ds0__specialAspect.1v10" => [ "Selected Aspects" ],
