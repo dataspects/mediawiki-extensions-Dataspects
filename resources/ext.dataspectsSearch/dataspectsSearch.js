@@ -98,6 +98,7 @@ const saveSearchFacetFormHTML = () => {
             <fieldset>
               <legend>Save current search facet</legend>
               Name: <input type="text" data-cy="saveSearchFacetFormHTMLName">
+              <span data-cy="savesearchfacet_result"></span><br/>
               <button type="submit" data-cy="saveSearchFacetFormHTMLSave">Save</button>
             </fieldset>
           </form>`;
@@ -122,11 +123,12 @@ $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
         searchfacetname: payload.searchFacetName,
         currenthelper: payload.currentHelper,
       })
-      .done(function (data) {
-        console.log(JSON.stringify(data, null, 2));
+      .done(function (response) {
+        $('[data-cy="savesearchfacet_result"]').text(response.data.status);
+        console.log(JSON.stringify(response, null, 2));
       })
-      .fail(function (data) {
-        console.error(data);
+      .fail(function (response) {
+        console.error(response);
       });
   });
 });
@@ -195,13 +197,23 @@ function showSavedSearchFacetsList() {
     .done(function (response) {
       const sfs = response.data.searchfacets
         .map((sf) => {
-          return "<li>" + sf.name + "</li>";
+          return (
+            "<li><a href='#' title='savedSearchFacet " +
+            sf.id +
+            "' class='savedSearchFacet' data-cy='savedSearchFacet" +
+            sf.id +
+            "'>" +
+            sf.name +
+            "</a></li>"
+          );
         })
         .join("");
-      $('[data-cy="savedSearchFacetsList"]').html("<ul>" + sfs + "</ul>");
+      $('[data-cy="savedSearchFacetsList"]').html(
+        "<ul data-cy='savedSearchFacetsUL'>" + sfs + "</ul>"
+      );
     })
-    .fail(function (data) {
-      console.error(data);
+    .fail(function (response) {
+      console.error(response);
     });
 }
 
@@ -418,11 +430,11 @@ function handleSpecialDataspectsBackstage() {
           querytype: "initializetopictype",
           topictype_name: $("#topictype_name").val(),
         })
-        .done(function (data) {
-          $("#initializetopictype_result").text(data.data.status);
+        .done(function (response) {
+          $("#initializetopictype_result").text(response.data.status);
         })
-        .fail(function (data) {
-          console.error(data);
+        .fail(function (response) {
+          console.error(response);
         });
     });
   });

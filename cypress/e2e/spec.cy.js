@@ -13,13 +13,14 @@ describe("dataspects", () => {
 });
 
 describe("dataspects", () => {
-  it("should show the saved search facets", () => {
-    cy.mediawiki_login(login);
+  it.only("should show the saved search facets", () => {
+    // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.takeScreenshot("saved-search-facets");
+    cy.get("a.savedSearchFacet").first().click();
   });
-  it.only("should show the 'Save search facet' form", () => {
+  it("should show the 'Save search facet' form", () => {
     // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="saveCurrentFacetButton"]').click();

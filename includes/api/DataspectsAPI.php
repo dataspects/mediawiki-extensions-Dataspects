@@ -26,12 +26,18 @@ class DataspectsAPI extends ApiBase {
 		// FIXME: security concerns: injection, api call parameters?
         switch ($queryType) {
 			case 'putsearchfacet':
-				try {
-					$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
-					$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
-				} catch (Exception $e) {
-					wfDebug("### DataspectsAPI error: ".$e);
-					$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
+				if(in_array("writeapi", $user->getRights())){
+					try {
+						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
+					} catch (Exception $e) {
+						wfDebug("### DataspectsAPI error: ".$e);
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
+					}
+				} else {
+					$errorMessage = "putsearchfacet not permitted for ".$user->getName();
+					wfDebug("### "+$errorMessage);
+					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetname' => $params['searchfacetname'] ] );
 				}
 				break;
 			case 'getsearchfacets':
