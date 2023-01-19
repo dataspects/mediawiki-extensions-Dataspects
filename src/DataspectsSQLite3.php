@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\Dataspects;
 class DataspectsSQLite3 extends \SQLite3
 {
     function __construct($name) {
-        $this->open(__DIR__."/../".$name);
+        $this->open("./extensions/Dataspects/".$name);
     }
 
     public function initialize() {
@@ -22,6 +22,6 @@ class DataspectsSQLite3 extends \SQLite3
                 "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"])
             ];
 		}
-        return json_encode($arr);
+        return $arr;
     }
 }

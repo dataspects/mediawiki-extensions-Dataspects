@@ -4,3 +4,4 @@
 .eslintcache
 yarn.lock
 testdataspects.sqlite
+dataspects.sqlite

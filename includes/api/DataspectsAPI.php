@@ -6,7 +6,14 @@ class DataspectsAPI extends ApiBase {
 
 	public function __construct( $query, $moduleName ) {
 		parent::__construct( $query, $moduleName );
-		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
+		try {
+			$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
+			$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3("dataspects.sqlite");
+			// FIXME: SQLITE3_OPEN_CREATE seems not to work!
+			wfDebug("### DataspectsAPI loaded");
+		} catch (Exception $e) {
+			wfDebug("### DataspectsAPI error: ".$e);
+		}
 	}
 
 	public function execute() {
@@ -23,7 +30,8 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'searchfacetname' => $searchfacetname ) );
 				break;
 			case 'loadsearchfacets':
-				$this->getResult()->addValue(null, "data", array( 'searchfacets' => ["one"] ) );
+				$searchFacets = $this->sqlite3->getDs0instantsearchHelpers();
+				$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
 				break;
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
