@@ -40,10 +40,10 @@ Cypress.Commands.add("takeScreenshot", (imageName) => {
   cy.screenshot(imageName, { capture: "viewport" });
 });
 
-Cypress.Commands.add("mediawiki_login", (username, password) => {
+Cypress.Commands.add("mediawiki_login", (login) => {
   cy.visit("/w/index.php?title=Special:UserLogin");
-  cy.get("input#wpName1").type(username);
-  cy.get("input#wpPassword1").type(password);
+  cy.get("input#wpName1").type(login[0]);
+  cy.get("input#wpPassword1").type(login[1]);
   cy.get("button#wpLoginAttempt").click();
 });
 

@@ -7,5 +7,7 @@ module.exports = {
     screenshotsFolder:
       "/home/lex/mwstakeorgdevclone/extensions/Dataspects/readme_images",
     video: true,
+    viewportWidth: 1400,
+    viewportHeight: 850,
   },
 };

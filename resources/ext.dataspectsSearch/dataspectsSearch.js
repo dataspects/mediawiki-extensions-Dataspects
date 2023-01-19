@@ -92,33 +92,48 @@ const setCurrentHelper = (helper) => {
   );
 };
 
-const getCurrentHelperAndUpdateUI = () => {
-  let currentHelper = JSON.parse(
-    window.localStorage.getItem("dataspectsSearchFacet")
-  );
-  console.info(JSON.stringify(currentHelper, null, 2));
-  let args = {
-    "ds0:instantsearchHelper": JSON.stringify(currentHelper)
-      .replaceAll("{", "@@@ocb@@@")
-      .replaceAll("}", "@@@ccb@@@"), // FIXME
-  };
-  $("#saveFacetLink").html(saveFacetLink(args));
+const saveSearchFacetFormHTML = () => {
+  return `<form data-cy="saveSearchFacetFormHTML" action="#">
+            <fieldset>
+              <legend>Save current search facet</legend>
+              Name: <input type="text" data-cy="saveSearchFacetFormHTMLName">
+              <button type="submit" data-cy="saveSearchFacetFormHTMLSave">Save</button>
+            </fieldset>
+          </form>`;
 };
 
+$('[data-cy="saveCurrentFacetButton"]').click(function (e) {
+  e.preventDefault();
+  $('[data-cy="dropzone0"]').html(saveSearchFacetFormHTML());
+  $('[data-cy="saveSearchFacetFormHTML"]').on("submit", (e) => {
+    const data = {
+      searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
+      currentHelper: JSON.parse(
+        window.localStorage.getItem("dataspectsSearchFacet")
+      ),
+    };
+    if (data.searchFacetName === "" || data.currentHelper === {}) {
+      alert("saveCurrentFacet data error!");
+    }
+    console.info(data);
+    e.preventDefault();
+  });
+});
+
 // LEX230108163200
-saveFacetLink = (args) => {
-  return (
-    "<a href='" +
-    currentDeFactoWgServer() +
-    "/wiki/Special:FormEdit/SearchFacet" +
-    "?" +
-    Object.keys(args)
-      .map((key) => {
-        return encodeURI("SearchFacet[" + key + "]" + "=" + args[key]);
-      })
-      .join("&") +
-    "'>Save current facet</a>"
-  );
+const saveSearchFacetFormOLD = (args) => {
+  // return (
+  //   "<a href='" +
+  //   currentDeFactoWgServer() +
+  //   "/wiki/Special:FormEdit/SearchFacet" +
+  //   "?" +
+  //   Object.keys(args)
+  //     .map((key) => {
+  //       return encodeURI("SearchFacet[" + key + "]" + "=" + args[key]);
+  //     })
+  //     .join("&") +
+  //   "'>Save current facet</a>"
+  // );
 };
 
 const configureThisSearch = (helper) => {
@@ -187,7 +202,6 @@ function handleSpecialDataspects() {
         alert("You have to select one or more source(s).");
       }
       setCurrentHelper(helper);
-      getCurrentHelperAndUpdateUI();
     },
   });
   search.addWidgets([

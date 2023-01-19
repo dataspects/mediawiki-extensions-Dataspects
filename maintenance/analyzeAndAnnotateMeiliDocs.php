@@ -47,22 +47,43 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
          */
         $job = $this->getOption( 'job', false );
         if($job) {
-                        
             $doWrite = $this->getOption( 'doWrite', false );
-
             echo "\nRunning '$job' with option 'doWrite=$doWrite'\n";
-
-            $jobClass = "MediaWiki\Extension\Dataspects\AnalyzeJobs\\$job";
-            if(class_exists($jobClass)) {
-                $jobInstance = new $jobClass($this->globalsConfig, $doWrite);
-                $jobInstance->execute();
+            if($job == "pipeline") {
+                /**
+                 * Pipeline
+                 */
+                $pipeline = [
+                    "ProcessElementMessages",
+                    "ProcessExtensionPagesFromMediaWikiOrg",
+                    "ProcessSelectedAspects",
+                    "RemoveDuplicateFieldValues"
+                ];
             } else {
-                echo "WARNING: Job '$job' not found\n";
+                /**
+                 * Job classes
+                 */
+                $pipeline = [
+                    $job
+                ];
             }
-
-            echo "\n";
+            foreach ($pipeline as $job) {
+                $this->executeJob($job, $doWrite);
+                sleep(30); //FIXME: $hits must not be written back to Meilisearch between jobs if pipelined!
+                echo "\n";
+            }
         }
 	}
+
+    private function executeJob($job, $doWrite) {
+        $jobClass = "MediaWiki\Extension\Dataspects\AnalyzeJobs\\$job";
+        if(class_exists($jobClass)) {
+            $jobInstance = new $jobClass($this->globalsConfig, $doWrite);
+            $jobInstance->execute();
+        } else {
+            echo "WARNING: Job '$job' not found\n";
+        }
+    }
 
     private function status() {
         $analyzeJobs = [];

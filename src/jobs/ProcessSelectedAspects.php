@@ -27,9 +27,7 @@ class ProcessSelectedAspects extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
                     // Initialize
                     $hit = $this->initializeIfNotExists($hit, "ds0__specialAspect", "Selected Aspects");
                     // Add aspects
-                    $aspectTitle = $this->globalsConfig['wgSelectedAspects'][$annotation["predicate"]]["title"];
-                    $aspect = "Selected Aspects > ".$aspectTitle;
-                    $hit = $this->addIfNotExists($hit, "ds0__specialAspect.1v11", $aspect);
+                    $hit["ds0__specialAspect.1v11"][] = "Selected Aspects > ".$this->globalsConfig['wgSelectedAspects'][$annotation["predicate"]]["title"];
                 }
             }
         }
@@ -40,23 +38,9 @@ class ProcessSelectedAspects extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
         // For hierarchicalMenus, it starts at *.1v10
         if(!array_key_exists($predicate, $hit)) {
             $hit = array_merge($hit, [
-                $predicate => "",
-                $predicate.".1v10" => $title,
-                $predicate.".1v11" => array(),
+                $predicate.".1v10" => [ $title ],
+                $predicate.".1v11" => [],
             ]);
-        }
-        return $hit;
-    }
-
-    private function addIfNotExists($hit, $field, $value) {
-        if(!in_array($value, $hit[$field])){
-            $this->log("+a", "Added $value to $field of ".$hit['id']);
-            $hit[$field] = array_merge(
-                $hit[$field],
-                [
-                    $value,
-                ]
-            );
         }
         return $hit;
     }
