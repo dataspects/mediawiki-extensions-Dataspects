@@ -8,7 +8,7 @@ class DataspectsAPI extends ApiBase {
 		parent::__construct( $query, $moduleName );
 		try {
 			$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
-			$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3("dataspects.sqlite");
+			$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
 			// FIXME: SQLITE3_OPEN_CREATE seems not to work!
 			wfDebug("### DataspectsAPI loaded");
 		} catch (Exception $e) {
@@ -25,12 +25,17 @@ class DataspectsAPI extends ApiBase {
 		}
 		// FIXME: security concerns: injection, api call parameters?
         switch ($queryType) {
-			case 'savesearchfacet':
-				$searchfacetname = $params['searchfacetname'];
-				$this->getResult()->addValue(null, "data", array( 'searchfacetname' => $searchfacetname ) );
+			case 'putsearchfacet':
+				try {
+					$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
+					$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
+				}
 				break;
-			case 'loadsearchfacets':
-				$searchFacets = $this->sqlite3->getDs0instantsearchHelpers();
+			case 'getsearchfacets':
+				$searchFacets = $this->sqlite3->getSearchFacets();
 				$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
 				break;
 			case 'numberofnodes':

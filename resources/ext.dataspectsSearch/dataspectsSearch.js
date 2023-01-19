@@ -110,9 +110,7 @@ $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
     e.preventDefault();
     const payload = {
       searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
-      currentHelper: JSON.parse(
-        window.localStorage.getItem("dataspectsSearchFacet")
-      ),
+      currentHelper: window.localStorage.getItem("dataspectsSearchFacet"),
     };
     if (payload.searchFacetName === "" || payload.currentHelper === {}) {
       alert("saveCurrentFacet data error!");
@@ -120,9 +118,9 @@ $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
     api
       .get({
         action: "dataspectsapi",
-        querytype: "savesearchfacet",
+        querytype: "putsearchfacet",
         searchfacetname: payload.searchFacetName,
-        currenthelper: JSON.stringify(payload.currentHelper),
+        currenthelper: payload.currentHelper,
       })
       .done(function (data) {
         console.log(JSON.stringify(data, null, 2));
@@ -188,14 +186,36 @@ if (
   handleSpecialDataspects();
 }
 
+function showSavedSearchFacetsList() {
+  api
+    .get({
+      action: "dataspectsapi",
+      querytype: "getsearchfacets",
+    })
+    .done(function (response) {
+      const sfs = response.data.searchfacets
+        .map((sf) => {
+          return "<li>" + sf.name + "</li>";
+        })
+        .join("");
+      $('[data-cy="savedSearchFacetsList"]').html("<ul>" + sfs + "</ul>");
+    })
+    .fail(function (data) {
+      console.error(data);
+    });
+}
+
 function handleSpecialDataspects() {
   if (!mw.config.get("wgDataspectsSearchURL")) {
     return;
   }
+
   const { SearchResultMatcher } = require("./searchResultMatcher.js");
 
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.min.js");
+
+  showSavedSearchFacetsList();
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
@@ -389,6 +409,7 @@ function handleSpecialDataspectsBackstage() {
   n4j.firstXCharacters(20, "name");
 
   $(document).ready(function () {
+    console.log("me");
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();
       api

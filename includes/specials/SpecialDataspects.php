@@ -32,7 +32,7 @@ class SpecialDataspects extends SpecialPage {
 					<ul class="accordion">
 						<li><!-- LEX230108163200 -->
 							<a data-cy="showSavedSearchFacetsButton" class="toggle" href=#>Saved search facets</a>
-							<div class="inner">'.$this->searchFacets().'</div>
+							<div class="inner" data-cy="savedSearchFacetsList"></div>
 						</li>
 						<li>
 							<table id="hierarchicalMenus">
@@ -63,36 +63,6 @@ class SpecialDataspects extends SpecialPage {
 			'user' => $this->getUser()->getName()
 		));
 		$output->addModules( 'ext.dataspectsSearch' );
-	}
-
-	private function searchFacets() {
-		$params = new \FauxRequest(
-			array(
-				'action' => 'askargs',
-				'conditions' => "eppo0:hasEntityType::SearchFacet",
-				"printouts" => "Eppo0:hasEntityTitle|Eppo0:hasEntityBlurb|Ds0:instantsearchHelper"
-			)
-		);
-		$api = new \ApiMain( $params );
-		$api->execute();
-		$data = $api->getResult()->getResultData();
-		$searchFacets = array();
-		foreach($data["query"]["results"] as $searchFacet => $sfdata) {
-			$searchFacets[] = array(
-				"name" => $searchFacet,
-				"Eppo0:hasEntityTitle" => $sfdata["printouts"]["Eppo0:hasEntityTitle"][0],
-				"Eppo0:hasEntityBlurb" => $sfdata["printouts"]["Eppo0:hasEntityBlurb"][0],
-				"Ds0:instantsearchHelper" => implode("", $sfdata["printouts"]["Ds0:instantsearchHelper"])
-			);
-		};
-		$html = array("<ul>");
-		foreach($searchFacets as $searchFacet) {
-			$pageLink = "<a href='".$searchFacet["name"]."'>".$searchFacet["Eppo0:hasEntityTitle"]."</a>";
-			$activateLink = "<a href='".$GLOBALS['wgServer']."/wiki/Special:Dataspects?helper=".$searchFacet["Ds0:instantsearchHelper"]."'>Activate</a>";
-			$html[] = "<li>".$pageLink." (".$activateLink.")</li>";
-		}
-		$html[] = "</ul>";
-		return implode("", $html);
 	}
 
 	private function sources() {
