@@ -2,6 +2,7 @@ require("./helpers.js");
 require("mediawiki.api");
 require("./chart.js");
 require("./chartjs-plugin-datalabels.js");
+const api = new mw.Api();
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -106,17 +107,29 @@ $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
   e.preventDefault();
   $('[data-cy="dropzone0"]').html(saveSearchFacetFormHTML());
   $('[data-cy="saveSearchFacetFormHTML"]').on("submit", (e) => {
-    const data = {
+    e.preventDefault();
+    const payload = {
       searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
       currentHelper: JSON.parse(
         window.localStorage.getItem("dataspectsSearchFacet")
       ),
     };
-    if (data.searchFacetName === "" || data.currentHelper === {}) {
+    if (payload.searchFacetName === "" || payload.currentHelper === {}) {
       alert("saveCurrentFacet data error!");
     }
-    console.info(data);
-    e.preventDefault();
+    api
+      .get({
+        action: "dataspectsapi",
+        querytype: "savesearchfacet",
+        searchfacetname: payload.searchFacetName,
+        currenthelper: JSON.stringify(payload.currentHelper),
+      })
+      .done(function (data) {
+        console.log(JSON.stringify(data, null, 2));
+      })
+      .fail(function (data) {
+        console.error(data);
+      });
   });
 });
 
@@ -378,7 +391,6 @@ function handleSpecialDataspectsBackstage() {
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();
-      const api = new mw.Api();
       api
         .get({
           action: "dataspectsapi",

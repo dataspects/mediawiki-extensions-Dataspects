@@ -18,6 +18,10 @@ class DataspectsAPI extends ApiBase {
 		}
 		// FIXME: security concerns: injection, api call parameters?
         switch ($queryType) {
+			case 'savesearchfacet':
+				$searchfacetname = $params['searchfacetname'];
+				$this->getResult()->addValue(null, "data", array( 'searchfacetname' => $searchfacetname ) );
+				break;
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
@@ -99,7 +103,9 @@ class DataspectsAPI extends ApiBase {
 			'ds0__sourceParseTextURL' => null,
 			'topictype_name' => null,
 			'firstxcharacters' => null,
-			'property' => null
+			'property' => null,
+			'searchfacetname' => null,
+			'currenthelper' => null
         ];
     }
 
