@@ -198,8 +198,8 @@ function showSavedSearchFacetsList() {
       const sfs = response.data.searchfacets
         .map((sf) => {
           return (
-            "<li><a href='#' title='savedSearchFacet " +
-            sf.id +
+            "<li><a href='#' title='" +
+            JSON.stringify(sf.ds0__instantsearchHelper, null, 2) +
             "' class='savedSearchFacet' data-cy='savedSearchFacet" +
             sf.id +
             "'>" +
