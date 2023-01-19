@@ -22,6 +22,9 @@ class DataspectsAPI extends ApiBase {
 				$searchfacetname = $params['searchfacetname'];
 				$this->getResult()->addValue(null, "data", array( 'searchfacetname' => $searchfacetname ) );
 				break;
+			case 'loadsearchfacets':
+				$this->getResult()->addValue(null, "data", array( 'searchfacets' => ["one"] ) );
+				break;
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
