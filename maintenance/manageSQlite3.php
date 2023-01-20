@@ -19,8 +19,9 @@ class ManageSQLite3 extends \Maintenance {
 		$this->sqlite3 = new DataspectsSQLite3();
 		$initialize = $this->getOption( 'initialize', false );
 		if($initialize) {
-			$this->sqlite3->initialize();
-			$this->sqlite3->exec("DELETE FROM facets;");
+			if($this->sqlite3->initialize()) {
+				$this->sqlite3->exec("DELETE FROM facets;");
+			}
 		}
 	}
 

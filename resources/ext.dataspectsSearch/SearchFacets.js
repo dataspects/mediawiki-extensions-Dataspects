@@ -16,6 +16,7 @@ SearchFacets = class {
         querytype: "getsearchfacets",
       })
       .done((response) => {
+        console.log(response.data);
         const sfs = response.data.searchfacets
           .map((sf) => {
             return this.#listItem(sf);

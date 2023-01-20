@@ -6,14 +6,11 @@ class DataspectsAPI extends ApiBase {
 
 	public function __construct( $query, $moduleName ) {
 		parent::__construct( $query, $moduleName );
-		try {
-			$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
-			$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
-			// FIXME: SQLITE3_OPEN_CREATE seems not to work!
-			wfDebug("### DataspectsAPI loaded");
-		} catch (Exception $e) {
-			wfDebug("### DataspectsAPI error: ".$e);
-		}
+	}
+
+	private function loadBackends() {
+		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
+		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
 	}
 
 	public function execute() {
@@ -28,6 +25,7 @@ class DataspectsAPI extends ApiBase {
 			case 'putsearchfacet':
 				if(in_array("writeapi", $user->getRights())){
 					try {
+						$this->loadBackends();
 						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
 					} catch (Exception $e) {
@@ -41,12 +39,19 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'getsearchfacets':
-				$searchFacets = $this->sqlite3->getSearchFacets();
-				$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
+				try {
+					$this->loadBackends();
+					$searchFacets = $this->sqlite3->getSearchFacets();
+					$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI3 error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+				}
 				break;
 			case 'deletesearchfacet':
 				if(in_array("writeapi", $user->getRights())){
 					try {
+						$this->loadBackends();
 						$result = $this->sqlite3->deleteSearchFacet($params['searchfacetid']);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetid' => $params['searchfacetid'], 'result' => $result ] ); //FIXME: handle $result
 					} catch (Exception $e) {
@@ -60,10 +65,12 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'numberofnodes':
+				$this->loadBackends();
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
 			case 'templatecallssubgraph':
 				try {
+					$this->loadBackends();
 					$templatecallssubgraph = $this->dsNeo4j->templateCallsSubgraph($params['name']);
 				} catch (Exception $ex) {
 					$templatecallssubgraph = "Error";
@@ -71,16 +78,20 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'templatecallssubgraph' => $templatecallssubgraph ) );
 				break;
 			case 'firstxcharacters':
+				$this->loadBackends();
 				$this->getResult()->addValue(null, "data", array( 'firstxcharacters' => $this->dsNeo4j->firstXCharacters($params['firstxcharacters'], $params['property']) ) );
 				break;
 			case 'releasetimestampxago':
+				$this->loadBackends();
 				$this->getResult()->addValue(null, "data", array( 'releasetimestampxago' => $this->dsNeo4j->releaseTimestampXago()) );
 				break;
 			case 'originalpagecontent':
+				$this->loadBackends();
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['ds0__sourceParseTextURL'] )) );
 				break;
 			case 'initializetopictype':
 				if(in_array("writeapi", $user->getRights())){
+					$this->loadBackends();
 					$topictype_name = $params['topictype_name'];
 					$this->initializeTopicType($topictype_name);
 					$this->getResult()->addValue(null, "data", array( 'status' => 'initialized', 'topictype_name' => $topictype_name) );

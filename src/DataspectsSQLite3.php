@@ -2,27 +2,61 @@
 
 namespace MediaWiki\Extension\Dataspects;
 
-class DataspectsSQLite3 extends \SQLite3
-{
+class DataspectsSQLite3 extends \SQLite3 {
+    // FIXME: mustn't this be a "singleton"?
     function __construct() {
-        $this->open("/var/www/mediawiki/w/user-extensions/Dataspects/sqlite/dataspects.sqlite");
+        $this->db_dir = "/var/www/mediawiki/w/user-extensions/Dataspects/sqlite/";
+        $this->db_file = $this->db_dir."dataspects.sqlite";
+        $this->perms = 0777; // FIXME
+    }
+
+    private function openDB() {
+        try {
+            $this->open($this->db_file);
+            return true;
+        } catch (Exception $e) {
+            wfDebug("### ".$e->getMessage());
+            return false;
+        }
     }
 
     public function initialize() {
-        $this->exec("CREATE TABLE IF NOT EXISTS facets(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, ds0instantsearchHelper TEXT);");
+        if(!is_dir($this->db_dir)) {
+            if(!mkdir($this->db_dir)) {
+                return false;
+            }
+            if(!chmod($this->db_dir, $this->perms)) {
+                return false;
+            }
+        }
+        $this->open($this->db_file);
+        if(chmod($this->db_file, $this->perms)) {
+            $this->exec("CREATE TABLE IF NOT EXISTS facets(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, ds0instantsearchHelper TEXT);");
+            return true;
+        }
+        return false;
     }
 
     public function putSearchFacet($name, $currentHelper) { // FIXME: SQL injection safe?
+        if(!$this->openDB()) {
+            return false;
+        }
         $result = $this->exec("INSERT INTO facets(name, ds0instantsearchHelper) VALUES('$name', '$currentHelper');");
+        wfDebug("### $result");
         return $result;
     }
 
     public function deleteSearchFacet($id) { // FIXME: SQL injection safe?
+        $this->openDB();
         $result = $this->exec("DELETE FROM facets WHERE id = ".intval($id).";");
         return $result;
     }
 
     public function getSearchFacets() {
+        if(!$this->openDB()) {
+            wfDebug("### you");
+            return false;
+        }
         $results = $this->query("SELECT id, name, ds0instantsearchHelper FROM facets;");
         $arr = [];
         while ($row = $results->fetchArray()) {    
