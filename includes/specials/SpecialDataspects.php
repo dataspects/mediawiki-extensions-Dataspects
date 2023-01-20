@@ -23,6 +23,7 @@ class SpecialDataspects extends SpecialPage {
 				<td style="width:60%;">
 					<div style="float:right;"><input type="checkbox" id="originalPageContent">Show original page contents <input type="checkbox" id="compactList" value="1">Compact list</div>
 					<div id="searchbox"></div>
+					<div id="searchFacetControls"></div>
 					<div id="intro"></div>
 					<div id="hits"></div>
 				</td>

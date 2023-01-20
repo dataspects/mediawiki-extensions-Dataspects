@@ -199,6 +199,7 @@ function handleSpecialDataspects() {
       configureThisSearch(helper);
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
         // FXIME!
+        searchFacets.typeahead(helper.state.query);
         helper.search();
       } else {
         alert("You have to select one or more source(s).");
@@ -378,7 +379,6 @@ function handleSpecialDataspectsBackstage() {
   n4j.firstXCharacters(20, "name");
 
   $(document).ready(function () {
-    console.log("me");
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();
       mwapi

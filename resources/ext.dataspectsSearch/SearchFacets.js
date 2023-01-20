@@ -3,6 +3,22 @@ SearchFacets = class {
     this.mwapi = mwapi;
   }
 
+  typeahead = (query) => {
+    this.mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: "typeaheadsearchfacets",
+        querystring: query,
+      })
+      .done((response) => {
+        $("#searchFacetControls").html(JSON.stringify(response.data.matches));
+      })
+      .fail((response) => {
+        console.error("typeaheadsearchfacets");
+        console.error(response);
+      });
+  };
+
   placeSearchFacetFormHTML = (dropzone) => {
     $('[data-cy="' + dropzone + '"]').html(
       '<form data-cy="saveSearchFacetFormHTML" action="#"><fieldset><legend>Save current search facet</legend>Name: <input type="text" data-cy="saveSearchFacetFormHTMLName"><span data-cy="savesearchfacet_result"></span><br/><button type="submit" data-cy="saveSearchFacetFormHTMLSave">Save</button></fieldset></form>'

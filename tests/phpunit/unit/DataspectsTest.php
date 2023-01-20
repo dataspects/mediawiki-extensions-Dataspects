@@ -141,7 +141,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		// $this->markTestSkipped();
 		echo $this->neo4jClient->addSearchFacet("Test search facet");
 		echo $this->neo4jClient->addSearchFacet("Search facet for test");
-		print_r($this->neo4jClient->typeahead("for sea"));
+		echo $this->neo4jClient->addSearchFacet("Search for me");
+		print_r($this->neo4jClient->typeahead("for est"));
 	}
 
 	public function testSearch() {

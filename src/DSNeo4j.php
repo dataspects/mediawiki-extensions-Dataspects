@@ -42,7 +42,7 @@ class DSNeo4j {
     foreach ($results as $result) {
       $matches[] = [
         "name" => $result->get("name"),
-        "matches" => array_map(fn($value): string => $value[0], $result->getAsArrayList("matches")->toRecursiveArray())
+        "matches" => array_map(fn($val): string => $val[0], $result->getAsArrayList("matches")->toRecursiveArray())
       ];
     }
     return $matches;

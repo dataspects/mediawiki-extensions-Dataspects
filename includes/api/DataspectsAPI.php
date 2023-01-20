@@ -42,6 +42,16 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetname' => $params['searchfacetname'] ] );
 				}
 				break;
+			case 'typeaheadsearchfacets':
+				try {
+					$this->loadBackends();
+					$matches = $this->dsNeo4j->typeahead($params['querystring']);
+					$this->getResult()->addValue(null, "data", array( 'matches' => json_encode($matches) ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+				}
+				break;
 			case 'getsearchfacets':
 				try {
 					$this->loadBackends();
@@ -69,8 +79,15 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'numberofnodes':
-				$this->loadBackends();
-				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
+				try {
+					$this->loadBackends();
+					$non = $this->dsNeo4j->numberOfNodes();
+					wfDebug("### sadasd");
+					$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $non ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+				}
 				break;
 			case 'templatecallssubgraph':
 				try {
@@ -158,7 +175,8 @@ class DataspectsAPI extends ApiBase {
 			'property' => null,
 			'searchfacetname' => null,
 			'searchfacetid' => null,
-			'currenthelper' => null
+			'currenthelper' => null,
+			"querystring" => null
         ];
     }
 
