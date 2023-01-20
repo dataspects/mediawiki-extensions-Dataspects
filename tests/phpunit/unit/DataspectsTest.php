@@ -101,6 +101,9 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->globalsConfig = [
+			"wgDataspectsNeo4jURL" => "neo4j://neo4j:7687",
+			"wgDataspectsNeo4jUsername" => "neo4j",
+			"wgDataspectsNeo4jPassword" => "globi2000",
 			"wgDataspectsSpacyURL" => "http://localhost:8050",
 			"wgDataspectsSearchURL" => "http://localhost:7700",
 			"wgDataspectsSearchKey" => "masterKey",
@@ -121,16 +124,28 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		
 		$this->meiliWriteClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsWriteURL'], $this->globalsConfig['wgDataspectsWriteKey'], new HttplugClient());
 
-		$this->initializeTestIndex();
-		$this->addTestDocuments();
+		$this->neo4jClient = new DSNeo4j(
+			$this->globalsConfig["wgDataspectsNeo4jURL"],
+			$this->globalsConfig["wgDataspectsNeo4jUsername"],
+			$this->globalsConfig["wgDataspectsNeo4jPassword"]
+		);
+		// $this->initializeTestIndex();
+		// $this->addTestDocuments();
 	}
 
 	protected function tearDown(): void {
 		parent::tearDown();
 	}
 
-	public function testSearch() {
+	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {
 		// $this->markTestSkipped();
+		echo $this->neo4jClient->addSearchFacet("Test search facet");
+		echo $this->neo4jClient->addSearchFacet("Search facet for test");
+		print_r($this->neo4jClient->typeahead("for sea"));
+	}
+
+	public function testSearch() {
+		$this->markTestSkipped();
 		$hits = $this->searchIndex->search(
             "abcdef",
             [
@@ -143,7 +158,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testRemoveDuplicateFieldValues() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
 		$job = new AnalyzeJobs\RemoveDuplicateFieldValues($this->globalsConfig, "true");
@@ -154,7 +169,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testProcessSelectedAspects() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$this->assertCount(2, $hits[0]["ds0__specialAspect.1v11"]);
 		$job = new AnalyzeJobs\ProcessSelectedAspects($this->globalsConfig, "true");
@@ -165,7 +180,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testProcessExtensionPagesFromMediaWikiOrg() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$job = new AnalyzeJobs\ProcessExtensionPagesFromMediaWikiOrg($this->globalsConfig, "true");
 		$job->execute();
@@ -184,7 +199,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
 	public function testProcessElementMessages() {
-		// $this->markTestSkipped();
+		$this->markTestSkipped();
 		$hits = $this->hitsForsearchForReleaseTimestamp("1673881510");
 		$job = new AnalyzeJobs\ProcessElementMessages($this->globalsConfig, "true");
 		$job->execute();

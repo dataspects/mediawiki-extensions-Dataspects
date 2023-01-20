@@ -7,18 +7,67 @@ use Laudis\Neo4j\Authentication\Authenticate;
 use Laudis\Neo4j\ClientBuilder;
 use Laudis\Neo4j\Contracts\TransactionInterface;
 
+// https://github.com/neo4j-php/neo4j-php-client
+
 class DSNeo4j {
 
-  public function __construct() {
+  public function __construct($url, $username, $password) {
     try {
       $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
         'neo4j',
-        $GLOBALS['wgDataspectsNeo4jURL'],
-        Authenticate::basic($GLOBALS['wgDataspectsNeo4jUsername'], $GLOBALS['wgDataspectsNeo4jPassword'])
+        $url,
+        Authenticate::basic($username, $password)
       )->build();
     } catch (Exception $e) {
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     } 
+  }
+
+  public function typeahead($queryString) {
+    echo "(?i)".str_replace(" ", "|", $queryString);
+    $query = [
+      "query" => '
+        MATCH     (n:SearchFacet)
+        WITH      apoc.text.regexGroups(n.name, $regex) AS matches,
+                  n.name AS name
+        RETURN    name, matches
+        ORDER BY  size(matches) DESC
+      ',
+      "params" => [
+        "regex" => "(?i)".str_replace(" ", "|", $queryString)
+      ]
+    ];
+    $results = $this->query($query);
+    $matches = [];
+    foreach ($results as $result) {
+      $matches[] = [
+        "name" => $result->get("name"),
+        "matches" => array_map(fn($value): string => $value[0], $result->getAsArrayList("matches")->toRecursiveArray())
+      ];
+    }
+    return $matches;
+  }
+
+  public function addSearchFacet($name) {
+    $queries = [
+      [
+        "query" => '
+            CALL apoc.merge.node(
+              [ "SearchFacet" ],
+              { name: $name },  // identProps
+              {},               // props
+              {}                // onMatchProps
+            )
+            YIELD node
+            RETURN node
+        ',
+        "params" => [
+          "name" => $name
+        ]
+      ]
+    ];
+    $this->update($queries);
+    echo "Added SearchFacet ".$name;
   }
 
   public function addPageToNeo4j($mediaWikiPage) {

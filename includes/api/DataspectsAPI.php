@@ -9,7 +9,11 @@ class DataspectsAPI extends ApiBase {
 	}
 
 	private function loadBackends() {
-		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j();
+		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
+			$GLOBALS["wgDataspectsNeo4jURL"],
+			$GLOBALS["wgDataspectsNeo4jUsername"],
+			$GLOBALS["wgDataspectsNeo4jPassword"]
+		);
 		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
 	}
 

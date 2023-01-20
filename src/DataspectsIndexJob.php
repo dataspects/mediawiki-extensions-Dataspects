@@ -24,7 +24,11 @@ class DataspectsIndexJob extends \Job {
   // https://docs.php-http.org/en/latest/clients.html
 
   public function run() {    
-    $dsNeo4j = new DSNeo4j();
+    $dsNeo4j = new DSNeo4j(
+      $GLOBALS["wgDataspectsNeo4jURL"],
+			$GLOBALS["wgDataspectsNeo4jUsername"],
+			$GLOBALS["wgDataspectsNeo4jPassword"]
+    );
     wfDebug("### __>__ Indexing Pipeline: RUNNING dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
     try { # FIXME
       $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());

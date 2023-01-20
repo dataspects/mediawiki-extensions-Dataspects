@@ -26,7 +26,11 @@ class DMFFeedOne extends \Maintenance {
 		wfDebug("### __>__ Indexing Pipeline: REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 		switch($params["namespace"]) {
 			case 0:
-				$dsNeo4j = new DSNeo4j();
+				$dsNeo4j = new DSNeo4j(
+					$GLOBALS["wgDataspectsNeo4jURL"],
+					$GLOBALS["wgDataspectsNeo4jUsername"],
+					$GLOBALS["wgDataspectsNeo4jPassword"]
+				);
                 echo("### ".$params["namespace"].":".$params["title"]);
                 try { # FIXME
                 $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
