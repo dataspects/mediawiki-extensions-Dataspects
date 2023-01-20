@@ -9,3 +9,7 @@ ifURLreturnAnchorTag = (str) => {
 currentDeFactoWgServer = () => {
   return window.location.protocol + "//" + window.location.hostname;
 };
+
+unixTimestamp = () => {
+  return Math.floor(Date.now() / 1000);
+};

@@ -64,13 +64,14 @@ $("#compactList").click(function () {
   }
 });
 
-$(".toggle").click(function (e) {
+$('[data-cy="showSavedSearchFacetsButton"]').click(function (e) {
   e.preventDefault();
   let $this = $(this);
   if ($this.next().hasClass("show")) {
     $this.next().removeClass("show");
     $this.next().slideUp(350);
   } else {
+    searchFacets.showSavedSearchFacetsList(mwapi);
     $this.parent().parent().find("li .inner").removeClass("show");
     $this.parent().parent().find("li .inner").slideUp(350);
     $this.next().toggleClass("show");
@@ -95,20 +96,9 @@ const setCurrentHelper = (helper) => {
   );
 };
 
-const saveSearchFacetFormHTML = () => {
-  return `<form data-cy="saveSearchFacetFormHTML" action="#">
-            <fieldset>
-              <legend>Save current search facet</legend>
-              Name: <input type="text" data-cy="saveSearchFacetFormHTMLName">
-              <span data-cy="savesearchfacet_result"></span><br/>
-              <button type="submit" data-cy="saveSearchFacetFormHTMLSave">Save</button>
-            </fieldset>
-          </form>`;
-};
-
 $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
   e.preventDefault();
-  $('[data-cy="dropzone0"]').html(saveSearchFacetFormHTML());
+  searchFacets.placeSearchFacetFormHTML("dropzone0");
   $('[data-cy="saveSearchFacetFormHTML"]').on("submit", (e) => {
     e.preventDefault();
     const payload = {
@@ -158,11 +148,7 @@ const configureThisSearch = (helper) => {
       helper.state.query = getUrlParameter("q"); // This populates the search input
     } else if (getUrlParameter("helper")) {
       helper.setState(
-        JSON.parse(
-          getUrlParameter("helper")
-            .replaceAll("@@@ocb@@@", "{")
-            .replaceAll("@@@ccb@@@", "}")
-        ).meilisearchHelper.state
+        JSON.parse(getUrlParameter("helper")).meilisearchHelper.state
       );
     }
   }
@@ -199,8 +185,6 @@ function handleSpecialDataspects() {
 
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.min.js");
-
-  searchFacets.showSavedSearchFacetsList(mwapi);
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),

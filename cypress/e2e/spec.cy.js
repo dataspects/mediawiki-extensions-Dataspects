@@ -13,15 +13,15 @@ describe("dataspects", () => {
 });
 
 describe("dataspects", () => {
-  it.only("should show the saved search facets", () => {
+  it("should show the saved search facets", () => {
     // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.takeScreenshot("saved-search-facets");
     cy.get("li.savedSearchFacet a").first().click();
   });
-  it("should show the 'Save search facet' form", () => {
-    // cy.mediawiki_login(login);
+  it.only("should save a new search facet", () => {
+    cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="saveCurrentFacetButton"]').click();
     cy.get('[data-cy="saveSearchFacetFormHTML"]')
@@ -32,10 +32,16 @@ describe("dataspects", () => {
           e.preventDefault();
         });
       });
+    const unixTimestamp = Math.floor(Date.now() / 1000);
     cy.typeIntoTextInput(
       '[data-cy="saveSearchFacetFormHTMLName"]',
-      "My search facet"
+      unixTimestamp
     );
     cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
+    cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
+    cy.get('[data-cy="savedSearchFacetsUL"]').contains(
+      "li.savedSearchFacet a.itemName",
+      unixTimestamp
+    );
   });
 });
