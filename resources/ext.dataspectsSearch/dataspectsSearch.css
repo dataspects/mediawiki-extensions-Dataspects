@@ -1,3 +1,10 @@
+li.savedSearchFacet a.itemAction {
+  color: gray;
+}
+li.savedSearchFacet a.itemName {
+  font-weight: bold;
+}
+
 .badge {
   border-radius: 2px;
   padding: 2px;

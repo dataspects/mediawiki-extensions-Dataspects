@@ -18,7 +18,7 @@ describe("dataspects", () => {
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.takeScreenshot("saved-search-facets");
-    cy.get("a.savedSearchFacet").first().click();
+    cy.get("li.savedSearchFacet a").first().click();
   });
   it("should show the 'Save search facet' form", () => {
     // cy.mediawiki_login(login);
