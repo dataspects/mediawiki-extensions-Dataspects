@@ -50,7 +50,7 @@ linkStyle 1,4,5 stroke:#00ff00
 - implements **[Algolia's InstantSearch](https://github.com/meilisearch/instant-meilisearch)**
 - provides **meta data on search results**: currently 'last indexed' and 'searchResultClass', see [LEX230108155400](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108155400)
 - formats the controlled use of **[cognitive keywords (CoKe)](https://wiki.dataspects.com/wiki/C1537999723)**, see [LEX230108160200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108160200)
-- **save search facets**, see [LEX230108163200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108163200), currently requires https://mwstakeorg.dataspects.com/wiki/SearchFacet
+- **save search facets**, see [LEX230108163200](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108163200), <code>maintenance/manageSQlite3.php --initialize</code>
 - show **original page contents** under search results, see [LEX230108165801](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165801)
 - compact search results, see [LEX230108165800](https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX230108165800)
 - enable **multiple sources**

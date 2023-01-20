@@ -136,3 +136,34 @@ Cypress.Commands.add("click_headerTab", (headerTab) => {
 Cypress.Commands.add("showHelpingHints", () => {
   cy.get("#mwstakeHelpHintButton").click();
 });
+
+Cypress.Commands.add("saveSearchFacet", (name) => {
+  cy.visit("/wiki/Special:Dataspects");
+  // Open
+  cy.get('[data-cy="saveCurrentFacetButton"]').click();
+  cy.get('[data-cy="saveSearchFacetFormHTML"]')
+    .should("be.visible")
+    .then((form$) => {
+      // FIXME: can this .then() be moved as a function to commands.js?
+      form$.on("submit", (e) => {
+        e.preventDefault();
+      });
+    });
+  // Type
+  cy.typeIntoTextInput('[data-cy="saveSearchFacetFormHTMLName"]', name);
+  // Save
+  cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
+});
+
+Cypress.Commands.add("removeSearchFacet", (name) => {
+  cy.get('[data-cy="savedSearchFacetsList"]').then(($element) => {
+    if (!$element.is(":visible")) {
+      cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
+    }
+  });
+  cy.get('[data-cy="savedSearchFacetsUL"]')
+    .contains("li.savedSearchFacet a.itemName", name)
+    .siblings()
+    .contains("a.itemAction", "remove")
+    .click();
+});

@@ -20,28 +20,11 @@ describe("dataspects", () => {
     cy.takeScreenshot("saved-search-facets");
     cy.get("li.savedSearchFacet a").first().click();
   });
-  it.only("should save a new search facet and remove it again", () => {
+  it("should save a new search facet and remove it again", () => {
     // Visit
     cy.mediawiki_login(login);
-    cy.visit("/wiki/Special:Dataspects");
-    // Open
-    cy.get('[data-cy="saveCurrentFacetButton"]').click();
-    cy.get('[data-cy="saveSearchFacetFormHTML"]')
-      .should("be.visible")
-      .then((form$) => {
-        // FIXME: can this .then() be moved as a function to commands.js?
-        form$.on("submit", (e) => {
-          e.preventDefault();
-        });
-      });
-    // Type
-    const unixTimestamp = Math.floor(Date.now() / 1000);
-    cy.typeIntoTextInput(
-      '[data-cy="saveSearchFacetFormHTMLName"]',
-      unixTimestamp
-    );
-    // Save
-    cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
+    const unixTimestamp = Math.floor(Date.now());
+    cy.saveSearchFacet(unixTimestamp);
     // Check
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.get('[data-cy="savedSearchFacetsUL"]').contains(
@@ -49,13 +32,21 @@ describe("dataspects", () => {
       unixTimestamp
     );
     // Remove
-    cy.get('[data-cy="savedSearchFacetsUL"]')
-      .contains("li.savedSearchFacet a.itemName", unixTimestamp)
-      .siblings()
-      .contains("a.itemAction", "remove")
-      .click();
+    cy.removeSearchFacet(unixTimestamp);
+    // Check
     cy.get('[data-cy="savedSearchFacetsUL"]')
       .contains("li.savedSearchFacet a.itemName", unixTimestamp)
       .should("not.exist");
+  });
+
+  it.only("should save two new search facets and use them again", () => {
+    cy.mediawiki_login(login);
+    const sfName0 = Math.floor(Date.now());
+    cy.saveSearchFacet(sfName0);
+    // const sfName1 = Math.floor(Date.now());
+    // cy.saveSearchFacet(sfName1);
+    //
+    cy.removeSearchFacet(sfName0);
+    // cy.removeSearchFacet(sfName1);
   });
 });
