@@ -1,8 +1,10 @@
-require("./helpers.js");
 require("mediawiki.api");
+const mwapi = new mw.Api();
+require("./helpers.js");
 require("./chart.js");
 require("./chartjs-plugin-datalabels.js");
-const api = new mw.Api();
+const { SearchFacets } = require("./SearchFacets.js");
+const searchFacets = new SearchFacets(mwapi);
 /*
 
 instantsearch.widgets.hierarchicalMenus cover domain-agnostic predicates:
@@ -116,7 +118,7 @@ $('[data-cy="saveCurrentFacetButton"]').click(function (e) {
     if (payload.searchFacetName === "" || payload.currentHelper === {}) {
       alert("saveCurrentFacet data error!");
     }
-    api
+    mwapi
       .get({
         action: "dataspectsapi",
         querytype: "putsearchfacet",
@@ -188,35 +190,6 @@ if (
   handleSpecialDataspects();
 }
 
-function showSavedSearchFacetsList() {
-  api
-    .get({
-      action: "dataspectsapi",
-      querytype: "getsearchfacets",
-    })
-    .done(function (response) {
-      const sfs = response.data.searchfacets
-        .map((sf) => {
-          return (
-            "<li><a href='#' title='" +
-            JSON.stringify(sf.ds0__instantsearchHelper, null, 2) +
-            "' class='savedSearchFacet' data-cy='savedSearchFacet" +
-            sf.id +
-            "'>" +
-            sf.name +
-            "</a></li>"
-          );
-        })
-        .join("");
-      $('[data-cy="savedSearchFacetsList"]').html(
-        "<ul data-cy='savedSearchFacetsUL'>" + sfs + "</ul>"
-      );
-    })
-    .fail(function (response) {
-      console.error(response);
-    });
-}
-
 function handleSpecialDataspects() {
   if (!mw.config.get("wgDataspectsSearchURL")) {
     return;
@@ -227,7 +200,7 @@ function handleSpecialDataspects() {
   require("./instant-meilisearch.umd.js");
   require("./instantsearch.production.min.js");
 
-  showSavedSearchFacetsList();
+  searchFacets.showSavedSearchFacetsList(mwapi);
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
@@ -424,7 +397,7 @@ function handleSpecialDataspectsBackstage() {
     console.log("me");
     $("#initializetopictype_form").submit(function (event) {
       event.preventDefault();
-      api
+      mwapi
         .get({
           action: "dataspectsapi",
           querytype: "initializetopictype",

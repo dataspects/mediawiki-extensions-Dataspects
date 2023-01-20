@@ -59,6 +59,7 @@
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.min.js",
         "./DSneo4j.js",
+        "./SearchFacets.js",
         "./vis-network.min.js",
         "./chart.js",
         "./chartjs-plugin-datalabels.js",
