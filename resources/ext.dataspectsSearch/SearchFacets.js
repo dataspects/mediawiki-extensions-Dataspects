@@ -46,21 +46,15 @@ SearchFacets = class {
     const activate =
       "<a searchfacetid='" +
       sf.id +
-      "' href='#' title='' data-cy='" +
-      id +
-      "_activate' class='itemAction'>activate</a>";
+      "' href='#' title='' itemaction='activate' class='itemAction'>activate</a>";
     const remove =
       "<a searchfacetid='" +
       sf.id +
-      "' href='#' title='' data-cy='" +
-      id +
-      "_remove' class='itemAction'>remove</a>";
+      "' href='#' title='' itemaction='delete' class='itemAction'>remove</a>";
     const replace =
       "<a searchfacetid='" +
       sf.id +
-      "' href='#' title='' data-cy='" +
-      id +
-      "_replace' class='itemAction'>replace</a>";
+      "' href='#' title='' itemaction='replace' class='itemAction'>replace</a>";
     return (
       "<li class='savedSearchFacet'>" +
       link +
@@ -77,14 +71,16 @@ SearchFacets = class {
   #eventHandlers = () => {
     return $("li.savedSearchFacet a.itemAction").click((event) => {
       const sfID = event.target.attributes["searchfacetid"].value;
+      const itemAction = event.target.attributes["itemaction"].value;
       this.mwapi
         .get({
           action: "dataspectsapi",
-          querytype: "deletesearchfacet",
+          querytype: itemAction + "searchfacet",
           searchfacetid: sfID,
         })
         .done((response) => {
           console.log(response.data);
+          this.showSavedSearchFacetsList();
         })
         .fail((response) => {
           console.error(response);

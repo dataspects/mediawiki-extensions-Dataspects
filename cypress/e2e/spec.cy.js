@@ -54,7 +54,6 @@ describe("dataspects", () => {
       .siblings()
       .contains("a.itemAction", "remove")
       .click();
-    cy.get('[data-cy="showSavedSearchFacetsButton"]').click().click();
     cy.get('[data-cy="savedSearchFacetsUL"]')
       .contains("li.savedSearchFacet a.itemName", unixTimestamp)
       .should("not.exist");
