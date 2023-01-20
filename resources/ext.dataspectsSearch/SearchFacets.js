@@ -34,7 +34,9 @@ SearchFacets = class {
   #listItem = (sf) => {
     const id = "savedSearchFacet" + sf.id;
     const link =
-      "<a href='#' title='" +
+      "<a searchfacetid='" +
+      sf.id +
+      "' href='#' title='" +
       JSON.stringify(sf.ds0__instantsearchHelper, null, 2) +
       "'  data-cy='" +
       id +
@@ -42,15 +44,21 @@ SearchFacets = class {
       sf.name +
       "</a>";
     const activate =
-      "<a href='#' title='' data-cy='" +
+      "<a searchfacetid='" +
+      sf.id +
+      "' href='#' title='' data-cy='" +
       id +
       "_activate' class='itemAction'>activate</a>";
     const remove =
-      "<a href='#' title='' data-cy='" +
+      "<a searchfacetid='" +
+      sf.id +
+      "' href='#' title='' data-cy='" +
       id +
       "_remove' class='itemAction'>remove</a>";
     const replace =
-      "<a href='#' title='' data-cy='" +
+      "<a searchfacetid='" +
+      sf.id +
+      "' href='#' title='' data-cy='" +
       id +
       "_replace' class='itemAction'>replace</a>";
     return (
@@ -68,8 +76,19 @@ SearchFacets = class {
 
   #eventHandlers = () => {
     return $("li.savedSearchFacet a.itemAction").click((event) => {
-      const dataCy = event.target.attributes["data-cy"].value;
-      console.log(dataCy);
+      const sfID = event.target.attributes["searchfacetid"].value;
+      this.mwapi
+        .get({
+          action: "dataspectsapi",
+          querytype: "deletesearchfacet",
+          searchfacetid: sfID,
+        })
+        .done((response) => {
+          console.log(response.data);
+        })
+        .fail((response) => {
+          console.error(response);
+        });
     });
   };
 };

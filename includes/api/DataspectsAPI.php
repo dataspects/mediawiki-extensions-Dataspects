@@ -44,6 +44,21 @@ class DataspectsAPI extends ApiBase {
 				$searchFacets = $this->sqlite3->getSearchFacets();
 				$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
 				break;
+			case 'deletesearchfacet':
+				if(in_array("writeapi", $user->getRights())){
+					try {
+						$result = $this->sqlite3->deleteSearchFacet($params['searchfacetid']);
+						$this->getResult()->addValue(null, "data", [ 'searchfacetid' => $params['searchfacetid'], 'result' => $result ] ); //FIXME: handle $result
+					} catch (Exception $e) {
+						wfDebug("### DataspectsAPI error: ".$e);
+						$this->getResult()->addValue(null, "data", [ 'searchfacetid' => $params['searchfacetid'], 'result' => $e->getMessage() ] );
+					}
+				} else {
+					$errorMessage = "deletesearchfacet not permitted for ".$user->getName();
+					wfDebug("### "+$errorMessage);
+					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetid' => $params['searchfacetid'] ] );
+				}
+				break;
 			case 'numberofnodes':
 				$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $this->dsNeo4j->numberOfNodes() ) );
 				break;
@@ -127,6 +142,7 @@ class DataspectsAPI extends ApiBase {
 			'firstxcharacters' => null,
 			'property' => null,
 			'searchfacetname' => null,
+			'searchfacetid' => null,
 			'currenthelper' => null
         ];
     }

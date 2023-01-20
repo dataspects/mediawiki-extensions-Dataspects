@@ -17,6 +17,11 @@ class DataspectsSQLite3 extends \SQLite3
         return $result;
     }
 
+    public function deleteSearchFacet($id) { // FIXME: SQL injection safe?
+        $result = $this->exec("DELETE FROM facets WHERE id = ".intval($id).";");
+        return $result;
+    }
+
     public function getSearchFacets() {
         $results = $this->query("SELECT id, name, ds0instantsearchHelper FROM facets;");
         $arr = [];
