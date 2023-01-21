@@ -36,11 +36,20 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 function handleSpecialDataspects() {
+  const { SearchResultMatcher } = require("./searchResultMatcher.js");
   if (!mw.config.get("wgDataspectsSearchURL")) {
     return;
   }
+  const setCurrentHelper = (helper) => {
+    window.localStorage.setItem(
+      "dataspectsSearchFacet",
+      JSON.stringify({
+        environment: { user: mw.config.get("user") },
+        meilisearchHelper: helper,
+      })
+    );
+  };
 
-  const { SearchResultMatcher } = require("./searchResultMatcher.js");
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
     searchClient: instantMeiliSearch(
@@ -61,6 +70,7 @@ function handleSpecialDataspects() {
       } else {
         alert("You have to select one or more source(s).");
       }
+      setCurrentHelper(helper);
     },
   });
   const searchFacets = new SearchFacets(mwapi, search);
@@ -345,14 +355,4 @@ $("#compactList").click(function () {
 //     $("#intro").html(getUrlParameter("intro"));
 //   }
 //   $("#facetingMenus").click();
-// };
-
-// const setCurrentHelper = (helper) => {
-//   window.localStorage.setItem(
-//     "dataspectsSearchFacet",
-//     JSON.stringify({
-//       environment: { user: mw.config.get("user") },
-//       meilisearchHelper: helper,
-//     })
-//   );
 // };

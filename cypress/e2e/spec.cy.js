@@ -7,8 +7,6 @@ describe("dataspects", () => {
     cy.takeScreenshot("dataspects-Search-page");
     cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
     cy.takeScreenshot("instant-search-results");
-    cy.clearCurrentFacet();
-    cy.takeScreenshot("cleared-facet");
   });
 });
 
@@ -55,5 +53,8 @@ describe("dataspects", () => {
     // cy.removeSearchFacet(sfName1);
   });
 
-  it.only("should find 'backup' and then 'About cloning' by search facet", () => {});
+  it.only("should find 'backup' and then 'About cloning' by search facet", () => {
+    cy.visit("/wiki/Special:Dataspects");
+    cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
+  });
 });

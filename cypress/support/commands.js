@@ -103,10 +103,6 @@ Cypress.Commands.add("typeIntoTextInput", (selector, text) => {
   cy.wait(2000);
 });
 
-Cypress.Commands.add("clearCurrentFacet", (selector, text) => {
-  cy.get('[data-cy="ds-clear-current-facet"]').click();
-});
-
 //////////////////////////
 
 const predicateNameReformattedBySMW = (predicateName) => {
