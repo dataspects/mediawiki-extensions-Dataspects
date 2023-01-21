@@ -1,8 +1,9 @@
 const { SearchFacetControl } = require("./SearchFacetControl.js");
 
 SearchFacets = class {
-  constructor(mwapi) {
+  constructor(mwapi, search) {
     this.mwapi = mwapi;
+    this.search = search;
   }
 
   typeahead = (query) => {
@@ -80,6 +81,111 @@ SearchFacets = class {
             console.log(
               "Activate " + event.target.attributes["searchfacetname"].value
             );
+            var myhelper = {
+              environment: { user: "Lex" },
+              meilisearchHelper: {
+                client: {},
+                state: {
+                  facets: [],
+                  disjunctiveFacets: ["ds0__source", "ds0__sourceNamespace"],
+                  hierarchicalFacets: [
+                    {
+                      name: "eppo0__hasEntityType.1v10",
+                      attributes: [
+                        "eppo0__hasEntityType.1v10",
+                        "eppo0__hasEntityType.1v11",
+                        "eppo0__hasEntityType.1v12",
+                      ],
+                      separator: " > ",
+                      rootPath: null,
+                      showParentLevel: true,
+                    },
+                    {
+                      name: "ck0__containsCognitiveKeyword.1v10",
+                      attributes: [
+                        "ck0__containsCognitiveKeyword.1v10",
+                        "ck0__containsCognitiveKeyword.1v11",
+                      ],
+                      separator: " > ",
+                      rootPath: null,
+                      showParentLevel: true,
+                    },
+                    {
+                      name: "ds0__featuresAction.1v10",
+                      attributes: [
+                        "ds0__featuresAction.1v10",
+                        "ds0__featuresAction.1v11",
+                      ],
+                      separator: " > ",
+                      rootPath: null,
+                      showParentLevel: true,
+                    },
+                    {
+                      name: "ds0__specialAspect.1v10",
+                      attributes: [
+                        "ds0__specialAspect.1v10",
+                        "ds0__specialAspect.1v11",
+                      ],
+                      separator: " > ",
+                      rootPath: null,
+                      showParentLevel: true,
+                    },
+                    {
+                      name: "ds0__allPredicates.1v10",
+                      attributes: [
+                        "ds0__allPredicates.1v10",
+                        "ds0__allPredicates.1v11",
+                        "ds0__allPredicates.1v12",
+                      ],
+                      separator: " > ",
+                      rootPath: null,
+                      showParentLevel: true,
+                    },
+                  ],
+                  facetsRefinements: {},
+                  facetsExcludes: {},
+                  disjunctiveFacetsRefinements: {
+                    ds0__sourceNamespace: [],
+                    ds0__source: [
+                      "https://mwstake.org/mwstake/wiki/",
+                      "Element",
+                      "https://smw-cindykate.com/wiki/",
+                      "https://wiki.dataspects.com/wiki/",
+                      "Code",
+                      "https://www.mediawiki.org/wiki/",
+                    ],
+                  },
+                  numericRefinements: {},
+                  tagRefinements: [],
+                  hierarchicalFacetsRefinements: {
+                    "eppo0__hasEntityType.1v10": [],
+                    "ck0__containsCognitiveKeyword.1v10": [],
+                    "ds0__featuresAction.1v10": [],
+                    "ds0__specialAspect.1v10": [],
+                    "ds0__allPredicates.1v10": [],
+                  },
+                  index: "mwstakeorg",
+                  attributesToSnippet: [
+                    "eppo0__hasEntityTitle",
+                    "ds0__contentText:100",
+                  ],
+                  hitsPerPage: 5,
+                  query: "clone",
+                  maxValuesPerFacet: 1000,
+                  highlightPreTag: "__ais-highlight__",
+                  highlightPostTag: "__/ais-highlight__",
+                  page: 0,
+                },
+                lastResults: null,
+                _queryId: 1,
+                _lastQueryIdReceived: -1,
+                derivedHelpers: [],
+                _currentNbQueries: 1,
+                _events: {},
+              },
+            };
+            this.search.helper.setState(myhelper.meilisearchHelper.state);
+            this.search.helper.search();
           }
         })
         .fail((response) => {
