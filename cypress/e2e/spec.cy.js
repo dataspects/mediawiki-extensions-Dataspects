@@ -44,8 +44,8 @@ describe("dataspects", () => {
     const sfName0 = Math.floor(Date.now()).toString();
     cy.saveSearchFacet(sfName0);
     cy.typeIntoTextInput("input.ais-SearchBox-input", sfName0.substring(0, 3));
-    cy.get('span[data-cy="searchFacetControl"]').contains(
-      'span[data-cy="searchFacetControlName"]',
+    cy.get('div[data-cy="searchFacetControl"]').contains(
+      'div[data-cy="searchFacetControlName"]',
       sfName0
     );
     // const sfName1 = Math.floor(Date.now());

@@ -1,3 +1,14 @@
+div.searchFacetControl {
+  background-color: #e8e8e8;
+  padding: 3px;
+  border-radius: 3px;
+  display: inline;
+  margin: 10px 10px 0px 0px;
+}
+div.searchFacetControlName {
+  display: inline;
+}
+
 li.savedSearchFacet a.itemAction {
   color: gray;
 }

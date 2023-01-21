@@ -4,22 +4,24 @@ SearchFacetControl = class {
   }
 
   html = () => {
-    return '<span data-cy="searchFacetControl">' + this.#name() + "</span>";
+    return (
+      '<div data-cy="searchFacetControl" class="searchFacetControl">' +
+      this.#name() +
+      "</div>"
+    );
   };
 
   #name = () => {
     return (
-      '<span data-cy="searchFacetControlName">' +
+      '<div data-cy="searchFacetControlName" class="searchFacetControlName">' +
       this.#mark(this.searchFacet.name) +
-      "</span>"
+      "</div>"
     );
   };
 
   #mark = (str) => {
     const re = new RegExp("(" + this.searchFacet.matches.join("|") + ")", "g");
-    console.log(re);
     str = str.replaceAll(re, "<mark>$1</mark>");
-    console.log(str);
     return str;
   };
 };
