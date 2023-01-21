@@ -5,11 +5,13 @@ div.searchFacetControl {
   display: inline;
   margin: 10px 10px 0px 0px;
 }
-div.searchFacetControlName {
+a.searchFacetControlName {
   display: inline;
+  color: blue !important;
+  font-weight: bold;
 }
 
-li.savedSearchFacet a.itemAction {
+li.savedSearchFacet a.searchFacetAction {
   color: gray;
 }
 li.savedSearchFacet a.itemName {

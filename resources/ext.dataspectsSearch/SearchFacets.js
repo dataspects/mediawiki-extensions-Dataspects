@@ -16,14 +16,14 @@ SearchFacets = class {
         querystring: query,
       })
       .done((response) => {
-        console.log(response);
         $("#searchFacetControls").html(
           response.data.status === 0
             ? response.data.matches.map((sf) => {
-                return new SearchFacetControl(sf).html();
+                return new SearchFacetControl(sf).highlightedHtml();
               })
             : response.data.status
         );
+        this.#eventHandlers();
       })
       .fail((response) => {
         $("#searchFacetControls").html(
@@ -46,10 +46,13 @@ SearchFacets = class {
         querytype: "getsearchfacets",
       })
       .done((response) => {
-        console.log(response.data);
         const sfs = response.data.searchfacets
           .map((sf) => {
-            return this.#listItem(sf);
+            return (
+              "<li class='savedSearchFacet'>" +
+              new SearchFacetControl(sf).html() +
+              "</li>"
+            );
           })
           .join("");
         $('[data-cy="savedSearchFacetsList"]').html(
@@ -62,56 +65,22 @@ SearchFacets = class {
       });
   };
 
-  #listItem = (sf) => {
-    const id = "savedSearchFacet" + sf.id;
-    const link =
-      "<a searchfacetid='" +
-      sf.id +
-      "' href='#' title='" +
-      JSON.stringify(sf.ds0__instantsearchHelper, null, 2) +
-      "'  data-cy='" +
-      id +
-      "' class='itemName'>" +
-      sf.name +
-      "</a>";
-    const activate =
-      "<a searchfacetid='" +
-      sf.id +
-      "' href='#' title='' itemaction='activate' class='itemAction'>activate</a>";
-    const remove =
-      "<a searchfacetid='" +
-      sf.id +
-      "' href='#' title='' itemaction='delete' class='itemAction'>remove</a>";
-    const replace =
-      "<a searchfacetid='" +
-      sf.id +
-      "' href='#' title='' itemaction='replace' class='itemAction'>replace</a>";
-    return (
-      "<li class='savedSearchFacet'>" +
-      link +
-      " " +
-      activate +
-      " " +
-      replace +
-      " " +
-      remove +
-      "</li>"
-    );
-  };
-
   #eventHandlers = () => {
-    return $("li.savedSearchFacet a.itemAction").click((event) => {
-      const sfID = event.target.attributes["searchfacetid"].value;
-      const itemAction = event.target.attributes["itemaction"].value;
+    return $("a.searchFacetAction").click((event) => {
+      const searchFacetAction =
+        event.target.attributes["searchFacetAction"].value;
       this.mwapi
         .get({
           action: "dataspectsapi",
-          querytype: itemAction + "searchfacet",
-          searchfacetid: sfID,
+          querytype: searchFacetAction + "searchfacet",
+          searchfacetname: event.target.attributes["searchfacetname"].value,
         })
         .done((response) => {
-          console.log(response.data);
-          this.showSavedSearchFacetsList();
+          if (searchFacetAction === "activate") {
+            console.log(
+              "Activate " + event.target.attributes["searchfacetname"].value
+            );
+          }
         })
         .fail((response) => {
           console.error(response);

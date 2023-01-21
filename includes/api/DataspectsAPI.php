@@ -68,19 +68,23 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'deletesearchfacet':
+				wfDebug("### deletesearchfacet for ".$params['searchfacetname']);
 				if(in_array("writeapi", $user->getRights())){
 					try {
 						$this->loadBackends();
-						$result = $this->sqlite3->deleteSearchFacet($params['searchfacetid']);
-						$this->getResult()->addValue(null, "data", [ 'searchfacetid' => $params['searchfacetid'], 'result' => $result ] ); //FIXME: handle $result
+						$result = $this->sqlite3->deleteSearchFacet($params['searchfacetname']);
+						wfDebug("### deleted from SQLite3: ".$params['searchfacetname']);
+						$this->dsNeo4j->deleteSearchFacet($params['searchfacetname']);
+						wfDebug("### deleted from Neo4j: ".$params['searchfacetname']);
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
 					} catch (Exception $e) {
 						wfDebug("### DataspectsAPI error: ".$e);
-						$this->getResult()->addValue(null, "data", [ 'searchfacetid' => $params['searchfacetid'], 'result' => $e->getMessage() ] );
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
 					}
 				} else {
 					$errorMessage = "deletesearchfacet not permitted for ".$user->getName();
 					wfDebug("### "+$errorMessage);
-					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetid' => $params['searchfacetid'] ] );
+					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetname' => $params['searchfacetname'] ] );
 				}
 				break;
 			case 'numberofnodes':
@@ -179,7 +183,6 @@ class DataspectsAPI extends ApiBase {
 			'firstxcharacters' => null,
 			'property' => null,
 			'searchfacetname' => null,
-			'searchfacetid' => null,
 			'currenthelper' => null,
 			"querystring" => null
         ];

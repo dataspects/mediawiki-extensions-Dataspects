@@ -46,9 +46,9 @@ class DataspectsSQLite3 extends \SQLite3 {
         return $result;
     }
 
-    public function deleteSearchFacet($id) { // FIXME: SQL injection safe?
+    public function deleteSearchFacet($name) { // FIXME: SQL injection safe?
         $this->openDB();
-        $result = $this->exec("DELETE FROM facets WHERE id = ".intval($id).";");
+        $result = $this->exec("DELETE FROM facets WHERE name = '".$name."';");
         return $result;
     }
 
@@ -57,11 +57,10 @@ class DataspectsSQLite3 extends \SQLite3 {
             wfDebug("### you");
             return false;
         }
-        $results = $this->query("SELECT id, name, ds0instantsearchHelper FROM facets;");
+        $results = $this->query("SELECT name, ds0instantsearchHelper FROM facets;");
         $arr = [];
         while ($row = $results->fetchArray()) {    
             $arr[] = [
-                "id" => $row["id"],
                 "name" => $row["name"],
                 "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"])
             ];

@@ -49,6 +49,21 @@ class DSNeo4j {
     return $matches;
   }
 
+  public function deleteSearchFacet($name) {
+    $query = [
+      "query" => '
+        MATCH         (n:SearchFacet)
+        WHERE         n.name = $name
+        DETACH DELETE n
+      ',
+      "params" => [
+        "name" => $name
+      ]
+    ];
+    $results = $this->query($query);
+    return $results;
+  }
+
   public function addSearchFacet($name) {
     $queries = [
       [
