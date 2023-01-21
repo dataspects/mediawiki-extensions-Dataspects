@@ -52,10 +52,10 @@ ElementSearchResult = class extends SearchResult {
     return '<span class="eppo0__hasEntityTitle">' + iss + "</span>";
   };
 
-  ds0__contentText = (instantsearch) => {
-    // FIXME: highlight but don't snippet! (https://www.algolia.com/doc/api-reference/widgets/highlight/js/)
-    return this.hit.ds0__contentText;
-  };
+  // ds0__contentText = (instantsearch) => {
+  //   // FIXME: highlight but don't snippet! (https://www.algolia.com/doc/api-reference/widgets/highlight/js/)
+  //   return this.hit.ds0__contentText;
+  // };
 
   createMetaPageLink = () => {
     //#IndexConfigSetting
