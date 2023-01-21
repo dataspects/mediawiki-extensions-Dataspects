@@ -7,6 +7,7 @@ SearchResult = class {
    */
   constructor(hit, n4j) {
     this.hit = hit;
+    console.log(JSON.stringify(hit, null, 2));
     this.api = new mw.Api();
     this.n4j = n4j;
   }
@@ -35,13 +36,13 @@ SearchResult = class {
      */
     if (this.isCompact) {
       return {
-        main: '<div class="compactHit">',
+        main: '<div class="compactHit" data-cy="' + this.hit.id + '">',
         srh: "<div class='searchResultHeader'>",
         srb: "<div class='searchResultBody' style='display:none'>",
       };
     }
     return {
-      main: '<div class="hit">',
+      main: '<div class="hit" data-cy="' + this.hit.id + '">',
       srh: "<div class='searchResultHeader'>",
       srb: "<div class='searchResultBody' style='display:block'>",
     };

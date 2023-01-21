@@ -55,6 +55,11 @@ describe("dataspects", () => {
 
   it.only("should find 'backup' and then 'About cloning' by search facet", () => {
     cy.visit("/wiki/Special:Dataspects");
-    cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
+    cy.typeIntoTextInput("input.ais-SearchBox-input", "backup");
+    cy.get('div.hit[data-cy="mwstakeorg_100"]').should("be.visible");
+    cy.get('div[data-cy="searchFacetControl"]')
+      .contains('a[data-cy="searchFacetControlName"]', "About cloning")
+      .click();
+    cy.get('div.hit[data-cy="mwstakeorg_141"]').should("be.visible");
   });
 });
