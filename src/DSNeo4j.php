@@ -24,17 +24,18 @@ class DSNeo4j {
   }
 
   public function typeahead($queryString) {
-    echo "(?i)".str_replace(" ", "|", $queryString);
     $query = [
       "query" => '
         MATCH     (n:SearchFacet)
-        WITH      apoc.text.regexGroups(n.name, $regex) AS matches,
+        WITH      apoc.coll.toSet(
+                    apoc.text.regexGroups(n.name, $regex)
+                  ) AS matches,
                   n.name AS name
         RETURN    name, matches
         ORDER BY  size(matches) DESC
       ',
       "params" => [
-        "regex" => "(?i)".str_replace(" ", "|", $queryString)
+        "regex" => "(?i)".str_replace(" ", "|", trim($queryString))
       ]
     ];
     $results = $this->query($query);

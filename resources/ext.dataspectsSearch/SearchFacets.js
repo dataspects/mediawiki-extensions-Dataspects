@@ -1,3 +1,5 @@
+const { SearchFacetControl } = require("./SearchFacetControl.js");
+
 SearchFacets = class {
   constructor(mwapi) {
     this.mwapi = mwapi;
@@ -11,7 +13,11 @@ SearchFacets = class {
         querystring: query,
       })
       .done((response) => {
-        $("#searchFacetControls").html(JSON.stringify(response.data.matches));
+        $("#searchFacetControls").html(
+          response.data.matches.map((sf) => {
+            return new SearchFacetControl(sf).html();
+          })
+        );
       })
       .fail((response) => {
         console.error("typeaheadsearchfacets");

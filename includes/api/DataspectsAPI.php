@@ -31,6 +31,7 @@ class DataspectsAPI extends ApiBase {
 					try {
 						$this->loadBackends();
 						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
+						$this->dsNeo4j->addSearchFacet($params['searchfacetname']);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
 					} catch (Exception $e) {
 						wfDebug("### DataspectsAPI error: ".$e);
@@ -45,8 +46,11 @@ class DataspectsAPI extends ApiBase {
 			case 'typeaheadsearchfacets':
 				try {
 					$this->loadBackends();
-					$matches = $this->dsNeo4j->typeahead($params['querystring']);
-					$this->getResult()->addValue(null, "data", array( 'matches' => json_encode($matches) ) );
+					$matches = [];
+					if(trim($params['querystring']) <> "") {
+						$matches = $this->dsNeo4j->typeahead($params['querystring']);
+					}
+					$this->getResult()->addValue(null, "data", array( 'matches' => $matches ) );
 				} catch (Exception $e) {
 					wfDebug("### DataspectsAPI error: ".$e);
 					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );

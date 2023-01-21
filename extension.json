@@ -60,6 +60,7 @@
         "./instantsearch.production.min.js",
         "./DSneo4j.js",
         "./SearchFacets.js",
+        "./SearchFacetControl.js",
         "./vis-network.min.js",
         "./chart.js",
         "./chartjs-plugin-datalabels.js",
