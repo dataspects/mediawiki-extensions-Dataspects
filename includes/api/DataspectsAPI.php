@@ -67,6 +67,17 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
 				}
 				break;
+			case 'activatesearchfacet':
+				wfDebug("### getsearchfacet for ".$params['searchfacetname']);
+				try {
+					$this->loadBackends();
+					$searchFacets = $this->sqlite3->getSearchFacet($params['searchfacetname']);
+					$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI3 error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+				}
+				break;
 			case 'deletesearchfacet':
 				wfDebug("### deletesearchfacet for ".$params['searchfacetname']);
 				if(in_array("writeapi", $user->getRights())){
@@ -132,7 +143,9 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			default:
-				$this->getResult()->addValue(null, "data", array( 'status' => $queryType." is not a valid dataspects MWAPI querytype") );
+				$status = $queryType." is not a valid dataspects MWAPI querytype";
+				wfDebug("### "+$status);
+				$this->getResult()->addValue(null, "data", array( 'status' => $status) );
 			break;
 		}
 		

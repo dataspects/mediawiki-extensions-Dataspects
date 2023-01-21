@@ -54,7 +54,6 @@ class DataspectsSQLite3 extends \SQLite3 {
 
     public function getSearchFacets() {
         if(!$this->openDB()) {
-            wfDebug("### you");
             return false;
         }
         $results = $this->query("SELECT name, ds0instantsearchHelper FROM facets;");
@@ -62,7 +61,22 @@ class DataspectsSQLite3 extends \SQLite3 {
         while ($row = $results->fetchArray()) {    
             $arr[] = [
                 "name" => $row["name"],
-                "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"])
+                "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"], true)
+            ];
+		}
+        return $arr;
+    }
+
+    public function getSearchFacet($searchfacetname) {
+        if(!$this->openDB()) {
+            return false;
+        }
+        $results = $this->query("SELECT name, ds0instantsearchHelper FROM facets WHERE name = '$searchfacetname';");
+        $arr = [];
+        while ($row = $results->fetchArray()) {    
+            $arr[] = [
+                "name" => $row["name"],
+                "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"], true)
             ];
 		}
         return $arr;

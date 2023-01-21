@@ -7,7 +7,6 @@ SearchResult = class {
    */
   constructor(hit, n4j) {
     this.hit = hit;
-    console.log(JSON.stringify(hit, null, 2));
     this.api = new mw.Api();
     this.n4j = n4j;
   }
