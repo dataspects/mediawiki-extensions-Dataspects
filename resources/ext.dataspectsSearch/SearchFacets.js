@@ -6,6 +6,9 @@ SearchFacets = class {
   }
 
   typeahead = (query) => {
+    $("#searchFacetControls").html(
+      '<div class="pulsate">Loading search facets&hellip;</div>'
+    );
     this.mwapi
       .get({
         action: "dataspectsapi",
@@ -13,14 +16,19 @@ SearchFacets = class {
         querystring: query,
       })
       .done((response) => {
+        console.log(response);
         $("#searchFacetControls").html(
-          response.data.matches.map((sf) => {
-            return new SearchFacetControl(sf).html();
-          })
+          response.data.status === 0
+            ? response.data.matches.map((sf) => {
+                return new SearchFacetControl(sf).html();
+              })
+            : response.data.status
         );
       })
       .fail((response) => {
-        console.error("typeaheadsearchfacets");
+        $("#searchFacetControls").html(
+          '<div class="pulsate">Failed to load search facets.</div>'
+        );
         console.error(response);
       });
   };

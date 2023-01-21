@@ -45,12 +45,13 @@ class DataspectsAPI extends ApiBase {
 				break;
 			case 'typeaheadsearchfacets':
 				try {
+					wfDebug("### typeaheadsearchfacets for ".$params['querystring']);
 					$this->loadBackends();
 					$matches = [];
 					if(trim($params['querystring']) <> "") {
 						$matches = $this->dsNeo4j->typeahead($params['querystring']);
 					}
-					$this->getResult()->addValue(null, "data", array( 'matches' => $matches ) );
+					$this->getResult()->addValue(null, "data", array( 'matches' => $matches, 'status' => 0 ) );
 				} catch (Exception $e) {
 					wfDebug("### DataspectsAPI error: ".$e);
 					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
@@ -127,7 +128,7 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			default:
-			# code...
+				$this->getResult()->addValue(null, "data", array( 'status' => $queryType." is not a valid dataspects MWAPI querytype") );
 			break;
 		}
 		
