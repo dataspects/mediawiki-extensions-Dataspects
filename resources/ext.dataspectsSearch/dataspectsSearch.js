@@ -175,12 +175,6 @@ function handleSpecialDataspects() {
             helper.setState(
               searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
             );
-            console.log(
-              "Query should be " +
-                searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
-                  .query
-            );
-            console.log("Query is " + helper.state.query);
           } else {
             /**
              * If the f-induced facet is not found, then we have to default to defaultToAuthorizedSources

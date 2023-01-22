@@ -110,7 +110,6 @@ SearchFacets = class {
                 "."
             );
           }
-          console.log(JSON.stringify(response, null, 2));
         })
         .fail((response) => {
           console.error(response);

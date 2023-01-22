@@ -25,7 +25,6 @@ SearchFacetControl = class {
       '<div data-cy="searchFacetControl" class="searchFacetControl">' +
       this.#name(true) +
       "</div>";
-    console.log(html);
     return html;
   };
 
@@ -51,7 +50,6 @@ SearchFacetControl = class {
       );
       str = str.replaceAll(re, "<mark class='searchFacetNameMarker'>$1</mark>");
     }
-    console.log(str);
     return str;
   };
 
