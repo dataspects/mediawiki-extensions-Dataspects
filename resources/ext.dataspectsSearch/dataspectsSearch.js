@@ -115,8 +115,9 @@ function handleSpecialDataspects() {
     }
   };
   const checkForFQueryString = (helper) => {
+    // FIXME: is this correctly and completely implemented?
     return new Promise(function (resolve, reject) {
-      const currentSearchFacet = getUrlParameter("f");
+      const currentSearchFacet = decodeURIComponent(getUrlParameter("f"));
       if (currentSearchFacet) {
         mwapi
           .get({
@@ -130,6 +131,8 @@ function handleSpecialDataspects() {
                 response.data.searchfacets[0].ds0__instantsearchHelper
                   .meilisearchHelper.state
               );
+            } else {
+              console.log(currentSearchFacet);
             }
             resolve("Promise resolved");
           })

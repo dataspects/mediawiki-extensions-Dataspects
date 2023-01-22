@@ -9,11 +9,13 @@ SearchFacetControl = class {
       '<div data-cy="searchFacetControl" class="searchFacetControl">' +
       this.#name(false) +
       " " +
-      this.#activateLink() +
+      this.#activate() +
       " " +
-      this.#replaceLink() +
+      this.#replace() +
       " " +
-      this.#removeLink() +
+      this.#remove() +
+      " " +
+      this.#link() +
       "</div>"
     );
   };
@@ -46,7 +48,7 @@ SearchFacetControl = class {
     return str;
   };
 
-  #activateLink = () => {
+  #activate = () => {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
@@ -54,7 +56,7 @@ SearchFacetControl = class {
     );
   };
 
-  #removeLink = () => {
+  #remove = () => {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
@@ -62,11 +64,20 @@ SearchFacetControl = class {
     );
   };
 
-  #replaceLink = () => {
+  #replace = () => {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
       "' href='#' title='Replace' searchFacetAction='replace' class='searchFacetAction'>replace</a>"
+    );
+  };
+  #link = () => {
+    return (
+      "<a href='" +
+      mw.config.get("wgServer") +
+      "/wiki/Special:Dataspects?f=" +
+      encodeURIComponent(this.searchFacet.name) +
+      "' title='Load this facet as a bookmarkable link' class='searchFacetAction'>link</a>"
     );
   };
 };
