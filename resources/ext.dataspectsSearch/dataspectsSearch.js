@@ -13,6 +13,27 @@ var theDs0__sources = [];
 const n4j = new DSNeo4j(); //FIXME: ok to be global?
 
 /**
+ *
+ * @param {*} sParam
+ * @returns
+ */
+const getUrlParameter = (sParam) => {
+  var sPageURL = window.location.search.substring(1),
+    sURLVariables = sPageURL.split("&"),
+    sParameterName,
+    i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split("=");
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined
+        ? true
+        : decodeURIComponent(sParameterName[1]);
+    }
+  }
+  return false;
+};
+/**
  * Switch by special page type
  */
 if (
@@ -28,7 +49,10 @@ if (
 ) {
   handleSpecialDataspects();
 }
-
+/**
+ *
+ * @param {*} helper
+ */
 const defaultToAuthorizedSources = (helper) => {
   mw.config.get("sources").forEach((source) => {
     helper.addDisjunctiveFacetRefinement("ds0__source", source);
@@ -36,10 +60,21 @@ const defaultToAuthorizedSources = (helper) => {
 };
 
 function handleSpecialDataspects() {
-  const { SearchResultMatcher } = require("./searchResultMatcher.js");
+  /**
+   * Check config
+   */
   if (!mw.config.get("wgDataspectsSearchURL")) {
     return;
   }
+  /**
+   * Load special classes
+   */
+  const { SearchResultMatcher } = require("./searchResultMatcher.js");
+
+  /**
+   *
+   * @param {*} helper
+   */
   const setCurrentHelper = (helper) => {
     window.localStorage.setItem(
       "dataspectsSearchFacet",
@@ -49,6 +84,61 @@ function handleSpecialDataspects() {
       })
     );
   };
+  /**
+   * https://community.algolia.com/algoliasearch-helper-js/reference.html
+   *
+   * derive()
+   * hasPedningRequests()
+   * setQueryParameter()
+   * clearRefinements()
+   * addFacetRefinements()
+   * removeFacetRefinements()
+   * hasRefinement()
+   * getRefinements()
+   * clearRefinements()
+   * removeDisjunctiveFacetRefinement()
+   * hasRefinements()
+   * addHierarchicalFacetRefinement()
+   * addFacetExclusion()
+   * addTag()
+   * helper.on('change|search|result|error|searchQueueEmpty|searchForFacetValues'
+   * results.npPages|nbHits
+   * parsedQuery
+   * serverUsed
+   * setTypoTolerance()
+   */
+
+  const checkForQQueryString = (helper) => {
+    const currentQueryString = getUrlParameter("q");
+    if (currentQueryString) {
+      helper.setQuery(currentQueryString);
+    }
+  };
+  const checkForFQueryString = (helper) => {
+    return new Promise(function (resolve, reject) {
+      const currentSearchFacet = getUrlParameter("f");
+      if (currentSearchFacet) {
+        mwapi
+          .get({
+            action: "dataspectsapi",
+            querytype: "activatesearchfacet",
+            searchfacetname: currentSearchFacet,
+          })
+          .done((response) => {
+            if (response.data.searchfacets.length > 0) {
+              helper.setState(
+                response.data.searchfacets[0].ds0__instantsearchHelper
+                  .meilisearchHelper.state
+              );
+            }
+            resolve("Promise resolved");
+          })
+          .fail((response) => {
+            console.error(response);
+          });
+      }
+    });
+  };
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
@@ -56,11 +146,15 @@ function handleSpecialDataspects() {
       mw.config.get("wgDataspectsSearchURL"),
       mw.config.get("wgDataspectsSearchKey")
     ),
-    searchFunction(helper) {
+    async searchFunction(helper) {
       /*
         This code is executed on page load as well as "as-you-type"
       */
+
       if (initialPageLoad) {
+        if (!checkForQQueryString(helper)) {
+          await checkForFQueryString(helper);
+        }
         defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
       }
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
@@ -73,6 +167,7 @@ function handleSpecialDataspects() {
       setCurrentHelper(helper);
     },
   });
+
   const searchFacets = new SearchFacets(mwapi, search);
   search.addWidgets([
     instantsearch.widgets.configure({
@@ -331,24 +426,6 @@ $("#compactList").click(function () {
     isCompact = false;
   }
 });
-
-// const getUrlParameter = (sParam) => {
-//   var sPageURL = window.location.search.substring(1),
-//     sURLVariables = sPageURL.split("&"),
-//     sParameterName,
-//     i;
-
-//   for (i = 0; i < sURLVariables.length; i++) {
-//     sParameterName = sURLVariables[i].split("=");
-
-//     if (sParameterName[0] === sParam) {
-//       return sParameterName[1] === undefined
-//         ? true
-//         : decodeURIComponent(sParameterName[1]);
-//     }
-//   }
-//   return false;
-// };
 
 // const onPageLoadComplete = () => {
 //   if (getUrlParameter("intro")) {

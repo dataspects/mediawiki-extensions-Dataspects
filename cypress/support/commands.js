@@ -100,7 +100,7 @@ Cypress.Commands.add("mediawiki_refresh", () => {
 // dataspectsSearch
 Cypress.Commands.add("typeIntoTextInput", (selector, text) => {
   cy.get(selector).type(text);
-  cy.wait(2000);
+  cy.wait(1000);
 });
 
 //////////////////////////
