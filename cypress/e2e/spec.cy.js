@@ -13,7 +13,7 @@ describe("dataspects", () => {
 });
 
 describe("dataspects", () => {
-  it("should be triggered by MediaWiki's top right corner search input's 'containing option'", () => {
+  it.only("should be triggered by MediaWiki's top right corner search input's 'containing option'", () => {
     cy.visit("/wiki");
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.typeIntoTextInput("#searchInput", scenario[0].query);
@@ -33,14 +33,14 @@ describe("dataspects", () => {
     });
   });
 
-  it("should show the saved search facets", () => {
+  it.only("should show the saved search facets", () => {
     // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.takeScreenshot("saved-search-facets");
     cy.get("li.savedSearchFacet a").first().click();
   });
-  it("should save a new search facet and remove it again", () => {
+  it.only("should save a new search facet and remove it again", () => {
     // Visit
     cy.mediawiki_login(login);
     const unixTimestamp = Math.floor(Date.now());
@@ -48,14 +48,18 @@ describe("dataspects", () => {
     // Check
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.get('[data-cy="savedSearchFacetsUL"]').contains(
-      "li.savedSearchFacet a.itemName",
+      "li.savedSearchFacet div[data-cy='searchFacetControl'] a.searchFacetControlName",
       unixTimestamp
     );
     // Remove
     cy.removeSearchFacet(unixTimestamp);
+    cy.get('[data-cy="showSavedSearchFacetsButton"]').click().click();
     // Check
     cy.get('[data-cy="savedSearchFacetsUL"]')
-      .contains("li.savedSearchFacet a.itemName", unixTimestamp)
+      .contains(
+        "li.savedSearchFacet div[data-cy='searchFacetControl'] a.searchFacetControlName",
+        unixTimestamp
+      )
       .should("not.exist");
   });
 

@@ -4,6 +4,7 @@ require("./chart.js");
 require("./chartjs-plugin-datalabels.js");
 require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
+require("./datatables.js");
 const { SearchFacets } = require("./SearchFacets.js");
 const { DSNeo4j } = require("./DSneo4j.js");
 const mwapi = new mw.Api();
@@ -75,15 +76,21 @@ function handleSpecialDataspects() {
    *
    * @param {*} helper
    */
-  const setCurrentHelper = (helper) => {
+  const storeCurrentContextInLocalStorage = (helper, searchFacet) => {
+    var currentContext = {
+      environment: { user: mw.config.get("user") },
+      meilisearchHelper: helper,
+      searchFacetName: false,
+    };
+    if (searchFacet) {
+      currentContext.searchFacetName = searchFacet.name;
+    }
     window.localStorage.setItem(
-      "dataspectsSearchFacet",
-      JSON.stringify({
-        environment: { user: mw.config.get("user") },
-        meilisearchHelper: helper,
-      })
+      "currentContext",
+      JSON.stringify(currentContext)
     );
   };
+
   /**
    * https://community.algolia.com/algoliasearch-helper-js/reference.html
    *
@@ -108,13 +115,15 @@ function handleSpecialDataspects() {
    * setTypoTolerance()
    */
 
-  const checkForQQueryString = (helper) => {
+  const setQueryIfQURLParameter = (helper) => {
     const currentQueryString = getUrlParameter("q");
     if (currentQueryString) {
       helper.setQuery(currentQueryString);
+      return true;
     }
+    return false;
   };
-  const checkForFQueryString = (helper) => {
+  const checkForFURLParameter = () => {
     // FIXME: is this correctly and completely implemented?
     return new Promise(function (resolve, reject) {
       const currentSearchFacet = decodeURIComponent(getUrlParameter("f"));
@@ -127,14 +136,10 @@ function handleSpecialDataspects() {
           })
           .done((response) => {
             if (response.data.searchfacets.length > 0) {
-              helper.setState(
-                response.data.searchfacets[0].ds0__instantsearchHelper
-                  .meilisearchHelper.state
-              );
+              resolve(response.data.searchfacets[0]);
             } else {
-              console.log(currentSearchFacet);
+              resolve(false);
             }
-            resolve("Promise resolved");
           })
           .fail((response) => {
             console.error(response);
@@ -153,13 +158,32 @@ function handleSpecialDataspects() {
       /*
         This code is executed on page load as well as "as-you-type"
       */
-
+      var searchFacet = {};
       if (initialPageLoad) {
-        if (!checkForQQueryString(helper)) {
-          await checkForFQueryString(helper);
+        // IS there a q coming from MW's top right search?
+        if (!setQueryIfQURLParameter(helper)) {
+          // If there is NOT, then check for f URL parameter and get the corresponding facet:
+          searchFacet = await checkForFURLParameter();
+          if (searchFacet) {
+            console.log("Loading search facet " + searchFacet.name);
+            helper.setState(
+              searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
+            );
+            console.log(
+              "Query should be " +
+                searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
+                  .query
+            );
+            console.log("Query is " + helper.state.query);
+          } else {
+            defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
+          }
         }
-        defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
+        // Update local storage with URL-parameter induced config:
+        storeCurrentContextInLocalStorage(helper, searchFacet);
       }
+      initialPageLoad = false;
+
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
         // FXIME!
         searchFacets.typeahead(helper.state.query);
@@ -167,7 +191,6 @@ function handleSpecialDataspects() {
       } else {
         alert("You have to select one or more source(s).");
       }
-      setCurrentHelper(helper);
     },
   });
 
@@ -220,7 +243,6 @@ function handleSpecialDataspects() {
             .map((item) => {
               return item;
             });
-          initialPageLoad = false;
         }
         // enforceAuthorizedSources(helper);
         return theDs0__sources;
@@ -309,11 +331,15 @@ function handleSpecialDataspects() {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
+          var currentContext = JSON.parse(
+            window.localStorage.getItem("currentContext")
+          );
+          console.log(
+            "currentContext.searchFacetName: " + currentContext.searchFacetName
+          );
           var srm = new SearchResultMatcher(
             hit,
-            JSON.parse(
-              window.localStorage.getItem("dataspectsSearchFacet")
-            ).environment,
+            currentContext.environment,
             instantsearch,
             n4j
           );
@@ -344,7 +370,7 @@ function handleSpecialDataspects() {
       e.preventDefault();
       const payload = {
         searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
-        currentHelper: window.localStorage.getItem("dataspectsSearchFacet"),
+        currentHelper: window.localStorage.getItem("currentContext"),
       };
       if (payload.searchFacetName === "" || payload.currentHelper === {}) {
         alert("saveCurrentFacet data error!");
@@ -401,6 +427,33 @@ function handleSpecialDataspectsBackstage() {
         .fail(function (response) {
           console.error(response);
         });
+    });
+
+    $("#table_id").DataTable({
+      data: [
+        {
+          name: "Tiger Nixon",
+          position: "System Architect",
+          salary: "$3,120",
+          start_date: "2011/04/25",
+          office: "Edinburgh",
+          extn: "5421",
+        },
+        {
+          name: "Garrett Winters",
+          position: "Director",
+          salary: "$5,300",
+          start_date: "2011/07/25",
+          office: "Edinburgh",
+          extn: "8422",
+        },
+      ],
+      columns: [
+        { data: "name" },
+        { data: "position" },
+        { data: "salary" },
+        { data: "office" },
+      ],
     });
   });
 }

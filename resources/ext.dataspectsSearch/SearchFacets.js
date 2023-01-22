@@ -67,6 +67,7 @@ SearchFacets = class {
   };
 
   #eventHandlers = () => {
+    $("a.searchFacetAction").unbind();
     return $("a.searchFacetAction").click((event) => {
       const searchFacetAction =
         event.target.attributes["searchFacetAction"].value;
@@ -79,13 +80,30 @@ SearchFacets = class {
         .done((response) => {
           if (searchFacetAction === "activate") {
             console.log(
-              "Activate " + event.target.attributes["searchfacetname"].value
+              "Activate " +
+                event.target.attributes["searchfacetname"].value +
+                "..."
             );
             this.search.helper.setState(
               response.data.searchfacets[0].ds0__instantsearchHelper
                 .meilisearchHelper.state
             );
+            // Update currentContext in localStorage
+            var currentContext = JSON.parse(
+              window.localStorage.getItem("currentContext")
+            );
+            currentContext.searchFacetName = response.data.searchfacets[0].name;
+            window.localStorage.setItem(
+              "currentContext",
+              JSON.stringify(currentContext)
+            );
+            //
             this.search.helper.search();
+            console.log(
+              "Activated " +
+                event.target.attributes["searchfacetname"].value +
+                "."
+            );
           }
         })
         .fail((response) => {

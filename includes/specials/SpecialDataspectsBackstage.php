@@ -24,7 +24,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     </td>
 				</tr>
                 <tr>
-                    <td><b>Current configuration</b></td>
+                    <td><b>Current configuration</b><table id="table_id"></table></td>
                     <td>
                         '.$this->currentConfiguration().'
                     </td>

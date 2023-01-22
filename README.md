@@ -177,3 +177,5 @@ lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ yarn add \
 
 **Copy into place, e.g.**
 lex@lexThinkPad:~/Downloads/dataspects-search-js-libraries$ cp node_modules/vis-network/dist/vis-network.min.js ~/mwstakeorgdevclone/extensions/Dataspects/resources/ext.dataspectsSearch/
+
+https://datatables.net/download/
