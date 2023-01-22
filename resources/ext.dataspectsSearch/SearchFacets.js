@@ -69,8 +69,15 @@ SearchFacets = class {
   #eventHandlers = () => {
     $("a.searchFacetAction").unbind();
     return $("a.searchFacetAction").click((event) => {
-      const searchFacetAction =
-        event.target.attributes["searchFacetAction"].value;
+      console.log(event.target.attributes["searchFacetAction"]);
+      var searchFacetAction = "";
+      if ("searchFacetAction" in event.target.attributes) {
+        searchFacetAction = event.target.attributes["searchFacetAction"].value;
+      } else {
+        searchFacetAction =
+          event.target.parentNode.attributes["searchFacetAction"].value;
+      }
+
       this.mwapi
         .get({
           action: "dataspectsapi",
@@ -105,6 +112,7 @@ SearchFacets = class {
                 "."
             );
           }
+          console.log(JSON.stringify(response, null, 2));
         })
         .fail((response) => {
           console.error(response);

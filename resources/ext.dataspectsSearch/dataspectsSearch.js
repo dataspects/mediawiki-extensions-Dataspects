@@ -89,7 +89,6 @@ function handleSpecialDataspects() {
       "currentContext",
       JSON.stringify(currentContext)
     );
-    console.log("### stored currentContext in localStorage");
   };
 
   /**
@@ -119,7 +118,6 @@ function handleSpecialDataspects() {
   const setQueryIfQURLParameter = (helper) => {
     const currentQueryString = getUrlParameter("q");
     if (currentQueryString) {
-      console.log("### q query parameter set to " + currentQueryString);
       helper.setQuery(currentQueryString);
       defaultToAuthorizedSources(helper);
       return true;
@@ -158,21 +156,15 @@ function handleSpecialDataspects() {
       mw.config.get("wgDataspectsSearchKey")
     ),
     async searchFunction(helper) {
-      console.log(
-        "### Starting async searchFunction with initialPageLoad = " +
-          initialPageLoad
-      );
       /*
         This code is executed on page load as well as "as-you-type"
       */
       var searchFacet = {};
       if (initialPageLoad) {
-        console.log("### initialPageLoad");
         /**
          * Check for q URL parameter and setQuery if there is one
          */
         if (!setQueryIfQURLParameter(helper)) {
-          console.log("### no q query parameter");
           /**
            * If there is no q URL parameter, then check for
            * f URL parameter and get the corresponding facet:
@@ -201,10 +193,8 @@ function handleSpecialDataspects() {
       }
       initialPageLoad = false;
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
-        console.log("### Next");
         // FXIME!
         searchFacets.typeahead(helper.state.query);
-        console.log("### helper.search()");
         helper.search();
       } else {
         alert("You have to select one or more source(s).");
@@ -213,6 +203,9 @@ function handleSpecialDataspects() {
   });
 
   const searchFacets = new SearchFacets(mwapi, search);
+  var currentContext = JSON.parse(
+    window.localStorage.getItem("currentContext")
+  );
   search.addWidgets([
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
@@ -349,15 +342,17 @@ function handleSpecialDataspects() {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
-          var currentContext = JSON.parse(
-            window.localStorage.getItem("currentContext")
-          );
           console.log(
-            "currentContext.searchFacetName: " + currentContext.searchFacetName
+            "currentContext.searchFacetName in templates: " +
+              currentContext.searchFacetName
           );
+          /**
+           * If there is a currentContext.searchFacetName, then we consider special options.
+           * For example a summary above the Meilisearch search results.
+           */
           var srm = new SearchResultMatcher(
             hit,
-            currentContext.environment,
+            currentContext,
             instantsearch,
             n4j
           );
@@ -370,6 +365,10 @@ function handleSpecialDataspects() {
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
       transformItems(items, { results }) {
+        console.log(
+          "currentContext.searchFacetName in transformItems: " +
+            currentContext.searchFacetName
+        );
         return items.map((item, index) => {
           return {
             ...item,

@@ -20,13 +20,13 @@ const { CodeSearchResult } = require("./searchResultClasses/code.js");
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, environment, instantsearch, n4j) {
+  constructor(hit, currentContext, instantsearch, n4j) {
     this.hit = hit;
     this.n4j = n4j;
     this.instantsearch = instantsearch;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo(this.hit);
-    this.environment = environment;
+    this.environment = currentContext.environment;
     this.defaultSearchResultClass = "SearchResult";
     this.searchResultClass = this.getSearchResultClass();
   }

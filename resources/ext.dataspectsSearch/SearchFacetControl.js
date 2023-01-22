@@ -21,11 +21,12 @@ SearchFacetControl = class {
   };
 
   highlightedHtml = () => {
-    return (
+    const html =
       '<div data-cy="searchFacetControl" class="searchFacetControl">' +
       this.#name(true) +
-      "</div>"
-    );
+      "</div>";
+    console.log(html);
+    return html;
   };
 
   #name = (highlighted) => {
@@ -43,8 +44,14 @@ SearchFacetControl = class {
   };
 
   #mark = (str) => {
-    const re = new RegExp("(" + this.searchFacet.matches.join("|") + ")", "g");
-    str = str.replaceAll(re, "<mark>$1</mark>");
+    if (this.searchFacet.matches.length > 0) {
+      const re = new RegExp(
+        "(" + this.searchFacet.matches.join("|") + ")",
+        "g"
+      );
+      str = str.replaceAll(re, "<mark>$1</mark>");
+    }
+    console.log(str);
     return str;
   };
 
