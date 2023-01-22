@@ -37,7 +37,7 @@ SearchFacetControl = class {
     return (
       '<a searchfacetname="' +
       this.searchFacet.name +
-      '" href="#" data-cy="searchFacetControlName" class="searchFacetControlName searchFacetAction" searchFacetAction="activate" title="Activate">' +
+      '" href="#" data-cy="searchFacetControlName" class="searchFacetControlName searchfacetaction" searchfacetaction="activate" title="Activate">' +
       name +
       "</a>"
     );
@@ -49,7 +49,7 @@ SearchFacetControl = class {
         "(" + this.searchFacet.matches.join("|") + ")",
         "g"
       );
-      str = str.replaceAll(re, "<mark>$1</mark>");
+      str = str.replaceAll(re, "<mark class='searchFacetNameMarker'>$1</mark>");
     }
     console.log(str);
     return str;
@@ -59,7 +59,7 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Activate' searchFacetAction='activate' class='searchFacetAction'>activate</a>"
+      "' href='#' title='Activate' searchfacetaction='activate' class='searchfacetaction'>activate</a>"
     );
   };
 
@@ -67,7 +67,7 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Remove' searchFacetAction='delete' class='searchFacetAction'>remove</a>"
+      "' href='#' title='Remove' searchfacetaction='delete' class='searchfacetaction'>remove</a>"
     );
   };
 
@@ -75,7 +75,7 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Replace' searchFacetAction='replace' class='searchFacetAction'>replace</a>"
+      "' href='#' title='Replace' searchfacetaction='replace' class='searchfacetaction'>replace</a>"
     );
   };
   #link = () => {
@@ -84,7 +84,7 @@ SearchFacetControl = class {
       mw.config.get("wgServer") +
       "/wiki/Special:Dataspects?f=" +
       encodeURIComponent(this.searchFacet.name) +
-      "' title='Load this facet as a bookmarkable link' class='searchFacetAction'>link</a>"
+      "' title='Load this facet as a bookmarkable link' class='searchfacetaction'>link</a>"
     );
   };
 };

@@ -11,7 +11,7 @@ a.searchFacetControlName {
   font-weight: bold;
 }
 
-li.savedSearchFacet a.searchFacetAction {
+li.savedSearchFacet a.searchfacetaction {
   color: gray;
 }
 li.savedSearchFacet a.itemName {

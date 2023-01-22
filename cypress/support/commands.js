@@ -163,6 +163,6 @@ Cypress.Commands.add("removeSearchFacet", (name) => {
       name
     )
     .siblings()
-    .contains("a.searchFacetAction", "remove")
+    .contains("a.searchfacetaction", "remove")
     .click();
 });

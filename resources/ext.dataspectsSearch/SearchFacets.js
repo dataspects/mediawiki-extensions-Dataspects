@@ -67,28 +67,26 @@ SearchFacets = class {
   };
 
   #eventHandlers = () => {
-    $("a.searchFacetAction").unbind();
-    return $("a.searchFacetAction").click((event) => {
-      console.log(event.target.attributes["searchFacetAction"]);
-      var searchFacetAction = "";
-      if ("searchFacetAction" in event.target.attributes) {
-        searchFacetAction = event.target.attributes["searchFacetAction"].value;
-      } else {
-        searchFacetAction =
-          event.target.parentNode.attributes["searchFacetAction"].value;
+    $("a.searchfacetaction").unbind();
+    return $("a.searchfacetaction").click((event) => {
+      var currentNode = event.target;
+      if (event.target.className === "searchFacetNameMarker") {
+        currentNode = event.target.parentNode;
       }
+      const searchfacetaction =
+        currentNode.attributes["searchfacetaction"].value;
 
       this.mwapi
         .get({
           action: "dataspectsapi",
-          querytype: searchFacetAction + "searchfacet",
-          searchfacetname: event.target.attributes["searchfacetname"].value,
+          querytype: searchfacetaction + "searchfacet",
+          searchfacetname: currentNode.attributes["searchfacetname"].value,
         })
         .done((response) => {
-          if (searchFacetAction === "activate") {
+          if (searchfacetaction === "activate") {
             console.log(
               "Activate " +
-                event.target.attributes["searchfacetname"].value +
+                currentNode.attributes["searchfacetname"].value +
                 "..."
             );
             this.search.helper.setState(
@@ -108,7 +106,7 @@ SearchFacets = class {
             this.search.helper.search();
             console.log(
               "Activated " +
-                event.target.attributes["searchfacetname"].value +
+                currentNode.attributes["searchfacetname"].value +
                 "."
             );
           }
