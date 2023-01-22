@@ -24,7 +24,7 @@ describe("dataspects", () => {
     });
   });
 
-  it.only("should search by the 'f' URL parameter", () => {
+  it("should search by the 'f' URL parameter", () => {
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.visit("/wiki/Special:Dataspects?f=" + scenario[2].searchFacetName);
       cy.get('div.hit[data-cy="' + scenario[2].hitIdInTop5 + '"]').should(
@@ -33,14 +33,14 @@ describe("dataspects", () => {
     });
   });
 
-  it.only("should show the saved search facets", () => {
+  it("should show the saved search facets", () => {
     // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.takeScreenshot("saved-search-facets");
     cy.get("li.savedSearchFacet a").first().click();
   });
-  it.only("should save a new search facet and remove it again", () => {
+  it("should save a new search facet and remove it again", () => {
     // Visit
     cy.mediawiki_login(login);
     const unixTimestamp = Math.floor(Date.now());

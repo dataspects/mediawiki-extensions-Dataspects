@@ -89,6 +89,7 @@ function handleSpecialDataspects() {
       "currentContext",
       JSON.stringify(currentContext)
     );
+    console.log("### stored currentContext in localStorage");
   };
 
   /**
@@ -118,7 +119,9 @@ function handleSpecialDataspects() {
   const setQueryIfQURLParameter = (helper) => {
     const currentQueryString = getUrlParameter("q");
     if (currentQueryString) {
+      console.log("### q query parameter set to " + currentQueryString);
       helper.setQuery(currentQueryString);
+      defaultToAuthorizedSources(helper);
       return true;
     }
     return false;
@@ -155,14 +158,25 @@ function handleSpecialDataspects() {
       mw.config.get("wgDataspectsSearchKey")
     ),
     async searchFunction(helper) {
+      console.log(
+        "### Starting async searchFunction with initialPageLoad = " +
+          initialPageLoad
+      );
       /*
         This code is executed on page load as well as "as-you-type"
       */
       var searchFacet = {};
       if (initialPageLoad) {
-        // IS there a q coming from MW's top right search?
+        console.log("### initialPageLoad");
+        /**
+         * Check for q URL parameter and setQuery if there is one
+         */
         if (!setQueryIfQURLParameter(helper)) {
-          // If there is NOT, then check for f URL parameter and get the corresponding facet:
+          console.log("### no q query parameter");
+          /**
+           * If there is no q URL parameter, then check for
+           * f URL parameter and get the corresponding facet:
+           */
           searchFacet = await checkForFURLParameter();
           if (searchFacet) {
             console.log("Loading search facet " + searchFacet.name);
@@ -176,6 +190,9 @@ function handleSpecialDataspects() {
             );
             console.log("Query is " + helper.state.query);
           } else {
+            /**
+             * If the f-induced facet is not found, then we have to default to defaultToAuthorizedSources
+             */
             defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
           }
         }
@@ -183,10 +200,11 @@ function handleSpecialDataspects() {
         storeCurrentContextInLocalStorage(helper, searchFacet);
       }
       initialPageLoad = false;
-
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
+        console.log("### Next");
         // FXIME!
         searchFacets.typeahead(helper.state.query);
+        console.log("### helper.search()");
         helper.search();
       } else {
         alert("You have to select one or more source(s).");
