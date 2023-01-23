@@ -67,26 +67,50 @@ SearchFacets = class {
   };
 
   #eventHandlers = () => {
-    return $("a.searchFacetAction").click((event) => {
-      const searchFacetAction =
-        event.target.attributes["searchFacetAction"].value;
+    $("a.searchfacetaction").unbind();
+    return $("a.searchfacetaction").click((event) => {
+      var currentNode = event.target;
+      if (event.target.className === "searchFacetNameMarker") {
+        currentNode = event.target.parentNode;
+      }
+      const searchfacetaction =
+        currentNode.attributes["searchfacetaction"].value;
+
       this.mwapi
         .get({
           action: "dataspectsapi",
-          querytype: searchFacetAction + "searchfacet",
-          searchfacetname: event.target.attributes["searchfacetname"].value,
+          querytype: searchfacetaction + "searchfacet",
+          searchfacetname: currentNode.attributes["searchfacetname"].value,
         })
         .done((response) => {
-          if (searchFacetAction === "activate") {
+          if (searchfacetaction === "activate") {
             console.log(
-              "Activate " + event.target.attributes["searchfacetname"].value
+              "Activate " +
+                currentNode.attributes["searchfacetname"].value +
+                "..."
             );
             this.search.helper.setState(
               response.data.searchfacets[0].ds0__instantsearchHelper
                 .meilisearchHelper.state
             );
+            // Update currentContext in localStorage
+            var currentContext = JSON.parse(
+              window.localStorage.getItem("currentContext")
+            );
+            currentContext.searchFacetName = response.data.searchfacets[0].name;
+            window.localStorage.setItem(
+              "currentContext",
+              JSON.stringify(currentContext)
+            );
+            //
             this.search.helper.search();
+            console.log(
+              "Activated " +
+                currentNode.attributes["searchfacetname"].value +
+                "."
+            );
           }
+          $(currentNode).siblings("sup").html(response.data.status);
         })
         .fail((response) => {
           console.error(response);

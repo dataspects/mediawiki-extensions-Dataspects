@@ -158,8 +158,11 @@ Cypress.Commands.add("removeSearchFacet", (name) => {
     }
   });
   cy.get('[data-cy="savedSearchFacetsUL"]')
-    .contains("li.savedSearchFacet a.itemName", name)
+    .contains(
+      "li.savedSearchFacet div[data-cy='searchFacetControl'] a.searchFacetControlName",
+      name
+    )
     .siblings()
-    .contains("a.itemAction", "remove")
+    .contains("a.searchfacetaction", "remove")
     .click();
 });

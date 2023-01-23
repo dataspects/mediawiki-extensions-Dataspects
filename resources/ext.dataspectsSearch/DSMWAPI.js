@@ -1,10 +1,30 @@
 require("./vis-network.min.js");
 require("mediawiki.api");
 
-DSNeo4j = class {
+DSMWAPI = class {
   constructor() {
     this.api = new mw.Api();
   }
+
+  nodesList = (tableId, dataTablesOptions) => {
+    this.api
+      .get({
+        action: "dataspectsapi",
+        querytype: "nodeslist",
+      })
+      .done(function (response) {
+        /**
+         * Ask Craig: can I get response.data.nodeslist as return to
+         * this.dsMWAPI.nodesList();?
+         */
+        (dataTablesOptions.data = response.data.nodeslist),
+          $("#" + tableId).DataTable(dataTablesOptions);
+      })
+      .fail(function (response) {
+        console.error("nodeslist");
+        console.error(response);
+      });
+  };
 
   numberOfNodes = (name) => {
     this.api
@@ -210,4 +230,4 @@ const convertToVisNetwork = (rawData) => {
   return gmd;
 };
 
-module.exports = { DSNeo4j };
+module.exports = { DSMWAPI };

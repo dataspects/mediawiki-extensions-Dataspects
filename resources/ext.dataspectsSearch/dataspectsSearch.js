@@ -4,13 +4,14 @@ require("./chart.js");
 require("./chartjs-plugin-datalabels.js");
 require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
+require("./datatables.js");
 const { SearchFacets } = require("./SearchFacets.js");
-const { DSNeo4j } = require("./DSneo4j.js");
+const { DSMWAPI } = require("./DSMWAPI.js");
 const mwapi = new mw.Api();
 var isCompact = false;
 var initialPageLoad = true;
 var theDs0__sources = [];
-const n4j = new DSNeo4j(); //FIXME: ok to be global?
+const dsMWAPI = new DSMWAPI(); //FIXME: ok to be global?
 
 /**
  *
@@ -75,15 +76,21 @@ function handleSpecialDataspects() {
    *
    * @param {*} helper
    */
-  const setCurrentHelper = (helper) => {
+  const storeCurrentContextInLocalStorage = (helper, searchFacet) => {
+    var currentContext = {
+      environment: { user: mw.config.get("user") },
+      meilisearchHelper: helper,
+      searchFacetName: false,
+    };
+    if (searchFacet) {
+      currentContext.searchFacetName = searchFacet.name;
+    }
     window.localStorage.setItem(
-      "dataspectsSearchFacet",
-      JSON.stringify({
-        environment: { user: mw.config.get("user") },
-        meilisearchHelper: helper,
-      })
+      "currentContext",
+      JSON.stringify(currentContext)
     );
   };
+
   /**
    * https://community.algolia.com/algoliasearch-helper-js/reference.html
    *
@@ -108,13 +115,16 @@ function handleSpecialDataspects() {
    * setTypoTolerance()
    */
 
-  const checkForQQueryString = (helper) => {
+  const setQueryIfQURLParameter = (helper) => {
     const currentQueryString = getUrlParameter("q");
     if (currentQueryString) {
       helper.setQuery(currentQueryString);
+
+      return true;
     }
+    return false;
   };
-  const checkForFQueryString = (helper) => {
+  const checkForFURLParameter = () => {
     // FIXME: is this correctly and completely implemented?
     return new Promise(function (resolve, reject) {
       const currentSearchFacet = decodeURIComponent(getUrlParameter("f"));
@@ -127,14 +137,10 @@ function handleSpecialDataspects() {
           })
           .done((response) => {
             if (response.data.searchfacets.length > 0) {
-              helper.setState(
-                response.data.searchfacets[0].ds0__instantsearchHelper
-                  .meilisearchHelper.state
-              );
+              resolve(response.data.searchfacets[0]);
             } else {
-              console.log(currentSearchFacet);
+              resolve(false);
             }
-            resolve("Promise resolved");
           })
           .fail((response) => {
             console.error(response);
@@ -142,6 +148,10 @@ function handleSpecialDataspects() {
       }
     });
   };
+
+  var currentContext = JSON.parse(
+    window.localStorage.getItem("currentContext")
+  );
 
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
@@ -153,25 +163,44 @@ function handleSpecialDataspects() {
       /*
         This code is executed on page load as well as "as-you-type"
       */
-
+      var searchFacet = {};
       if (initialPageLoad) {
-        if (!checkForQQueryString(helper)) {
-          await checkForFQueryString(helper);
+        defaultToAuthorizedSources(helper);
+        /**
+         * Check for q URL parameter and setQuery if there is one
+         */
+        if (!setQueryIfQURLParameter(helper)) {
+          /**
+           * If there is no q URL parameter, then check for
+           * f URL parameter and get the corresponding facet:
+           */
+          searchFacet = await checkForFURLParameter();
+          if (searchFacet) {
+            console.log("Loading search facet " + searchFacet.name);
+            helper.setState(
+              searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
+            );
+          }
         }
-        defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
+        storeCurrentContextInLocalStorage(helper, searchFacet);
       }
+
+      initialPageLoad = false;
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
         // FXIME!
         searchFacets.typeahead(helper.state.query);
+        currentContext = JSON.parse(
+          window.localStorage.getItem("currentContext")
+        );
         helper.search();
       } else {
         alert("You have to select one or more source(s).");
       }
-      setCurrentHelper(helper);
     },
   });
 
   const searchFacets = new SearchFacets(mwapi, search);
+
   search.addWidgets([
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
@@ -220,7 +249,6 @@ function handleSpecialDataspects() {
             .map((item) => {
               return item;
             });
-          initialPageLoad = false;
         }
         // enforceAuthorizedSources(helper);
         return theDs0__sources;
@@ -309,13 +337,20 @@ function handleSpecialDataspects() {
            * These are matched against profiles.json in order to load
            * the correct SearchResult subclass or default SearchResult class.
            */
+          console.log(
+            "currentContext.searchFacetName in templates: " +
+              currentContext.searchFacetName
+          );
+          /**
+           * If there is a currentContext.searchFacetName, then we consider special options.
+           * For example a summary above the Meilisearch search results.
+           */
           var srm = new SearchResultMatcher(
             hit,
-            JSON.parse(
-              window.localStorage.getItem("dataspectsSearchFacet")
-            ).environment,
+            currentContext,
             instantsearch,
-            n4j
+            dsMWAPI,
+            mwapi
           );
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
@@ -326,12 +361,27 @@ function handleSpecialDataspects() {
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
       transformItems(items, { results }) {
-        return items.map((item, index) => {
-          return {
-            ...item,
-            position: { index, page: results.page },
-          };
-        });
+        console.log(
+          "currentContext.searchFacetName in transformItems: " +
+            currentContext.searchFacetName
+        );
+        var theItems = [];
+        if (currentContext.searchFacetName != false) {
+          // FIXME
+          theItems.push({
+            id: "dataspectsSpecialID",
+            eppo0__hasEntityType: currentContext.searchFacetName,
+          });
+        }
+        theItems.push(
+          ...items.map((item, index) => {
+            return {
+              ...item,
+              position: { index, page: results.page },
+            };
+          })
+        );
+        return theItems;
       },
     }),
   ]);
@@ -344,7 +394,7 @@ function handleSpecialDataspects() {
       e.preventDefault();
       const payload = {
         searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
-        currentHelper: window.localStorage.getItem("dataspectsSearchFacet"),
+        currentHelper: window.localStorage.getItem("currentContext"),
       };
       if (payload.searchFacetName === "" || payload.currentHelper === {}) {
         alert("saveCurrentFacet data error!");
@@ -358,7 +408,6 @@ function handleSpecialDataspects() {
         })
         .done(function (response) {
           $('[data-cy="savesearchfacet_result"]').text(response.data.status);
-          console.log(JSON.stringify(response, null, 2));
         })
         .fail(function (response) {
           console.error(response);
@@ -382,9 +431,9 @@ function handleSpecialDataspects() {
 }
 
 function handleSpecialDataspectsBackstage() {
-  n4j.numberOfNodes("#numberOfNeo4jNodes");
-  n4j.releaseTimestampXago();
-  n4j.firstXCharacters(20, "name");
+  dsMWAPI.numberOfNodes("#numberOfNeo4jNodes");
+  dsMWAPI.releaseTimestampXago();
+  dsMWAPI.firstXCharacters(20, "name");
 
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {

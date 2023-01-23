@@ -4,11 +4,16 @@ import queryHitsCombinations from "../fixtures/query-hits-combinations.json";
 
 describe("dataspects", () => {
   it("should be able to search for 'clone'", () => {
-    cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
-    cy.takeScreenshot("dataspects-Search-page");
-    cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
-    cy.takeScreenshot("instant-search-results");
+    cy.fixture("query-hits-combinations").then((scenario) => {
+      cy.typeIntoTextInput("input.ais-SearchBox-input", scenario[0].query);
+      cy.get('div.hit[data-cy="' + scenario[0].hitIdInTop5 + '"]').should(
+        "be.visible"
+      );
+    });
+  });
+  it.only("should display DataspectsSpecialDatatables for f=Bryan", () => {
+    cy.visit("/wiki/Special:Dataspects?f=Bryan");
   });
 });
 
@@ -24,7 +29,7 @@ describe("dataspects", () => {
     });
   });
 
-  it.only("should search by the 'f' URL parameter", () => {
+  it("should search by the 'f' URL parameter", () => {
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.visit("/wiki/Special:Dataspects?f=" + scenario[2].searchFacetName);
       cy.get('div.hit[data-cy="' + scenario[2].hitIdInTop5 + '"]').should(
@@ -48,14 +53,18 @@ describe("dataspects", () => {
     // Check
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
     cy.get('[data-cy="savedSearchFacetsUL"]').contains(
-      "li.savedSearchFacet a.itemName",
+      "li.savedSearchFacet div[data-cy='searchFacetControl'] a.searchFacetControlName",
       unixTimestamp
     );
     // Remove
     cy.removeSearchFacet(unixTimestamp);
+    cy.get('[data-cy="showSavedSearchFacetsButton"]').click().click();
     // Check
     cy.get('[data-cy="savedSearchFacetsUL"]')
-      .contains("li.savedSearchFacet a.itemName", unixTimestamp)
+      .contains(
+        "li.savedSearchFacet div[data-cy='searchFacetControl'] a.searchFacetControlName",
+        unixTimestamp
+      )
       .should("not.exist");
   });
 

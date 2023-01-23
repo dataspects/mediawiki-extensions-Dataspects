@@ -87,7 +87,7 @@ class DataspectsAPI extends ApiBase {
 						wfDebug("### deleted from SQLite3: ".$params['searchfacetname']);
 						$this->dsNeo4j->deleteSearchFacet($params['searchfacetname']);
 						wfDebug("### deleted from Neo4j: ".$params['searchfacetname']);
-						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => "mememe" ] ); //FIXME: handle $result
 					} catch (Exception $e) {
 						wfDebug("### DataspectsAPI error: ".$e);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
@@ -140,6 +140,16 @@ class DataspectsAPI extends ApiBase {
 					$errorMessage = "initializetopictype not permitted for ".$user->getName();
 					wfDebug("### "+$errorMessage);
 					$this->getResult()->addValue(null, "data", array( 'status' => $errorMessage, 'topictype_name' => $topictype_name) );
+				}
+				break;
+			case 'nodeslist':
+				try {
+					$this->loadBackends();
+					$nodesList = $this->dsNeo4j->nodesList();
+					$this->getResult()->addValue(null, "data", array( 'nodeslist' => $nodesList ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI3 error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
 				}
 				break;
 			default:

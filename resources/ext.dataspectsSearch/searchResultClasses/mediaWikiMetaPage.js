@@ -1,11 +1,11 @@
 MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
-  constructor(hit, n4j) {
-    super(hit, n4j);
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 
   ds0__contentText = (instantsearch) => {
     // LEX230108161800
-    this.n4j.testGraph(this.hit.eppo0__hasEntityURL);
+    this.dsMWAPI.testGraph(this.hit.eppo0__hasEntityURL);
     return (
       "<div id='" +
       this.hit.eppo0__hasEntityURL +

@@ -1,3 +1,7 @@
+.searchFacetActionMessage {
+  color: red;
+}
+
 div.searchFacetControl {
   background-color: #e8e8e8;
   padding: 3px;
@@ -11,7 +15,7 @@ a.searchFacetControlName {
   font-weight: bold;
 }
 
-li.savedSearchFacet a.searchFacetAction {
+li.savedSearchFacet a.searchfacetaction {
   color: gray;
 }
 li.savedSearchFacet a.itemName {

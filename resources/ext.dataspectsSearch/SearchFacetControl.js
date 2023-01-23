@@ -16,16 +16,18 @@ SearchFacetControl = class {
       this.#remove() +
       " " +
       this.#link() +
+      " " +
+      this.#message() +
       "</div>"
     );
   };
 
   highlightedHtml = () => {
-    return (
+    const html =
       '<div data-cy="searchFacetControl" class="searchFacetControl">' +
       this.#name(true) +
-      "</div>"
-    );
+      "</div>";
+    return html;
   };
 
   #name = (highlighted) => {
@@ -36,15 +38,20 @@ SearchFacetControl = class {
     return (
       '<a searchfacetname="' +
       this.searchFacet.name +
-      '" href="#" data-cy="searchFacetControlName" class="searchFacetControlName searchFacetAction" searchFacetAction="activate" title="Activate">' +
+      '" href="#" data-cy="searchFacetControlName" class="searchFacetControlName searchfacetaction" searchfacetaction="activate" title="Activate">' +
       name +
       "</a>"
     );
   };
 
   #mark = (str) => {
-    const re = new RegExp("(" + this.searchFacet.matches.join("|") + ")", "g");
-    str = str.replaceAll(re, "<mark>$1</mark>");
+    if (this.searchFacet.matches.length > 0) {
+      const re = new RegExp(
+        "(" + this.searchFacet.matches.join("|") + ")",
+        "g"
+      );
+      str = str.replaceAll(re, "<mark class='searchFacetNameMarker'>$1</mark>");
+    }
     return str;
   };
 
@@ -52,7 +59,7 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Activate' searchFacetAction='activate' class='searchFacetAction'>activate</a>"
+      "' href='#' title='Activate' searchfacetaction='activate' class='searchfacetaction'>activate</a>"
     );
   };
 
@@ -60,7 +67,7 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Remove' searchFacetAction='delete' class='searchFacetAction'>remove</a>"
+      "' href='#' title='Remove' searchfacetaction='delete' class='searchfacetaction'>remove</a>"
     );
   };
 
@@ -68,17 +75,22 @@ SearchFacetControl = class {
     return (
       "<a searchfacetname='" +
       this.searchFacet.name +
-      "' href='#' title='Replace' searchFacetAction='replace' class='searchFacetAction'>replace</a>"
+      "' href='#' title='Replace' searchfacetaction='replace' class='searchfacetaction'>replace</a>"
     );
   };
+
   #link = () => {
     return (
       "<a href='" +
       mw.config.get("wgServer") +
       "/wiki/Special:Dataspects?f=" +
       encodeURIComponent(this.searchFacet.name) +
-      "' title='Load this facet as a bookmarkable link' class='searchFacetAction'>link</a>"
+      "' title='Load this facet as a bookmarkable link' class='searchfacetaction'>link</a>"
     );
+  };
+
+  #message = () => {
+    return "<sup data-cy='searchfacetactionmessage' class='searchFacetActionMessage'></sup>";
   };
 };
 

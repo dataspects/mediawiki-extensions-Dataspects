@@ -1,6 +1,6 @@
 WikiDataspectsResult = class extends MediaWikiSearchResult {
-  constructor(hit) {
-    super(hit);
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 
   eppo0__hasEntityTitle = () => {

@@ -1,6 +1,6 @@
 SearchFacetSearchResult = class extends MediaWikiSearchResult {
-  constructor(hit) {
-    super(hit);
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 
   searchResultHeader = () => {
@@ -20,14 +20,14 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return (
-      this.ds0__contentText(instantsearch) +
+      this.ds0__contentText() +
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
       "<script>" +
-      this.parsedPageText(hit) +
+      this.parsedPageText() +
       +"</script>"
     );
   };
@@ -43,7 +43,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
   };
 
   eppo0__hasEntityTitle = () => {
-    var iss = instantsearch.snippet({
+    var iss = this.instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
       hit: this.hit,

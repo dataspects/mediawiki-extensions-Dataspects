@@ -12,15 +12,36 @@ use Laudis\Neo4j\Contracts\TransactionInterface;
 class DSNeo4j {
 
   public function __construct($url, $username, $password) {
+    wfDebug("### Backend neo4j loading");
     try {
       $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
         'neo4j',
         $url,
         Authenticate::basic($username, $password)
       )->build();
+      wfDebug("### Backend neo4j loaded ");
     } catch (Exception $e) {
+      wfDebug("### Backend neo4j ".$e->getMessage());
       echo 'Caught exception: ',  $e->getMessage(), "\n";
     } 
+  }
+
+  public function nodesList() {
+    $query = [
+      "query" => '
+        MATCH     (n:MediaWikiPage)
+        RETURN    n.name AS name
+      ',
+      "params" => []
+    ];
+    $results = $this->query($query);
+    $nodesList = [];
+    foreach ($results as $result) {
+      $nodesList[] = [
+        name => $result->get("name")
+      ];
+    }
+    return $nodesList;
   }
 
   public function typeahead($queryString) {

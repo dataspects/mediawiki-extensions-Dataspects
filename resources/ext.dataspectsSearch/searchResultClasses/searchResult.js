@@ -1,30 +1,42 @@
-require("mediawiki.api");
 SearchResult = class {
   /**
    * dsImplementation: how to configure search result design/behaviour/interaction
    * https://wiki.dataspects.com/wiki/C0332407119
    *
    */
-  constructor(hit, n4j) {
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+    this.error = error;
+    this.info = info;
     this.hit = hit;
-    this.api = new mw.Api();
-    this.n4j = n4j;
+    this.currentContext = currentContext;
+    this.instantsearch = instantsearch;
+    this.dsMWAPI = dsMWAPI;
+    this.mwapi = mwapi;
   }
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
-  searchResult = (hit, error, info, instantsearch) => {
+  searchResult = (
+    error,
+    info,
+    hit,
+    currentContext,
+    instantsearch,
+    dsMWAPI,
+    mwapi
+  ) => {
     var isrcss = this.initialSearchResultCSS();
     return (
       isrcss.main + // The all encompassing hit class
       (typeof error.message == "string" ? error.message : "") +
       (typeof info.message == "string" ? info.message : "") +
       isrcss.srh + // The header to be shown in compact mode
-      this.searchResultHeader(instantsearch) +
+      this.searchResultHeader() +
       "</div>" +
       isrcss.srb + // The body to be hidden in compact mode
-      this.searchResultBody(hit, instantsearch) +
-      "</div>" +
-      "</div>"
+      this.searchResultBody() +
+      "</div><script>" +
+      this.script() +
+      "</script></div>"
     );
   };
 
@@ -47,13 +59,13 @@ SearchResult = class {
     };
   };
 
-  searchResultHeader = (instantsearch) => {
+  searchResultHeader = () => {
     return (
       "<table><tr><td>" +
       this.resultIcon() +
       "</td><td>" +
       this.eppo0__hasEntityType() +
-      this.eppo0__hasEntityTitle(instantsearch) +
+      this.eppo0__hasEntityTitle(this.instantsearch) +
       this.eppo0__categories() +
       this.ds0__sourceNamespace() +
       "</td></tr><tr><td></td><td>" +
@@ -63,17 +75,12 @@ SearchResult = class {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
-    return (
-      "<div>" +
-      this.ds0__contentText(instantsearch) +
-      "</div>" +
-      this.annotations()
-    );
+  searchResultBody = () => {
+    return "<div>" + this.ds0__contentText() + "</div>" + this.annotations();
   };
 
-  eppo0__hasEntityTitle = (instantsearch) => {
-    var iss = instantsearch.snippet({
+  eppo0__hasEntityTitle = () => {
+    var iss = this.instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
       hit: this.hit,
@@ -101,7 +108,7 @@ SearchResult = class {
   };
 
   ds0__contentText = (instantsearch) => {
-    return instantsearch.snippet({
+    return this.instantsearch.snippet({
       attribute: "ds0__contentText",
       highlightedTagName: "mark",
       hit: this.hit,
@@ -155,11 +162,11 @@ SearchResult = class {
     return "";
   };
 
-  parsedPageText = (hit) => {
+  parsedPageText = () => {
     return "";
   };
 
-  resultIcon = (hit) => {
+  resultIcon = () => {
     return "";
   };
 
@@ -219,6 +226,10 @@ SearchResult = class {
       }
     }
     return this.hit.name;
+  };
+
+  script = () => {
+    return "";
   };
 };
 
