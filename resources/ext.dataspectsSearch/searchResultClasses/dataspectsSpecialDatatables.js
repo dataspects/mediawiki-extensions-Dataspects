@@ -4,7 +4,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
   }
 
   searchResultBody = () => {
-    console.log(this.dsMWAPI);
+    this.dsMWAPI.nodesList();
     return '<table id="table_id"></table>';
   };
 

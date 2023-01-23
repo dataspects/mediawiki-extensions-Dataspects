@@ -6,6 +6,21 @@ DSMWAPI = class {
     this.api = new mw.Api();
   }
 
+  nodesList = () => {
+    this.api
+      .get({
+        action: "dataspectsapi",
+        querytype: "nodeslist",
+      })
+      .done(function (response) {
+        console.log(response);
+      })
+      .fail(function (response) {
+        console.error("nodeslist");
+        console.error(response);
+      });
+  };
+
   numberOfNodes = (name) => {
     this.api
       .get({
