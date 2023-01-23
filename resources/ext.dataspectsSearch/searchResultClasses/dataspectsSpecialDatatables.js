@@ -8,8 +8,10 @@ DataspectsSpecialDatatables = class extends SearchResult {
   };
 
   script = () => {
-    console.log(this.dsMWAPI);
-    this.dsMWAPI.nodesList();
+    const dataTablesOptions = {
+      columns: [{ data: "name" }],
+    };
+    this.dsMWAPI.nodesList("table_id", dataTablesOptions);
   };
 };
 

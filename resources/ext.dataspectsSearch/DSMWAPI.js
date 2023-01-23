@@ -6,7 +6,7 @@ DSMWAPI = class {
     this.api = new mw.Api();
   }
 
-  nodesList = () => {
+  nodesList = (tableId, dataTablesOptions) => {
     this.api
       .get({
         action: "dataspectsapi",
@@ -17,11 +17,8 @@ DSMWAPI = class {
          * Ask Craig: can I get response.data.nodeslist as return to
          * this.dsMWAPI.nodesList();?
          */
-
-        $("#table_id").DataTable({
-          data: response.data.nodeslist,
-          columns: [{ data: "name" }],
-        });
+        (dataTablesOptions.data = response.data.nodeslist),
+          $("#" + tableId).DataTable(dataTablesOptions);
       })
       .fail(function (response) {
         console.error("nodeslist");
