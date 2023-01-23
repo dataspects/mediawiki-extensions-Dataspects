@@ -60,7 +60,7 @@
         "./searchResultClasses/dataspectsSpecialDatatables.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.min.js",
-        "./DSneo4j.js",
+        "./DSMWAPI.js",
         "./SearchFacets.js",
         "./SearchFacetControl.js",
         "./vis-network.min.js",

@@ -1,17 +1,16 @@
-require("mediawiki.api");
 SearchResult = class {
   /**
    * dsImplementation: how to configure search result design/behaviour/interaction
    * https://wiki.dataspects.com/wiki/C0332407119
    *
    */
-  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
     this.error = error;
     this.info = info;
     this.hit = hit;
     this.currentContext = currentContext;
     this.instantsearch = instantsearch;
-    this.n4j = n4j;
+    this.dsMWAPI = dsMWAPI;
     this.mwapi = mwapi;
   }
 
@@ -22,7 +21,7 @@ SearchResult = class {
     hit,
     currentContext,
     instantsearch,
-    n4j,
+    dsMWAPI,
     mwapi
   ) => {
     var isrcss = this.initialSearchResultCSS();

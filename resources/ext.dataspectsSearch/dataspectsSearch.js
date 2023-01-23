@@ -6,12 +6,12 @@ require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
 require("./datatables.js");
 const { SearchFacets } = require("./SearchFacets.js");
-const { DSNeo4j } = require("./DSneo4j.js");
+const { DSMWAPI } = require("./DSMWAPI.js");
 const mwapi = new mw.Api();
 var isCompact = false;
 var initialPageLoad = true;
 var theDs0__sources = [];
-const n4j = new DSNeo4j(); //FIXME: ok to be global?
+const dsMWAPI = new DSMWAPI(); //FIXME: ok to be global?
 
 /**
  *
@@ -349,7 +349,7 @@ function handleSpecialDataspects() {
             hit,
             currentContext,
             instantsearch,
-            n4j,
+            dsMWAPI,
             mwapi
           );
           console.info(
@@ -431,9 +431,9 @@ function handleSpecialDataspects() {
 }
 
 function handleSpecialDataspectsBackstage() {
-  n4j.numberOfNodes("#numberOfNeo4jNodes");
-  n4j.releaseTimestampXago();
-  n4j.firstXCharacters(20, "name");
+  dsMWAPI.numberOfNodes("#numberOfNeo4jNodes");
+  dsMWAPI.releaseTimestampXago();
+  dsMWAPI.firstXCharacters(20, "name");
 
   $(document).ready(function () {
     $("#initializetopictype_form").submit(function (event) {

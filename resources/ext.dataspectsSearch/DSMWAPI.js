@@ -1,7 +1,7 @@
 require("./vis-network.min.js");
 require("mediawiki.api");
 
-DSNeo4j = class {
+DSMWAPI = class {
   constructor() {
     this.api = new mw.Api();
   }
@@ -210,4 +210,4 @@ const convertToVisNetwork = (rawData) => {
   return gmd;
 };
 
-module.exports = { DSNeo4j };
+module.exports = { DSMWAPI };

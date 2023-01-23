@@ -23,11 +23,11 @@ const {
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, currentContext, instantsearch, n4j, mwapi) {
+  constructor(hit, currentContext, instantsearch, dsMWAPI, mwapi) {
     this.hit = hit;
     this.currentContext = currentContext;
     this.instantsearch = instantsearch;
-    this.n4j = n4j;
+    this.dsMWAPI = dsMWAPI;
     this.mwapi = mwapi;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo(this.hit);
@@ -49,7 +49,7 @@ SearchResultMatcher = class {
       this.hit,
       this.currentContext,
       this.instantsearch,
-      this.n4j,
+      this.dsMWAPI,
       this.mwapi
     );
   };
@@ -91,7 +91,7 @@ SearchResultMatcher = class {
       this.hit,
       this.currentContext,
       this.instantsearch,
-      this.n4j,
+      this.dsMWAPI,
       this.mwapi
     );
   };
@@ -121,7 +121,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -133,7 +133,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -145,7 +145,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -157,7 +157,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -169,7 +169,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -181,7 +181,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -193,7 +193,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -205,7 +205,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -217,7 +217,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -229,7 +229,7 @@ SearchResultMatcher = class {
           this.hit,
           this.currentContext,
           this.instantsearch,
-          this.n4j,
+          this.dsMWAPI,
           this.mwapi
         );
         break;
@@ -279,7 +279,7 @@ SearchResultMatchError = class {
 // LEX230108155400
 SearchResultMatchInfo = class {
   #messageValue;
-  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
     this.hit = hit;
   }
 

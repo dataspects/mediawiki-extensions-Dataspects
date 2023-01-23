@@ -1,6 +1,6 @@
 SMWCindyKateSearchResult = class extends MediaWikiSearchResult {
-  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
-    super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
+  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 };
 
