@@ -3,17 +3,19 @@ let login = ["lex", "globi2000globi"];
 import queryHitsCombinations from "../fixtures/query-hits-combinations.json";
 
 describe("dataspects", () => {
-  it("should be able to search for 'clone'", () => {
-    cy.mediawiki_login(login);
+  it.only("should be able to search for 'clone'", () => {
     cy.visit("/wiki/Special:Dataspects");
-    cy.takeScreenshot("dataspects-Search-page");
-    cy.typeIntoTextInput("input.ais-SearchBox-input", "clone");
-    cy.takeScreenshot("instant-search-results");
+    cy.fixture("query-hits-combinations").then((scenario) => {
+      cy.typeIntoTextInput("input.ais-SearchBox-input", scenario[0].query);
+      cy.get('div.hit[data-cy="' + scenario[0].hitIdInTop5 + '"]').should(
+        "be.visible"
+      );
+    });
   });
 });
 
 describe("dataspects", () => {
-  it.only("should be triggered by MediaWiki's top right corner search input's 'containing option'", () => {
+  it("should be triggered by MediaWiki's top right corner search input's 'containing option'", () => {
     cy.visit("/wiki");
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.typeIntoTextInput("#searchInput", scenario[0].query);
@@ -63,7 +65,7 @@ describe("dataspects", () => {
       .should("not.exist");
   });
 
-  it("should save two new search facets and use them again", () => {
+  it.only("should save two new search facets and use them again", () => {
     cy.mediawiki_login(login);
     const sfName0 = Math.floor(Date.now()).toString();
     cy.saveSearchFacet(sfName0);

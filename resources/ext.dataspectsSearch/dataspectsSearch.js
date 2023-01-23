@@ -77,6 +77,7 @@ function handleSpecialDataspects() {
    * @param {*} helper
    */
   const storeCurrentContextInLocalStorage = (helper, searchFacet) => {
+    console.log("me");
     var currentContext = {
       environment: { user: mw.config.get("user") },
       meilisearchHelper: helper,
@@ -119,7 +120,7 @@ function handleSpecialDataspects() {
     const currentQueryString = getUrlParameter("q");
     if (currentQueryString) {
       helper.setQuery(currentQueryString);
-      defaultToAuthorizedSources(helper);
+
       return true;
     }
     return false;
@@ -149,6 +150,10 @@ function handleSpecialDataspects() {
     });
   };
 
+  var currentContext = JSON.parse(
+    window.localStorage.getItem("currentContext")
+  );
+
   const search = instantsearch({
     indexName: mw.config.get("wgDataspectsIndex"),
     searchClient: instantMeiliSearch(
@@ -161,6 +166,7 @@ function handleSpecialDataspects() {
       */
       var searchFacet = {};
       if (initialPageLoad) {
+        defaultToAuthorizedSources(helper);
         /**
          * Check for q URL parameter and setQuery if there is one
          */
@@ -175,20 +181,17 @@ function handleSpecialDataspects() {
             helper.setState(
               searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
             );
-          } else {
-            /**
-             * If the f-induced facet is not found, then we have to default to defaultToAuthorizedSources
-             */
-            defaultToAuthorizedSources(helper); //FIXME: HACK: this confines the FIRST helper to authorized sources. However, unchecking all options expands search across ALL sources!
           }
         }
-        // Update local storage with URL-parameter induced config:
-        storeCurrentContextInLocalStorage(helper, searchFacet);
       }
+      storeCurrentContextInLocalStorage(helper, searchFacet);
       initialPageLoad = false;
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
         // FXIME!
         searchFacets.typeahead(helper.state.query);
+        currentContext = JSON.parse(
+          window.localStorage.getItem("currentContext")
+        );
         helper.search();
       } else {
         alert("You have to select one or more source(s).");
@@ -197,9 +200,7 @@ function handleSpecialDataspects() {
   });
 
   const searchFacets = new SearchFacets(mwapi, search);
-  var currentContext = JSON.parse(
-    window.localStorage.getItem("currentContext")
-  );
+
   search.addWidgets([
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
@@ -359,6 +360,7 @@ function handleSpecialDataspects() {
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
       transformItems(items, { results }) {
+        console.log(currentContext); // FIXME: this is null if localStorage doesn't contain already a currentContext!
         console.log(
           "currentContext.searchFacetName in transformItems: " +
             currentContext.searchFacetName
