@@ -107,7 +107,7 @@ SearchResult = class {
       : "";
   };
 
-  ds0__contentText = (instantsearch) => {
+  ds0__contentText = () => {
     return this.instantsearch.snippet({
       attribute: "ds0__contentText",
       highlightedTagName: "mark",

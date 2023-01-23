@@ -2,6 +2,11 @@
   color: red;
 }
 
+.dsHint {
+  color: gray;
+  font-style: italic;
+}
+
 div.searchFacetControl {
   background-color: #e8e8e8;
   padding: 3px;

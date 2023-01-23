@@ -10,7 +10,7 @@ const { DSMWAPI } = require("./DSMWAPI.js");
 const mwapi = new mw.Api();
 var isCompact = false;
 var initialPageLoad = true;
-var theDs0__sources = [];
+var currentDs0__sources = [];
 const dsMWAPI = new DSMWAPI(); //FIXME: ok to be global?
 
 /**
@@ -165,7 +165,7 @@ function handleSpecialDataspects() {
       */
       var searchFacet = {};
       if (initialPageLoad) {
-        defaultToAuthorizedSources(helper);
+        // defaultToAuthorizedSources(helper);
         /**
          * Check for q URL parameter and setQuery if there is one
          */
@@ -186,22 +186,28 @@ function handleSpecialDataspects() {
       }
 
       initialPageLoad = false;
-      if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
-        // FXIME!
-        searchFacets.typeahead(helper.state.query);
-        currentContext = JSON.parse(
-          window.localStorage.getItem("currentContext")
-        );
-        helper.search();
-      } else {
-        alert("You have to select one or more source(s).");
-      }
+      // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
+      // FXIME!
+      searchFacets.typeahead(helper.state.query);
+      currentContext = JSON.parse(
+        window.localStorage.getItem("currentContext")
+      );
+      helper.search();
+      // } else {
+      //   alert("You have to select one or more source(s).");
+      // }
     },
   });
 
   const searchFacets = new SearchFacets(mwapi, search);
 
+  theHelper = null;
   search.addWidgets([
+    {
+      init: (options) => {
+        theHelper = options.helper;
+      },
+    },
     instantsearch.widgets.configure({
       // FIXME: https://github.com/algolia/instantsearch/discussions/4762?sort=top?sort=top
       attributesToSnippet: mw.config.get("wgDataspectsAttributesToSnippet"),
@@ -230,31 +236,45 @@ function handleSpecialDataspects() {
     instantsearch.widgets.refinementList({
       container: "#sources-refinement-list",
       attribute: "ds0__source",
+      operator: "or",
+      // https://discourse.algolia.com/t/auto-select-facet-values-on-page-load/15819/4
       transformItems(items, { results }) {
-        if (initialPageLoad) {
-          // In order to always show all sources (disjunctively),
-          // we initialize theDs0__sources on initialPageLoad to all sources.
-          // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
+        // In order to always show all sources (disjunctively),
+        // we initialize currentDs0__sources on initialPageLoad to all sources.
+        // FIXME: 1) properly implement disjunctive facets, 2) templating with checkboxes
+        // FIXME: operator: "or" seems to have no effect!?
+        // FIXME: The following merely confines the options list to the authorized sources.
+        // It does not restrict the helper's disjunctiveFacetsRefinements!
+        currentDs0__sources = items
+          .filter((item) => {
+            if (mw.config.get("sources").includes(item.value)) {
+              return true;
+            }
+            return false;
+          })
+          .map((item) => {
+            return item;
+          });
 
-          // FIXME: The following merely confines the options list to the authorized sources.
-          // It does not restrict the helper's disjunctiveFacetsRefinements!
-          // This could be done if we were able to access the helper here.
-          theDs0__sources = items
-            .filter((item) => {
-              if (mw.config.get("sources").includes(item.value)) {
-                return true;
-              }
-              return false;
-            })
-            .map((item) => {
-              return item;
-            });
-        }
-        // enforceAuthorizedSources(helper);
-        return theDs0__sources;
+        //   // enforceAuthorizedSources(helper);
+        return currentDs0__sources;
       },
+      // templates: {
+      //   item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge ds0__source">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
+      // },
       templates: {
-        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="badge ds0__source">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
+        item(item, { html }) {
+          const { url, label, count, isRefined } = item;
+          console.log(isRefined);
+          const a = '<a href="' + url + '">' + label + " (" + count + ")</a>";
+          if (isRefined) {
+            return (
+              a +
+              " <span class='dsHint'>Click again to return to all sources&hellip;</span>"
+            );
+          }
+          return a;
+        },
       },
       cssClasses: {
         root: "sources-refinement-list",

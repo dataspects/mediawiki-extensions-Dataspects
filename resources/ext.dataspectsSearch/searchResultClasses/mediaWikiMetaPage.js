@@ -3,7 +3,7 @@ MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
     super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 
-  ds0__contentText = (instantsearch) => {
+  ds0__contentText = () => {
     // LEX230108161800
     this.dsMWAPI.testGraph(this.hit.eppo0__hasEntityURL);
     return (
@@ -11,7 +11,7 @@ MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
       this.hit.eppo0__hasEntityURL +
       "' class='visjsGraph'></div>" +
       "<pre>" +
-      instantsearch.snippet({
+      this.instantsearch.snippet({
         attribute: "ds0__contentSource",
         highlightedTagName: "mark",
         hit: this.hit,
