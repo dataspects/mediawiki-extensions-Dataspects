@@ -65,7 +65,7 @@ describe("dataspects", () => {
       .should("not.exist");
   });
 
-  it.only("should save two new search facets and use them again", () => {
+  it("should save two new search facets and use them again", () => {
     cy.mediawiki_login(login);
     const sfName0 = Math.floor(Date.now()).toString();
     cy.saveSearchFacet(sfName0);

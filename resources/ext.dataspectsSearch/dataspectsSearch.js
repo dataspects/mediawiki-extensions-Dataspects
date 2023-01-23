@@ -77,7 +77,6 @@ function handleSpecialDataspects() {
    * @param {*} helper
    */
   const storeCurrentContextInLocalStorage = (helper, searchFacet) => {
-    console.log("me");
     var currentContext = {
       environment: { user: mw.config.get("user") },
       meilisearchHelper: helper,
@@ -183,8 +182,9 @@ function handleSpecialDataspects() {
             );
           }
         }
+        storeCurrentContextInLocalStorage(helper, searchFacet);
       }
-      storeCurrentContextInLocalStorage(helper, searchFacet);
+
       initialPageLoad = false;
       if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
         // FXIME!
@@ -360,7 +360,6 @@ function handleSpecialDataspects() {
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
       },
       transformItems(items, { results }) {
-        console.log(currentContext); // FIXME: this is null if localStorage doesn't contain already a currentContext!
         console.log(
           "currentContext.searchFacetName in transformItems: " +
             currentContext.searchFacetName
@@ -397,7 +396,6 @@ function handleSpecialDataspects() {
         })
         .done(function (response) {
           $('[data-cy="savesearchfacet_result"]').text(response.data.status);
-          console.log(JSON.stringify(response, null, 2));
         })
         .fail(function (response) {
           console.error(response);
