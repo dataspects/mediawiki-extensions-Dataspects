@@ -349,7 +349,8 @@ function handleSpecialDataspects() {
             hit,
             currentContext,
             instantsearch,
-            n4j
+            n4j,
+            mwapi
           );
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
@@ -368,6 +369,7 @@ function handleSpecialDataspects() {
         if (currentContext.searchFacetName != false) {
           // FIXME
           theItems.push({
+            id: "dataspectsSpecialID",
             eppo0__hasEntityType: currentContext.searchFacetName,
           });
         }

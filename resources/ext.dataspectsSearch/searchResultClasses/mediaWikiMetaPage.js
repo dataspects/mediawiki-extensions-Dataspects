@@ -1,6 +1,6 @@
 MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
-  constructor(hit, n4j) {
-    super(hit, n4j);
+  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
   ds0__contentText = (instantsearch) => {

@@ -23,10 +23,12 @@ const {
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
-  constructor(hit, currentContext, instantsearch, n4j) {
+  constructor(hit, currentContext, instantsearch, n4j, mwapi) {
     this.hit = hit;
-    this.n4j = n4j;
+    this.currentContext = currentContext;
     this.instantsearch = instantsearch;
+    this.n4j = n4j;
+    this.mwapi = mwapi;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo(this.hit);
     this.environment = currentContext.environment;
@@ -35,17 +37,20 @@ SearchResultMatcher = class {
   }
 
   searchResult = () => {
-    this.info.message =
-      "Item " +
-      this.hit.id +
-      " is displayed using searchResultClass '" +
-      this.searchResultClassName +
-      "'";
+    // this.info.message =
+    //   "Item " +
+    //   this.hit.id +
+    //   " is displayed using searchResultClass '" +
+    //   this.searchResultClassName +
+    //   "'";
     return this.searchResultClass.searchResult(
-      this.hit,
       this.error,
       this.info,
-      instantsearch
+      this.hit,
+      this.currentContext,
+      this.instantsearch,
+      this.n4j,
+      this.mwapi
     );
   };
 
@@ -80,7 +85,15 @@ SearchResultMatcher = class {
   #defaultSearchResultClass = () => {
     this.error.message = "ERROR: No searchResultClass found!";
     this.searchResultClassName = "SearchResult";
-    return new SearchResult(this.hit, this.n4j);
+    return new SearchResult(
+      this.error,
+      this.info,
+      this.hit,
+      this.currentContext,
+      this.instantsearch,
+      this.n4j,
+      this.mwapi
+    );
   };
 
   #profilesMatch = (profile) => {
@@ -102,43 +115,123 @@ SearchResultMatcher = class {
     switch (searchResultClassName) {
       case "SearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new SearchResult(this.hit, this.n4j);
+        return new SearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "ElementSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new ElementSearchResult(this.hit, this.n4j);
+        return new ElementSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "SMWCindyKateSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new SMWCindyKateSearchResult(this.hit, this.n4j);
+        return new SMWCindyKateSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "WikiDataspectsResult":
         this.searchResultClassName = searchResultClassName;
-        return new WikiDataspectsResult(this.hit, this.n4j);
+        return new WikiDataspectsResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "SearchFacetSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new SearchFacetSearchResult(this.hit, this.n4j);
+        return new SearchFacetSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "MediaWikiSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new MediaWikiSearchResult(this.hit, this.n4j);
+        return new MediaWikiSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "MediaWikiMetaPageSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new MediaWikiMetaPageSearchResult(this.hit, this.n4j);
+        return new MediaWikiMetaPageSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "MediaWikiFileSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new MediaWikiFileSearchResult(this.hit, this.n4j);
+        return new MediaWikiFileSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "CodeSearchResult":
         this.searchResultClassName = searchResultClassName;
-        return new CodeSearchResult(this.hit, this.n4j);
+        return new CodeSearchResult(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       case "DataspectsSpecialDatatables":
         this.searchResultClassName = searchResultClassName;
-        return new DataspectsSpecialDatatables(this.hit, this.n4j);
+        return new DataspectsSpecialDatatables(
+          this.error,
+          this.info,
+          this.hit,
+          this.currentContext,
+          this.instantsearch,
+          this.n4j,
+          this.mwapi
+        );
         break;
       default:
         return this.#defaultSearchResultClass();
@@ -186,7 +279,7 @@ SearchResultMatchError = class {
 // LEX230108155400
 SearchResultMatchInfo = class {
   #messageValue;
-  constructor(hit) {
+  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
     this.hit = hit;
   }
 

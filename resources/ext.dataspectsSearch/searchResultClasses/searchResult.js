@@ -5,14 +5,26 @@ SearchResult = class {
    * https://wiki.dataspects.com/wiki/C0332407119
    *
    */
-  constructor(hit, n4j) {
+  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+    this.error = error;
+    this.info = info;
     this.hit = hit;
-    this.api = new mw.Api();
+    this.currentContext = currentContext;
+    this.instantsearch = instantsearch;
     this.n4j = n4j;
+    this.mwapi = mwapi;
   }
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
-  searchResult = (hit, error, info, instantsearch) => {
+  searchResult = (
+    error,
+    info,
+    hit,
+    currentContext,
+    instantsearch,
+    n4j,
+    mwapi
+  ) => {
     var isrcss = this.initialSearchResultCSS();
     return (
       isrcss.main + // The all encompassing hit class
@@ -65,12 +77,7 @@ SearchResult = class {
   };
 
   searchResultBody = (hit, instantsearch) => {
-    return (
-      "<div>" +
-      this.ds0__contentText(instantsearch) +
-      "</div>" +
-      this.annotations()
-    );
+    return "<div>" + this.ds0__contentText() + "</div>" + this.annotations();
   };
 
   eppo0__hasEntityTitle = (instantsearch) => {
@@ -102,7 +109,7 @@ SearchResult = class {
   };
 
   ds0__contentText = (instantsearch) => {
-    return instantsearch.snippet({
+    return this.instantsearch.snippet({
       attribute: "ds0__contentText",
       highlightedTagName: "mark",
       hit: this.hit,

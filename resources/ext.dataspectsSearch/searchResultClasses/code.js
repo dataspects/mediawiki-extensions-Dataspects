@@ -1,6 +1,6 @@
 CodeSearchResult = class extends SearchResult {
-  constructor(hit) {
-    super(hit);
+  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
   resultIcon = (hit) => {

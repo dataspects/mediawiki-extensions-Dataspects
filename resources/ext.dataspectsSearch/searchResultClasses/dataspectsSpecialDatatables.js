@@ -1,9 +1,10 @@
 DataspectsSpecialDatatables = class extends SearchResult {
-  constructor(hit) {
-    super(hit);
+  constructor(error, info, hit, currentContext, instantsearch, n4j, mwapi) {
+    super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
   searchResultBody = (hit, instantsearch) => {
+    console.log(this.n4j);
     return '<table id="table_id"></table>';
   };
 
