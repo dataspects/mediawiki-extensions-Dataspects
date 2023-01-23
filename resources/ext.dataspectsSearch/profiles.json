@@ -10,12 +10,6 @@
   },
   {
     "hit": {
-      "eppo0__hasEntityType": "SearchFacet"
-    },
-    "searchResultClassName": "SearchFacetSearchResult"
-  },
-  {
-    "hit": {
       "ds0__sourceNamespace": "Template"
     },
     "searchResultClassName": "MediaWikiMetaPageSearchResult"
@@ -82,7 +76,9 @@
   },
   {
     "hit": {
-      "eppo0__hasEntityType": "Bryan"
+      "ds0__source": "dataspectsSystem",
+      "eppo0__hasEntityType": "DataspectsSearchFacet",
+      "eppo0__hasEntityTitle": "Bryan"
     },
     "searchResultClassName": "DataspectsSpecialDatatables"
   }

@@ -246,7 +246,7 @@ SearchResultMatcher = class {
     for (const key of keys2) {
       const val1 = object1[key];
       const val2 = object2[key];
-      const areObjects = this.isObject(val1) && this.isObject(val2);
+      const areObjects = this.#isObject(val1) && this.#isObject(val2);
       if (
         (areObjects && !this.#firstContainsSecond(val1, val2)) ||
         (!areObjects && val1 !== val2)
@@ -257,7 +257,7 @@ SearchResultMatcher = class {
     return true;
   };
 
-  isObject = (object) => {
+  #isObject = (object) => {
     return object != null && typeof object === "object";
   };
 };

@@ -5,6 +5,7 @@ require("./chartjs-plugin-datalabels.js");
 require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
 require("./datatables.js");
+const profiles = require("./profiles.json");
 const { SearchFacets } = require("./SearchFacets.js");
 const { DSMWAPI } = require("./DSMWAPI.js");
 const mwapi = new mw.Api();
@@ -347,6 +348,53 @@ function handleSpecialDataspects() {
     // FIXME: ${currentDeFactoWgServer()}/wiki/ by variable
     instantsearch.widgets.infiniteHits({
       container: "#hits",
+      transformItems(items, { results }) {
+        console.log(
+          "currentContext.searchFacetName in transformItems: " +
+            currentContext.searchFacetName
+        );
+        var theItems = [];
+        /**
+         * >>> Handle currentContext.searchFacetName
+         */
+        if (currentContext.searchFacetName != false) {
+          //FIXME: VERY UGLY!!!!
+          /**
+           * If the hit matches:
+           *                                "hit": {
+           *                                   "ds0__source": "dataspectsSystem",
+           *                                   "eppo0__hasEntityType": "DataspectsSearchFacet"
+           *                                 }
+           * then we want to consider a
+           * a special search result class and prepend it to the hits as a pseudo-hit.
+           */
+          for (const key in Object.keys(profiles)) {
+            if (
+              profiles[key].hit.eppo0__hasEntityTitle ==
+              currentContext.searchFacetName
+            ) {
+              theItems.push({
+                id: "dataspectsSpecialID",
+                ds0__source: "dataspectsSystem",
+                eppo0__hasEntityType: "DataspectsSearchFacet",
+                eppo0__hasEntityTitle: currentContext.searchFacetName,
+              });
+            }
+          }
+        }
+        /**
+         * <<< Handle currentContext.searchFacetName
+         */
+        theItems.push(
+          ...items.map((item, index) => {
+            return {
+              ...item,
+              position: { index, page: results.page },
+            };
+          })
+        );
+        return theItems;
+      },
       templates: {
         item(hit) {
           /**
@@ -361,10 +409,6 @@ function handleSpecialDataspects() {
             "currentContext.searchFacetName in templates: " +
               currentContext.searchFacetName
           );
-          /**
-           * If there is a currentContext.searchFacetName, then we consider special options.
-           * For example a summary above the Meilisearch search results.
-           */
           var srm = new SearchResultMatcher(
             hit,
             currentContext,
@@ -375,33 +419,16 @@ function handleSpecialDataspects() {
           console.info(
             "Returning " + hit.name + " using " + srm.searchResultClassName
           );
+          if (
+            hit.eppo0__hasEntityType == "DataspectsSearchFacet" &&
+            srm.searchResultClassName == "SearchResult"
+          ) {
+            console.log("me");
+          }
           return srm.searchResult();
         },
         empty:
           "No results for <q>{{ query }}</q> or no results for your authorization level.",
-      },
-      transformItems(items, { results }) {
-        console.log(
-          "currentContext.searchFacetName in transformItems: " +
-            currentContext.searchFacetName
-        );
-        var theItems = [];
-        if (currentContext.searchFacetName != false) {
-          // FIXME
-          theItems.push({
-            id: "dataspectsSpecialID",
-            eppo0__hasEntityType: currentContext.searchFacetName,
-          });
-        }
-        theItems.push(
-          ...items.map((item, index) => {
-            return {
-              ...item,
-              position: { index, page: results.page },
-            };
-          })
-        );
-        return theItems;
       },
     }),
   ]);
