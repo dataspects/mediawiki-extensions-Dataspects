@@ -87,7 +87,7 @@ class DataspectsAPI extends ApiBase {
 						wfDebug("### deleted from SQLite3: ".$params['searchfacetname']);
 						$this->dsNeo4j->deleteSearchFacet($params['searchfacetname']);
 						wfDebug("### deleted from Neo4j: ".$params['searchfacetname']);
-						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
+						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => "mememe" ] ); //FIXME: handle $result
 					} catch (Exception $e) {
 						wfDebug("### DataspectsAPI error: ".$e);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );

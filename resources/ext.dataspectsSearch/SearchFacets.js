@@ -110,6 +110,7 @@ SearchFacets = class {
                 "."
             );
           }
+          $(currentNode).siblings("sup").html(response.data.status);
         })
         .fail((response) => {
           console.error(response);

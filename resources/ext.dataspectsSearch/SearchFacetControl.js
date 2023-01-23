@@ -16,6 +16,8 @@ SearchFacetControl = class {
       this.#remove() +
       " " +
       this.#link() +
+      " " +
+      this.#message() +
       "</div>"
     );
   };
@@ -76,6 +78,7 @@ SearchFacetControl = class {
       "' href='#' title='Replace' searchfacetaction='replace' class='searchfacetaction'>replace</a>"
     );
   };
+
   #link = () => {
     return (
       "<a href='" +
@@ -84,6 +87,10 @@ SearchFacetControl = class {
       encodeURIComponent(this.searchFacet.name) +
       "' title='Load this facet as a bookmarkable link' class='searchfacetaction'>link</a>"
     );
+  };
+
+  #message = () => {
+    return "<sup data-cy='searchfacetactionmessage' class='searchFacetActionMessage'></sup>";
   };
 };
 
