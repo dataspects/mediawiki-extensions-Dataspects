@@ -3,7 +3,7 @@ let login = ["lex", "globi2000globi"];
 import queryHitsCombinations from "../fixtures/query-hits-combinations.json";
 
 describe("dataspects", () => {
-  it.only("should be able to search for 'clone'", () => {
+  it("should be able to search for 'clone'", () => {
     cy.visit("/wiki/Special:Dataspects");
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.typeIntoTextInput("input.ais-SearchBox-input", scenario[0].query);
@@ -11,6 +11,9 @@ describe("dataspects", () => {
         "be.visible"
       );
     });
+  });
+  it.only("should display DataspectsSpecialDatatables for f=Bryan", () => {
+    cy.visit("/wiki/Special:Dataspects?f=Bryan");
   });
 });
 

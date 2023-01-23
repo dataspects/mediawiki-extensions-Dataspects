@@ -364,12 +364,22 @@ function handleSpecialDataspects() {
           "currentContext.searchFacetName in transformItems: " +
             currentContext.searchFacetName
         );
-        return items.map((item, index) => {
-          return {
-            ...item,
-            position: { index, page: results.page },
-          };
-        });
+        var theItems = [];
+        if (currentContext.searchFacetName != false) {
+          // FIXME
+          theItems.push({
+            eppo0__hasEntityType: currentContext.searchFacetName,
+          });
+        }
+        theItems.push(
+          ...items.map((item, index) => {
+            return {
+              ...item,
+              position: { index, page: results.page },
+            };
+          })
+        );
+        return theItems;
       },
     }),
   ]);
@@ -438,33 +448,6 @@ function handleSpecialDataspectsBackstage() {
         .fail(function (response) {
           console.error(response);
         });
-    });
-
-    $("#table_id").DataTable({
-      data: [
-        {
-          name: "Tiger Nixon",
-          position: "System Architect",
-          salary: "$3,120",
-          start_date: "2011/04/25",
-          office: "Edinburgh",
-          extn: "5421",
-        },
-        {
-          name: "Garrett Winters",
-          position: "Director",
-          salary: "$5,300",
-          start_date: "2011/07/25",
-          office: "Edinburgh",
-          extn: "8422",
-        },
-      ],
-      columns: [
-        { data: "name" },
-        { data: "position" },
-        { data: "salary" },
-        { data: "office" },
-      ],
     });
   });
 }

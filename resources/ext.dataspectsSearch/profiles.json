@@ -79,5 +79,11 @@
       "ds0__source": "Element"
     },
     "searchResultClassName": "ElementSearchResult"
+  },
+  {
+    "hit": {
+      "eppo0__hasEntityType": "Bryan"
+    },
+    "searchResultClassName": "DataspectsSpecialDatatables"
   }
 ]

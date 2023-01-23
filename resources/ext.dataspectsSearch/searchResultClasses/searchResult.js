@@ -23,8 +23,9 @@ SearchResult = class {
       "</div>" +
       isrcss.srb + // The body to be hidden in compact mode
       this.searchResultBody(hit, instantsearch) +
-      "</div>" +
-      "</div>"
+      "</div><script>" +
+      this.script() +
+      "</script></div>"
     );
   };
 
@@ -219,6 +220,10 @@ SearchResult = class {
       }
     }
     return this.hit.name;
+  };
+
+  script = () => {
+    return "";
   };
 };
 

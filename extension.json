@@ -57,6 +57,7 @@
         "./searchResultClasses/wikiDataspects.js",
         "./searchResultClasses/searchFacet.js",
         "./searchResultClasses/code.js",
+        "./searchResultClasses/dataspectsSpecialDatatables.js",
         "./instant-meilisearch.umd.js",
         "./instantsearch.production.min.js",
         "./DSneo4j.js",

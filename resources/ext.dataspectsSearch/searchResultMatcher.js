@@ -17,6 +17,9 @@ const {
   SearchFacetSearchResult,
 } = require("./searchResultClasses/searchFacet.js");
 const { CodeSearchResult } = require("./searchResultClasses/code.js");
+const {
+  DataspectsSpecialDatatables,
+} = require("./searchResultClasses/dataspectsSpecialDatatables.js");
 const profiles = require("./profiles.json");
 
 SearchResultMatcher = class {
@@ -132,6 +135,10 @@ SearchResultMatcher = class {
       case "CodeSearchResult":
         this.searchResultClassName = searchResultClassName;
         return new CodeSearchResult(this.hit, this.n4j);
+        break;
+      case "DataspectsSpecialDatatables":
+        this.searchResultClassName = searchResultClassName;
+        return new DataspectsSpecialDatatables(this.hit, this.n4j);
         break;
       default:
         return this.#defaultSearchResultClass();
