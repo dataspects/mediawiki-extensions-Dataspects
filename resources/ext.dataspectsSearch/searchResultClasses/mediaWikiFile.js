@@ -4,21 +4,21 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
     this.typesHavingViewer = ["image/png"];
   }
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return (
       "<div>" +
-      this.ds0__contentText(instantsearch) +
+      this.ds0__contentText() +
       "</div>" +
-      this.ds0__attachments(hit, instantsearch) +
+      this.ds0__attachments() +
       this.annotations() +
       this.parsedPageTextFieldset() +
       "<script>" +
-      this.parsedPageText(hit) +
+      this.parsedPageText() +
       +"</script>"
     );
   };
 
-  ds0__attachments = (hit, instantsearch) => {
+  ds0__attachments = () => {
     //FIXME: handle non-image displays
     if (this.hit.ds0__attachments) {
       return this.hit.ds0__attachments.map((attachment) => {
@@ -34,7 +34,7 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
                 attachment.thumbURL + "/120px-" + this.hit.name
               ) +
               '"></a></td><td><div class="ds0__attachmentsText">' +
-              instantsearch.snippet({
+              this.instantsearch.snippet({
                 attribute: "mw0__attachments.text",
                 highlightedTagName: "mark",
                 hit: this.hit,

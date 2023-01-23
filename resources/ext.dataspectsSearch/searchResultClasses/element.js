@@ -11,21 +11,21 @@ ElementSearchResult = class extends SearchResult {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return (
       "&rarr; " +
       this.createMetaPageLink() +
       "<div>" +
       this.eppo0__hasEntityURL() +
       "<div>" +
-      this.ds0__contentText(instantsearch) +
+      this.ds0__contentText() +
       "</div>" +
       // this.mw0__attachment(instantsearch) +
       this.annotations()
     );
   };
 
-  resultIcon = (hit) => {
+  resultIcon = () => {
     return (
       "<img class='resultIcon' src='" +
       currentDeFactoWgServer() +
@@ -34,7 +34,7 @@ ElementSearchResult = class extends SearchResult {
   };
 
   eppo0__hasEntityTitle = () => {
-    var iss = instantsearch.snippet({
+    var iss = this.instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
       hit: this.hit,

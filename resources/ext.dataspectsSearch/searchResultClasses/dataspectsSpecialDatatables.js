@@ -3,7 +3,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
     super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     console.log(this.n4j);
     return '<table id="table_id"></table>';
   };

@@ -31,10 +31,10 @@ SearchResult = class {
       (typeof error.message == "string" ? error.message : "") +
       (typeof info.message == "string" ? info.message : "") +
       isrcss.srh + // The header to be shown in compact mode
-      this.searchResultHeader(instantsearch) +
+      this.searchResultHeader() +
       "</div>" +
       isrcss.srb + // The body to be hidden in compact mode
-      this.searchResultBody(hit, instantsearch) +
+      this.searchResultBody() +
       "</div><script>" +
       this.script() +
       "</script></div>"
@@ -60,13 +60,13 @@ SearchResult = class {
     };
   };
 
-  searchResultHeader = (instantsearch) => {
+  searchResultHeader = () => {
     return (
       "<table><tr><td>" +
       this.resultIcon() +
       "</td><td>" +
       this.eppo0__hasEntityType() +
-      this.eppo0__hasEntityTitle(instantsearch) +
+      this.eppo0__hasEntityTitle(this.instantsearch) +
       this.eppo0__categories() +
       this.ds0__sourceNamespace() +
       "</td></tr><tr><td></td><td>" +
@@ -76,12 +76,12 @@ SearchResult = class {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return "<div>" + this.ds0__contentText() + "</div>" + this.annotations();
   };
 
-  eppo0__hasEntityTitle = (instantsearch) => {
-    var iss = instantsearch.snippet({
+  eppo0__hasEntityTitle = () => {
+    var iss = this.instantsearch.snippet({
       attribute: "eppo0__hasEntityTitle",
       highlightedTagName: "mark",
       hit: this.hit,
@@ -163,11 +163,11 @@ SearchResult = class {
     return "";
   };
 
-  parsedPageText = (hit) => {
+  parsedPageText = () => {
     return "";
   };
 
-  resultIcon = (hit) => {
+  resultIcon = () => {
     return "";
   };
 

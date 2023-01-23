@@ -3,7 +3,7 @@ MediaWikiSearchResult = class extends SearchResult {
     super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
-  resultIcon = (hit) => {
+  resultIcon = () => {
     return (
       "<img class='resultIcon' src='" +
       currentDeFactoWgServer() +
@@ -11,22 +11,22 @@ MediaWikiSearchResult = class extends SearchResult {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return (
       "<div>" +
-      this.ds0__contentText(instantsearch) +
+      this.ds0__contentText() +
       "</div>" +
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
       "<script>" +
-      this.parsedPageText(hit) +
+      this.parsedPageText() +
       +"</script>"
     );
   };
 
   // LEX230108165801
-  parsedPageText = (hit) => {
+  parsedPageText = () => {
     // FIXME: This must be run only when opening "Show original page contents"
     // if ("ds0__sourceParseTextURL" in hit && hit.ds0__sourceParseTextURL != "") {
     //   this.api

@@ -3,7 +3,7 @@ CodeSearchResult = class extends SearchResult {
     super(error, info, hit, currentContext, instantsearch, n4j, mwapi);
   }
 
-  resultIcon = (hit) => {
+  resultIcon = () => {
     return (
       "<img class='resultIcon' src='" +
       currentDeFactoWgServer() +
@@ -11,7 +11,7 @@ CodeSearchResult = class extends SearchResult {
     );
   };
 
-  searchResultBody = (hit, instantsearch) => {
+  searchResultBody = () => {
     return this.annotations();
   };
 
