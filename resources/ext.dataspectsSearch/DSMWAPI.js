@@ -13,7 +13,15 @@ DSMWAPI = class {
         querytype: "nodeslist",
       })
       .done(function (response) {
-        console.log(response);
+        /**
+         * Ask Craig: can I get response.data.nodeslist as return to
+         * this.dsMWAPI.nodesList();?
+         */
+
+        $("#table_id").DataTable({
+          data: response.data.nodeslist,
+          columns: [{ data: "name" }],
+        });
       })
       .fail(function (response) {
         console.error("nodeslist");

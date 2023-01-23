@@ -142,6 +142,16 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", array( 'status' => $errorMessage, 'topictype_name' => $topictype_name) );
 				}
 				break;
+			case 'nodeslist':
+				try {
+					$this->loadBackends();
+					$nodesList = $this->dsNeo4j->nodesList();
+					$this->getResult()->addValue(null, "data", array( 'nodeslist' => $nodesList ) );
+				} catch (Exception $e) {
+					wfDebug("### DataspectsAPI3 error: ".$e);
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+				}
+				break;
 			default:
 				$status = $queryType." is not a valid dataspects MWAPI querytype";
 				wfDebug("### "+$status);
