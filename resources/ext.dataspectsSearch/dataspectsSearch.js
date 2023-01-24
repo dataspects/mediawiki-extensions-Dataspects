@@ -180,16 +180,16 @@ function handleSpecialDataspects() {
            * f URL parameter and get the corresponding facet:
            */
           searchFacet = await checkForFURLParameter();
-          if (searchFacet) {
+          console.log(searchFacet);
+          if (searchFacet && searchFacet.ds0__instantsearchHelper) {
             console.log("Loading search facet " + searchFacet.name);
             helper.setState(
               searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
             );
           }
         }
-        storeCurrentContextInLocalStorage(helper, searchFacet);
       }
-
+      storeCurrentContextInLocalStorage(helper, searchFacet);
       initialPageLoad = false;
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
@@ -197,6 +197,7 @@ function handleSpecialDataspects() {
       currentContext = JSON.parse(
         window.localStorage.getItem("currentContext")
       );
+      console.log(JSON.stringify(helper, null, 2));
       helper.search();
       // } else {
       //   alert("You have to select one or more source(s).");
@@ -354,10 +355,12 @@ function handleSpecialDataspects() {
       container: "#hits",
       transformItems(items, { results }) {
         var theItems = [];
+        console.log(theItems);
         /**
          * currentContext.searchFacetName
          */
         if (currentContext.searchFacetName != false) {
+          console.log(currentContext.searchFacetName);
           /**
            * If the hit matches:
            *                                "hit": {
@@ -377,6 +380,11 @@ function handleSpecialDataspects() {
             pseudoHit,
             currentContext
           ).getSearchResultClass();
+          console.log(
+            pseudoHit.searchResultClassName +
+              " for " +
+              currentContext.searchFacetName
+          );
           if (pseudoHit.searchResultClassName != "SearchResult") {
             theItems.push(pseudoHit);
           }

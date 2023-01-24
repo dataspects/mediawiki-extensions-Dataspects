@@ -85,8 +85,8 @@ SearchFacets = class {
         .done((response) => {
           if (searchfacetaction === "activate") {
             console.log(
-              "Activate " +
-                currentNode.attributes["searchfacetname"].value +
+              "meilisearchHelper: Registering activation of " +
+                response.data.searchfacets[0].name +
                 "..."
             );
             this.search.helper.setState(
@@ -105,9 +105,7 @@ SearchFacets = class {
             //
             this.search.helper.search();
             console.log(
-              "Activated " +
-                currentNode.attributes["searchfacetname"].value +
-                "."
+              currentContext.searchFacetName + " stored in currentContext"
             );
           }
           $(currentNode).siblings("sup").html(response.data.status);

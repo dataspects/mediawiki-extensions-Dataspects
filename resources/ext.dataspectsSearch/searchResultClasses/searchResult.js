@@ -109,11 +109,12 @@ SearchResult = class {
   };
 
   ds0__contentText = () => {
-    return this.instantsearch.snippet({
-      attribute: "ds0__contentText",
-      highlightedTagName: "mark",
-      hit: this.hit,
-    });
+    return "me";
+    // return this.instantsearch.snippet({
+    //   attribute: "ds0__contentText",
+    //   highlightedTagName: "mark",
+    //   hit: this.hit,
+    // });
   };
 
   myURLEncode = (url) => {

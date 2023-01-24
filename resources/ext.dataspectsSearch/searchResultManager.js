@@ -1,10 +1,10 @@
 const { SearchResult } = require("./searchResultClasses/searchResult.js");
-const { ElementSearchResult } = require("./searchResultClasses/element.js");
 const {
   MediaWikiSearchResult,
   MediaWikiFileSearchResult,
   MediaWikiMetaPageSearchResult,
-} = require("./searchResultClasses/mediaWiki.js");
+  ElementSearchResult,
+} = require("./searchResultClasses.js");
 const {
   SMWCindyKateSearchResult,
 } = require("./searchResultClasses/sMWCindyKate.js");
