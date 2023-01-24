@@ -21,8 +21,9 @@ const {
 const profiles = require("./profiles.json");
 
 ProfilesMatcher = class {
-  constructor(hit) {
+  constructor(hit, currentContext) {
     this.hit = hit;
+    this.environment = currentContext.environment;
   }
   getSearchResultClass = () => {
     for (const key in Object.keys(profiles)) {
@@ -78,19 +79,19 @@ SearchResultMatcher = class {
     this.mwapi = mwapi;
     this.error = new SearchResultMatchError();
     this.info = new SearchResultMatchInfo(this.hit);
-    this.environment = currentContext.environment;
-    this.defaultSearchResultClass = "SearchResult";
-    this.searchResultClass = this.getSearchResultClass();
   }
 
   searchResult = () => {
-    // this.info.message =
-    //   "Item " +
-    //   this.hit.id +
-    //   " is displayed using searchResultClass '" +
-    //   this.searchResultClassName +
-    //   "'";
-    return this.searchResultClass.searchResult(
+    this.info.message =
+      "Item " +
+      this.hit.id +
+      " is displayed using searchResultClass '" +
+      this.hit.searchResultClassName +
+      "'";
+    const searchResultClass = this.#searchResultClassMappings(
+      this.hit.searchResultClassName
+    );
+    return searchResultClass.searchResult(
       this.error,
       this.info,
       this.hit,
@@ -99,62 +100,6 @@ SearchResultMatcher = class {
       this.dsMWAPI,
       this.mwapi
     );
-  };
-
-  getSearchResultClass = () => {
-    for (const key in Object.keys(profiles)) {
-      if (this.#profilesMatch(profiles[key])) {
-        /**
-         * We check the hit against the profiles. THE FIRST THAT MATCHES IS USED!
-         * So, more general profiles need to be placed at the end of profiles.json.
-         * E.g. ds0__sourceNamespace is more specific than ds0__source, so in profiles.json:
-         * [
-         *  {
-         *    "hit": {
-         *      "ds0__sourceNamespace": ...
-         *    }
-         *  },
-         *  {
-         *    "hit": {
-         *      "ds0__source": ...
-         *    }
-         *  }
-         * ]
-         */
-        return this.#searchResultClassMappings(
-          profiles[key].searchResultClassName
-        );
-      }
-    }
-    return this.#defaultSearchResultClass();
-  };
-
-  #defaultSearchResultClass = () => {
-    this.error.message = "ERROR: No searchResultClass found!";
-    this.searchResultClassName = "SearchResult";
-    return new SearchResult(
-      this.error,
-      this.info,
-      this.hit,
-      this.currentContext,
-      this.instantsearch,
-      this.dsMWAPI,
-      this.mwapi
-    );
-  };
-
-  #profilesMatch = (profile) => {
-    if ("environment" in profile) {
-      if (
-        this.#firstContainsSecond(this.hit, profile.hit) &&
-        this.#firstContainsSecond(this.environment, profile.environment)
-      ) {
-        return true;
-      }
-    } else if (this.#firstContainsSecond(this.hit, profile.hit)) {
-      return true;
-    }
-    return false;
   };
 
   #searchResultClassMappings = (searchResultClassName) => {
@@ -281,31 +226,8 @@ SearchResultMatcher = class {
         );
         break;
       default:
-        return this.#defaultSearchResultClass();
+        return "SearchResult";
     }
-  };
-
-  #firstContainsSecond = (object1, object2) => {
-    // ds1:implements: FIXME: match on annotations array containing annotation fragment(s)
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-
-    for (const key of keys2) {
-      const val1 = object1[key];
-      const val2 = object2[key];
-      const areObjects = this.#isObject(val1) && this.#isObject(val2);
-      if (
-        (areObjects && !this.#firstContainsSecond(val1, val2)) ||
-        (!areObjects && val1 !== val2)
-      ) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  #isObject = (object) => {
-    return object != null && typeof object === "object";
   };
 };
 
@@ -326,7 +248,7 @@ SearchResultMatchError = class {
 // LEX230108155400
 SearchResultMatchInfo = class {
   #messageValue;
-  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+  constructor(hit) {
     this.hit = hit;
   }
 

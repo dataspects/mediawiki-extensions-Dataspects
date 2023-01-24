@@ -391,8 +391,18 @@ function handleSpecialDataspects() {
          */
         theItems.push(
           ...items.map((hit, index) => {
-            var pm = new ProfilesMatcher(hit).getSearchResultClass();
-            console.log(pm);
+            /**
+             * ds1:implements: Match SearchResult class against hit/env profile
+             * We have:
+             *  1) a hit JSON from Meilisearch and
+             *  2) an environment JSON from the browser.
+             * These are matched against profiles.json in order to load
+             * the correct SearchResult subclass or default SearchResult class.
+             */
+            hit.searchResultClassName = new ProfilesMatcher(
+              hit,
+              currentContext
+            ).getSearchResultClass();
             return {
               ...hit,
               position: { index, page: results.page },
@@ -403,34 +413,13 @@ function handleSpecialDataspects() {
       },
       templates: {
         item(hit) {
-          /**
-           * ds1:implements: Match SearchResult class against hit/env profile
-           * We have:
-           *  1) a hit JSON from Meilisearch and
-           *  2) an environment JSON from the browser.
-           * These are matched against profiles.json in order to load
-           * the correct SearchResult subclass or default SearchResult class.
-           */
-          console.log(
-            "currentContext.searchFacetName in templates: " +
-              currentContext.searchFacetName
-          );
-          var srm = new SearchResultMatcher(
+          const srm = new SearchResultMatcher(
             hit,
             currentContext,
             instantsearch,
             dsMWAPI,
             mwapi
           );
-          console.info(
-            "Returning " + hit.name + " using " + srm.searchResultClassName
-          );
-          if (
-            hit.eppo0__hasEntityType == "DataspectsSearchFacet" &&
-            srm.searchResultClassName == "SearchResult"
-          ) {
-            console.log("me");
-          }
           return srm.searchResult();
         },
         empty:
