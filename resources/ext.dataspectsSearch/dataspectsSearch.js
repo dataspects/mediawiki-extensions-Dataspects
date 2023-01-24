@@ -386,7 +386,7 @@ function handleSpecialDataspects() {
            * a special search result class and prepend it to the hits as a pseudo-hit.
            */
           var pseudoHit = {
-            id: Math.floor(Date.now()).toString(),
+            id: currentContext.searchFacetName + "DataspectsSearchFacet",
             ds0__source: "dataspectsSystem",
             eppo0__hasEntityType: "DataspectsSearchFacet",
             eppo0__hasEntityTitle: currentContext.searchFacetName,
