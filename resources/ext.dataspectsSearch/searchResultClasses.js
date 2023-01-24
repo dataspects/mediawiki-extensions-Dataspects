@@ -156,7 +156,7 @@ SearchResult = class {
   };
 
   parsedPageText = () => {
-    return "";
+    return "parsedPageText";
   };
 
   resultIcon = () => {
@@ -246,9 +246,7 @@ MediaWikiSearchResult = class extends SearchResult {
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
-      "<code>" +
-      this.parsedPageText() +
-      +"</code>"
+      this.parsedPageText()
     );
   };
 
@@ -273,6 +271,7 @@ MediaWikiSearchResult = class extends SearchResult {
     //     "ds0__sourceParseTextURL is not defined for " + hit.eppo0__hasEntityURL
     //   );
     // }
+    return "";
   };
 
   parsedPageTextFieldset = () => {
@@ -300,9 +299,7 @@ MediaWikiFileSearchResult = class extends MediaWikiSearchResult {
       this.ds0__attachments() +
       this.annotations() +
       this.parsedPageTextFieldset() +
-      "<code>" +
-      this.parsedPageText() +
-      +"</code>"
+      this.parsedPageText()
     );
   };
 
@@ -561,9 +558,7 @@ SearchFacetSearchResult = class extends MediaWikiSearchResult {
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
       this.parsedPageTextFieldset() +
-      "<code>" +
-      this.parsedPageText() +
-      +"</code>"
+      this.parsedPageText()
     );
   };
 
