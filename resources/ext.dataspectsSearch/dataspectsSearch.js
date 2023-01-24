@@ -6,6 +6,7 @@ require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
 require("./datatables.js");
 const profiles = require("./profiles.json");
+const { DataspectsHelpers } = require("./helpers.js");
 const { SearchFacets } = require("./SearchFacets.js");
 const { DSMWAPI } = require("./DSMWAPI.js");
 const mwapi = new mw.Api();
@@ -40,13 +41,14 @@ const getUrlParameter = (sParam) => {
  */
 if (
   window.location.href.startsWith(
-    currentDeFactoWgServer() + "/wiki/Special:DataspectsBackstage"
+    DataspectsHelpers.currentDeFactoWgServer() +
+      "/wiki/Special:DataspectsBackstage"
   )
 ) {
   handleSpecialDataspectsBackstage();
 } else if (
   window.location.href.startsWith(
-    currentDeFactoWgServer() + "/wiki/Special:Dataspects"
+    DataspectsHelpers.currentDeFactoWgServer() + "/wiki/Special:Dataspects"
   )
 ) {
   handleSpecialDataspects();
@@ -345,7 +347,7 @@ function handleSpecialDataspects() {
       },
       limit: 1000,
     }),
-    // FIXME: ${currentDeFactoWgServer()}/wiki/ by variable
+    // FIXME: ${DataspectsHelpers.currentDeFactoWgServer()}/wiki/ by variable
     instantsearch.widgets.infiniteHits({
       container: "#hits",
       transformItems(items, { results }) {

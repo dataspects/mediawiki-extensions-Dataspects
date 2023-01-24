@@ -28,7 +28,7 @@ ElementSearchResult = class extends SearchResult {
   resultIcon = () => {
     return (
       "<img class='resultIcon' src='" +
-      currentDeFactoWgServer() +
+      DataspectsHelpers.currentDeFactoWgServer() +
       "/w/images/5/5c/Elementlogo.png'>"
     );
   };
@@ -73,7 +73,7 @@ ElementSearchResult = class extends SearchResult {
 
     return (
       "<a href='" +
-      currentDeFactoWgServer() +
+      DataspectsHelpers.currentDeFactoWgServer() +
       "/wiki/Special:FormEdit/" +
       eppo0__hasEntityTitle +
       "?" +
@@ -87,7 +87,7 @@ ElementSearchResult = class extends SearchResult {
       "&" +
       backlink +
       "'>Create a meta page for this</a> on <img class='resultIcon' src='" +
-      currentDeFactoWgServer() +
+      DataspectsHelpers.currentDeFactoWgServer() +
       "/w/images/a/a9/Mediawikilogo.png'>"
     );
   };
@@ -96,7 +96,7 @@ ElementSearchResult = class extends SearchResult {
     if (annotation.predicate == "ds77__isReplyTo") {
       return (
         "<img class='resultIcon' src='" +
-        currentDeFactoWgServer() +
+        DataspectsHelpers.currentDeFactoWgServer() +
         "/w/images/5/5c/Elementlogo.png'>&nbsp;<a href='" +
         annotation.objectText +
         "'>" +

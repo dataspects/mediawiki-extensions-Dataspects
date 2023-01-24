@@ -6,7 +6,7 @@ CodeSearchResult = class extends SearchResult {
   resultIcon = () => {
     return (
       "<img class='resultIcon' src='" +
-      currentDeFactoWgServer() +
+      DataspectsHelpers.currentDeFactoWgServer() +
       "/w/images/0/0e/Vscodelogo.png'>"
     );
   };
@@ -21,7 +21,7 @@ CodeSearchResult = class extends SearchResult {
         .map((annotation) => {
           return (
             '<tr><td><a href="' +
-            currentDeFactoWgServer() +
+            DataspectsHelpers.currentDeFactoWgServer() +
             "/wiki/Property:" +
             annotation.predicate +
             '" class="blinking">' +

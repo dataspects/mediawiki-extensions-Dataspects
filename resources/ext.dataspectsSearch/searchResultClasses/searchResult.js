@@ -1,3 +1,4 @@
+const { DataspectsHelpers } = require("../helpers.js");
 SearchResult = class {
   /**
    * dsImplementation: how to configure search result design/behaviour/interaction
@@ -149,7 +150,7 @@ SearchResult = class {
         .map((category) => {
           return (
             '<a href="' +
-            currentDeFactoWgServer() +
+            DataspectsHelpers.currentDeFactoWgServer() +
             "/wiki/Category:" +
             category +
             '"><span class="eppo0__category">' +
@@ -176,7 +177,7 @@ SearchResult = class {
         .map((annotation) => {
           return (
             '<tr><td><a href="' +
-            currentDeFactoWgServer() +
+            DataspectsHelpers.currentDeFactoWgServer() +
             "/wiki/Property:" +
             annotation.predicate +
             '">' +
@@ -197,7 +198,7 @@ SearchResult = class {
   };
 
   objectText = (annotation) => {
-    return ifURLreturnAnchorTag(annotation.objectText);
+    return DataspectsHelpers.ifURLreturnAnchorTag(annotation.objectText);
   };
 
   createMetaPageLink = () => {
