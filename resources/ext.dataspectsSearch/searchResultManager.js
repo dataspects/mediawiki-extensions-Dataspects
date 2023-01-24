@@ -92,13 +92,13 @@ SearchResultMatcher = class {
       this.hit.searchResultClassName
     );
     return searchResultClass.searchResult(
-      this.error,
-      this.info,
       this.hit,
       this.currentContext,
       this.instantsearch,
       this.dsMWAPI,
-      this.mwapi
+      this.mwapi,
+      this.error,
+      this.info
     );
   };
 

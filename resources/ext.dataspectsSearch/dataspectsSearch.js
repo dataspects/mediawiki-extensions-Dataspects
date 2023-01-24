@@ -353,16 +353,11 @@ function handleSpecialDataspects() {
     instantsearch.widgets.infiniteHits({
       container: "#hits",
       transformItems(items, { results }) {
-        console.log(
-          "currentContext.searchFacetName in transformItems: " +
-            currentContext.searchFacetName
-        );
         var theItems = [];
         /**
-         * >>> Handle currentContext.searchFacetName
+         * currentContext.searchFacetName
          */
         if (currentContext.searchFacetName != false) {
-          //FIXME: VERY UGLY!!!!
           /**
            * If the hit matches:
            *                                "hit": {
@@ -372,23 +367,20 @@ function handleSpecialDataspects() {
            * then we want to consider a
            * a special search result class and prepend it to the hits as a pseudo-hit.
            */
-          // for (const key in Object.keys(profiles)) {
-          //   if (
-          //     profiles[key].hit.eppo0__hasEntityTitle ==
-          //     currentContext.searchFacetName
-          //   ) {
-          //     theItems.push({
-          //       id: "dataspectsSpecialID",
-          //       ds0__source: "dataspectsSystem",
-          //       eppo0__hasEntityType: "DataspectsSearchFacet",
-          //       eppo0__hasEntityTitle: currentContext.searchFacetName,
-          //     });
-          //   }
-          // }
+          var pseudoHit = {
+            id: Math.floor(Date.now()).toString(),
+            ds0__source: "dataspectsSystem",
+            eppo0__hasEntityType: "DataspectsSearchFacet",
+            eppo0__hasEntityTitle: currentContext.searchFacetName,
+          };
+          pseudoHit.searchResultClassName = new ProfilesMatcher(
+            pseudoHit,
+            currentContext
+          ).getSearchResultClass();
+          if (pseudoHit.searchResultClassName != "SearchResult") {
+            theItems.push(pseudoHit);
+          }
         }
-        /**
-         * <<< Handle currentContext.searchFacetName
-         */
         theItems.push(
           ...items.map((hit, index) => {
             /**

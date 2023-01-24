@@ -17,13 +17,13 @@ SearchResult = class {
 
   // THIS METHOD MUST NOT BE OVERWRITTEN BY SUBCLASSES!
   searchResult = (
-    error,
-    info,
     hit,
     currentContext,
     instantsearch,
     dsMWAPI,
-    mwapi
+    mwapi,
+    error,
+    info
   ) => {
     var isrcss = this.initialSearchResultCSS();
     return (
