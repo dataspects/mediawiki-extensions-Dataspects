@@ -46,13 +46,7 @@
       "packageFiles": [
         "./dataspectsSearch.js",
         "./searchResultManager.js",
-        "./searchResultClasses/searchResult.js",
         "./searchResultClasses.js",
-        "./searchResultClasses/sMWCindyKate.js",
-        "./searchResultClasses/wikiDataspects.js",
-        "./searchResultClasses/searchFacet.js",
-        "./searchResultClasses/code.js",
-        "./searchResultClasses/dataspectsSpecialDatatables.js",
         "./DSMWAPI.js",
         "./SearchFacets.js",
         "./SearchFacetControl.js",

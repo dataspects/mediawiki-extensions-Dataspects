@@ -1,23 +1,16 @@
-const { SearchResult } = require("./searchResultClasses/searchResult.js");
 const {
+  SearchResult,
   MediaWikiSearchResult,
   MediaWikiFileSearchResult,
   MediaWikiMetaPageSearchResult,
   ElementSearchResult,
-} = require("./searchResultClasses.js");
-const {
-  SMWCindyKateSearchResult,
-} = require("./searchResultClasses/sMWCindyKate.js");
-const {
-  WikiDataspectsResult,
-} = require("./searchResultClasses/wikiDataspects.js");
-const {
-  SearchFacetSearchResult,
-} = require("./searchResultClasses/searchFacet.js");
-const { CodeSearchResult } = require("./searchResultClasses/code.js");
-const {
+  CodeSearchResult,
   DataspectsSpecialDatatables,
-} = require("./searchResultClasses/dataspectsSpecialDatatables.js");
+  SearchFacetSearchResult,
+  SMWCindyKateSearchResult,
+  WikiDataspectsResult,
+} = require("./searchResultClasses.js");
+
 const profiles = require("./profiles.json");
 
 ProfilesMatcher = class {
@@ -257,8 +250,7 @@ SearchResultMatchInfo = class {
   };
 
   xago = (timestamp) => {
-    const date = new Date();
-    const now = Math.floor(date.getTime() / 1000);
+    const now = Math.floor(new Date().getTime() / 1000);
     const difference = Math.floor(now - timestamp);
     var output = "";
     var unit = "";

@@ -191,6 +191,8 @@ function handleSpecialDataspects() {
               searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
             );
             setCurrentContextSearchFacetName(searchFacet.name);
+          } else {
+            setCurrentContextSearchFacetName(false);
           }
         }
       }
@@ -370,7 +372,6 @@ function handleSpecialDataspects() {
          * currentContext.searchFacetName
          */
         if (currentContext.searchFacetName != false) {
-          console.log(currentContext.searchFacetName);
           /**
            * If the hit matches:
            *                                "hit": {
@@ -392,7 +393,7 @@ function handleSpecialDataspects() {
           ).getSearchResultClass();
           console.log(
             pseudoHit.searchResultClassName +
-              " for " +
+              " for SearchFacetName " +
               currentContext.searchFacetName
           );
           if (pseudoHit.searchResultClassName != "SearchResult") {
