@@ -253,24 +253,31 @@ MediaWikiSearchResult = class extends SearchResult {
   // LEX230108165801
   parsedPageText = () => {
     // FIXME: This must be run only when opening "Show original page contents"
-    // if ("ds0__sourceParseTextURL" in hit && hit.ds0__sourceParseTextURL != "") {
-    //   this.mwapi
-    //     .get({
-    //       action: "dataspectsapi",
-    //       querytype: "originalpagecontent",
-    //       ds0__sourceParseTextURL: hit.ds0__sourceParseTextURL,
-    //     })
-    //     .done(function (data) {
-    //       $("#" + hit.id).html(data.data.originalpagecontent);
-    //     });
-    // } else {
-    //   $("#" + hit.id).html(
-    //     "<p>SORRY: ds0__sourceParseTextURL is not defined for this entity.</p>"
-    //   );
-    //   console.debug(
-    //     "ds0__sourceParseTextURL is not defined for " + hit.eppo0__hasEntityURL
-    //   );
-    // }
+    const hitID = this.hit.id;
+    if (
+      "ds0__sourceParseTextURL" in this.hit &&
+      this.hit.ds0__sourceParseTextURL != ""
+    ) {
+      this.mwapi
+        .get({
+          action: "dataspectsapi",
+          querytype: "originalpagecontent",
+          ds0__sourceParseTextURL: this.hit.ds0__sourceParseTextURL,
+        })
+        .done(function (response) {
+          $("div#" + hitID + "_originalPageContent").html(
+            response.data.originalpagecontent
+          );
+        });
+    } else {
+      $("div#" + hitID + "_originalPageContent").html(
+        "<p>SORRY: ds0__sourceParseTextURL is not defined for this entity.</p>"
+      );
+      console.debug(
+        "ds0__sourceParseTextURL is not defined for " +
+          this.hit.eppo0__hasEntityURL
+      );
+    }
     return "";
   };
 
@@ -280,7 +287,7 @@ MediaWikiSearchResult = class extends SearchResult {
       this.hit.id +
       '_fieldset" class="parsedPageText"><legend><i>This is the original page content</i></legend><div id="' +
       this.hit.id +
-      '">Loading...</div></fieldset>'
+      '_originalPageContent">Loading...</div></fieldset>'
     );
   };
 };
