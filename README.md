@@ -5,32 +5,37 @@ dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) 
 [dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html)
 
 ```mermaid
-flowchart LR
+flowchart BT
 
-  subgraph Docker on server
-    mediawiki("<b>MediaWiki API</b>
+  subgraph Extension:Dataspects
+    mediawikiAPI("<b>MediaWiki API</b>
     - LocalSettings.php
     - <a href='https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi'>dataspectsapi</a>")
-    meilisearch("<b>Meilisearch</b>")
-    tika("<b>Tika</b>")
-    spacy("<b>spaCy</b>")
-    neo4j("<b>Neo4j</b>")
+    sQLite("<b>SQLite</b><br/>for managing search facet configs")
+    Cypress("<b><a href='https://www.cypress.io/'>Cypress</a></b><br/>end-to-end and compnent tests")
+    AnalysisPipelines("<a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs'>Analysis Pipelines</a>")
   end
 
+  storage("<b>Meilisearch</b><br/><b>Neo4j</b>")
+  analyzers("<b>Tika</b><br/><b>spaCy</b>")
+
   subgraph Internet
-    userAgent("<b>User Agent</b>")
-    DataspectsCLI("<b><a href='https://github.com/dataspects/DataspectsCLI'>DataspectsCLI</a></b>
+    userAgent("<b>Special:Dataspects</b> (Algolia <a href='https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/'>InstantSearch</a>)<br/><b>Special:DataspectsBackstage</b>")
+    internetSources("<b>- mediawiki.org</b><br/><b>- semantic-mediawiki.org</b><br/><b>- riot.im</b><br/>...")
+  end
+
+  subgraph Workstation
+    DataspectsCLI("<b><a href='https://github.com/dataspects/dataspects'>dataspects (Go CLI)</a></b>
     - export MEILI_MASTER_KEY=
     - export INDEX=")
   end
-
-  DataspectsCLI-->|configure/manage|meilisearch
-  userAgent<-->|<b>search content</b><br/>wgDataspectsSearchKey|meilisearch
-  userAgent<-->mediawiki
-  mediawiki<-->|<b>update content</b><br/>wgDataspectsWriteKey|meilisearch
-  mediawiki<-->|analyze content|tika
-  mediawiki<-->|analyze content|spacy
-  mediawiki<-->|<b>update content</b>|neo4j
+  DataspectsCLI-.-|configure/manage|storage
+  userAgent-->|<b>Search</b><br/>wgDataspectsSearchKey|storage
+  userAgent-->mediawikiAPI
+  mediawikiAPI-->|<b>CRUD</b><br/>wgDataspectsWriteKey|storage
+  AnalysisPipelines-->|Annotate|analyzers
+  DataspectsCLI-->|<b>Read</b>|internetSources
+  mediawikiAPI-->|<b>CRUD</b>|sQLite
 
 classDef default text-align:left;
 linkStyle 0,3,6 stroke:#ff0000

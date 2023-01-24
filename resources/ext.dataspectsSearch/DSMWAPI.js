@@ -3,11 +3,11 @@ require("mediawiki.api");
 
 DSMWAPI = class {
   constructor() {
-    this.api = new mw.Api();
+    this.mwapi = new mw.Api();
   }
 
   nodesList = (tableId, dataTablesOptions) => {
-    this.api
+    this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "nodeslist",
@@ -27,7 +27,7 @@ DSMWAPI = class {
   };
 
   numberOfNodes = (name) => {
-    this.api
+    this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "numberofnodes",
@@ -42,7 +42,7 @@ DSMWAPI = class {
   };
 
   firstXCharacters = (firstXCharacters, property) => {
-    this.api
+    this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "firstxcharacters",
@@ -81,7 +81,7 @@ DSMWAPI = class {
   };
 
   releaseTimestampXago = () => {
-    this.api
+    this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "releasetimestampxago",
@@ -125,7 +125,7 @@ DSMWAPI = class {
   };
 
   testGraph = (name) => {
-    this.api
+    this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "templatecallssubgraph",

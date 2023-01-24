@@ -254,7 +254,7 @@ MediaWikiSearchResult = class extends SearchResult {
   parsedPageText = () => {
     // FIXME: This must be run only when opening "Show original page contents"
     // if ("ds0__sourceParseTextURL" in hit && hit.ds0__sourceParseTextURL != "") {
-    //   this.api
+    //   this.mwapi
     //     .get({
     //       action: "dataspectsapi",
     //       querytype: "originalpagecontent",
