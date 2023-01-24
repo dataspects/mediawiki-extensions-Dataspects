@@ -104,9 +104,7 @@ SearchFacets = class {
             );
             //
             this.search.helper.search();
-            console.log(
-              currentContext.searchFacetName + " stored in currentContext"
-            );
+            console.log("Activated " + currentContext.searchFacetName + ".");
           }
           $(currentNode).siblings("sup").html(response.data.status);
         })

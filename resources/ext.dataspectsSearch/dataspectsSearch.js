@@ -77,19 +77,24 @@ function handleSpecialDataspects() {
    * Load special classes
    */
 
-  /**
-   *
-   * @param {*} helper
-   */
-  const storeCurrentContextInLocalStorage = (helper, searchFacet) => {
-    var currentContext = {
-      environment: { user: mw.config.get("user") },
-      meilisearchHelper: helper,
-      searchFacetName: false,
-    };
-    if (searchFacet) {
-      currentContext.searchFacetName = searchFacet.name;
-    }
+  const setCurrentContextHelper = (helper) => {
+    var currentContext = JSON.parse(
+      window.localStorage.getItem("currentContext")
+    );
+    currentContext.meilisearchHelper = helper;
+    currentContext.environment = { user: mw.config.get("user") };
+    window.localStorage.setItem(
+      "currentContext",
+      JSON.stringify(currentContext)
+    );
+  };
+
+  const setCurrentContextSearchFacetName = (searchFacetName) => {
+    var currentContext = JSON.parse(
+      window.localStorage.getItem("currentContext")
+    );
+    currentContext.searchFacetName = searchFacetName;
+    currentContext.environment = { user: mw.config.get("user") };
     window.localStorage.setItem(
       "currentContext",
       JSON.stringify(currentContext)
@@ -180,16 +185,23 @@ function handleSpecialDataspects() {
            * f URL parameter and get the corresponding facet:
            */
           searchFacet = await checkForFURLParameter();
-          console.log(searchFacet);
           if (searchFacet && searchFacet.ds0__instantsearchHelper) {
             console.log("Loading search facet " + searchFacet.name);
             helper.setState(
               searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
             );
+            setCurrentContextSearchFacetName(searchFacet.name);
           }
         }
       }
-      storeCurrentContextInLocalStorage(helper, searchFacet);
+      /**
+       * localStorage must be updated on every search because of potentially
+       * new facets and/or query
+       *
+       * But when a searchFacet control has updated currentContext's searchFacetName, then
+       * this overwrites it again!
+       */
+      setCurrentContextHelper(helper);
       initialPageLoad = false;
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
@@ -197,7 +209,6 @@ function handleSpecialDataspects() {
       currentContext = JSON.parse(
         window.localStorage.getItem("currentContext")
       );
-      console.log(JSON.stringify(helper, null, 2));
       helper.search();
       // } else {
       //   alert("You have to select one or more source(s).");
@@ -355,7 +366,6 @@ function handleSpecialDataspects() {
       container: "#hits",
       transformItems(items, { results }) {
         var theItems = [];
-        console.log(theItems);
         /**
          * currentContext.searchFacetName
          */
