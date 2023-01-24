@@ -81,6 +81,9 @@ function handleSpecialDataspects() {
     var currentContext = JSON.parse(
       window.localStorage.getItem("currentContext")
     );
+    if (!currentContext) {
+      currentContext = {};
+    }
     currentContext.meilisearchHelper = helper;
     currentContext.environment = { user: mw.config.get("user") };
     window.localStorage.setItem(
@@ -173,6 +176,7 @@ function handleSpecialDataspects() {
       /*
         This code is executed on page load as well as "as-you-type"
       */
+      setCurrentContextHelper(helper);
       var searchFacet = {};
       if (initialPageLoad) {
         // defaultToAuthorizedSources(helper);
@@ -203,7 +207,7 @@ function handleSpecialDataspects() {
        * But when a searchFacet control has updated currentContext's searchFacetName, then
        * this overwrites it again!
        */
-      setCurrentContextHelper(helper);
+
       initialPageLoad = false;
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
