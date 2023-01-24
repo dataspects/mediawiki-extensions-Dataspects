@@ -20,6 +20,55 @@ const {
 } = require("./searchResultClasses/dataspectsSpecialDatatables.js");
 const profiles = require("./profiles.json");
 
+ProfilesMatcher = class {
+  constructor(hit) {
+    this.hit = hit;
+  }
+  getSearchResultClass = () => {
+    for (const key in Object.keys(profiles)) {
+      if (this.#profilesMatch(profiles[key])) {
+        return profiles[key].searchResultClassName;
+      }
+    }
+    return "SearchResult";
+  };
+  #profilesMatch = (profile) => {
+    if ("environment" in profile) {
+      if (
+        this.#firstContainsSecond(this.hit, profile.hit) &&
+        this.#firstContainsSecond(this.environment, profile.environment)
+      ) {
+        return true;
+      }
+    } else if (this.#firstContainsSecond(this.hit, profile.hit)) {
+      return true;
+    }
+    return false;
+  };
+  #firstContainsSecond = (object1, object2) => {
+    // ds1:implements: FIXME: match on annotations array containing annotation fragment(s)
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    for (const key of keys2) {
+      const val1 = object1[key];
+      const val2 = object2[key];
+      const areObjects = this.#isObject(val1) && this.#isObject(val2);
+      if (
+        (areObjects && !this.#firstContainsSecond(val1, val2)) ||
+        (!areObjects && val1 !== val2)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  #isObject = (object) => {
+    return object != null && typeof object === "object";
+  };
+};
+
 SearchResultMatcher = class {
   constructor(hit, currentContext, instantsearch, dsMWAPI, mwapi) {
     this.hit = hit;
@@ -338,4 +387,4 @@ SearchResultMatchInfo = class {
   }
 };
 
-module.exports = { SearchResultMatcher };
+module.exports = { ProfilesMatcher, SearchResultMatcher };

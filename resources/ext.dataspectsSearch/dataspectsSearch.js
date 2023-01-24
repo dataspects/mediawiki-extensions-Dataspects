@@ -5,7 +5,6 @@ require("./chartjs-plugin-datalabels.js");
 require("./instant-meilisearch.umd.js");
 require("./instantsearch.production.min.js");
 require("./datatables.js");
-const profiles = require("./profiles.json");
 const { DataspectsHelpers } = require("./helpers.js");
 const { SearchFacets } = require("./SearchFacets.js");
 const { DSMWAPI } = require("./DSMWAPI.js");
@@ -14,6 +13,10 @@ var isCompact = false;
 var initialPageLoad = true;
 var currentDs0__sources = [];
 const dsMWAPI = new DSMWAPI(); //FIXME: ok to be global?
+const {
+  ProfilesMatcher,
+  SearchResultMatcher,
+} = require("./searchResultManager.js");
 
 /**
  *
@@ -73,7 +76,6 @@ function handleSpecialDataspects() {
   /**
    * Load special classes
    */
-  const { SearchResultMatcher } = require("./searchResultMatcher.js");
 
   /**
    *
@@ -370,27 +372,29 @@ function handleSpecialDataspects() {
            * then we want to consider a
            * a special search result class and prepend it to the hits as a pseudo-hit.
            */
-          for (const key in Object.keys(profiles)) {
-            if (
-              profiles[key].hit.eppo0__hasEntityTitle ==
-              currentContext.searchFacetName
-            ) {
-              theItems.push({
-                id: "dataspectsSpecialID",
-                ds0__source: "dataspectsSystem",
-                eppo0__hasEntityType: "DataspectsSearchFacet",
-                eppo0__hasEntityTitle: currentContext.searchFacetName,
-              });
-            }
-          }
+          // for (const key in Object.keys(profiles)) {
+          //   if (
+          //     profiles[key].hit.eppo0__hasEntityTitle ==
+          //     currentContext.searchFacetName
+          //   ) {
+          //     theItems.push({
+          //       id: "dataspectsSpecialID",
+          //       ds0__source: "dataspectsSystem",
+          //       eppo0__hasEntityType: "DataspectsSearchFacet",
+          //       eppo0__hasEntityTitle: currentContext.searchFacetName,
+          //     });
+          //   }
+          // }
         }
         /**
          * <<< Handle currentContext.searchFacetName
          */
         theItems.push(
-          ...items.map((item, index) => {
+          ...items.map((hit, index) => {
+            var pm = new ProfilesMatcher(hit).getSearchResultClass();
+            console.log(pm);
             return {
-              ...item,
+              ...hit,
               position: { index, page: results.page },
             };
           })

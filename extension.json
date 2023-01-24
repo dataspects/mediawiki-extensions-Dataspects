@@ -45,7 +45,7 @@
       "styles": ["dataspectsSearch.css", "datatables.css"],
       "packageFiles": [
         "./dataspectsSearch.js",
-        "./searchResultMatcher.js",
+        "./searchResultManager.js",
         "./searchResultClasses/searchResult.js",
         "./searchResultClasses/element.js",
         "./searchResultClasses/mediaWiki.js",
