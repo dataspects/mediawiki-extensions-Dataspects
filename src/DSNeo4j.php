@@ -30,7 +30,9 @@ class DSNeo4j {
     $query = [
       "query" => '
         MATCH     (n:MediaWikiPage)
-        RETURN    n.name AS name
+        RETURN    n.name AS name,
+                  n.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
+                  n.eppo0__hasEntityURL AS eppo0__hasEntityURL
       ',
       "params" => []
     ];
@@ -38,7 +40,8 @@ class DSNeo4j {
     $nodesList = [];
     foreach ($results as $result) {
       $nodesList[] = [
-        name => $result->get("name")
+        name => $result->get("eppo0__hasEntityTitle"),
+        eppo0__hasEntityURL => $result->get("eppo0__hasEntityURL")
       ];
     }
     return $nodesList;

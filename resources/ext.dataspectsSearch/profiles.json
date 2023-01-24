@@ -78,7 +78,7 @@
     "hit": {
       "ds0__source": "dataspectsSystem",
       "eppo0__hasEntityType": "DataspectsSearchFacet",
-      "eppo0__hasEntityTitle": "Bryan"
+      "eppo0__hasEntityTitle": "Stable extensions"
     },
     "searchResultClassName": "DataspectsSpecialDatatables"
   }

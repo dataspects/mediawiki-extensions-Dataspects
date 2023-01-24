@@ -516,6 +516,14 @@ DataspectsSpecialDatatables = class extends SearchResult {
     super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
   }
 
+  eppo0__hasEntityTitle = () => {
+    return (
+      '<span class="eppo0__hasEntityTitle">' +
+      this.hit.eppo0__hasEntityTitle +
+      "</span>"
+    );
+  };
+
   searchResultBody = () => {
     return '<table id="table_id"></table>';
   };
@@ -523,7 +531,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
   script = () => {
     // $(document).ready(function () {
     const dataTablesOptions = {
-      columns: [{ data: "name" }],
+      columns: [{ data: "name" }, { data: "eppo0__hasEntityURL" }],
     };
     this.dsMWAPI.nodesList("table_id", dataTablesOptions);
     // });
