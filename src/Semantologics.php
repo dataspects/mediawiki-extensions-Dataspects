@@ -46,9 +46,10 @@ class Semantologics {
                     $this->mediaWikiPage["annotations"][] = array(
                         'subject' => $this->mediaWikiPage["name"],
                         'predicate' => $data["predicate"],
+                        'objectSource' => $object,
                         'objectText' => $object,
-                        'objectLiteralHTML' => $object,
-                        'smwPropertyType' => 9
+                        'objectHTML' => $object,
+                        'objectType' => "Node"
                     );
                     if(array_key_exists("hierarchicalMenu", $data)) {
                         $this->mediaWikiPage = array_merge($this->mediaWikiPage, $data["hierarchicalMenu"]);

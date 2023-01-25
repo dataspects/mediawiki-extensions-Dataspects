@@ -60,7 +60,20 @@ class SpecialDataspectsFeed {
     return $mediaWikiPage;
   }
 
-  
+  private function semanticMediaWikiPropertyTypeMappings($number) {
+    // https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
+    $map = [
+      2 => "Text",
+      9 => "Node",
+      6 => "Date",
+      5 => "URL"
+    ];
+    if(array_key_exists($number, $map)) {
+      return $map[$number];
+    }
+    wfDebug("### UNMANAGED SMW_NS_PROPERTY TYPE: ".$number); 
+    return $map[2];
+  }
 
   public function getMediaWikiPageAnnotations() {
     $data = $this->dsf->browseBySubject($this->title);
@@ -72,15 +85,16 @@ class SpecialDataspectsFeed {
             if(is_array($object)) {
               $source = str_replace('#0##', '', $object['item']);
               $smwLiteral = $source;
-              if($object['type'] == 9) {
+              if($this->semanticMediaWikiPropertyTypeMappings($object['type']) == "Node") {
                 $source = $this->fullArticlePath.$source;
               }
               $this->annotations[] = array(
                 'subject' => strtolower($this->title->getFullURL()),
                 'predicate' => $propertyName,
+                'objectSource' => $source,
+                'objectHTML' => $this->dsf->getParsedWikitext($source),
                 'objectText' => $source,
-                'objectLiteralHTML' => $this->dsf->getParsedWikitext($source),
-                'smwPropertyType' => $object['type']
+                'objectType' => $this->semanticMediaWikiPropertyTypeMappings($object['type'])
               );
             }
           }
@@ -104,7 +118,7 @@ class SpecialDataspectsFeed {
           if(is_array($object)) {
             $this->annotations[$propertyName] = array(
               'objectText' => $object['item'],
-              'smwPropertyType' => $object['type']
+              'objectType' => semanticMediaWikiPropertyTypeMappings($object['type'])
             );
           }
         }

@@ -88,9 +88,10 @@ class DataspectsSpacyJob extends \Job {
     $this->annotations[] = array(
         'subject' => "strtolower",
         'predicate' => "propertyName",
-        'objectText' => "source",
-        'objectLiteralHTML' => "test",
-        'smwPropertyType' => "asd"
+        'objectSource' => "source",
+        'objectText' => "text",
+        'objectHTML' => "test",
+        'objectType' => "asd"
       );
   }
 
