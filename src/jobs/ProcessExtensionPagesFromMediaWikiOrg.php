@@ -29,7 +29,7 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
         if($capture != "") {
             foreach (explode("|", $capture) as $value) {
                 $annotation = [
-                    "subject"   => $hit["name"],
+                    "subject"   => $hit["eppo0__hasEntityURL"],
                     "predicate" => "ds0:usedInPackageAndOrFarm",
                     "objectSource" => explode("=", $value)[0],
                     "objectText" => explode("=", $value)[0],

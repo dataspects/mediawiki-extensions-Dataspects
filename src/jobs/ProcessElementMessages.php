@@ -27,7 +27,7 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
         if(array_key_exists("annotations", $spaCyInsight)) {
             foreach($spaCyInsight["annotations"] as $spaCyInsightAnnotation) {
                 $annotation = [
-                    "subject"   => $hit["name"],
+                    "subject"   => $hit["eppo0__hasEntityURL"],
                     "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
                     "objectSource" => true,
 					"objectHTML" => true,
