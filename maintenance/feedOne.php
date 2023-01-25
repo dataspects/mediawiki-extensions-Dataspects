@@ -12,7 +12,7 @@ class DMFFeedOne extends \Maintenance {
 	public function execute() {
 		// $title = \Title::newFromText('File:TWebC.png');
 		// $title = \Title::newFromText('Software "Canasta"');
-		$title = \Title::newFromText('Software_"Canasta_CLI"');
+		$title = \Title::newFromText('Software "Canasta CLI"');
 		$this->feedOne($title);
 	}
 

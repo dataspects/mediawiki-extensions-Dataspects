@@ -111,31 +111,324 @@ class DSNeo4j {
   }
 
   public function addPageToNeo4j($mediaWikiPage) {
-    // wfDebug($mediaWikiPage);
-    // print_r($mediaWikiPage);
-    // Here we define which fields of $mediaWikiPage become node properties (and not relationships)
-    $coreProperties = '{
-      name: $eppo0__hasEntityURL,
-      release_timestamp: $release_timestamp
-    }';
-    $queries = [
-        [
-            "query" => '
-                CALL apoc.merge.node(
-                  [ "MediaWikiPage" ],
-                  { name: $eppo0__hasEntityURL }, // identProps
-                  '.$coreProperties.',    // props
-                  '.$coreProperties.'     // onMatchProps
-                )
-                YIELD node
-                RETURN node
-            ',
-            "params" => $mediaWikiPage // This provides all fields. We select in $coreProperties.
-        ]
-    ];
-    $queries = array_merge($queries, $this->templateTransactions($mediaWikiPage));
+    $queries = [];
+    $queries = array_merge($queries, $this->addNode($mediaWikiPage));
+    $queries = array_merge($queries, $this->addRelationships($mediaWikiPage));
     $this->update($queries);
     echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$mediaWikiPage["eppo0__hasEntityURL"]."\n";
+  }
+
+  private function addNode($mediaWikiPage) {
+    $queries = [];
+    $queries[] = [
+      "query" => '
+        CALL apoc.merge.node(
+          $subjectLabels,
+          {	// ident
+            name: $name
+          },
+          {	// on create
+            name: $name,
+            eppo0__hasEntityURL: $eppo0__hasEntityURL,
+            eppo0__hasEntityTitle: $eppo0__hasEntityTitle,
+            ds0__sourceNamespace: $ds0__sourceNamespace,
+            release_timestamp: $release_timestamp,
+            eppo0__hasEntityType: $eppo0__hasEntityType
+          },
+          {	// on match
+            eppo0__hasEntityURL: $eppo0__hasEntityURL,
+            eppo0__hasEntityTitle: $eppo0__hasEntityTitle,
+            ds0__sourceNamespace: $ds0__sourceNamespace,
+            release_timestamp: $release_timestamp,
+            eppo0__hasEntityType: $eppo0__hasEntityType
+          }
+        )
+        YIELD node AS sub
+        WITH sub AS sub
+        CALL apoc.merge.node(
+          $objectLabels,
+          {name: $object},
+          {},
+          {}
+        ) YIELD node AS obj
+        WITH sub, obj
+        CALL apoc.merge.relationship(
+          sub,
+          $predicate,
+          {},
+          {},
+          obj,
+          {}
+        ) YIELD rel
+        RETURN rel
+      ',
+      "params" => [
+        "subjectLabels" =>         ["MediaWikiPage"],
+        "name" =>                  strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+        "eppo0__hasEntityURL" =>   $mediaWikiPage["eppo0__hasEntityURL"],
+        "eppo0__hasEntityTitle" => $mediaWikiPage["eppo0__hasEntityTitle"],
+        "ds0__sourceNamespace" =>  $mediaWikiPage["ds0__sourceNamespace"],
+        "release_timestamp" =>     $mediaWikiPage["release_timestamp"],
+        "eppo0__hasEntityType" =>  $mediaWikiPage["eppo0__hasEntityType"],
+        "objectLabels" =>          ["MediaWiki"],
+        "object" =>                $mediaWikiPage["ds0__source"],
+        "predicate" =>             "ds0__originatedInSource"
+      ]
+    ];
+    return $queries;
+  }
+
+  private function addRelationships($mediaWikiPage) {
+    $queries = [];
+    $queries = array_merge($queries, $this->addCategories($mediaWikiPage));
+    $queries = array_merge($queries, $this->addOutgoingLinks($mediaWikiPage));
+    $queries = array_merge($queries, $this->addIncomingLinks($mediaWikiPage));
+    $queries = array_merge($queries, $this->addAnnotations($mediaWikiPage));
+    $queries = array_merge($queries, $this->addTemplates($mediaWikiPage));
+    $queries = array_merge($queries, $this->addAttachments($mediaWikiPage));
+    return $queries;
+  }
+
+  private function addCategories($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["eppo0__categories"] as $category) {
+      $queries[] = [
+        "query" => '
+          MERGE (sub:MediaWikiPage{name: $subject})
+          WITH sub AS sub
+          CALL apoc.merge.node(
+            $objectLabels,
+            {name: $object},
+            {},
+            {}
+          ) YIELD node AS obj
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "predicate" =>     "eppo0__hasCategory",
+          "object" =>        strtolower($category),
+          "objectLabels" =>  ["Category"]
+        ]
+      ];
+    }
+    return $queries;
+  }
+
+  private function addOutgoingLinks($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["ds0__outgoingLinks"] as $link) {
+      $queries[] = [
+        "query" => '
+          MERGE (sub:MediaWikiPage{name: $subject})
+          WITH sub AS sub
+          CALL apoc.merge.node(
+            $objectLabels,
+            {name: $object},
+            {},
+            {}
+          ) YIELD node AS obj
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "predicate" =>     "ds0__linksTo",
+          "object" =>        strtolower($link),
+          "objectLabels" =>  ["RELATIONSHIPLEAF"]
+        ]
+      ];
+    }
+    return $queries;
+  }
+
+  private function addIncomingLinks($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["ds0__incomingLinks"] as $link) {
+      $queries[] = [
+        "query" => '
+          MERGE (obj:MediaWikiPage{name: $object})
+          WITH obj AS obj
+          CALL apoc.merge.node(
+            $subjectLabels,
+            {name: $subject},
+            {},
+            {}
+          ) YIELD node AS sub
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($link),
+          "subjectLabels" =>  ["RELATIONSHIPLEAF"],
+          "predicate" =>     "ds0__linksTo",
+          "object" =>        strtolower($mediaWikiPage["eppo0__hasEntityURL"])
+        ]
+      ];
+    }
+    return $queries;
+  }
+
+  private function addAnnotations($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["annotations"] as $annot) {
+      if(in_array($annot["objectType"], ["URL", "Page"])) {
+        $queries[] = [
+          "query" => '
+            MERGE (sub:MediaWikiPage{name: $subject})
+            WITH sub AS sub
+            CALL apoc.merge.node(
+              $objectLabels,
+              {name: $object},
+              {},
+              {}
+            ) YIELD node AS obj
+            WITH sub, obj
+            CALL apoc.merge.relationship(
+              sub,
+              $predicate,
+              {},
+              {},
+              obj,
+              {}
+            ) YIELD rel
+            RETURN rel
+          ',
+          "params" => [
+            "subject" =>       strtolower($annot["subject"]),
+            "predicate" =>     $annot["predicate"],
+            "object" =>        strtolower($annot["objectText"]),
+            "objectLabels" =>  ["RELATIONSHIPLEAF"]
+          ]
+        ];
+      }
+    }
+    return $queries;
+  }
+
+  private function addTemplates($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["ds0__templates"] as $template) {
+      $queries[] = [
+        "query" => '
+          MERGE (sub:MediaWikiPage{name: $subject})
+          WITH sub AS sub
+          CALL apoc.merge.node(
+            $objectLabels,
+            {name: $object},
+            {},
+            {}
+          ) YIELD node AS obj
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "predicate" =>     "eppo0__hasTemplate",
+          "object" =>        strtolower($template["title"]),
+          "objectLabels" =>  ["Template"]
+        ]
+      ];
+    }
+    foreach ($mediaWikiPage["ds0__templates_by_regex"] as $template) {
+      $queries[] = [
+        "query" => '
+          MERGE (sub:MediaWikiPage{name: $subject})
+          WITH sub AS sub
+          CALL apoc.merge.node(
+            $objectLabels,
+            {name: $object},
+            {},
+            {}
+          ) YIELD node AS obj
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "predicate" =>     "eppo0__hasTemplate",
+          "object" =>        strtolower($template["title"]),
+          "objectLabels" =>  ["Template"]
+        ]
+      ];
+    }
+    return $queries;
+  }
+
+  private function addAttachments($mediaWikiPage) {
+    $queries = [];
+    foreach ($mediaWikiPage["ds0__attachments"] as $attachment) {
+      $queries[] = [
+        "query" => '
+          MERGE (sub:MediaWikiPage{name: $subject})
+          WITH sub AS sub
+          CALL apoc.merge.node(
+            $objectLabels,
+            {name: $object},
+            {},
+            {}
+          ) YIELD node AS obj
+          WITH sub, obj
+          CALL apoc.merge.relationship(
+            sub,
+            $predicate,
+            {},
+            {},
+            obj,
+            {}
+          ) YIELD rel
+          RETURN rel
+        ',
+        "params" => [
+          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "predicate" =>     "eppo0__hasCategory",
+          "object" =>        strtolower($attachment),
+          "objectLabels" =>  ["RELATIONSHIPLEAF"]
+        ]
+      ];
+    }
+    return $queries;
   }
 
   public function numberOfNodes() {
@@ -248,51 +541,6 @@ class DSNeo4j {
       $data[ "datasets" ][] = $result->get("count");
     }
     return $data;
-  }
-
-  private function templateTransactions($mediaWikiPage) {
-    $templates = $mediaWikiPage["mw0__templates_by_regex"];
-    foreach ($mediaWikiPage["mw0__templates"] as $template) {
-      $templates[] = $template["title"];
-    }
-    $queries = [];
-    foreach ($templates as $fullTemplateName) {
-      $templateCoreProperties = '{
-        name: $objName
-      }';
-      $queries[] = [
-        "query" => '
-          MATCH (sub:MediaWikiPage{name: $subName})
-
-          WITH sub
-          CALL apoc.merge.node(
-            [ "MediaWikiPage", "Template" ],
-            '.$templateCoreProperties.',  // identProps
-            {},                           // props
-            '.$templateCoreProperties.'   // onMatchProps
-          )
-          YIELD node AS obj
-
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            "mw0__UsesTemplate",
-            {},                   // identProps
-            {},                   // props
-            obj,
-            {}                    // onMatchProps
-          )
-          YIELD rel
-
-          RETURN rel
-        ',
-        "params" => [
-          "subName" => $mediaWikiPage["eppo0__hasEntityURL"],
-          "objName" => $this->eppo0__hasEntityURL($fullTemplateName)
-        ]
-      ];
-    }
-    return $queries;
   }
 
   private function update($queries) {
