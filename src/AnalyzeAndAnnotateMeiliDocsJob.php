@@ -18,6 +18,12 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         
         $meiliWriteClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsWriteURL'], $this->globalsConfig['wgDataspectsWriteKey'], new HttplugClient());
         $this->writeIndex = $meiliWriteClient->index($this->globalsConfig['wgDataspectsIndex']);
+
+        $this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
+			$this->globalsConfig["wgDataspectsNeo4jURL"],
+			$this->globalsConfig["wgDataspectsNeo4jUsername"],
+			$this->globalsConfig["wgDataspectsNeo4jPassword"]
+		);
 	}
 
     protected function analyzeAndAnnotateMeiliDocs() {
@@ -48,6 +54,9 @@ class AnalyzeAndAnnotateMeiliDocsJob {
                 if($this->doWrite === 'true') {
                     $this->log(">w", "Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
                     $this->writeIndex->addDocuments([$consideredHit]);
+                    // WORKHERE
+                    print_r($consideredHit);
+                    $this->dsNeo4j->addPageToNeo4j($consideredHit);
                 }
             }
         }

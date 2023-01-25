@@ -326,6 +326,20 @@ class DSNeo4j {
             "objectLabels" =>  ["RELATIONSHIPLEAF"]
           ]
         ];
+      } else {
+        $queries[] = [
+          "query" => '
+            MATCH (sub:MediaWikiPage{name: $subject})
+            CALL apoc.create.setProperty(sub, $predicate, $object)
+            YIELD node
+            RETURN sub
+          ',
+          "params" => [
+            "subject" =>       strtolower($annot["subject"]),
+            "predicate" =>     str_replace(":", "__", $annot["predicate"]),
+            "object" =>        strtolower($annot["objectText"]),
+          ]
+        ];
       }
     }
     return $queries;
