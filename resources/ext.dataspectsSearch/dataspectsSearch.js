@@ -451,6 +451,9 @@ function handleSpecialDataspects() {
       e.preventDefault();
       const payload = {
         searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
+        searchFacetComment: $(
+          '[data-cy="saveSearchFacetFormHTMLComment"]'
+        ).val(),
         currentHelper: window.localStorage.getItem("currentContext"),
       };
       if (payload.searchFacetName === "" || payload.currentHelper === {}) {
@@ -461,10 +464,11 @@ function handleSpecialDataspects() {
           action: "dataspectsapi",
           querytype: "putsearchfacet",
           searchfacetname: payload.searchFacetName,
+          searchfacetcomment: payload.searchFacetComment,
           currenthelper: payload.currentHelper,
         })
         .done(function (response) {
-          $('[data-cy="savesearchfacet_result"]').text(response.data.status);
+          $('[data-cy="savesearchfacet_message"]').text(response.data.status);
         })
         .fail(function (response) {
           console.error(response);
@@ -502,7 +506,7 @@ function handleSpecialDataspectsBackstage() {
           topictype_name: $("#topictype_name").val(),
         })
         .done(function (response) {
-          $("#initializetopictype_result").text(response.data.status);
+          $("#initializetopictype_message").text(response.data.status);
         })
         .fail(function (response) {
           console.error(response);

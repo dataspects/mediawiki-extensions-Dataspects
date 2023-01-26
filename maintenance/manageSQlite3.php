@@ -21,7 +21,11 @@ class ManageSQLite3 extends \Maintenance {
 		if($initialize) {
 			if($this->sqlite3->initialize()) {
 				$this->sqlite3->exec("DELETE FROM facets;");
+			} else {
+				echo "Initializing failed.";
 			}
+		} else {
+			echo "Initializing failed.";
 		}
 	}
 

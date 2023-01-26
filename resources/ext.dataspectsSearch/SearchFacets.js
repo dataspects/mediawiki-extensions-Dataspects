@@ -36,7 +36,7 @@ SearchFacets = class {
 
   placeSearchFacetFormHTML = (dropzone) => {
     $('[data-cy="' + dropzone + '"]').html(
-      '<form data-cy="saveSearchFacetFormHTML" action="#"><fieldset><legend>Save current search facet</legend>Name: <input type="text" data-cy="saveSearchFacetFormHTMLName"><span data-cy="savesearchfacet_result"></span><br/><button type="submit" data-cy="saveSearchFacetFormHTMLSave">Save</button></fieldset></form>'
+      '<form data-cy="saveSearchFacetFormHTML" action="#"><fieldset><legend>Save current search facet</legend>Name: <input type="text" data-cy="saveSearchFacetFormHTMLName"><br/>Comment: <input type="text" data-cy="saveSearchFacetFormHTMLComment"><br/><span data-cy="savesearchfacet_message" class="dsHint"></span><br/><button type="submit" data-cy="saveSearchFacetFormHTMLSave" style="margin-top:10px;">Save</button></fieldset></form>'
     );
   };
 

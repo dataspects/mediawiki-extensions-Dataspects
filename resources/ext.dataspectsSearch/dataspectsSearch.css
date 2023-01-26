@@ -1,3 +1,13 @@
+.dataspectsFeatureLink {
+  background-color: orange;
+  border-radius: 2px;
+  padding: 1px;
+  font-size: 10px;
+}
+
+.dsHint {
+}
+
 .searchFacetActionMessage {
   color: red;
 }

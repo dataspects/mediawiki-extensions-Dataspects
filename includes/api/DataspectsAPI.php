@@ -30,8 +30,8 @@ class DataspectsAPI extends ApiBase {
 				if(in_array("writeapi", $user->getRights())){
 					try {
 						$this->loadBackends();
-						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
-						$this->dsNeo4j->addSearchFacet($params['searchfacetname']);
+						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['searchfacetcomment'], $params['currenthelper']);
+						$this->dsNeo4j->addSearchFacet($params['searchfacetname'], $params['searchfacetcomment']);
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $result ] ); //FIXME: handle $result
 					} catch (Exception $e) {
 						wfDebug("### DataspectsAPI error: ".$e);
@@ -206,6 +206,7 @@ class DataspectsAPI extends ApiBase {
 			'firstxcharacters' => null,
 			'property' => null,
 			'searchfacetname' => null,
+			'searchfacetcomment' => null,
 			'currenthelper' => null,
 			"querystring" => null
         ];
