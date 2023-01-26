@@ -9,6 +9,7 @@ describe("dataspects Search Facets", () => {
       cy.get('div.hit[data-cy="' + scenario[2].hitIdInTop5 + '"]').should(
         "be.visible"
       );
+      cy.get(".ais-InfiniteHits-loadMore").click();
     });
   });
 

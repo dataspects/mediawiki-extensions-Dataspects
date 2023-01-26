@@ -162,7 +162,7 @@ function handleSpecialDataspects() {
     });
   };
 
-  const handleSearchFacet = (helper, searchFacet) => {
+  const checkIfThereIsASearchFacet = (helper, searchFacet) => {
     if (searchFacet && searchFacet.ds0__instantsearchHelper) {
       console.log("Loading search facet " + searchFacet.name);
       helper.setState(
@@ -171,6 +171,36 @@ function handleSpecialDataspects() {
       setCurrentContextSearchFacetName(searchFacet.name);
     } else {
       setCurrentContextSearchFacetName(false);
+    }
+  };
+
+  const addSearchFacetToTheItems = (currentContext, theItems) => {
+    /**
+     * If the hit matches:
+     *                                "hit": {
+     *                                   "ds0__source": "dataspectsSystem",
+     *                                   "eppo0__hasEntityType": "DataspectsSearchFacet"
+     *                                 }
+     * then we want to consider a
+     * a special search result class and prepend it to the hits as a pseudo-hit.
+     */
+    var pseudoHit = {
+      id: currentContext.searchFacetName + "DataspectsSearchFacet",
+      ds0__source: "dataspectsSystem",
+      eppo0__hasEntityType: "DataspectsSearchFacet",
+      eppo0__hasEntityTitle: currentContext.searchFacetName,
+    };
+    pseudoHit.searchResultClassName = new ProfilesMatcher(
+      pseudoHit,
+      currentContext
+    ).getSearchResultClass();
+    console.log(
+      pseudoHit.searchResultClassName +
+        " for SearchFacetName " +
+        currentContext.searchFacetName
+    );
+    if (pseudoHit.searchResultClassName != "SearchResult") {
+      theItems.push(pseudoHit);
     }
   };
 
@@ -201,7 +231,7 @@ function handleSpecialDataspects() {
            * f URL parameter and get the corresponding facet:
            */
           searchFacet = await checkForFURLParameter();
-          handleSearchFacet(helper, searchFacet);
+          checkIfThereIsASearchFacet(helper, searchFacet);
         }
       }
       /**
@@ -380,33 +410,7 @@ function handleSpecialDataspects() {
          * currentContext.searchFacetName
          */
         if (results.page == 0 && currentContext.searchFacetName != false) {
-          /**
-           * If the hit matches:
-           *                                "hit": {
-           *                                   "ds0__source": "dataspectsSystem",
-           *                                   "eppo0__hasEntityType": "DataspectsSearchFacet"
-           *                                 }
-           * then we want to consider a
-           * a special search result class and prepend it to the hits as a pseudo-hit.
-           */
-          var pseudoHit = {
-            id: currentContext.searchFacetName + "DataspectsSearchFacet",
-            ds0__source: "dataspectsSystem",
-            eppo0__hasEntityType: "DataspectsSearchFacet",
-            eppo0__hasEntityTitle: currentContext.searchFacetName,
-          };
-          pseudoHit.searchResultClassName = new ProfilesMatcher(
-            pseudoHit,
-            currentContext
-          ).getSearchResultClass();
-          console.log(
-            pseudoHit.searchResultClassName +
-              " for SearchFacetName " +
-              currentContext.searchFacetName
-          );
-          if (pseudoHit.searchResultClassName != "SearchResult") {
-            theItems.push(pseudoHit);
-          }
+          addSearchFacetToTheItems(currentContext, theItems);
         }
         theItems.push(
           ...items.map((hit, index) => {
