@@ -38,14 +38,14 @@ class DataspectsAPI extends ApiBase {
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
 					}
 				} else {
-					$errorMessage = "putsearchfacet not permitted for ".$user->getName();
+					$errorMessage = "$queryType not permitted for ".$user->getName();
 					wfDebug("### "+$errorMessage);
 					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetname' => $params['searchfacetname'] ] );
 				}
 				break;
 			case 'typeaheadsearchfacets':
 				try {
-					wfDebug("### typeaheadsearchfacets for ".$params['querystring']);
+					wfDebug("### $queryType for ".$params['querystring']);
 					$this->loadBackends();
 					$matches = [];
 					if(trim($params['querystring']) <> "") {
@@ -68,7 +68,7 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'activatesearchfacet':
-				wfDebug("### getsearchfacet for ".$params['searchfacetname']);
+				wfDebug("### $queryType for ".$params['searchfacetname']);
 				try {
 					$this->loadBackends();
 					$searchFacets = $this->sqlite3->getSearchFacet($params['searchfacetname']);
@@ -79,7 +79,7 @@ class DataspectsAPI extends ApiBase {
 				}
 				break;
 			case 'deletesearchfacet':
-				wfDebug("### deletesearchfacet for ".$params['searchfacetname']);
+				wfDebug("### $queryType for ".$params['searchfacetname']);
 				if(in_array("writeapi", $user->getRights())){
 					try {
 						$this->loadBackends();
@@ -93,7 +93,7 @@ class DataspectsAPI extends ApiBase {
 						$this->getResult()->addValue(null, "data", [ 'searchfacetname' => $params['searchfacetname'], 'result' => $e->getMessage() ] );
 					}
 				} else {
-					$errorMessage = "deletesearchfacet not permitted for ".$user->getName();
+					$errorMessage = "$queryType not permitted for ".$user->getName();
 					wfDebug("### "+$errorMessage);
 					$this->getResult()->addValue(null, "data", [ 'status' => $errorMessage, 'searchfacetname' => $params['searchfacetname'] ] );
 				}
@@ -102,7 +102,6 @@ class DataspectsAPI extends ApiBase {
 				try {
 					$this->loadBackends();
 					$non = $this->dsNeo4j->numberOfNodes();
-					wfDebug("### sadasd");
 					$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $non ) );
 				} catch (Exception $e) {
 					wfDebug("### DataspectsAPI error: ".$e);

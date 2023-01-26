@@ -137,12 +137,34 @@ Debug API: https://localhost/w/api.php
 
 ## Develop
 
-1. `image: getmeili/meilisearch:v0.28.1`<br/>`image: apache/tika:2.4.1-full`
-2. Clone the test data: https://mwstakeorg.dataspects.com/wiki/C1728772915
-3. `$wgDataspectsSearchURL = "http://localhost:7700";`<br/>`$wgDataspectsWriteURL = "http://localhost:7700";`<br/>`$wgDataspectsSearchKey = "masterKey";`<br/>
-   `$wgDataspectsWriteKey = "masterKey";`
-4. Reindex/develop Meilisearch: https://github.com/dataspects/DataspectsCLI<br/>E.g. `php extensions/Dataspects/maintenance/feedOne.php`
-5. Update JS code: LEX2208021344
+### CHECK: system status
+
+- [Special:DataspectsBackstage](https://mwstakeorg.dataspects.com/wiki/Special:DataspectsBackstage)
+- `mwstakeorg__status.sh`
+  - DEPLOY the underlying `mwstakeorg__status.py` to **production** by `php extensions/Dataspects/maintenance/manageSQlite3.php --initialize`
+
+### CHECK: docker-compose.override.yml
+
+- CHECK: Base images [Meilisearch](https://hub.docker.com/r/getmeili/meilisearch/tags), [Neo4j](https://hub.docker.com/_/neo4j/tags), [Tika](https://hub.docker.com/r/apache/tika/tags)
+- CHECK: Derived images [canasta-dataspects](https://hub.docker.com/r/dataspects/canasta-dataspects/tags), [spacy-dataspects](https://hub.docker.com/r/dataspects/spacy-dataspects/tags)
+- CHECK: Environment variables in `.env` which set `$wgDataspects*` variables in `LocalSettings.php`
+
+### CONFIGURE: the environment for Extension:Dataspects
+
+- OPTION: temporarily change `$wgDataspects*` variables in `LocalSettings.php`:
+  - ADVANTAGES:
+    - no need to restart the Docker compose stack
+    - preserve proper development `.env`
+
+### CONFIGURE: the data storage backends
+
+- PREPARE: `source *.config` files (e.g. `localhost.config` and `production.config`) _exporting_ the environment variables
+  - RESET Meilisearch: `meilisearch__reset-INDEX.sh` which applies `src/indexsettings.json`
+- RESET SQLite:
+  1. delete `sqlite/dataspects.sqlite`
+  2. run `php extensions/Dataspects/maintenance/manageSQlite3.php --initialize`
+- RESET Neo4j:
+  - `MATCH(n&lt;:label(:s)&gt;) DETACH DELETE n`
 
 ### Tika
 
