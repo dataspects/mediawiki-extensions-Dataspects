@@ -10,5 +10,5 @@ module.exports = {
     viewportWidth: 1400,
     viewportHeight: 850,
   },
-  retries: 3,
+  retries: 1,
 };

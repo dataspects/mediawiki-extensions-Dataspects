@@ -30,6 +30,7 @@ class DSNeo4j {
     $query = [
       "query" => '
         MATCH     (n:MediaWikiPage)
+        WHERE     n.ds0__usedInPackageAndOrFarm = "canasta"
         RETURN    n.name AS name,
                   n.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
                   n.eppo0__hasEntityURL AS eppo0__hasEntityURL
@@ -88,21 +89,22 @@ class DSNeo4j {
     return $results;
   }
 
-  public function addSearchFacet($name) {
+  public function addSearchFacet($name, $eppo0__hasEntityBlurb) {
     $queries = [
       [
         "query" => '
             CALL apoc.merge.node(
               [ "SearchFacet" ],
-              { name: $name },  // identProps
-              {},               // props
-              {}                // onMatchProps
+              { name: $name },        // identProps
+              { eppo0__hasEntityBlurb: $eppo0__hasEntityBlurb },  // props
+              { eppo0__hasEntityBlurb: $eppo0__hasEntityBlurb }   // onMatchProps
             )
             YIELD node
             RETURN node
         ',
         "params" => [
-          "name" => $name
+          "name" => $name,
+          "eppo0__hasEntityBlurb" => $eppo0__hasEntityBlurb
         ]
       ]
     ];

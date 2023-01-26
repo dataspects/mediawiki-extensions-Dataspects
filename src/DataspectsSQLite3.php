@@ -31,17 +31,17 @@ class DataspectsSQLite3 extends \SQLite3 {
         }
         $this->open($this->db_file);
         if(chmod($this->db_file, $this->perms)) {
-            $this->exec("CREATE TABLE IF NOT EXISTS facets(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, comment TEXT, ds0instantsearchHelper TEXT);");
+            $this->exec("CREATE TABLE IF NOT EXISTS facets(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, ds0instantsearchHelper TEXT);");
             return true;
         }
         return false;
     }
 
-    public function putSearchFacet($name, $comment, $currentHelper) { // FIXME: SQL injection safe?
+    public function putSearchFacet($name, $currentHelper) { // FIXME: SQL injection safe?
         if(!$this->openDB()) {
             return false;
         }
-        $result = $this->exec("INSERT INTO facets(name, comment, ds0instantsearchHelper) VALUES('$name', '$comment', '$currentHelper');");
+        $result = $this->exec("INSERT INTO facets(name, ds0instantsearchHelper) VALUES('$name', '$currentHelper');");
         wfDebug("### $result");
         return $result;
     }
@@ -61,7 +61,6 @@ class DataspectsSQLite3 extends \SQLite3 {
         while ($row = $results->fetchArray()) {    
             $arr[] = [
                 "name" => $row["name"],
-                "comment" => $row["comment"],
                 "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"], true)
             ];
 		}
@@ -77,7 +76,6 @@ class DataspectsSQLite3 extends \SQLite3 {
         while ($row = $results->fetchArray()) {    
             $arr[] = [
                 "name" => $row["name"],
-                "comment" => $row["comment"],
                 "ds0__instantsearchHelper" => json_decode($row["ds0instantsearchHelper"], true)
             ];
 		}

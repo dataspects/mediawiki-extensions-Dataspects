@@ -162,6 +162,18 @@ function handleSpecialDataspects() {
     });
   };
 
+  const handleSearchFacet = (helper, searchFacet) => {
+    if (searchFacet && searchFacet.ds0__instantsearchHelper) {
+      console.log("Loading search facet " + searchFacet.name);
+      helper.setState(
+        searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
+      );
+      setCurrentContextSearchFacetName(searchFacet.name);
+    } else {
+      setCurrentContextSearchFacetName(false);
+    }
+  };
+
   var currentContext = JSON.parse(
     window.localStorage.getItem("currentContext")
   );
@@ -189,15 +201,7 @@ function handleSpecialDataspects() {
            * f URL parameter and get the corresponding facet:
            */
           searchFacet = await checkForFURLParameter();
-          if (searchFacet && searchFacet.ds0__instantsearchHelper) {
-            console.log("Loading search facet " + searchFacet.name);
-            helper.setState(
-              searchFacet.ds0__instantsearchHelper.meilisearchHelper.state
-            );
-            setCurrentContextSearchFacetName(searchFacet.name);
-          } else {
-            setCurrentContextSearchFacetName(false);
-          }
+          handleSearchFacet(helper, searchFacet);
         }
       }
       /**
@@ -375,7 +379,7 @@ function handleSpecialDataspects() {
         /**
          * currentContext.searchFacetName
          */
-        if (currentContext.searchFacetName != false) {
+        if (results.page == 0 && currentContext.searchFacetName != false) {
           /**
            * If the hit matches:
            *                                "hit": {
@@ -451,7 +455,7 @@ function handleSpecialDataspects() {
       e.preventDefault();
       const payload = {
         searchFacetName: $('[data-cy="saveSearchFacetFormHTMLName"]').val(),
-        searchFacetComment: $(
+        searchfaceteppo0__hasEntityBlurb: $(
           '[data-cy="saveSearchFacetFormHTMLComment"]'
         ).val(),
         currentHelper: window.localStorage.getItem("currentContext"),
@@ -464,7 +468,8 @@ function handleSpecialDataspects() {
           action: "dataspectsapi",
           querytype: "putsearchfacet",
           searchfacetname: payload.searchFacetName,
-          searchfacetcomment: payload.searchFacetComment,
+          searchfaceteppo0__hasEntityBlurb:
+            payload.searchfaceteppo0__hasEntityBlurb,
           currenthelper: payload.currentHelper,
         })
         .done(function (response) {
