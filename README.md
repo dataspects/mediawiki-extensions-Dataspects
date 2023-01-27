@@ -125,7 +125,16 @@ Allows per-MediaWiki-namespace indexing
 
 1. Add to Canasta MediaWiki container: `composer require --with-all-dependencies meilisearch/meilisearch-php:0.25.0 symfony/http-client laudis/neo4j-php-client`
 
-## Test
+## TEST
+
+1. RESET: data storage backends (see below _CONFIGURE: the data storage backends_)
+2. LOAD: `w# php tests/phpunit/phpunit.php --filter testResetTestData extensions/Dataspects/tests/phpunit/unit/DataspectsTest.php`
+3. RUN:
+   - Cypress
+     - E2E tests
+     - Component tests
+   - Services tests (TIKA, spaCy)
+   - PHP unit tests
 
 ```bash
 sudo docker exec -it canasta-dockercompose_web_1 /bin/bash
@@ -135,7 +144,11 @@ root@95e3ef5ecc17:/var/www/mediawiki/w# php tests/phpunit/phpunit.php \
 
 Debug API: https://localhost/w/api.php
 
-## Develop
+## DOCUMENT
+
+- ACTION: `mwstakeorg__localhost__make-test-documentation-TDM.sh`
+
+## DEVELOP
 
 ### CHECK: system status
 

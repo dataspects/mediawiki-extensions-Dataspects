@@ -130,11 +130,19 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			$this->globalsConfig["wgDataspectsNeo4jPassword"]
 		);
 		// $this->initializeTestIndex();
-		// $this->addTestDocuments();
+		// $this->testResetTestData();
 	}
 
 	protected function tearDown(): void {
 		parent::tearDown();
+	}
+
+    public function testResetTestData() {
+        // FIXME: load from JSON
+		$this->writeIndex->addDocuments($this->testDocuments);
+		sleep(1);
+		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
+		$this->assertCount(count($this->testDocuments), $hits);
 	}
 
 	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {
@@ -254,11 +262,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		return $hits;
 	}
 
-	private function addTestDocuments() {
-		$this->writeIndex->addDocuments($this->testDocuments);
-		sleep(1);
-		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
-		$this->assertCount(count($this->testDocuments), $hits);
-	}
+	
 
 }

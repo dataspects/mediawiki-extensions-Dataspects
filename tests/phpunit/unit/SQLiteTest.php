@@ -4,7 +4,6 @@
 
 class SQLiteTest extends MediaWikiUnitTestCase {
 
-
 	protected function setUp(): void {
 		parent::setUp();
 		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();

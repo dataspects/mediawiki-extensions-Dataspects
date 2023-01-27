@@ -24,33 +24,40 @@
                 This is the <b>documentation on the use cases</b> enabled by <a href="https://github.com/dataspects/Dataspects">https://github.com/dataspects/Dataspects</a>.
             </li>
             <li>
-                These use cases based on <a href='https://github.com/dataspects/Dataspects/tree/main/cypress/e2e/read-only.cy.js'>read-only.cy.js</a> are curated by MWStake and currently <b>certified for MWCore 1.36</b> in conjunction with <a href="">this set of extensions</a>.
+                These use cases based on <a href='https://github.com/dataspects/Dataspects/tree/main/cypress/e2e/search-facets.cy.js'>search-facets.cy.js</a> are curated by MWStake and currently <b>certified for MWCore 1.36</b> in conjunction with <a href="">this set of extensions</a>.
             </li>
         </ol>
         
                 <table><tr><td>
                     
 
-<div class='describe'><span class='aspect'>Aspect</span>: <b>MediaWiki Extension:Dataspects</b></div>
-<div class='left20'><span class='feature'>Use Case</span>: <b>it should be able to search for 'clone'</b></div>
+<div class='describe'><span class='aspect'>Aspect</span>: <b>dataspects Search Facets</b></div>
+<div class='left20'><span class='feature'>Use Case</span>: <b>it should load a facet by URL GET parameter 'f'</b></div>
+    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for fixture'>fixture</a>(<span class='arguments'></span>)</div>
+      <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for visit'>visit</a>(<span class='arguments'></span>)</div>
+
+
+
+<div class='left20'><span class='feature'>Use Case</span>: <b>it should show the saved search facets</b></div>
+<div class='left40 comment'>    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for mediawiki_login'>mediawiki_login</a>(<span class='arguments'></span>)</div></div>
+    <div class='left40'><span class='goto'>Go to</span> /wiki/Special:Dataspects</div>
+
+    
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('saved-search-facets')" onmouseout="toggleImage('saved-search-facets')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> saved-search-facets
+                    </div>
+
+
+<div class='left20'><span class='feature'>Use Case</span>: <b>it should find 'backup' and then 'About cloning' by search facet</b></div>
     <div class='left40'><span class='goto'>Go to</span> /wiki/Special:Dataspects</div>
     <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for fixture'>fixture</a>(<span class='arguments'></span>)</div>
       <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for typeIntoTextInput'>typeIntoTextInput</a>(<span class='arguments'></span>)</div>
 
-      
-                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('search-results')" onmouseout="toggleImage('search-results')">
-                        <span class='screenshot'>&rarr; Screenshot: </span> search-results
-                    </div>
-
-<div class='left20'><span class='feature'>Use Case</span>: <b>it should be triggered by MediaWiki's top right corner search input's 'containing option'</b></div>
-    <div class='left40'><span class='goto'>Go to</span> /wiki</div>
-    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for fixture'>fixture</a>(<span class='arguments'></span>)</div>
-      <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for typeIntoTextInput'>typeIntoTextInput</a>(<span class='arguments'></span>)</div>
 
 
 
                 </td><td>
-                    <figure id="search-results" class="hide"><figcaption>search-results</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/search-results.png" /><figcaption>search-results</figcaption></figure>
+                    <figure id="saved-search-facets" class="hide"><figcaption>saved-search-facets</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/saved-search-facets.png" /><figcaption>saved-search-facets</figcaption></figure>
                 </td></tr></table>
             </body>
             </html>

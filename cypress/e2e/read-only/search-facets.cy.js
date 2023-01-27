@@ -3,7 +3,7 @@ let login = ["lex", "globi2000globi"];
 import queryHitsCombinations from "../../fixtures/query-hits-combinations.json";
 
 describe("dataspects Search Facets", () => {
-  it.only("should load a facet by URL GET parameter 'f'", () => {
+  it("should load a facet by URL GET parameter 'f'", () => {
     cy.fixture("query-hits-combinations").then((scenario) => {
       cy.visit("/wiki/Special:Dataspects?f=" + scenario[2].searchFacetName);
       cy.get('div.hit[data-cy="' + scenario[2].hitIdInTop5 + '"]').should(
