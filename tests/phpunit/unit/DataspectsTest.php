@@ -9,99 +9,11 @@ use \MeiliSearch\Client; // https://meilisearch.github.io/meilisearch-php/namesp
 class DataspectsTest extends \MediaWikiUnitTestCase {
 
 	# Meili doc at LEX200122141600
-	private $testDocuments = [
-		[
-			// Unique in index
-			"id" => "dataspectsTestDoc1673881510", // can be composed, e.g. mwWikiID + mwPageID
-			"name" => "http://localhost/wiki/wikidataspectsTestDoc1673881510", // matching name in Neo4j
-			"eppo0__hasEntityURL" => "http://localhost/wiki/wikidataspectsTestDoc1673881510",
-			// Headers
-			"ds0__sourceID" => "", // e.g. mwPageID, can be not unique in index
-			"eppo0__hasEntityTitle" => "dst Entity Title 0",
-			"eppo0__hasEntityBlurb" => "dst Entity Blurb 0",
-			"ds0__sourceNamespace" => "Main", // e.g. MW namespace
-			// Time
-			"release_timestamp" => "1673881510", // Unix timestamp
-			// Entity type
-			"eppo0__hasEntityType" => "dst Topic Type",
-			"eppo0__hasEntityType.1v10" => "Topic Type",
-			"eppo0__hasEntityType.1v11" => "Topic Type > dst Topic Type",
-			// Categories
-			"eppo0__categories" => [ "dst Category 0", "dst Category 1" ],
-			// Content
-			"ds0__contentSource" => "{{Used by|abcdef=1}} text", // E.g. wikitext
-			"ds0__contentHTML" => "<b>abcdef</b> text",
-			"ds0__contentText" => "We don't remember abcdef text", // Stripped HTML
-			// Content sections
-			"ds0__contentSections" => [ "dst Content Section 0", "dst Content Section 1" ],
-			// Parse source link
-			"ds0__sourceParseTextURL" => "https://wiki.dataspects.com/w/api.php?action=parse&page=Main_Page&prop=text&disablelimitreport&format=json",
-			// Templates
-			"ds0__templates" => [ "Template 0" ],
-      		"ds0__templates_by_regex" => [ "Template 0" ],
-			// Links
-			"ds0__outgoingLinks" [
-				"https://www.semantic-mediawiki.org/"
-			],
-      		"ds0__incomingLinks" [
-				"http://localhost/wiki/wikidataspectsTestDoc1673881511"
-			],
-			// Attachments
-			"ds0__attachments" => [],
-			// Source
-			"ds0__source" => "dst Source URL",
-			"ds0__source.1v10" => "Source",
-			"ds0__source.1v11" => "Source > dst Source URL",
-			"ds0__source.1v12" => "Source > dst Source URL > dst Source Namespace",
-			// Predicates
-			"ds0__allPredicates.1v10" => [ "All Predicates" ], // For hierarchicalMenus, it starts at *.1v10!
-			"ds0__allPredicates.1v11" => [],
-			"ds0__allPredicates.1v12" => [],
-			// Special aspects
-			"ds0__specialAspect" => "One",
-			"ds0__specialAspect.1v10" => [ "Selected Aspects" ],
-			"ds0__specialAspect.1v11" => [
-				"Selected Aspects > One",
-				"Selected Aspects > One"
-			],
-			// Annotations
-			"annotations" => [
-				[
-					"subject" => "dataspectsTestDoc1673881510",
-					"predicate" => "predicate 0",
-					"objectSource" => "{{makebold|object}} 0",
-					"objectHTML" => "<b>object</b> 0",
-					"objectText" => "object 0",
-					"objectType" => "Text" // ,https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
-				],
-				[
-					"subject" => "dataspectsTestDoc1673881510",
-					"predicate" => "predicate 1",
-					"objectSource" => "{{makebold|object}} 1",
-					"objectHTML" => "<b>object</b> 1",
-					"objectText" => "object 1",
-					"objectType" => "Text" // ,https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
-				],
-				[
-					"subject" => "dataspectsTestDoc1673881510",
-					"predicate" => "ds55__unrecommends",
-					"objectSource" => true,
-					"objectHTML" => true,
-					"objectText" => true,
-					"objectType" => "Boolean" // ,https://www.semantic-mediawiki.org/wiki/Help:List_of_datatypes
-				],
-			],
-			// CoKe
-			"ck0__containsCognitiveKeyword" => "",
-			"ck0__containsCognitiveKeyword.1v10" => "", 
-			"ck0__containsCognitiveKeyword.1v11" => ""
-		]
-	];
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->globalsConfig = [
-			"wgDataspectsNeo4jURL" => "neo4j://neo4j:7687",
+			"wgDataspectsNeo4jURL" => "neo4j://neo4j:7686",
 			"wgDataspectsNeo4jUsername" => "neo4j",
 			"wgDataspectsNeo4jPassword" => "globi2000",
 			"wgDataspectsSpacyURL" => "http://localhost:8050",
@@ -129,8 +41,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			$this->globalsConfig["wgDataspectsNeo4jUsername"],
 			$this->globalsConfig["wgDataspectsNeo4jPassword"]
 		);
-		// $this->initializeTestIndex();
-		// $this->testResetTestData();
 	}
 
 	protected function tearDown(): void {
@@ -138,11 +48,15 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
     public function testResetTestData() {
-        // FIXME: load from JSON
-		$this->writeIndex->addDocuments($this->testDocuments);
+        $databases = $this->neo4jClient->showDatabases();
+        echo $databases;
+        $this->initializeTestIndex();
+        $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
+        $testDocuments = json_decode($json,true);
+        $this->writeIndex->addDocuments($testDocuments);
 		sleep(1);
 		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
-		$this->assertCount(count($this->testDocuments), $hits);
+		$this->assertCount(count($testDocuments), $hits);
 	}
 
 	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {

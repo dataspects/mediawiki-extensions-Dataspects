@@ -26,6 +26,25 @@ class DSNeo4j {
     } 
   }
 
+  public function showDatabases() {
+    $query = [
+      "query" => '
+        SHOW DATABASES
+        YIELD name
+        RETURN name AS name
+      ',
+      "params" => []
+    ];
+    $results = $this->query($query);
+    $databases = [];
+    foreach ($results as $result) {
+      $databases[] = [
+        name => $result->get("name")
+      ];
+    }
+    return $databases;
+  }
+
   public function nodesList() {
     $query = [
       "query" => '
