@@ -16,7 +16,7 @@ class SpecialDataspectsFeed {
 
   # LEX200122141600
   function getMediaWikiPage() {
-    $mediaWikiPage = [
+    $meilisearchDocument = [
       ## Unique in index
       "id" => $GLOBALS['wgDataspectsMediaWikiIDPrefix']."_".$this->title->getArticleID(),// https://docs.meilisearch.com/learn/core_concepts/primary_key.html#formatting-the-document-id
       "name" => $this->title->mTextform,
@@ -51,13 +51,13 @@ class SpecialDataspectsFeed {
       ## Annotations from processAnnotations()
       ## CoKe from analyzeCoKe()
     ];
-    $mediaWikiPage = $this->processAnnotations($mediaWikiPage);
-    $mediaWikiPage = $this->processCategories($mediaWikiPage);
-    $mediaWikiPage = $this->processSources($mediaWikiPage);
-    $mediaWikiPage = $this->processAttachments($mediaWikiPage);
-    $mediaWikiPage = $this->smwsof->analyzeCoKe($mediaWikiPage);
-    wfDebug("### finished SpecialDataspectsFeed::mediaWikiPage");
-    return $mediaWikiPage;
+    $meilisearchDocument = $this->processAnnotations($meilisearchDocument);
+    $meilisearchDocument = $this->processCategories($meilisearchDocument);
+    $meilisearchDocument = $this->processSources($meilisearchDocument);
+    $meilisearchDocument = $this->processAttachments($meilisearchDocument);
+    $meilisearchDocument = $this->smwsof->analyzeCoKe($meilisearchDocument);
+    wfDebug("### finished SpecialDataspectsFeed::meilisearchDocument");
+    return $meilisearchDocument;
   }
 
   private function semanticMediaWikiPropertyTypeMappings($number) {
@@ -126,27 +126,27 @@ class SpecialDataspectsFeed {
     }
   }
 
-  public function allPredicates($mediaWikiPage) {
+  public function allPredicates($meilisearchDocument) {
     // ds1:implements: instantsearch.widgets.hierarchicalMenu #all-predicates-menu
-    $mediaWikiPage = $this->initializeIfNotExists($mediaWikiPage, "ds0__allPredicates", "All Predicates");
+    $meilisearchDocument = $this->initializeIfNotExists($meilisearchDocument, "ds0__allPredicates", "All Predicates");
     // Add predicates
-    foreach($mediaWikiPage["annotations"] as $annotation) {
-      $mediaWikiPage["ds0__allPredicates.1v11"][] = "All Predicates > ".$annotation["predicate"];
-      $mediaWikiPage["ds0__allPredicates.1v12"][] = "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectText"]);
+    foreach($meilisearchDocument["annotations"] as $annotation) {
+      $meilisearchDocument["ds0__allPredicates.1v11"][] = "All Predicates > ".$annotation["predicate"];
+      $meilisearchDocument["ds0__allPredicates.1v12"][] = "All Predicates > ".$annotation["predicate"]." > ".$this->considerTruncatingObjectLiteral($annotation["objectText"]);
     }
-    return $mediaWikiPage;
+    return $meilisearchDocument;
   }
 
-  private function initializeIfNotExists($mediaWikiPage, $predicate, $title) {
+  private function initializeIfNotExists($meilisearchDocument, $predicate, $title) {
         // For hierarchicalMenus, it starts at *.1v10!
-        if(!array_key_exists($predicate, $mediaWikiPage)) {
-            $mediaWikiPage = array_merge($mediaWikiPage, [
+        if(!array_key_exists($predicate, $meilisearchDocument)) {
+            $meilisearchDocument = array_merge($meilisearchDocument, [
                 $predicate.".1v10" => [$title],
                 $predicate.".1v11" => [],
                 $predicate.".1v12" => [],
             ]);
         }
-        return $mediaWikiPage;
+        return $meilisearchDocument;
     }
 
   private function considerTruncatingObjectLiteral($objectText) {
@@ -163,63 +163,63 @@ class SpecialDataspectsFeed {
 		return $hp->processAndReturnText();
   }
 
-  private function processAttachments($mediaWikiPage) {
+  private function processAttachments($meilisearchDocument) {
     if(count($this->dsf->attachments["files"]) > 0) {
-      $mediaWikiPage = array_merge($mediaWikiPage, [
+      $meilisearchDocument = array_merge($meilisearchDocument, [
         "ds0__attachments" => $this->dsf->attachments["files"]
       ]);
     }
-    return $mediaWikiPage;
+    return $meilisearchDocument;
   }
 
-  private function processSources($mediaWikiPage) {
-    $mediaWikiPage = array_merge($mediaWikiPage, [
+  private function processSources($meilisearchDocument) {
+    $meilisearchDocument = array_merge($meilisearchDocument, [
       "ds0__source" => $GLOBALS['wgSourceURL'],
       "ds0__source.1v10" => "Source",
       "ds0__source.1v11" => "Source > ".$GLOBALS['wgSourceURL'],
       "ds0__source.1v12" => "Source > ".$GLOBALS['wgSourceURL']." > ".$this->dsf->getNamespace($this->title->mNamespace)
     ]);
-    return $mediaWikiPage;
+    return $meilisearchDocument;
   }
 
-  private function processCategories($mediaWikiPage) {
+  private function processCategories($meilisearchDocument) {
     $eppo0__categories = array();
     foreach ($this->dsf->categories as $category) {
-      if(!in_array(basename($category), [$mediaWikiPage["eppo0__hasEntityType"], "Pages using DynamicPageList3 parser function"])) {
+      if(!in_array(basename($category), [$meilisearchDocument["eppo0__hasEntityType"], "Pages using DynamicPageList3 parser function"])) {
         $eppo0__categories[] = basename($category);
       }
     }
     if(!empty($eppo0__categories)) {
-      $mediaWikiPage = array_merge($mediaWikiPage, [
+      $meilisearchDocument = array_merge($meilisearchDocument, [
         "eppo0__categories" => $eppo0__categories,
       ]);
     }
-    return $mediaWikiPage;
+    return $meilisearchDocument;
   }
 
-  private function processAnnotations($mediaWikiPage) {
+  private function processAnnotations($meilisearchDocument) {
     $showAnnotations = [];
     if($this->annotations) {
       foreach ($this->annotations as $key => $annotation) {
         switch ($annotation["predicate"]) {
           case "Eppo0:hasEntityType":
-            $mediaWikiPage = array_merge($mediaWikiPage, [
+            $meilisearchDocument = array_merge($meilisearchDocument, [
               "eppo0__hasEntityType" => $annotation["objectText"],
               "eppo0__hasEntityType.1v10" => "Topic Type",
               "eppo0__hasEntityType.1v11" => "Topic Type > ".$annotation["objectText"],
             ]);
             if($annotation["objectText"] == "Event") {
-              $mediaWikiPage = $this->specialCaseForIsEventType($mediaWikiPage);
+              $meilisearchDocument = $this->specialCaseForIsEventType($meilisearchDocument);
             }
             break;
           case "Eppo0:hasEntityTitle":
             // This overwrites: "eppo0__hasEntityTitle" => $this->title->mTextform
-            $mediaWikiPage = array_merge($mediaWikiPage, [
+            $meilisearchDocument = array_merge($meilisearchDocument, [
               "eppo0__hasEntityTitle" => $annotation["objectText"],
             ]);
             break;
           case "Eppo0:hasEntityBlurb":
-            $mediaWikiPage = array_merge($mediaWikiPage, [
+            $meilisearchDocument = array_merge($meilisearchDocument, [
               "eppo0__hasEntityBlurb" => $annotation["objectText"],
             ]);
             break;
@@ -227,30 +227,30 @@ class SpecialDataspectsFeed {
             if (!str_starts_with($annotation["predicate"], 'Eppo0')) {
               $showAnnotations[] = $annotation;
             }
-            // $mediaWikiPage = $GLOBALS['wgSelectedAspects']($annotation, $mediaWikiPage);
+            // $meilisearchDocument = $GLOBALS['wgSelectedAspects']($annotation, $meilisearchDocument);
             break;
         }
       }
     }
-    $mediaWikiPage["annotations"] = $showAnnotations;
-    return $mediaWikiPage;
+    $meilisearchDocument["annotations"] = $showAnnotations;
+    return $meilisearchDocument;
   }
 
-  private function specialCaseForIsEventType($mediaWikiPage) {
-    $eventType = $this->getObjectByPredicateName("Mwstake:isEventType", $mediaWikiPage);
-    $mediaWikiPage = array_merge($mediaWikiPage, [
+  private function specialCaseForIsEventType($meilisearchDocument) {
+    $eventType = $this->getObjectByPredicateName("Mwstake:isEventType", $meilisearchDocument);
+    $meilisearchDocument = array_merge($meilisearchDocument, [
       "eppo0__hasEntityType.1v12" => "Topic Type > Event > ".$eventType,
     ]);
-    return $mediaWikiPage;
+    return $meilisearchDocument;
   }
 
-  private function getObjectByPredicateName($predicateName, $mediaWikiPage) {
+  private function getObjectByPredicateName($predicateName, $meilisearchDocument) {
     foreach ($this->annotations as $key => $annotation) {
       if($annotation["predicate"] == $predicateName) {
         return $annotation["objectText"];
       }
     }
-    return $predicateName." not found for ".$mediaWikiPage['name'];
+    return $predicateName." not found for ".$meilisearchDocument['name'];
   }
 
 }

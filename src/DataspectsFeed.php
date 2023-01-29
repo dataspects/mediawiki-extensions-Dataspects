@@ -16,7 +16,7 @@ class DataspectsFeed {
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     
-    $this->index = $meiliClient->index("mwstakeorg");
+    $this->index = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
     $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
@@ -71,7 +71,7 @@ class DataspectsFeed {
         $this->sdf->getMediaWikiPageAnnotations();
         $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
+        $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
         break;
       case 6: // File
         $this->getCategories();
@@ -83,7 +83,7 @@ class DataspectsFeed {
         $this->sdf->getMediaWikiPageAnnotations();
         $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
+        $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
 	      break;
       case 4:
         $this->getCategories();
@@ -91,12 +91,12 @@ class DataspectsFeed {
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->sdf->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
-        $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
+        $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
         break;
       case 102:
         $this->getCategories();
         // $this->sdf->getPredicateAnnotations(); // PENDING FEATURE
-        $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
+        $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
         break;
       case 10:
       case 108:
@@ -108,17 +108,17 @@ class DataspectsFeed {
         $this->getParse();
         $this->getIncomingAndOutgoingLinks();
         $this->mw0__templates_by_regex();
-        $this->mediaWikiPage = $this->sdf->getMediaWikiPage();
+        $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
         break;
       default:
         echo "ERROR in determining namespace ".$this->title->mNamespace."\n";
         break;
     }
-    $this->semantologics = new Semantologics($this->mediaWikiPage);
-    $this->mediaWikiPage = $this->semantologics->process();
-    $this->mediaWikiPage = $this->sdf->allPredicates($this->mediaWikiPage); // FIXME: move this to Semantologics
+    $this->semantologics = new Semantologics($this->meilisearchDocument);
+    $this->meilisearchDocument = $this->semantologics->process();
+    $this->meilisearchDocument = $this->sdf->allPredicates($this->meilisearchDocument); // FIXME: move this to Semantologics
     $this->addPageToMeilisearch();
-    $this->dsNeo4j->addPageToNeo4j($this->mediaWikiPage);
+    $this->dsNeo4j->addPageToNeo4j($this->meilisearchDocument);
     // print_r($this->dsNeo4j->templateCallsSubgraph("https://localhost/wiki/Template:Issue"));
   }
 
@@ -215,7 +215,7 @@ class DataspectsFeed {
   //     $this->url."/".$pageID,
   //     [
   //       "method" => "post",
-  //       "postData" => $this->mediaWikiPage
+  //       "postData" => $this->meilisearchDocument
   //     ],
   //     __METHOD__
   //   );
@@ -240,9 +240,9 @@ class DataspectsFeed {
   }
 
   private function addPageToMeilisearch() {
-    wfDebug("### ".json_encode($this->mediaWikiPage));
-    $result = $this->index->addDocuments([$this->mediaWikiPage]);
-    wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->mediaWikiPage["eppo0__hasEntityURL"]."\n");
+    wfDebug("### ".json_encode($this->meilisearchDocument));
+    $result = $this->index->addDocuments([$this->meilisearchDocument]);
+    wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->meilisearchDocument["eppo0__hasEntityURL"]."\n");
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");
   }

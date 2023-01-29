@@ -143,15 +143,15 @@ class DSNeo4j {
     echo "Added SearchFacet ".$name;
   }
 
-  public function addPageToNeo4j($mediaWikiPage) {
+  public function addPageToNeo4j($meilisearchDocument) {
     $queries = [];
-    $queries = array_merge($queries, $this->addNode($mediaWikiPage));
-    $queries = array_merge($queries, $this->addRelationships($mediaWikiPage));
+    $queries = array_merge($queries, $this->addNode($meilisearchDocument));
+    $queries = array_merge($queries, $this->addRelationships($meilisearchDocument));
     $this->update($queries);
-    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$mediaWikiPage["eppo0__hasEntityURL"]."\n";
+    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$meilisearchDocument["eppo0__hasEntityURL"]."\n";
   }
 
-  private function addNode($mediaWikiPage) {
+  private function addNode($meilisearchDocument) {
     $queries = [];
     $queries[] = [
       "query" => '
@@ -197,34 +197,34 @@ class DSNeo4j {
       ',
       "params" => [
         "subjectLabels" =>         ["MediaWikiPage"],
-        "name" =>                  strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
-        "eppo0__hasEntityURL" =>   $mediaWikiPage["eppo0__hasEntityURL"],
-        "eppo0__hasEntityTitle" => $mediaWikiPage["eppo0__hasEntityTitle"],
-        "ds0__sourceNamespace" =>  $mediaWikiPage["ds0__sourceNamespace"],
-        "release_timestamp" =>     $mediaWikiPage["release_timestamp"],
-        "eppo0__hasEntityType" =>  $mediaWikiPage["eppo0__hasEntityType"],
+        "name" =>                  strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+        "eppo0__hasEntityURL" =>   $meilisearchDocument["eppo0__hasEntityURL"],
+        "eppo0__hasEntityTitle" => $meilisearchDocument["eppo0__hasEntityTitle"],
+        "ds0__sourceNamespace" =>  $meilisearchDocument["ds0__sourceNamespace"],
+        "release_timestamp" =>     $meilisearchDocument["release_timestamp"],
+        "eppo0__hasEntityType" =>  $meilisearchDocument["eppo0__hasEntityType"],
         "objectLabels" =>          ["MediaWiki"],
-        "object" =>                $mediaWikiPage["ds0__source"],
+        "object" =>                $meilisearchDocument["ds0__source"],
         "predicate" =>             "ds0__originatedInSource"
       ]
     ];
     return $queries;
   }
 
-  private function addRelationships($mediaWikiPage) {
+  private function addRelationships($meilisearchDocument) {
     $queries = [];
-    $queries = array_merge($queries, $this->addCategories($mediaWikiPage));
-    $queries = array_merge($queries, $this->addOutgoingLinks($mediaWikiPage));
-    $queries = array_merge($queries, $this->addIncomingLinks($mediaWikiPage));
-    $queries = array_merge($queries, $this->addAnnotations($mediaWikiPage));
-    $queries = array_merge($queries, $this->addTemplates($mediaWikiPage));
-    $queries = array_merge($queries, $this->addAttachments($mediaWikiPage));
+    $queries = array_merge($queries, $this->addCategories($meilisearchDocument));
+    $queries = array_merge($queries, $this->addOutgoingLinks($meilisearchDocument));
+    $queries = array_merge($queries, $this->addIncomingLinks($meilisearchDocument));
+    $queries = array_merge($queries, $this->addAnnotations($meilisearchDocument));
+    $queries = array_merge($queries, $this->addTemplates($meilisearchDocument));
+    $queries = array_merge($queries, $this->addAttachments($meilisearchDocument));
     return $queries;
   }
 
-  private function addCategories($mediaWikiPage) {
+  private function addCategories($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["eppo0__categories"] as $category) {
+    foreach ($meilisearchDocument["eppo0__categories"] as $category) {
       $queries[] = [
         "query" => '
           MERGE (sub:MediaWikiPage{name: $subject})
@@ -247,7 +247,7 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
           "predicate" =>     "eppo0__hasCategory",
           "object" =>        strtolower($category),
           "objectLabels" =>  ["Category"]
@@ -257,9 +257,9 @@ class DSNeo4j {
     return $queries;
   }
 
-  private function addOutgoingLinks($mediaWikiPage) {
+  private function addOutgoingLinks($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["ds0__outgoingLinks"] as $link) {
+    foreach ($meilisearchDocument["ds0__outgoingLinks"] as $link) {
       $queries[] = [
         "query" => '
           MERGE (sub:MediaWikiPage{name: $subject})
@@ -282,7 +282,7 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
           "predicate" =>     "ds0__linksTo",
           "object" =>        strtolower($link),
           "objectLabels" =>  ["RELATIONSHIPLEAF"]
@@ -292,9 +292,9 @@ class DSNeo4j {
     return $queries;
   }
 
-  private function addIncomingLinks($mediaWikiPage) {
+  private function addIncomingLinks($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["ds0__incomingLinks"] as $link) {
+    foreach ($meilisearchDocument["ds0__incomingLinks"] as $link) {
       $queries[] = [
         "query" => '
           MERGE (obj:MediaWikiPage{name: $object})
@@ -320,16 +320,16 @@ class DSNeo4j {
           "subject" =>       strtolower($link),
           "subjectLabels" =>  ["RELATIONSHIPLEAF"],
           "predicate" =>     "ds0__linksTo",
-          "object" =>        strtolower($mediaWikiPage["eppo0__hasEntityURL"])
+          "object" =>        strtolower($meilisearchDocument["eppo0__hasEntityURL"])
         ]
       ];
     }
     return $queries;
   }
 
-  private function addAnnotations($mediaWikiPage) {
+  private function addAnnotations($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["annotations"] as $annot) {
+    foreach ($meilisearchDocument["annotations"] as $annot) {
       if(in_array($annot["objectType"], ["URL", "Page"])) {
         $queries[] = [
           "query" => '
@@ -378,9 +378,9 @@ class DSNeo4j {
     return $queries;
   }
 
-  private function addTemplates($mediaWikiPage) {
+  private function addTemplates($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["ds0__templates"] as $template) {
+    foreach ($meilisearchDocument["ds0__templates"] as $template) {
       $queries[] = [
         "query" => '
           MERGE (sub:MediaWikiPage{name: $subject})
@@ -403,14 +403,14 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
           "predicate" =>     "eppo0__hasTemplate",
           "object" =>        strtolower($template["title"]),
           "objectLabels" =>  ["Template"]
         ]
       ];
     }
-    foreach ($mediaWikiPage["ds0__templates_by_regex"] as $template) {
+    foreach ($meilisearchDocument["ds0__templates_by_regex"] as $template) {
       $queries[] = [
         "query" => '
           MERGE (sub:MediaWikiPage{name: $subject})
@@ -433,7 +433,7 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
           "predicate" =>     "eppo0__hasTemplate",
           "object" =>        strtolower($template["title"]),
           "objectLabels" =>  ["Template"]
@@ -443,9 +443,9 @@ class DSNeo4j {
     return $queries;
   }
 
-  private function addAttachments($mediaWikiPage) {
+  private function addAttachments($meilisearchDocument) {
     $queries = [];
-    foreach ($mediaWikiPage["ds0__attachments"] as $attachment) {
+    foreach ($meilisearchDocument["ds0__attachments"] as $attachment) {
       $queries[] = [
         "query" => '
           MERGE (sub:MediaWikiPage{name: $subject})
@@ -468,7 +468,7 @@ class DSNeo4j {
           RETURN rel
         ',
         "params" => [
-          "subject" =>       strtolower($mediaWikiPage["eppo0__hasEntityURL"]),
+          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
           "predicate" =>     "eppo0__hasCategory",
           "object" =>        strtolower($attachment),
           "objectLabels" =>  ["RELATIONSHIPLEAF"]

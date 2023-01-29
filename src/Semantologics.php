@@ -5,8 +5,8 @@ namespace MediaWiki\Extension\Dataspects;
 
 class Semantologics {
 
-  public function __construct($mediaWikiPage) {
-    $this->mediaWikiPage = $mediaWikiPage;
+  public function __construct($meilisearchDocument) {
+    $this->meilisearchDocument = $meilisearchDocument;
     // LEX230108160200
     $this->sk = new CoKe();
     $this->annotations = array(
@@ -33,7 +33,7 @@ class Semantologics {
   # LEX200122141600
   public function process() {
     foreach($this->annotations as $regex => $data) {
-        preg_match_all($regex, $this->mediaWikiPage["mw0__wikitext"], $matches);
+        preg_match_all($regex, $this->meilisearchDocument["mw0__wikitext"], $matches);
         if(array_key_exists(1, $matches)) {
             if (count($matches[1]) > 0) {
                 foreach($matches[1] as $match) {
@@ -43,8 +43,8 @@ class Semantologics {
                         $func = $data["objectHandler"];
                         $object = $this->$func($match);
                     }
-                    $this->mediaWikiPage["annotations"][] = array(
-                        'subject' => $this->mediaWikiPage["name"],
+                    $this->meilisearchDocument["annotations"][] = array(
+                        'subject' => $this->meilisearchDocument["name"],
                         'predicate' => $data["predicate"],
                         'objectSource' => $object,
                         'objectText' => $object,
@@ -52,13 +52,13 @@ class Semantologics {
                         'objectType' => "Node"
                     );
                     if(array_key_exists("hierarchicalMenu", $data)) {
-                        $this->mediaWikiPage = array_merge($this->mediaWikiPage, $data["hierarchicalMenu"]);
+                        $this->meilisearchDocument = array_merge($this->meilisearchDocument, $data["hierarchicalMenu"]);
                     }
                 }
             }
         }
     }
-    return $this->mediaWikiPage;
+    return $this->meilisearchDocument;
   }
 
   private function transclusionLogics($match) {

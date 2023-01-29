@@ -17,10 +17,10 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
             "wgDataspectsNeo4jDatabase" => "dataspectstest",
 			"wgDataspectsNeo4jUsername" => "neo4j",
 			"wgDataspectsNeo4jPassword" => "globi2000",
-			"wgDataspectsSpacyURL" => "http://localhost:8050",
-			"wgDataspectsSearchURL" => "http://localhost:7700",
+			"wgDataspectsSpacyURL" => "http://spacy:8050",
+			"wgDataspectsSearchURL" => "http://meili:7700",
 			"wgDataspectsSearchKey" => "masterKey",
-			"wgDataspectsWriteURL" => "http://localhost:7700",
+			"wgDataspectsWriteURL" => "http://meili:7700",
 			"wgDataspectsWriteKey" => "masterKey",
 			"wgDataspectsIndex" => "testindex",
 			"wgSelectedAspects" => [
