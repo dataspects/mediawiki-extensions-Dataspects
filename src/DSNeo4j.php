@@ -26,7 +26,7 @@ class DSNeo4j {
     } 
   }
 
-  public function showDatabases() {
+  public function listDatabaseNames() {
     $query = [
       "query" => '
         SHOW DATABASES
@@ -36,13 +36,25 @@ class DSNeo4j {
       "params" => []
     ];
     $results = $this->query($query);
-    $databases = [];
+    $databaseNames = [];
     foreach ($results as $result) {
-      $databases[] = [
-        name => $result->get("name")
-      ];
+      $databaseNames[] = $result->get("name");
     }
-    return $databases;
+    return $databaseNames;
+  }
+
+  public function deleteAllNodes() {
+    $queries = [
+      [
+        "query" => '
+            MATCH (n)
+            DETACH DELETE n
+        ',
+        "params" => []
+      ]
+    ];
+    $this->update($queries);
+    echo "Deleted all nodes";
   }
 
   public function nodesList() {

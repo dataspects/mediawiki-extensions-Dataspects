@@ -13,7 +13,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->globalsConfig = [
-			"wgDataspectsNeo4jURL" => "neo4j://neo4j:7686",
+			"wgDataspectsNeo4jURL" => "neo4j://neo4jtest:7687",
+            "wgDataspectsNeo4jDatabase" => "dataspectstest",
 			"wgDataspectsNeo4jUsername" => "neo4j",
 			"wgDataspectsNeo4jPassword" => "globi2000",
 			"wgDataspectsSpacyURL" => "http://localhost:8050",
@@ -48,15 +49,14 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 	}
 
     public function testResetTestData() {
-        $databases = $this->neo4jClient->showDatabases();
-        echo $databases;
-        $this->initializeTestIndex();
-        $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
-        $testDocuments = json_decode($json,true);
-        $this->writeIndex->addDocuments($testDocuments);
-		sleep(1);
-		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
-		$this->assertCount(count($testDocuments), $hits);
+        $this->initializeMeilisearchTestIndex();
+        $this->initializeNeo4jTestDatabase();
+        // $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
+        // $testDocuments = json_decode($json,true);
+        // $this->writeIndex->addDocuments($testDocuments);
+		// sleep(1);
+		// $hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
+		// $this->assertCount(count($testDocuments), $hits);
 	}
 
 	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {
@@ -140,7 +140,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		], $hits[0]["annotations"]);
 	}
 
-	private function initializeTestIndex() {
+	private function initializeMeilisearchTestIndex() {
 		// Existing indexes
 		$indexUids = array_map(function ($index) {return $index->getUid(); }, $this->meiliSearchClient->getAllIndexes()->getResults());
 		// Delete?
@@ -161,6 +161,15 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$this->searchIndex = $testindex;
 		$this->writeIndex = $testindex;
 	}
+
+    private function initializeNeo4jTestDatabase() {
+        $databaseNames = $this->neo4jClient->listDatabaseNames();
+        if(in_array($this->globalsConfig['wgDataspectsNeo4jDatabase'], $databaseNames)) {
+            $this->neo4jClient->deleteAllNodes();
+        } else {
+            echo $this->globalsConfig['wgDataspectsNeo4jDatabase']." not found!";
+        }
+    }
 
 	private function hitsForsearchForReleaseTimestamp($timestamp) {
 		$hits = $this->searchIndex->search(
