@@ -40,7 +40,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$this->neo4jClient = new DSNeo4j(
 			$this->globalsConfig["wgDataspectsNeo4jURL"],
 			$this->globalsConfig["wgDataspectsNeo4jUsername"],
-			$this->globalsConfig["wgDataspectsNeo4jPassword"]
+			$this->globalsConfig["wgDataspectsNeo4jPassword"],
+            $this->globalsConfig["wgDataspectsNeo4jDatabase"]
 		);
 	}
 
@@ -53,10 +54,13 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
         $this->initializeNeo4jTestDatabase();
         $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
         $testDocuments = json_decode($json,true);
-        // $this->writeIndex->addDocuments($testDocuments);
-		// sleep(1);
-		// $hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
-		// $this->assertCount(count($testDocuments), $hits);
+        $this->writeIndex->addDocuments($testDocuments);
+        foreach ($testDocuments as $testDocument) {
+            $this->neo4jClient->addPageToNeo4j($testDocument);
+        }
+		sleep(1);
+		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
+		$this->assertCount(count($testDocuments), $hits);
 	}
 
 	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {

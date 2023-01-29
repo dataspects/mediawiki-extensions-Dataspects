@@ -11,18 +11,19 @@ use Laudis\Neo4j\Contracts\TransactionInterface;
 
 class DSNeo4j {
 
-  public function __construct($url, $username, $password) {
+  public function __construct($url, $username, $password, $database) {
+    $this->url = $url;
+    $this->database = $database;
     wfDebug("### Backend neo4j loading");
     try {
       $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
         'neo4j',
-        $url,
+        $this->url."?database=".$this->database, // FIXME: does ?database= have an effect?
         Authenticate::basic($username, $password)
       )->build();
       wfDebug("### Backend neo4j loaded ");
     } catch (Exception $e) {
       wfDebug("### Backend neo4j ".$e->getMessage());
-      echo 'Caught exception: ',  $e->getMessage(), "\n";
     } 
   }
 
@@ -54,7 +55,7 @@ class DSNeo4j {
       ]
     ];
     $this->update($queries);
-    echo "Deleted all nodes";
+    wfDebug("Deleted all nodes");
   }
 
   public function nodesList() {
@@ -148,7 +149,7 @@ class DSNeo4j {
     $queries = array_merge($queries, $this->addNode($meilisearchDocument));
     $queries = array_merge($queries, $this->addRelationships($meilisearchDocument));
     $this->update($queries);
-    echo $GLOBALS['wgDataspectsNeo4jURL'].":".$GLOBALS['wgDataspectsNeo4jDatabase'].": ADDED: ".$meilisearchDocument["eppo0__hasEntityURL"]."\n";
+    wfDebug($this->url.":".$this->database.": ADDED: ".$meilisearchDocument["eppo0__hasEntityURL"]."\n");
   }
 
   private function addNode($meilisearchDocument) {

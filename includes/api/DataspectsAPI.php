@@ -12,7 +12,8 @@ class DataspectsAPI extends ApiBase {
 		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
 			$GLOBALS["wgDataspectsNeo4jURL"],
 			$GLOBALS["wgDataspectsNeo4jUsername"],
-			$GLOBALS["wgDataspectsNeo4jPassword"]
+			$GLOBALS["wgDataspectsNeo4jPassword"],
+            $GLOBALS["wgDataspectsNeo4jDatabase"],
 		);
 		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
 	}

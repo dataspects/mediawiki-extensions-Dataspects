@@ -17,10 +17,92 @@
     "ds0__contentText": "We don't remember abcdef text",
     "ds0__contentSections": ["dst Content Section 0", "dst Content Section 1"],
     "ds0__sourceParseTextURL": "https://wiki.dataspects.com/w/api.php?action=parse&page=Main_Page&prop=text&disablelimitreport&format=json",
-    "ds0__templates": ["Template 0"],
-    "ds0__templates_by_regex": ["Template 0"],
-    "0": "d",
-    "1": "d",
+    "ds0__templates": [
+      {
+        "title": "Template 0"
+      }
+    ],
+    "ds0__templates_by_regex": [
+      {
+        "title": "Template 0"
+      }
+    ],
+    "ds0__outgoingLinks": [],
+    "ds0__incomingLinks": [],
+    "ds0__attachments": [],
+    "ds0__source": "dst Source URL",
+    "ds0__source.1v10": "Source",
+    "ds0__source.1v11": "Source > dst Source URL",
+    "ds0__source.1v12": "Source > dst Source URL > dst Source Namespace",
+    "ds0__allPredicates.1v10": ["All Predicates"],
+    "ds0__allPredicates.1v11": [],
+    "ds0__allPredicates.1v12": [],
+    "ds0__specialAspect": "One",
+    "ds0__specialAspect.1v10": ["Selected Aspects"],
+    "ds0__specialAspect.1v11": [
+      "Selected Aspects > One",
+      "Selected Aspects > One"
+    ],
+    "annotations": [
+      {
+        "subject": "dataspectsTestDoc1673881510",
+        "predicate": "predicate 0",
+        "objectSource": "{{makebold|object}} 0",
+        "objectHTML": "<b>object</b> 0",
+        "objectText": "object 0",
+        "objectType": "Text"
+      },
+      {
+        "subject": "dataspectsTestDoc1673881510",
+        "predicate": "predicate 1",
+        "objectSource": "{{makebold|object}} 1",
+        "objectHTML": "<b>object</b> 1",
+        "objectText": "object 1",
+        "objectType": "Text"
+      },
+      {
+        "subject": "dataspectsTestDoc1673881510",
+        "predicate": "ds55__unrecommends",
+        "objectSource": true,
+        "objectHTML": true,
+        "objectText": true,
+        "objectType": "Boolean"
+      }
+    ],
+    "ck0__containsCognitiveKeyword": "",
+    "ck0__containsCognitiveKeyword.1v10": "",
+    "ck0__containsCognitiveKeyword.1v11": ""
+  },
+  {
+    "id": "dataspectsTestDoc1673881519",
+    "name": "http://localhost/wiki/wikidataspectsTestDoc1673881519",
+    "eppo0__hasEntityURL": "http://localhost/wiki/wikidataspectsTestDoc1673881519",
+    "ds0__sourceID": "",
+    "eppo0__hasEntityTitle": "dst Entity Title 0",
+    "eppo0__hasEntityBlurb": "dst Entity Blurb 0",
+    "ds0__sourceNamespace": "Main",
+    "release_timestamp": "1673881519",
+    "eppo0__hasEntityType": "dst Topic Type",
+    "eppo0__hasEntityType.1v10": "Topic Type",
+    "eppo0__hasEntityType.1v11": "Topic Type > dst Topic Type",
+    "eppo0__categories": ["dst Category 0", "dst Category 1"],
+    "ds0__contentSource": "{{Used by|abcdef=1}} text",
+    "ds0__contentHTML": "<b>abcdef</b> text",
+    "ds0__contentText": "We don't remember abcdef text",
+    "ds0__contentSections": ["dst Content Section 0", "dst Content Section 1"],
+    "ds0__sourceParseTextURL": "https://wiki.dataspects.com/w/api.php?action=parse&page=Main_Page&prop=text&disablelimitreport&format=json",
+    "ds0__templates": [
+      {
+        "title": "Template 0"
+      }
+    ],
+    "ds0__templates_by_regex": [
+      {
+        "title": "Template 0"
+      }
+    ],
+    "ds0__outgoingLinks": [],
+    "ds0__incomingLinks": [],
     "ds0__attachments": [],
     "ds0__source": "dst Source URL",
     "ds0__source.1v10": "Source",
