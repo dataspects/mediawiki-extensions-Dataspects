@@ -37,12 +37,9 @@
     "ds0__allPredicates.1v10": ["All Predicates"],
     "ds0__allPredicates.1v11": [],
     "ds0__allPredicates.1v12": [],
-    "ds0__specialAspect": "One",
+    "ds0__specialAspect": "Selected Aspects",
     "ds0__specialAspect.1v10": ["Selected Aspects"],
-    "ds0__specialAspect.1v11": [
-      "Selected Aspects > One",
-      "Selected Aspects > One"
-    ],
+    "ds0__specialAspect.1v11": ["Selected Aspects > Selected Aspect 0"],
     "annotations": [
       {
         "subject": "dataspectsTestDoc1673881510",
@@ -111,11 +108,11 @@
     "ds0__allPredicates.1v10": ["All Predicates"],
     "ds0__allPredicates.1v11": [],
     "ds0__allPredicates.1v12": [],
-    "ds0__specialAspect": "One",
+    "ds0__specialAspect": "Selected Aspects",
     "ds0__specialAspect.1v10": ["Selected Aspects"],
     "ds0__specialAspect.1v11": [
-      "Selected Aspects > One",
-      "Selected Aspects > One"
+      "Selected Aspects > Selected Aspect 0",
+      "Selected Aspects > Selected Aspect 1"
     ],
     "annotations": [
       {

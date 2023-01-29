@@ -23,6 +23,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 			"wgDataspectsWriteURL" => "http://meili:7700",
 			"wgDataspectsWriteKey" => "masterKey",
 			"wgDataspectsIndex" => "testindex",
+            "wgSQLiteDatabase" => "dataspectstest",
 			"wgSelectedAspects" => [
 				"ds55__unrecommends" => [
 					"title" => "Unrecommending"
@@ -52,6 +53,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
     public function testResetTestData() {
         $this->initializeMeilisearchTestIndex();
         $this->initializeNeo4jTestDatabase();
+        $this->initializeSQLite3TestDatabase();
         $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
         $testDocuments = json_decode($json,true);
         $this->writeIndex->addDocuments($testDocuments);
@@ -175,6 +177,11 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
         } else {
             echo $this->globalsConfig['wgDataspectsNeo4jDatabase']." not found!";
         }
+    }
+
+    private function initializeSQLite3TestDatabase() {
+        $this->sqlite3 = new DataspectsSQLite3("dataspectstest.sqlite");
+        $this->sqlite3->initialize();
     }
 
 	private function hitsForsearchForReleaseTimestamp($timestamp) {

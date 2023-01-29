@@ -72,6 +72,12 @@ class SpecialDataspectsBackstage extends SpecialPage {
         return '<table>
                     <tbody>
                         <tr>
+                            <td>wgSQLiteDatabase
+                            </td>
+                            <td>'.$GLOBALS['wgSQLiteDatabase'].'
+                            </td>
+                        </tr>
+                        <tr>
                             <td>wgDataspectsWriteURL
                             </td>
                             <td>'.$GLOBALS['wgDataspectsWriteURL'].'

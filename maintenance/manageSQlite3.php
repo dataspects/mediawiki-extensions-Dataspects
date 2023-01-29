@@ -11,12 +11,12 @@ class ManageSQLite3 extends \Maintenance {
 
 	public function __construct() {
 		parent::__construct();
-		$this->addOption( 'initialize', 'Initialize dataspects.sqlite', false );
+		$this->addOption( 'initialize', 'Initialize wgSQLiteDatabase', false );
 		$this->requireExtension( 'Dataspects' );
 	}
 
 	public function execute() {
-		$this->sqlite3 = new DataspectsSQLite3();
+		$this->sqlite3 = new DataspectsSQLite3($GLOBALS["wgSQLiteDatabase"]);
 		$initialize = $this->getOption( 'initialize', false );
 		if($initialize) {
 			if($this->sqlite3->initialize()) {

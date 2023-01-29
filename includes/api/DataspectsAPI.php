@@ -15,7 +15,9 @@ class DataspectsAPI extends ApiBase {
 			$GLOBALS["wgDataspectsNeo4jPassword"],
             $GLOBALS["wgDataspectsNeo4jDatabase"],
 		);
-		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3();
+		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3(
+            $GLOBALS["wgSQLiteDatabase"]
+        );
 	}
 
 	public function execute() {

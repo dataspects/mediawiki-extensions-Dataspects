@@ -3,5 +3,5 @@
 /node_modules
 .eslintcache
 yarn.lock
-testdataspects.sqlite
+dataspectstest.sqlite
 dataspects.sqlite

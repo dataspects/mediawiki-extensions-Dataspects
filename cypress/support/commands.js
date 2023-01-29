@@ -134,8 +134,6 @@ Cypress.Commands.add("showHelpingHints", () => {
 });
 
 Cypress.Commands.add("saveSearchFacet", (name) => {
-  cy.visit("/wiki/Special:Dataspects");
-  // Open
   cy.get('[data-cy="saveCurrentFacetButton"]').click();
   cy.get('[data-cy="saveSearchFacetFormHTML"]')
     .should("be.visible")

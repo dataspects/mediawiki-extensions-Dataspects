@@ -4,9 +4,9 @@ namespace MediaWiki\Extension\Dataspects;
 
 class DataspectsSQLite3 extends \SQLite3 {
     // FIXME: mustn't this be a "singleton"?
-    function __construct() {
+    function __construct($databaseName) {
         $this->db_dir = "/var/www/mediawiki/w/user-extensions/Dataspects/sqlite/";
-        $this->db_file = $this->db_dir."dataspects.sqlite";
+        $this->db_file = $this->db_dir.$databaseName;
         $this->perms = 0777; // FIXME
     }
 
@@ -32,6 +32,7 @@ class DataspectsSQLite3 extends \SQLite3 {
         $this->open($this->db_file);
         if(chmod($this->db_file, $this->perms)) {
             $this->exec("CREATE TABLE IF NOT EXISTS facets(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, ds0instantsearchHelper TEXT);");
+            $this->exec("DELETE FROM facets;");
             return true;
         }
         return false;
