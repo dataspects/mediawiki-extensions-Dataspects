@@ -51,8 +51,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
     public function testResetTestData() {
         $this->initializeMeilisearchTestIndex();
         $this->initializeNeo4jTestDatabase();
-        // $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
-        // $testDocuments = json_decode($json,true);
+        $json = file_get_contents(__DIR__.'/../../data/testDocuments.json');
+        $testDocuments = json_decode($json,true);
         // $this->writeIndex->addDocuments($testDocuments);
 		// sleep(1);
 		// $hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
