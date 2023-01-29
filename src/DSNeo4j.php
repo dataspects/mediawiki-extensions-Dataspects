@@ -58,6 +58,18 @@ class DSNeo4j {
     wfDebug("Deleted all nodes");
   }
 
+  public function countNodes() {
+    $query = [
+      "query" => '
+        MATCH     (n)
+        RETURN    count(n) AS numberOfNodes
+      ',
+      "params" => []
+    ];
+    $results = $this->query($query);
+    return $results->first()->get("numberOfNodes");
+  }
+
   public function nodesList() {
     $query = [
       "query" => '

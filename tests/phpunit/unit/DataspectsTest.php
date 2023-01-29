@@ -61,6 +61,8 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		sleep(1);
 		$hits = $this->searchIndex->search("", [ "filter" => [], "limit" => 10, "offset" => 0 ])->getHits();
 		$this->assertCount(count($testDocuments), $hits);
+        // + 4 is due to source, templates and cats!
+        $this->assertEquals(count($testDocuments) + 4, $this->neo4jClient->countNodes());
 	}
 
 	public function testSaveAndRetrieveSearchFacetsToFromNeo4j() {
