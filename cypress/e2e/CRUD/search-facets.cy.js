@@ -8,8 +8,9 @@ it.only("should 1) save a new facet and 2) use it", () => {
   cy.get("span.ds0__specialAspect").contains("Selected Aspects").click();
   cy.get("span.ds0__specialAspect").contains("Selected Aspect 1").click();
   const unixTimestamp = Math.floor(Date.now());
-  cy.saveSearchFacet(unixTimestamp);
-  cy.get('[data-cy="ds-clear-current-facet"]').click();
+  cy.save_search_facet(unixTimestamp);
+  cy.clear_current_facet();
+  cy.number_of_search_results_should_be(2);
   cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
   cy.get('[data-cy="savedSearchFacetsUL"]')
     .contains(
@@ -17,10 +18,13 @@ it.only("should 1) save a new facet and 2) use it", () => {
       unixTimestamp
     )
     .click();
-  console.log(Cypress.env("host"));
+  cy.number_of_search_results_should_be(1);
+  cy.remove_search_facet(unixTimestamp);
+  cy.clear_current_facet();
+  cy.number_of_search_results_should_be(2);
 });
 
-// cy.removeSearchFacet(unixTimestamp);
+// cy.remove_search_facet(unixTimestamp);
 
 // cy.typeIntoTextInput("input.ais-SearchBox-input", sfName0.substring(0, 3));
 

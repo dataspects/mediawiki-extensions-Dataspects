@@ -133,7 +133,7 @@ Cypress.Commands.add("showHelpingHints", () => {
   cy.get("#mwstakeHelpHintButton").click();
 });
 
-Cypress.Commands.add("saveSearchFacet", (name) => {
+Cypress.Commands.add("save_search_facet", (name) => {
   cy.get('[data-cy="saveCurrentFacetButton"]').click();
   cy.get('[data-cy="saveSearchFacetFormHTML"]')
     .should("be.visible")
@@ -149,7 +149,7 @@ Cypress.Commands.add("saveSearchFacet", (name) => {
   cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
 });
 
-Cypress.Commands.add("removeSearchFacet", (name) => {
+Cypress.Commands.add("remove_search_facet", (name) => {
   cy.get('[data-cy="savedSearchFacetsList"]').then(($element) => {
     if (!$element.is(":visible")) {
       cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
@@ -163,4 +163,12 @@ Cypress.Commands.add("removeSearchFacet", (name) => {
     .siblings()
     .contains("a.searchfacetaction", "remove")
     .click();
+});
+
+Cypress.Commands.add("number_of_search_results_should_be", (number) => {
+  cy.get("li.ais-InfiniteHits-item").should("have.length", number);
+});
+
+Cypress.Commands.add("clear_current_facet", (number) => {
+  cy.get('[data-cy="ds-clear-current-facet"]').click();
 });
