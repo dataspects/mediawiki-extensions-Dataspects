@@ -29,7 +29,7 @@ class SpecialDataspects extends SpecialPage {
 					<div id="hits"></div>
 				</td>
 				<td style="padding-left:100px;">
-					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <a data-cy="saveCurrentFacetButton">Save current facet</a>&nbsp;<sup class="dataspectsFeatureLink" title="Learn about this feature&hellip;"><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/wiki/Feature-%22Search-facets%22">F</a></sup><br/><a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <b><a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsBackstage">&rarr; Backstage</a></b>
+					<a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects" data-cy="ds-clear-current-facet">Clear current facet</a> | <a data-cy="saveCurrentFacetButton">Save current facet</a>&nbsp;<sup class="dataspectsFeatureLink" title="Learn about this feature&hellip;"><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/wiki/Feature-%22Search-facets%22">F</a></sup><br/><a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc/search-facets.cy.js.html">Docs</a> | <b><a href="'.$GLOBALS['wgServer'].'/wiki/Special:DataspectsBackstage">&rarr; Backstage</a></b>
 					<div data-cy="dropzone0"></div>
 					<ul class="accordion">
 						<li><!-- LEX230108163200 -->
