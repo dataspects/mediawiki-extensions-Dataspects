@@ -35,7 +35,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
 const wait = 500;
 
-Cypress.Commands.add("takeScreenshot", (imageName) => {
+Cypress.Commands.add("take_screenshot", (imageName) => {
   cy.wait(1000);
   cy.screenshot(imageName, { capture: "viewport" });
 });
@@ -98,7 +98,7 @@ Cypress.Commands.add("mediawiki_refresh", () => {
 });
 
 // dataspectsSearch
-Cypress.Commands.add("typeIntoTextInput", (selector, text) => {
+Cypress.Commands.add("type_text_into_text_input", (selector, text) => {
   cy.get(selector).type(text);
   cy.wait(1000);
 });
@@ -144,7 +144,7 @@ Cypress.Commands.add("save_search_facet", (name) => {
       });
     });
   // Type
-  cy.typeIntoTextInput('[data-cy="saveSearchFacetFormHTMLName"]', name);
+  cy.type_text_into_text_input('[data-cy="saveSearchFacetFormHTMLName"]', name);
   // Save
   cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
 });
@@ -171,4 +171,10 @@ Cypress.Commands.add("number_of_search_results_should_be", (number) => {
 
 Cypress.Commands.add("clear_current_facet", (number) => {
   cy.get('[data-cy="ds-clear-current-facet"]').click();
+});
+
+Cypress.Commands.add("click_first_typeahead_searchfacetcontrol", () => {
+  cy.get("div#searchFacetControls .searchFacetControlName.searchfacetaction")
+    .first()
+    .click();
 });

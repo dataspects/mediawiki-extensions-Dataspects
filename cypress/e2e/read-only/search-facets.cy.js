@@ -17,14 +17,17 @@ describe("dataspects Search Facets", () => {
     // cy.mediawiki_login(login);
     cy.visit("/wiki/Special:Dataspects");
     cy.get('[data-cy="showSavedSearchFacetsButton"]').click();
-    cy.takeScreenshot("saved-search-facets");
+    cy.take_screenshot("saved-search-facets");
     cy.get("li.savedSearchFacet a").first().click();
   });
 
   it("should find 'backup' and then 'About cloning' by search facet", () => {
     cy.visit("/wiki/Special:Dataspects");
     cy.fixture("query-hits-combinations").then((scenario) => {
-      cy.typeIntoTextInput("input.ais-SearchBox-input", scenario[1].query);
+      cy.type_text_into_text_input(
+        "input.ais-SearchBox-input",
+        scenario[1].query
+      );
       cy.get('div.hit[data-cy="' + scenario[1].hitIdInTop5 + '"]').should(
         "be.visible"
       );

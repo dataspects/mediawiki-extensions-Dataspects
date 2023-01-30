@@ -31,33 +31,60 @@
                 <table><tr><td>
                     
 
-<div class='describe'><span class='aspect'>Aspect</span>: <b>dataspects Search Facets</b></div>
-<div class='left20'><span class='feature'>Use Case</span>: <b>it should load a facet by URL GET parameter 'f'</b></div>
-    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for fixture'>fixture</a>(<span class='arguments'></span>)</div>
-      <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for visit'>visit</a>(<span class='arguments'></span>)</div>
+it.only("should save a new facet, find, use and remove it"
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for mediawiki_login'>mediawiki_login</a>(<span class='arguments'></span>)</div>
+  <div class='left40'><span class='goto'>Go to</span> /wiki/Special:Dataspects</div>
+<div class='left40 comment'>  Configure a facet</div>
 
 
-
-<div class='left20'><span class='feature'>Use Case</span>: <b>it should show the saved search facets</b></div>
-<div class='left40 comment'>    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for mediawiki_login'>mediawiki_login</a>(<span class='arguments'></span>)</div></div>
-    <div class='left40'><span class='goto'>Go to</span> /wiki/Special:Dataspects</div>
-
-    
-                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('saved-search-facets')" onmouseout="toggleImage('saved-search-facets')">
-                        <span class='screenshot'>&rarr; Screenshot: </span> saved-search-facets
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('configure-a-facet')" onmouseout="toggleImage('configure-a-facet')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> configure-a-facet
                     </div>
+<div class='left40 comment'>  Save the facet</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for save_search_facet'>save_search_facet</a>(<span class='arguments'></span>)</div>
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('save-a-facet')" onmouseout="toggleImage('save-a-facet')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> save-a-facet
+                    </div>
+<div class='left40 comment'>  Clear facets</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for clear_current_facet'>clear_current_facet</a>(<span class='arguments'></span>)</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for number_of_search_results_should_be'>number_of_search_results_should_be</a>(<span class='arguments'></span>)</div>
+<div class='left40 comment'>  Show facets</div>
 
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('show-facets')" onmouseout="toggleImage('show-facets')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> show-facets
+                    </div>
+<div class='left40 comment'>  Load the facet from the facet list</div>
 
-<div class='left20'><span class='feature'>Use Case</span>: <b>it should find 'backup' and then 'About cloning' by search facet</b></div>
-    <div class='left40'><span class='goto'>Go to</span> /wiki/Special:Dataspects</div>
-    <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for fixture'>fixture</a>(<span class='arguments'></span>)</div>
-      <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for typeIntoTextInput'>typeIntoTextInput</a>(<span class='arguments'></span>)</div>
-
-
-
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('load-a-facet')" onmouseout="toggleImage('load-a-facet')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> load-a-facet
+                    </div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for number_of_search_results_should_be'>number_of_search_results_should_be</a>(<span class='arguments'></span>)</div>
+<div class='left40 comment'>  Clear facets</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for clear_current_facet'>clear_current_facet</a>(<span class='arguments'></span>)</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for number_of_search_results_should_be'>number_of_search_results_should_be</a>(<span class='arguments'></span>)</div>
+<div class='left40 comment'>  Find and load the facet from typeahead</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for type_text_into_text_input'>type_text_into_text_input</a>(<span class='arguments'></span>)</div>
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('find-and-load-a-facet')" onmouseout="toggleImage('find-and-load-a-facet')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> find-and-load-a-facet
+                    </div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for click_first_typeahead_searchfacetcontrol'>click_first_typeahead_searchfacetcontrol</a>(<span class='arguments'></span>)</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for number_of_search_results_should_be'>number_of_search_results_should_be</a>(<span class='arguments'></span>)</div>
+<div class='left40 comment'>  Remove the facet</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for remove_search_facet'>remove_search_facet</a>(<span class='arguments'></span>)</div>
+  
+                    <div class='left60' style='cursor: help;' onmouseover="toggleImage('remove-a-facet')" onmouseout="toggleImage('remove-a-facet')">
+                        <span class='screenshot'>&rarr; Screenshot: </span> remove-a-facet
+                    </div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for clear_current_facet'>clear_current_facet</a>(<span class='arguments'></span>)</div>
+  <div class='left40'><span class='do'>Do</span> <a href='https://htmlpreview.github.io/?https://github.com/dataspects/Dataspects/blob/master//commands.html' class='command' title='Click to get an explanation for number_of_search_results_should_be'>number_of_search_results_should_be</a>(<span class='arguments'></span>)</div>
 
                 </td><td>
-                    <figure id="saved-search-facets" class="hide"><figcaption>saved-search-facets</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/saved-search-facets.png" /><figcaption>saved-search-facets</figcaption></figure>
+                    <figure id="configure-a-facet" class="hide"><figcaption>configure-a-facet</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/configure-a-facet.png" /><figcaption>configure-a-facet</figcaption></figure><figure id="save-a-facet" class="hide"><figcaption>save-a-facet</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/save-a-facet.png" /><figcaption>save-a-facet</figcaption></figure><figure id="show-facets" class="hide"><figcaption>show-facets</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/show-facets.png" /><figcaption>show-facets</figcaption></figure><figure id="load-a-facet" class="hide"><figcaption>load-a-facet</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/load-a-facet.png" /><figcaption>load-a-facet</figcaption></figure><figure id="find-and-load-a-facet" class="hide"><figcaption>find-and-load-a-facet</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/find-and-load-a-facet.png" /><figcaption>find-and-load-a-facet</figcaption></figure><figure id="remove-a-facet" class="hide"><figcaption>remove-a-facet</figcaption><img class="screenshotPNG" src="https://raw.githubusercontent.com/dataspects/Dataspects/master/readme_images/remove-a-facet.png" /><figcaption>remove-a-facet</figcaption></figure>
                 </td></tr></table>
             </body>
             </html>
