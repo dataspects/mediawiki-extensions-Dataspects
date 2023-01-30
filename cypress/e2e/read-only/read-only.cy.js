@@ -13,7 +13,7 @@ describe("MediaWiki Extension:Dataspects", () => {
       cy.get('div.hit[data-cy="' + scenario[0].hitIdInTop5 + '"]').should(
         "be.visible"
       );
-      cy.take_screenshot("search-results");
+      cy.__take_screenshot("search-results");
     });
   });
 

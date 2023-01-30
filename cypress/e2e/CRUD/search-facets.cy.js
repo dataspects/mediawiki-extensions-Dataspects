@@ -14,11 +14,11 @@ it.only("should save a new facet, find, use and remove it", () => {
   cy.get("span.ds0__specialAspect").contains("Selected Aspect 1").click();
   // Save the facet
   const unixTimestamp = Math.floor(Date.now());
-  cy.save_search_facet(unixTimestamp);
+  cy.clip_screenshot_and_save_search_facet(unixTimestamp, "save-a-facet");
 
   // Clear facets
-  cy.clear_current_facet();
-  cy.number_of_search_results_should_be(2);
+  cy.__clear_current_facet();
+  cy.__number_of_search_results_should_be(2);
   // Show facets
   cy.get('[data-cy="showSavedSearchFacetsButton"]').then(($target) => {
     cy.clip_screenshot_and_click($target, "show-facets");
@@ -30,19 +30,19 @@ it.only("should save a new facet, find, use and remove it", () => {
       unixTimestamp
     )
     .click();
-  cy.take_screenshot("load-a-facet");
-  cy.number_of_search_results_should_be(1);
+  cy.__take_screenshot("load-a-facet");
+  cy.__number_of_search_results_should_be(1);
   // Clear facets
-  cy.clear_current_facet();
-  cy.number_of_search_results_should_be(2);
+  cy.__clear_current_facet();
+  cy.__number_of_search_results_should_be(2);
   // Find and load the facet from typeahead
   cy.type_text_into_text_input("input.ais-SearchBox-input", "75 66");
-  cy.take_screenshot("find-and-load-a-facet");
+  cy.__take_screenshot("find-and-load-a-facet");
   cy.click_first_typeahead_searchfacetcontrol();
-  cy.number_of_search_results_should_be(1);
+  cy.__number_of_search_results_should_be(1);
   // Remove the facet
   cy.remove_search_facet(unixTimestamp);
-  cy.take_screenshot("remove-a-facet");
-  cy.clear_current_facet();
-  cy.number_of_search_results_should_be(2);
+  cy.__take_screenshot("remove-a-facet");
+  cy.__clear_current_facet();
+  cy.__number_of_search_results_should_be(2);
 });

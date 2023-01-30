@@ -35,7 +35,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
 const wait = 500;
 
-Cypress.Commands.add("take_screenshot", (imageName, coords) => {
+Cypress.Commands.add("__take_screenshot", (imageName, coords) => {
   const surroundingsFramePadding = 200;
   imageName = imageName + "__" + surroundingsFramePadding;
   cy.wait(1000);
@@ -58,7 +58,7 @@ Cypress.Commands.add("take_screenshot", (imageName, coords) => {
 
 Cypress.Commands.add("clip_screenshot_and_click", (target, name) => {
   var coords = target[0].getBoundingClientRect();
-  cy.take_screenshot(name, coords);
+  cy.__take_screenshot(name, coords);
   target.click();
 });
 
@@ -155,25 +155,31 @@ Cypress.Commands.add("showHelpingHints", () => {
   cy.get("#mwstakeHelpHintButton").click();
 });
 
-Cypress.Commands.add("save_search_facet", (name) => {
-  cy.get('[data-cy="saveCurrentFacetButton"]').click();
-  cy.get('[data-cy="saveSearchFacetFormHTML"]')
-    .should("be.visible")
-    .then((form$) => {
-      // FIXME: can this .then() be moved as a function to commands.js?
-      form$.on("submit", (e) => {
-        e.preventDefault();
+Cypress.Commands.add(
+  "clip_screenshot_and_save_search_facet",
+  (searchFacetName, screenshotName) => {
+    cy.get('[data-cy="saveCurrentFacetButton"]').click();
+    cy.get('[data-cy="saveSearchFacetFormHTML"]')
+      .should("be.visible")
+      .then((form$) => {
+        // FIXME: can this .then() be moved as a function to commands.js?
+        form$.on("submit", (e) => {
+          e.preventDefault();
+        });
       });
+    // Type
+    cy.type_text_into_text_input(
+      '[data-cy="saveSearchFacetFormHTMLName"]',
+      searchFacetName
+    );
+    // Save
+    cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').then(($target) => {
+      var coords = $target[0].getBoundingClientRect();
+      cy.__take_screenshot(screenshotName, coords);
+      $target.click();
     });
-  // Type
-  cy.type_text_into_text_input('[data-cy="saveSearchFacetFormHTMLName"]', name);
-  // Save
-  cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').then(($target) => {
-    var coords = $target[0].getBoundingClientRect();
-    cy.take_screenshot("save-a-facet", coords);
-    $target.click();
-  });
-});
+  }
+);
 
 Cypress.Commands.add("remove_search_facet", (name) => {
   cy.get('[data-cy="savedSearchFacetsList"]').then(($element) => {
@@ -191,11 +197,11 @@ Cypress.Commands.add("remove_search_facet", (name) => {
     .click();
 });
 
-Cypress.Commands.add("number_of_search_results_should_be", (number) => {
+Cypress.Commands.add("__number_of_search_results_should_be", (number) => {
   cy.get("li.ais-InfiniteHits-item").should("have.length", number);
 });
 
-Cypress.Commands.add("clear_current_facet", (number) => {
+Cypress.Commands.add("__clear_current_facet", (number) => {
   cy.get('[data-cy="ds-clear-current-facet"]').click();
 });
 
