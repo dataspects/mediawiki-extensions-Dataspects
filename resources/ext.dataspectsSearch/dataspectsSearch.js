@@ -1,5 +1,4 @@
 require("mediawiki.api");
-require("./helpers.js");
 require("./chart.js");
 require("./chartjs-plugin-datalabels.js");
 require("./instant-meilisearch.umd.js");
@@ -149,9 +148,14 @@ function handleSpecialDataspects() {
             searchfacetname: currentSearchFacet,
           })
           .done((response) => {
-            if (response.data.searchfacets.length > 0) {
+            if (
+              response.data.searchfacets &&
+              response.data.searchfacets.length > 0
+            ) {
               resolve(response.data.searchfacets[0]);
             } else {
+              $("#alertUserStage").html(response.data.result);
+
               resolve(false);
             }
           })

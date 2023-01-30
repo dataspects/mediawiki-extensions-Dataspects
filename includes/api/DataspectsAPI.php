@@ -78,7 +78,7 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", array( 'searchfacets' => $searchFacets ) );
 				} catch (Exception $e) {
 					wfDebug("### DataspectsAPI3 error: ".$e);
-					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage()." (DSE-2301-3010-0400)" ] );
 				}
 				break;
 			case 'deletesearchfacet':

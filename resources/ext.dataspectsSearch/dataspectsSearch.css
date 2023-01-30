@@ -37,6 +37,12 @@ li.savedSearchFacet a.itemName {
   font-weight: bold;
 }
 
+#alertUserStage {
+  font-style: italic;
+  color: red;
+  margin-bottom: 10px;
+}
+
 .badge {
   border-radius: 2px;
   padding: 2px;
