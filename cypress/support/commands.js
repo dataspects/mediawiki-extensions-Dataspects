@@ -35,9 +35,30 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
 const wait = 500;
 
-Cypress.Commands.add("take_screenshot", (imageName) => {
+Cypress.Commands.add("take_screenshot", (imageName, coords) => {
+  const surroundingsFrameFactor = 200;
   cy.wait(1000);
-  cy.screenshot(imageName, { capture: "viewport" });
+  if (coords) {
+    cy.screenshot(imageName, {
+      capture: "viewport",
+      clip: {
+        x: coords.x - surroundingsFrameFactor / 2,
+        y: coords.y - surroundingsFrameFactor / 2,
+        width: coords.width + surroundingsFrameFactor,
+        height: coords.height + surroundingsFrameFactor,
+      },
+    });
+  } else {
+    cy.screenshot(imageName, {
+      capture: "viewport",
+    });
+  }
+});
+
+Cypress.Commands.add("clip_screenshot_and_click", (target, name) => {
+  var coords = target[0].getBoundingClientRect();
+  cy.take_screenshot(name, coords);
+  target.click();
 });
 
 Cypress.Commands.add("mediawiki_login", (login) => {
@@ -146,7 +167,11 @@ Cypress.Commands.add("save_search_facet", (name) => {
   // Type
   cy.type_text_into_text_input('[data-cy="saveSearchFacetFormHTMLName"]', name);
   // Save
-  cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').click();
+  cy.get('[data-cy="saveSearchFacetFormHTMLSave"]').then(($target) => {
+    var coords = $target[0].getBoundingClientRect();
+    cy.take_screenshot("save-a-facet", coords);
+    $target.click();
+  });
 });
 
 Cypress.Commands.add("remove_search_facet", (name) => {
