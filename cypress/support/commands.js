@@ -36,16 +36,17 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 const wait = 500;
 
 Cypress.Commands.add("take_screenshot", (imageName, coords) => {
-  const surroundingsFrameFactor = 200;
+  const surroundingsFramePadding = 200;
+  imageName = imageName + "__" + surroundingsFramePadding;
   cy.wait(1000);
   if (coords) {
     cy.screenshot(imageName, {
       capture: "viewport",
       clip: {
-        x: coords.x - surroundingsFrameFactor / 2,
-        y: coords.y - surroundingsFrameFactor / 2,
-        width: coords.width + surroundingsFrameFactor,
-        height: coords.height + surroundingsFrameFactor,
+        x: coords.x - surroundingsFramePadding / 2,
+        y: coords.y - surroundingsFramePadding / 2,
+        width: coords.width + surroundingsFramePadding,
+        height: coords.height + surroundingsFramePadding,
       },
     });
   } else {
