@@ -13,11 +13,11 @@ flowchart BT
     - <a href='https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi'>dataspectsapi</a>")
     sQLite("<b>SQLite</b><br/>for managing search facet configs")
     Cypress("<b><a href='https://www.cypress.io/'>Cypress</a></b><br/>end-to-end and compnent tests")
-    AnalysisPipelines("<a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs'>Analysis Pipelines</a>")
+    AnalysisPipelines("<a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs'>Analysis Pipelines</a><ul><li>pipelines read/write from/to storage</li><li>pipelines can use services to conclude</br>annotations</li></ul>")
   end
 
-  storage("<b>Meilisearch</b><br/><b>Neo4j</b>")
-  analyzers("<b>Tika</b><br/><b>spaCy</b>")
+  storage("<b>Storage</b><ul><li>Meilisearch</li><li>Neo4j</li></ul>")
+  analyzers("<b>Services</b><ul><li>Tika</li><li>spaCy</li></ul>")
 
   subgraph Internet
     userAgent("<b>Special:Dataspects</b> (Algolia <a href='https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/'>InstantSearch</a>)<br/><b>Special:DataspectsBackstage</b>")
@@ -33,7 +33,8 @@ flowchart BT
   userAgent-->|<b>Search</b><br/>wgDataspectsSearchKey|storage
   userAgent-->mediawikiAPI
   mediawikiAPI-->|<b>CRUD</b><br/>wgDataspectsWriteKey|storage
-  AnalysisPipelines-->|Annotate|analyzers
+  AnalysisPipelines-.-analyzers
+  AnalysisPipelines-.-storage
   DataspectsCLI-->|<b>Read</b>|internetSources
   mediawikiAPI-->|<b>CRUD</b>|sQLite
 
@@ -72,47 +73,7 @@ linkStyle 1,4,5 stroke:#00ff00
 
 ## **PENDING**
 
-- Testing
 - Delete docs from indexes
-
-## LocalSettings.php
-
-```php
-wfLoadExtension( 'Dataspects' );
-$wgDataspectsTikaURL = "http://tika:9998";
-$wgDataspectsWriteURL = "http://meili:7700";
-$wgDataspectsSearchURL = "http://localhost:7700";
-
-# See later section "Keys" about how to set these keys
-$wgDataspectsSearchKey = "";       # Used by class SpecialDataspects
-$wgDataspectsWriteKey = "";        # Used by class DataspectsFeed
-
-# See later section "Keys" about how to create/configure this index
-$wgDataspectsIndex = "mediawiki";
-$wgDataspectsSourcesForAnonymous = [];
-$wgDataspectsSourcesForAuthenticated = [];
-$wgDataspectsMediaWikiIDPrefix = "dscan"; # together with the page ID, this represents the index doc id
-
-# This will direct full text searches to dataspects
-$wgDisableTextSearch = true;
-$wgSearchForwardUrl = "/wiki/Special:Dataspects?q=$1";
-```
-
-## Keys
-
-See https://github.com/dataspects/DataspectsCLI
-
-- `create-mediawiki-keys.sh`
-- `get-all-keys.sh`
-
-## Indexes
-
-See https://github.com/dataspects/DataspectsCLI
-
-- `create-mediawiki-indexes.sh`
-- `list-all-indexes.sh`
-- `update-mediawiki-indexes-settings.sh`
-- `mediawiki-settings.sh`
 
 ## Manual indexing
 

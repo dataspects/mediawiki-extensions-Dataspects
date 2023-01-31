@@ -34,7 +34,7 @@ class ProcessExtensionPagesFromMediaWikiOrg extends \MediaWiki\Extension\Dataspe
                     "objectSource" => explode("=", $value)[0],
                     "objectText" => explode("=", $value)[0],
                     "objectHTML" => explode("=", $value)[0],
-                    "objectType" => "Text"
+                    "objectType" => "PackageOrFarm"
                 ];
                 $hit = $this->addAnnotation($hit, $annotation);
                 $hit = $this->addToDs0AllPredicates($hit, $annotation);

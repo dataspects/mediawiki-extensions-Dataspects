@@ -55,8 +55,6 @@ class AnalyzeAndAnnotateMeiliDocsJob {
                 if($this->doWrite === 'true') {
                     $this->log(">w", "Write '".$consideredHit["eppo0__hasEntityTitle"]."'...");
                     $this->writeIndex->addDocuments([$consideredHit]);
-                    // WORKHERE
-                    print_r($consideredHit);
                     $this->dsNeo4j->addPageToNeo4j($consideredHit);
                 }
             }

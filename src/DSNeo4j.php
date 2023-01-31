@@ -73,11 +73,12 @@ class DSNeo4j {
   public function nodesList() {
     $query = [
       "query" => '
-        MATCH     (n:MediaWikiPage)
-        WHERE     n.ds0__usedInPackageAndOrFarm = "canasta"
-        RETURN    n.name AS name,
-                  n.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
-                  n.eppo0__hasEntityURL AS eppo0__hasEntityURL
+        MATCH   (sub:MediaWikiPage)-[pre:`ds0:usedInPackageAndOrFarm`]->(obj:PackageOrFarm)
+        WHERE   obj.name = "canasta"
+        RETURN  sub.name AS name,
+                sub.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
+                sub.eppo0__hasEntityURL AS eppo0__hasEntityURL
+        ORDER BY eppo0__hasEntityTitle
       ',
       "params" => []
     ];
@@ -344,25 +345,29 @@ class DSNeo4j {
     $queries = [];
     foreach ($meilisearchDocument["annotations"] as $annot) {
       if(in_array($annot["objectType"], ["URL", "Page"])) {
+        // This annotation links to an URL or another MediaWiki page
         $queries[] = [
           "query" => '
-            MERGE (sub:MediaWikiPage{name: $subject})
-            WITH sub AS sub
-            CALL apoc.merge.node(
-              $objectLabels,
-              {name: $object},
-              {},
-              {}
-            ) YIELD node AS obj
-            WITH sub, obj
-            CALL apoc.merge.relationship(
-              sub,
-              $predicate,
-              {},
-              {},
-              obj,
-              {}
-            ) YIELD rel
+            // Subject
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+            // Merge the object node
+                CALL apoc.merge.node(
+                $objectLabels,
+                {name: $object},
+                {},
+                {}
+                ) YIELD node AS obj
+                WITH sub, obj
+            // Merge the subject > object relationship
+                CALL apoc.merge.relationship(
+                sub,
+                $predicate,
+                {},
+                {},
+                obj,
+                {}
+                ) YIELD rel
             RETURN rel
           ',
           "params" => [
@@ -372,7 +377,7 @@ class DSNeo4j {
             "objectLabels" =>  ["RELATIONSHIPLEAF"]
           ]
         ];
-      } else {
+      } else if(in_array($annot["objectType"], ["Text"])) {
         $queries[] = [
           "query" => '
             MATCH (sub:MediaWikiPage{name: $subject})
@@ -386,6 +391,38 @@ class DSNeo4j {
             "object" =>        strtolower($annot["objectText"]),
           ]
         ];
+      } else {
+        $queries[] = [
+            "query" => '
+              // Subject
+                  MERGE (sub:MediaWikiPage{name: $subject})
+                  WITH sub AS sub
+              // Merge the object node
+                  CALL apoc.merge.node(
+                  $objectLabels,
+                  {name: $object},
+                  {},
+                  {}
+                  ) YIELD node AS obj
+                  WITH sub, obj
+              // Merge the subject > object relationship
+                  CALL apoc.merge.relationship(
+                  sub,
+                  $predicate,
+                  {},
+                  {},
+                  obj,
+                  {}
+                  ) YIELD rel
+              RETURN rel
+            ',
+            "params" => [
+              "subject" =>       strtolower($annot["subject"]),
+              "predicate" =>     $annot["predicate"],
+              "object" =>        strtolower($annot["objectText"]),
+              "objectLabels" =>  ["RELATIONSHIPLEAF", $annot["objectType"]]
+            ]
+          ];
       }
     }
     return $queries;
