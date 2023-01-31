@@ -2,7 +2,7 @@ let login = [Cypress.env("TESTUSERNAME"), Cypress.env("TESTPASSWORD")];
 
 import queryHitsCombinations from "../../fixtures/query-hits-combinations.json";
 
-it.only("should save a new facet, find, use and remove it", () => {
+it.only("should save a new facet, find it, use it and remove it", () => {
   cy.mediawiki_login(login);
   cy.visit("/wiki/Special:Dataspects");
   // Configure a facet
