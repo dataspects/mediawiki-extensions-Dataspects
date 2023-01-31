@@ -238,292 +238,306 @@ class DSNeo4j {
 
   private function addCategories($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["eppo0__categories"] as $category) {
-      $queries[] = [
-        "query" => '
-          MERGE (sub:MediaWikiPage{name: $subject})
-          WITH sub AS sub
-          CALL apoc.merge.node(
-            $objectLabels,
-            {name: $object},
-            {},
-            {}
-          ) YIELD node AS obj
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
-          "predicate" =>     "eppo0__hasCategory",
-          "object" =>        strtolower($category),
-          "objectLabels" =>  ["Category"]
-        ]
-      ];
+    if(array_key_exists("eppo0__categories", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["eppo0__categories"] as $category) {
+            $queries[] = [
+                "query" => '
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+                CALL apoc.merge.node(
+                    $objectLabels,
+                    {name: $object},
+                    {},
+                    {}
+                ) YIELD node AS obj
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+                "predicate" =>     "eppo0__hasCategory",
+                "object" =>        strtolower($category),
+                "objectLabels" =>  ["Category"]
+                ]
+            ];
+        }
     }
     return $queries;
   }
 
   private function addOutgoingLinks($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["ds0__outgoingLinks"] as $link) {
-      $queries[] = [
-        "query" => '
-          MERGE (sub:MediaWikiPage{name: $subject})
-          WITH sub AS sub
-          CALL apoc.merge.node(
-            $objectLabels,
-            {name: $object},
-            {},
-            {}
-          ) YIELD node AS obj
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
-          "predicate" =>     "ds0__linksTo",
-          "object" =>        strtolower($link),
-          "objectLabels" =>  ["RELATIONSHIPLEAF"]
-        ]
-      ];
+    if(array_key_exists("ds0__outgoingLinks", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["ds0__outgoingLinks"] as $link) {
+            $queries[] = [
+                "query" => '
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+                CALL apoc.merge.node(
+                    $objectLabels,
+                    {name: $object},
+                    {},
+                    {}
+                ) YIELD node AS obj
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+                "predicate" =>     "ds0__linksTo",
+                "object" =>        strtolower($link),
+                "objectLabels" =>  ["RELATIONSHIPLEAF"]
+                ]
+            ];
+        }
     }
     return $queries;
   }
 
   private function addIncomingLinks($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["ds0__incomingLinks"] as $link) {
-      $queries[] = [
-        "query" => '
-          MERGE (obj:MediaWikiPage{name: $object})
-          WITH obj AS obj
-          CALL apoc.merge.node(
-            $subjectLabels,
-            {name: $subject},
-            {},
-            {}
-          ) YIELD node AS sub
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($link),
-          "subjectLabels" =>  ["RELATIONSHIPLEAF"],
-          "predicate" =>     "ds0__linksTo",
-          "object" =>        strtolower($meilisearchDocument["eppo0__hasEntityURL"])
-        ]
-      ];
+    if(array_key_exists("ds0__incomingLinks", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["ds0__incomingLinks"] as $link) {
+            $queries[] = [
+                "query" => '
+                MERGE (obj:MediaWikiPage{name: $object})
+                WITH obj AS obj
+                CALL apoc.merge.node(
+                    $subjectLabels,
+                    {name: $subject},
+                    {},
+                    {}
+                ) YIELD node AS sub
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($link),
+                "subjectLabels" =>  ["RELATIONSHIPLEAF"],
+                "predicate" =>     "ds0__linksTo",
+                "object" =>        strtolower($meilisearchDocument["eppo0__hasEntityURL"])
+                ]
+            ];
+        }
     }
     return $queries;
   }
 
   private function addAnnotations($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["annotations"] as $annot) {
-      if(in_array($annot["objectType"], ["URL", "Page"])) {
-        // This annotation links to an URL or another MediaWiki page
-        $queries[] = [
-          "query" => '
-            // Subject
-                MERGE (sub:MediaWikiPage{name: $subject})
-                WITH sub AS sub
-            // Merge the object node
-                CALL apoc.merge.node(
-                $objectLabels,
-                {name: $object},
-                {},
-                {}
-                ) YIELD node AS obj
-                WITH sub, obj
-            // Merge the subject > object relationship
-                CALL apoc.merge.relationship(
-                sub,
-                $predicate,
-                {},
-                {},
-                obj,
-                {}
-                ) YIELD rel
-            RETURN rel
-          ',
-          "params" => [
-            "subject" =>       strtolower($annot["subject"]),
-            "predicate" =>     $annot["predicate"],
-            "object" =>        strtolower($annot["objectText"]),
-            "objectLabels" =>  ["RELATIONSHIPLEAF"]
-          ]
-        ];
-      } else if(in_array($annot["objectType"], ["Text"])) {
-        $queries[] = [
-          "query" => '
-            MATCH (sub:MediaWikiPage{name: $subject})
-            CALL apoc.create.setProperty(sub, $predicate, $object)
-            YIELD node
-            RETURN sub
-          ',
-          "params" => [
-            "subject" =>       strtolower($annot["subject"]),
-            "predicate" =>     str_replace(":", "__", $annot["predicate"]),
-            "object" =>        strtolower($annot["objectText"]),
-          ]
-        ];
-      } else {
-        $queries[] = [
-            "query" => '
-              // Subject
-                  MERGE (sub:MediaWikiPage{name: $subject})
-                  WITH sub AS sub
-              // Merge the object node
-                  CALL apoc.merge.node(
-                  $objectLabels,
-                  {name: $object},
-                  {},
-                  {}
-                  ) YIELD node AS obj
-                  WITH sub, obj
-              // Merge the subject > object relationship
-                  CALL apoc.merge.relationship(
-                  sub,
-                  $predicate,
-                  {},
-                  {},
-                  obj,
-                  {}
-                  ) YIELD rel
-              RETURN rel
-            ',
-            "params" => [
-              "subject" =>       strtolower($annot["subject"]),
-              "predicate" =>     $annot["predicate"],
-              "object" =>        strtolower($annot["objectText"]),
-              "objectLabels" =>  ["RELATIONSHIPLEAF", $annot["objectType"]]
-            ]
-          ];
-      }
+    if(array_key_exists("annotations", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["annotations"] as $annot) {
+            if(in_array($annot["objectType"], ["URL", "Page"])) {
+                // This annotation links to an URL or another MediaWiki page
+                $queries[] = [
+                "query" => '
+                    // Subject
+                        MERGE (sub:MediaWikiPage{name: $subject})
+                        WITH sub AS sub
+                    // Merge the object node
+                        CALL apoc.merge.node(
+                        $objectLabels,
+                        {name: $object},
+                        {},
+                        {}
+                        ) YIELD node AS obj
+                        WITH sub, obj
+                    // Merge the subject > object relationship
+                        CALL apoc.merge.relationship(
+                        sub,
+                        $predicate,
+                        {},
+                        {},
+                        obj,
+                        {}
+                        ) YIELD rel
+                    RETURN rel
+                ',
+                "params" => [
+                    "subject" =>       strtolower($annot["subject"]),
+                    "predicate" =>     $annot["predicate"],
+                    "object" =>        strtolower($annot["objectText"]),
+                    "objectLabels" =>  ["RELATIONSHIPLEAF"]
+                ]
+                ];
+            } else if(in_array($annot["objectType"], ["Text"])) {
+                $queries[] = [
+                "query" => '
+                    MATCH (sub:MediaWikiPage{name: $subject})
+                    CALL apoc.create.setProperty(sub, $predicate, $object)
+                    YIELD node
+                    RETURN sub
+                ',
+                "params" => [
+                    "subject" =>       strtolower($annot["subject"]),
+                    "predicate" =>     str_replace(":", "__", $annot["predicate"]),
+                    "object" =>        strtolower($annot["objectText"]),
+                ]
+                ];
+            } else {
+                $queries[] = [
+                    "query" => '
+                    // Subject
+                        MERGE (sub:MediaWikiPage{name: $subject})
+                        WITH sub AS sub
+                    // Merge the object node
+                        CALL apoc.merge.node(
+                        $objectLabels,
+                        {name: $object},
+                        {},
+                        {}
+                        ) YIELD node AS obj
+                        WITH sub, obj
+                    // Merge the subject > object relationship
+                        CALL apoc.merge.relationship(
+                        sub,
+                        $predicate,
+                        {},
+                        {},
+                        obj,
+                        {}
+                        ) YIELD rel
+                    RETURN rel
+                    ',
+                    "params" => [
+                    "subject" =>       strtolower($annot["subject"]),
+                    "predicate" =>     $annot["predicate"],
+                    "object" =>        strtolower($annot["objectText"]),
+                    "objectLabels" =>  ["RELATIONSHIPLEAF", $annot["objectType"]]
+                    ]
+                ];
+            }
+        }
     }
     return $queries;
   }
 
   private function addTemplates($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["ds0__templates"] as $template) {
-      $queries[] = [
-        "query" => '
-          MERGE (sub:MediaWikiPage{name: $subject})
-          WITH sub AS sub
-          CALL apoc.merge.node(
-            $objectLabels,
-            {name: $object},
-            {},
-            {}
-          ) YIELD node AS obj
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
-          "predicate" =>     "eppo0__hasTemplate",
-          "object" =>        strtolower($template["title"]),
-          "objectLabels" =>  ["Template"]
-        ]
-      ];
+    if(array_key_exists("ds0__templates", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["ds0__templates"] as $template) {
+            $queries[] = [
+                "query" => '
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+                CALL apoc.merge.node(
+                    $objectLabels,
+                    {name: $object},
+                    {},
+                    {}
+                ) YIELD node AS obj
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+                "predicate" =>     "eppo0__hasTemplate",
+                "object" =>        strtolower($template["title"]),
+                "objectLabels" =>  ["Template"]
+                ]
+            ];
+        }
     }
-    foreach ($meilisearchDocument["ds0__templates_by_regex"] as $template) {
-      $queries[] = [
-        "query" => '
-          MERGE (sub:MediaWikiPage{name: $subject})
-          WITH sub AS sub
-          CALL apoc.merge.node(
-            $objectLabels,
-            {name: $object},
-            {},
-            {}
-          ) YIELD node AS obj
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
-          "predicate" =>     "eppo0__hasTemplate",
-          "object" =>        strtolower($template["title"]),
-          "objectLabels" =>  ["Template"]
-        ]
-      ];
+    if(array_key_exists("ds0__templates_by_regex", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["ds0__templates_by_regex"] as $template) {
+            $queries[] = [
+                "query" => '
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+                CALL apoc.merge.node(
+                    $objectLabels,
+                    {name: $object},
+                    {},
+                    {}
+                ) YIELD node AS obj
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+                "predicate" =>     "eppo0__hasTemplate",
+                "object" =>        strtolower($template["title"]),
+                "objectLabels" =>  ["Template"]
+                ]
+            ];
+        }
     }
     return $queries;
   }
 
   private function addAttachments($meilisearchDocument) {
     $queries = [];
-    foreach ($meilisearchDocument["ds0__attachments"] as $attachment) {
-      $queries[] = [
-        "query" => '
-          MERGE (sub:MediaWikiPage{name: $subject})
-          WITH sub AS sub
-          CALL apoc.merge.node(
-            $objectLabels,
-            {name: $object},
-            {},
-            {}
-          ) YIELD node AS obj
-          WITH sub, obj
-          CALL apoc.merge.relationship(
-            sub,
-            $predicate,
-            {},
-            {},
-            obj,
-            {}
-          ) YIELD rel
-          RETURN rel
-        ',
-        "params" => [
-          "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
-          "predicate" =>     "eppo0__hasCategory",
-          "object" =>        strtolower($attachment),
-          "objectLabels" =>  ["RELATIONSHIPLEAF"]
-        ]
-      ];
+    if(array_key_exists("ds0__attachments", $meilisearchDocument)) {
+        foreach ($meilisearchDocument["ds0__attachments"] as $attachment) {
+            $queries[] = [
+                "query" => '
+                MERGE (sub:MediaWikiPage{name: $subject})
+                WITH sub AS sub
+                CALL apoc.merge.node(
+                    $objectLabels,
+                    {name: $object},
+                    {},
+                    {}
+                ) YIELD node AS obj
+                WITH sub, obj
+                CALL apoc.merge.relationship(
+                    sub,
+                    $predicate,
+                    {},
+                    {},
+                    obj,
+                    {}
+                ) YIELD rel
+                RETURN rel
+                ',
+                "params" => [
+                "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
+                "predicate" =>     "eppo0__hasCategory",
+                "object" =>        strtolower($attachment),
+                "objectLabels" =>  ["RELATIONSHIPLEAF"]
+                ]
+            ];
+        }
     }
     return $queries;
   }

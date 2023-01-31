@@ -2,7 +2,7 @@
 
 dataspects for MediaWiki is based on [Meilisearch](https://www.meilisearch.com) and [instant-meilisearch](https://github.com/meilisearch/instant-meilisearch).
 
-[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html)
+[dataspects TDM Documentation](https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc/search-facets.cy.js.html)
 
 ```mermaid
 flowchart BT
@@ -12,12 +12,12 @@ flowchart BT
     - LocalSettings.php
     - <a href='https://mwstakeorg.dataspects.com/w/api.php?action=help&modules=dataspectsapi'>dataspectsapi</a>")
     sQLite("<b>SQLite</b><br/>for managing search facet configs")
-    Cypress("<b><a href='https://www.cypress.io/'>Cypress</a></b><br/>end-to-end and compnent tests")
-    AnalysisPipelines("<a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs'>Analysis Pipelines</a><ul><li>pipelines read/write from/to storage</li><li>pipelines can use services to conclude</br>annotations</li></ul>")
+    Cypress("<b><a href='https://www.cypress.io/'>Cypress</a></b><ul><li><a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/cypress/e2e'>end-to-end and component tests</a></li><li><a href='https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc/search-facets.cy.js.html'>automatic documentation</a></li></ul>")
+    AnalysisPipelines("<a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs'>Analysis Pipelines</a><ol><li>read a facet from storage</li><li>use <span style='color:orange;'>modules/services</span> to conclude annotations</li><li>write altered documents back to storage</li></ol>")
   end
 
   storage("<b>Storage</b><ul><li>Meilisearch</li><li>Neo4j</li></ul>")
-  analyzers("<b>Services</b><ul><li>Tika</li><li>spaCy</li></ul>")
+  analyzers("<b style='color:orange;'>Services</b><ul><li>Tika</li><li>spaCy</li></ul>")
 
   subgraph Internet
     userAgent("<b>Special:Dataspects</b> (Algolia <a href='https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/'>InstantSearch</a>)<br/><b>Special:DataspectsBackstage</b>")
@@ -115,7 +115,6 @@ Debug API: https://localhost/w/api.php
 
 - [Special:DataspectsBackstage](https://mwstakeorg.dataspects.com/wiki/Special:DataspectsBackstage)
 - `mwstakeorg__status.sh`
-  - DEPLOY the underlying `mwstakeorg__status.py` to **production** by `php extensions/Dataspects/maintenance/manageSQlite3.php --initialize`
 
 ### CHECK: docker-compose.override.yml
 
