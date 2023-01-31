@@ -82,4 +82,16 @@ class DataspectsSQLite3 extends \SQLite3 {
 		}
         return $arr;
     }
+
+    public function numberOfRecordsInDatabase() {
+        if(!$this->openDB()) {
+            return false;
+        }
+        $results = $this->query("SELECT count(*) AS numberOfRecordsInDatabase FROM facets");
+        $numberOfRecordsInDatabase = 1;
+        while ($row = $results->fetchArray()) {    
+            $numberOfRecordsInDatabase = $row["numberOfRecordsInDatabase"];
+		}
+        return $numberOfRecordsInDatabase;
+    }
 }

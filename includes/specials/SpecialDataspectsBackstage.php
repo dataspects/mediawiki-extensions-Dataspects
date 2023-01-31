@@ -74,7 +74,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         <tr>
                             <td>wgSQLiteDatabase
                             </td>
-                            <td>'.$GLOBALS['wgSQLiteDatabase'].'
+                            <td>'.$GLOBALS['wgSQLiteDatabase'].' (<code id="numberOfRecordsInDatabase"></code> records)
                             </td>
                         </tr>
                         <tr>
@@ -92,7 +92,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         <tr>
                             <td>wgDataspectsIndex
                             </td>
-                            <td>'.$GLOBALS['wgDataspectsIndex'].'
+                            <td>'.$GLOBALS['wgDataspectsIndex'].' (<code id="numberOfDocsInIndex"></code> docs)
                             </td>
                         </tr>
                         <tr>

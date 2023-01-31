@@ -1,5 +1,8 @@
 <?php
 
+use \Symfony\Component\HttpClient\HttplugClient;
+use \MeiliSearch\Client;
+
 class DataspectsAPI extends ApiBase {
 
 	private $mInstalledExtensions = [];
@@ -8,7 +11,15 @@ class DataspectsAPI extends ApiBase {
 		parent::__construct( $query, $moduleName );
 	}
 
-	private function loadBackends() {
+	private function loadBackends() { // FIXME: Craig
+        $this->meiliSearchClient = new \MeiliSearch\Client(
+            $GLOBALS['wgDataspectsSearchURL'],
+            $GLOBALS['wgDataspectsSearchKey'],
+            new HttplugClient()
+        );
+        $this->meiliSearchIndex = $this->meiliSearchClient->index(
+            $GLOBALS['wgDataspectsIndex']
+        );
 		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
 			$GLOBALS["wgDataspectsNeo4jURL"],
 			$GLOBALS["wgDataspectsNeo4jUsername"],
@@ -29,6 +40,26 @@ class DataspectsAPI extends ApiBase {
 		}
 		// FIXME: security concerns: injection, api call parameters?
         switch ($queryType) {
+            case 'numberofdocsinindex':
+                try {
+                    $this->loadBackends();
+                    $stats = $this->meiliSearchIndex->stats();
+                    $this->getResult()->addValue(null, "data", [ 'numberofdocsinindex' => $stats["numberOfDocuments"] ] );
+                } catch (Exception $e) {
+                    wfDebug("### DataspectsAPI error: ".$e);
+                    $this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+                }
+                break;
+            case 'numberofrecordsindatabase':
+                try {
+                    $this->loadBackends();
+                    $result = $this->sqlite3->numberOfRecordsInDatabase();
+                    $this->getResult()->addValue(null, "data", [ 'numberofrecordsindatabase' => $result ] );
+                } catch (Exception $e) {
+                    wfDebug("### DataspectsAPI error: ".$e);
+                    $this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+                }
+                break;
 			case 'putsearchfacet':
 				if(in_array("writeapi", $user->getRights())){
 					try {

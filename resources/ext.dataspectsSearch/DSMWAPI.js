@@ -41,6 +41,36 @@ DSMWAPI = class {
       });
   };
 
+  numberOfDocsInIndex = (name) => {
+    this.mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: "numberofdocsinindex",
+      })
+      .done(function (data) {
+        $(name).text(data.data.numberofdocsinindex);
+      })
+      .fail(function (data) {
+        console.error("numberofnodes");
+        console.error(data);
+      });
+  };
+
+  numberOfRecordsInDatabase = (name) => {
+    this.mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: "numberofrecordsindatabase",
+      })
+      .done(function (data) {
+        $(name).text(data.data.numberofrecordsindatabase);
+      })
+      .fail(function (data) {
+        console.error("numberofnodes");
+        console.error(data);
+      });
+  };
+
   firstXCharacters = (firstXCharacters, property) => {
     this.mwapi
       .get({
