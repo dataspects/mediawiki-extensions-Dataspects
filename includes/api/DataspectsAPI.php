@@ -91,6 +91,17 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
 				}
 				break;
+            case 'concludedannotations':
+                try {
+                    wfDebug("### $queryType");
+                    $this->loadBackends();
+                    $concludedannotations = $this->dsNeo4j->concludedannotations($params['querystring']);
+                    $this->getResult()->addValue(null, "data", array( 'concludedannotations' => $concludedannotations, 'status' => 0 ) );
+                } catch (Exception $e) {
+                    wfDebug("### DataspectsAPI error: ".$e);
+                    $this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );
+                }
+                break;
 			case 'getsearchfacets':
 				try {
 					$this->loadBackends();

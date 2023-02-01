@@ -51,6 +51,24 @@ DSMWAPI = class {
       });
   };
 
+  concludedAnnotations = (name) => {
+    this.mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: "concludedannotations",
+      })
+      .done(function (data) {
+        $(name).text(JSON.stringify(data.data.concludedannotations));
+      })
+      .fail(function (data) {
+        console.error("numberofnodes");
+        console.error(data);
+      });
+    // $(name).text(
+    //   '<pre>MATCH (n) UNWIND [k IN keys(n) WHERE k STARTS WITH "ORIGINFOR#_#"] AS key RETURN key, n[key], count(n)</pre>'
+    // );
+  };
+
   firstXCharacters = (firstXCharacters, property) => {
     this.mwapi
       .get({

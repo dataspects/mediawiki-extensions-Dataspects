@@ -43,6 +43,11 @@ class SpecialDataspectsBackstage extends SpecialPage {
                         <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2211071526" style="text-align:right;display:block;">See underlying query at <code>LEX2211071527</code></a>
                     </td>
 				</tr>
+                <tr><!-- LEX230108165200 -->
+                    <td><b>Concluded annotations</b></td>
+                    <td><div id="concludedAnnotations"></div>
+                    </td>
+				</tr>
 			</table>' );
 		$output->addJsConfigVars(array(
 			'wgServer' => $GLOBALS['wgServer'],

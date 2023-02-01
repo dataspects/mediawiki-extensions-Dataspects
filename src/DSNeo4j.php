@@ -44,6 +44,27 @@ class DSNeo4j {
     return $databaseNames;
   }
 
+  public function concludedannotations() {
+    $query = [
+      "query" => '
+        MATCH (n)
+        UNWIND [k IN keys(n) WHERE k STARTS WITH "ORIGINFOR#_#"] AS key
+        RETURN key AS predicate, n[key] AS value, count(n) AS count
+      ',
+      "params" => []
+    ];
+    $results = $this->query($query);
+    $concludedannotations = [];
+    foreach ($results as $result) {
+        $concludedannotations[] = [
+            "predicate" => $result->get("predicate"),
+            "value" => $result->get("value"),
+            "count" => $result->get("count")
+        ];
+    }
+    return $concludedannotations;
+  }
+
   public function deleteAllNodes() {
     $queries = [
       [
@@ -323,6 +344,7 @@ class DSNeo4j {
   private function addIncomingLinks($meilisearchDocument) {
     $queries = [];
     if(array_key_exists("ds0__incomingLinks", $meilisearchDocument)) {
+        echo gettype($meilisearchDocument["ds0__incomingLinks"]);
         foreach ($meilisearchDocument["ds0__incomingLinks"] as $link) {
             $queries[] = [
                 "query" => '
@@ -398,14 +420,18 @@ class DSNeo4j {
                 $queries[] = [
                 "query" => '
                     MATCH (sub:MediaWikiPage{name: $subject})
-                    CALL apoc.create.setProperty(sub, $predicate, $object)
+                    CALL apoc.create.setProperties(
+                        sub, [$predicate, $originPredicate], [$object, $originObject]
+                    )
                     YIELD node
                     RETURN sub
                 ',
                 "params" => [
-                    "subject" =>       strtolower($annot["subject"]),
-                    "predicate" =>     str_replace(":", "__", $annot["predicate"]),
-                    "object" =>        strtolower($annot["objectText"]),
+                    "subject" =>            strtolower($annot["subject"]),
+                    "predicate" =>          str_replace(":", "__", $annot["predicate"]),
+                    "object" =>             strtolower($annot["objectText"]),
+                    "originPredicate" =>    "ORIGINFOR#_#".str_replace(":", "__", $annot["predicate"]),
+                    "originObject" =>       strtolower($annot["origin"]),
                 ]
                 ];
             } else {
