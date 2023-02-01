@@ -128,6 +128,7 @@ Debug API: https://localhost/w/api.php
   - ADVANTAGES:
     - no need to restart the Docker compose stack
     - preserve proper development `.env`
+- OPTION: temprarily change envs in docker-compose.override.yml, e.g. `DS_SPACY_SERVER=http://localhost:8051` to develop https://github.com/dataspects/SpaCyServer
 
 ### CONFIGURE: the data storage backends
 

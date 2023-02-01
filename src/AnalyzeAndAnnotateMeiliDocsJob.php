@@ -113,7 +113,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         return $hit;
     }
 
-    protected function spaCy($text, $url) {
+    public function spaCy($text, $url) {
         $ch = curl_init($url);
         curl_setopt_array($ch, array(
             CURLOPT_POST => 1,

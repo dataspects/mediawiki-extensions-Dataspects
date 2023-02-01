@@ -29,7 +29,7 @@ class ProcessElementMessages extends \MediaWiki\Extension\Dataspects\AnalyzeAndA
                 $annotation = [
                     "subject"   => $hit["eppo0__hasEntityURL"],
                     "predicate" => $spaCyInsightAnnotation["fullPredicateName"],
-                    "objectSource" => true,
+                    "objectSource" => $spaCyInsightAnnotation["origin"],
 					"objectHTML" => true,
 					"objectText" => true,
 					"objectType" => "Boolean"

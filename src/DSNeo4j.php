@@ -394,7 +394,7 @@ class DSNeo4j {
                     "objectLabels" =>  ["RELATIONSHIPLEAF"]
                 ]
                 ];
-            } else if(in_array($annot["objectType"], ["Text"])) {
+            } else if(in_array($annot["objectType"], ["Text", "Boolean"])) {
                 $queries[] = [
                 "query" => '
                     MATCH (sub:MediaWikiPage{name: $subject})
