@@ -20,7 +20,7 @@ flowchart BT
   analyzers("<b style='color:orange;'>Services</b><ul><li>Tika</li><li>spaCy</li></ul>")
 
   subgraph Internet
-    userAgent("<b>Special:Dataspects</b> (Algolia <a href='https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/'>InstantSearch</a>)<br/><b>Special:DataspectsBackstage</b>")
+    userAgent("<b>Special:Dataspects</b> (Algolia <a href='https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/'>InstantSearch</a>)<ul><li><a href='https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/main/resources/ext.dataspectsSearch/profiles.json'>hit profile <-> searchResultClass matching</a></li></ul><b>Special:DataspectsBackstage</b>")
     internetSources("<b>- mediawiki.org</b><br/><b>- semantic-mediawiki.org</b><br/><b>- riot.im</b><br/>...")
   end
 

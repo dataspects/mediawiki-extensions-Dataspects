@@ -6,26 +6,6 @@ DSMWAPI = class {
     this.mwapi = new mw.Api();
   }
 
-  nodesList = (tableId, dataTablesOptions) => {
-    this.mwapi
-      .get({
-        action: "dataspectsapi",
-        querytype: "nodeslist",
-      })
-      .done(function (response) {
-        /**
-         * Ask Craig: can I get response.data.nodeslist as return to
-         * this.dsMWAPI.nodesList();?
-         */
-        (dataTablesOptions.data = response.data.nodeslist),
-          $("#" + tableId).DataTable(dataTablesOptions);
-      })
-      .fail(function (response) {
-        console.error("nodeslist");
-        console.error(response);
-      });
-  };
-
   numberOfNodes = (name) => {
     this.mwapi
       .get({

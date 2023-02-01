@@ -1,3 +1,4 @@
+require("mediawiki.api");
 const { DataspectsHelpers } = require("./helpers.js");
 SearchResult = class {
   /**
@@ -540,7 +541,24 @@ DataspectsSpecialDatatables = class extends SearchResult {
     const dataTablesOptions = {
       columns: [{ data: "name" }, { data: "eppo0__hasEntityURL" }],
     };
-    this.dsMWAPI.nodesList("table_id", dataTablesOptions);
+    const mwapi = new mw.Api();
+    mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: "nodeslist",
+      })
+      .done(function (response) {
+        if (response.data.status == 0) {
+          dataTablesOptions.data = response.data.nodeslist;
+          $("#table_id").DataTable(dataTablesOptions);
+        } else {
+          $("#alertUserStage").html(response.data.status);
+        }
+      })
+      .fail(function (response) {
+        console.error("nodeslist");
+        console.error(response);
+      });
     // });
   };
 };
