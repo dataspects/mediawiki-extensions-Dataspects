@@ -522,6 +522,13 @@ CodeSearchResult = class extends SearchResult {
 DataspectsSpecialDatatables = class extends SearchResult {
   constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
     super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
+    this.querytype = "nodeslisttype0";
+    this.cypherparams = {
+      subMatchesAllTheseLabels: ["MediaWikiPage"],
+      predicate: "ds0:usedInPackageAndOrFarm",
+      objMatchesAllTheseLabels: ["PackageOrFarm"],
+      objName: "canasta",
+    };
   }
 
   eppo0__hasEntityTitle = () => {
@@ -533,7 +540,12 @@ DataspectsSpecialDatatables = class extends SearchResult {
   };
 
   searchResultBody = () => {
-    return '<table id="table_id"></table>';
+    return (
+      "<table id=\"table_id\"></table><div class='dsUnderlyingQueryDiv'><span class='dsUnderlyingQuerySpan' title='" +
+      this.querytype +
+      JSON.stringify(this.cypherparams, null, 2) +
+      "'>See underlying query at hovering</span></div>"
+    );
   };
 
   script = () => {
@@ -545,14 +557,9 @@ DataspectsSpecialDatatables = class extends SearchResult {
     mwapi
       .get({
         action: "dataspectsapi",
-        querytype: "nodeslisttype0",
+        querytype: this.querytype,
         //Craig: This should be safe as they're all params in LEX230201101200
-        cypherparams: JSON.stringify({
-          subMatchesAllTheseLabels: ["MediaWikiPage"],
-          predicate: "ds0:usedInPackageAndOrFarm",
-          objMatchesAllTheseLabels: ["PackageOrFarm"],
-          objName: "canasta",
-        }),
+        cypherparams: JSON.stringify(this.cypherparams),
       })
       .done(function (response) {
         if (response.data.status == 0) {

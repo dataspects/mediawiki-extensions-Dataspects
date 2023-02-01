@@ -5,6 +5,16 @@
   font-size: 10px;
 }
 
+.dsUnderlyingQueryDiv {
+  text-align: right;
+  color: red;
+}
+
+.dsUnderlyingQuerySpan {
+  background-color: beige;
+  cursor: help;
+}
+
 .dsHint {
 }
 
