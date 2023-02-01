@@ -545,7 +545,14 @@ DataspectsSpecialDatatables = class extends SearchResult {
     mwapi
       .get({
         action: "dataspectsapi",
-        querytype: "nodeslist",
+        querytype: "nodeslisttype0",
+        //Craig: This should be safe as they're all params in LEX230201101200
+        cypherparams: JSON.stringify({
+          subMatchesAllTheseLabels: ["MediaWikiPage"],
+          predicate: "ds0:usedInPackageAndOrFarm",
+          objMatchesAllTheseLabels: ["PackageOrFarm"],
+          objName: "canasta",
+        }),
       })
       .done(function (response) {
         if (response.data.status == 0) {

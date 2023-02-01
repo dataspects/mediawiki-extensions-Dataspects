@@ -175,10 +175,10 @@ class DataspectsAPI extends ApiBase {
 					$this->getResult()->addValue(null, "data", array( 'status' => $errorMessage, 'topictype_name' => $topictype_name) );
 				}
 				break;
-			case 'nodeslist':
+			case 'nodeslisttype0':
 				try {
 					$this->loadBackends();
-					$nodesList = $this->dsNeo4j->nodesList();
+                    $nodesList = $this->dsNeo4j->nodeslisttype0(json_decode($params['cypherparams'], true));
 					$this->getResult()->addValue(null, "data", array(
                             'status' => 0,
                             'nodeslist' => $nodesList
@@ -245,7 +245,8 @@ class DataspectsAPI extends ApiBase {
 			'searchfacetname' => null,
 			'searchfaceteppo0__hasEntityBlurb' => null,
 			'currenthelper' => null,
-			"querystring" => null
+			"querystring" => null,
+            "cypherparams" => null
         ];
     }
 

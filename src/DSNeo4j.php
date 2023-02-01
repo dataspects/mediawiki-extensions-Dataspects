@@ -70,17 +70,27 @@ class DSNeo4j {
     return $results->first()->get("numberOfNodes");
   }
 
-  public function nodesList() {
+  public function nodeslisttype0($cypherparams) {
+    // https://neo4j.com/docs/cypher-manual/5/functions/predicate/
     $query = [
       "query" => '
-        MATCH   (sub:MediaWikiPage)-[pre:`ds0:usedInPackageAndOrFarm`]->(obj:PackageOrFarm)
-        WHERE   obj.name = "canasta"
+        MATCH   (sub)-[pre]->(obj)
+        WHERE   all(
+                    label IN $subMatchesAllTheseLabels
+                    WHERE apoc.label.exists(sub, label)
+                )
+            AND all(
+                    label IN $objMatchesAllTheseLabels
+                    WHERE apoc.label.exists(obj, label)
+                )
+            AND obj.name = $objName
+            AND type(pre) = $predicate
         RETURN  sub.name AS name,
                 sub.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
                 sub.eppo0__hasEntityURL AS eppo0__hasEntityURL
         ORDER BY eppo0__hasEntityTitle
       ',
-      "params" => []
+      "params" => $cypherparams // LEX230201101200
     ];
     $results = $this->query($query);
     $nodesList = [];
