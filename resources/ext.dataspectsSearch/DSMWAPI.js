@@ -52,13 +52,21 @@ DSMWAPI = class {
   };
 
   concludedAnnotations = (name) => {
+    const dataTablesOptions = {
+      columns: [
+        { title: "Predicate", data: "predicate" },
+        { title: "Origin", data: "value" },
+        { title: "Count", data: "count" },
+      ],
+    };
     this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "concludedannotations",
       })
       .done(function (data) {
-        $(name).text(JSON.stringify(data.data.concludedannotations));
+        dataTablesOptions.data = data.data.concludedannotations;
+        $(name).DataTable(dataTablesOptions);
       })
       .fail(function (data) {
         console.error("numberofnodes");

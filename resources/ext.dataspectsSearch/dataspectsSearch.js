@@ -508,7 +508,7 @@ function handleSpecialDataspectsBackstage() {
   dsMWAPI.numberOfNodes("#numberOfNeo4jNodes");
   dsMWAPI.numberOfDocsInIndex("#numberOfDocsInIndex");
   dsMWAPI.numberOfRecordsInDatabase("#numberOfRecordsInDatabase");
-  dsMWAPI.concludedAnnotations("#concludedAnnotations");
+  dsMWAPI.concludedAnnotations("#concludedAnnotationsTable");
   dsMWAPI.releaseTimestampXago();
   dsMWAPI.firstXCharacters(20, "name");
 

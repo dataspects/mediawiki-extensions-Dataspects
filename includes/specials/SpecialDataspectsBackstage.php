@@ -44,8 +44,8 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     </td>
 				</tr>
                 <tr><!-- LEX230108165200 -->
-                    <td><b>Concluded annotations</b></td>
-                    <td><div id="concludedAnnotations"></div>
+                    <td><b><a id="concludedAnnotations">Concluded annotations</a></b><br/>See <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs">Jobs</a></td>
+                    <td><table id="concludedAnnotationsTable"></table>
                     </td>
 				</tr>
 			</table>' );
