@@ -138,13 +138,22 @@ class DSNeo4j {
   public function typeahead($queryString) {
     $query = [
       "query" => '
-        MATCH     (n:SearchFacet)
-        WITH      apoc.coll.toSet(
-                    apoc.text.regexGroups(n.name, $regex)
-                  ) AS matches,
-                  n.name AS name
-        RETURN    name, matches
-        ORDER BY  size(matches) DESC
+        MATCH       (n:SearchFacet)
+        WITH        apoc.coll.toSet(
+                        apoc.text.regexGroups(n.name, $regex)
+                    ) AS matches,
+                    n.name AS name
+        RETURN      name, matches
+        UNION
+        MATCH       (n)
+        UNWIND      keys(n) AS key
+        WITH        apoc.coll.toSet(
+                        apoc.text.regexGroups(key, $regex)
+                    ) AS matches,
+                    key AS name
+        WHERE       matches <> []
+        RETURN      name, matches
+        ORDER BY    size(matches) DESC
       ',
       "params" => [
         "regex" => "(?i)".str_replace(" ", "|", trim($queryString))
