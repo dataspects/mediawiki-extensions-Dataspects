@@ -55,7 +55,8 @@ DSMWAPI = class {
     const dataTablesOptions = {
       columns: [
         { title: "Predicate", data: "predicate" },
-        { title: "Origin", data: "value" },
+        { title: "Namespace", data: "namespace" },
+        { title: "Annotation Type", data: "annotationType" },
         { title: "Count", data: "count" },
       ],
     };
@@ -72,9 +73,6 @@ DSMWAPI = class {
         console.error("numberofnodes");
         console.error(data);
       });
-    // $(name).text(
-    //   '<pre>MATCH (n) UNWIND [k IN keys(n) WHERE k STARTS WITH "ORIGINFOR#_#"] AS key RETURN key, n[key], count(n)</pre>'
-    // );
   };
 
   firstXCharacters = (firstXCharacters, property) => {

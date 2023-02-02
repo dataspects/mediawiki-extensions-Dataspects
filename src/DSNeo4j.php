@@ -47,9 +47,19 @@ class DSNeo4j {
   public function concludedannotations() {
     $query = [
       "query" => '
-        MATCH (n)
-        UNWIND [k IN keys(n) WHERE k STARTS WITH "ORIGINFOR#_#"] AS key
-        RETURN key AS predicate, n[key] AS value, count(n) AS count
+        MATCH       (n)
+        UNWIND      keys(n) AS key
+        RETURN      DISTINCT key AS predicate,
+                    apoc.text.split(key, "__")[0] AS namespace,
+                    count(n) AS count,
+                    "property" AS annotationType
+        UNION
+        MATCH       (s)-[r]->(o)
+        RETURN      DISTINCT type(r) AS predicate,
+                    apoc.text.split(type(r), "__")[0] AS namespace,
+                    count(r) AS count,
+                    "relationship" AS annotationType
+        ORDER BY    namespace
       ',
       "params" => []
     ];
@@ -58,8 +68,9 @@ class DSNeo4j {
     foreach ($results as $result) {
         $concludedannotations[] = [
             "predicate" => $result->get("predicate"),
-            "value" => $result->get("value"),
-            "count" => $result->get("count")
+            "namespace" => $result->get("namespace"),
+            "count" => $result->get("count"),
+            "annotationType" => $result->get("annotationType")
         ];
     }
     return $concludedannotations;
@@ -421,7 +432,7 @@ class DSNeo4j {
                 "query" => '
                     MATCH (sub:MediaWikiPage{name: $subject})
                     CALL apoc.create.setProperties(
-                        sub, [$predicate, $originPredicate], [$object, $originObject]
+                        sub, [$predicate], [$object]
                     )
                     YIELD node
                     RETURN sub
@@ -429,9 +440,7 @@ class DSNeo4j {
                 "params" => [
                     "subject" =>            strtolower($annot["subject"]),
                     "predicate" =>          str_replace(":", "__", $annot["predicate"]),
-                    "object" =>             strtolower($annot["objectText"]),
-                    "originPredicate" =>    "ORIGINFOR#_#".str_replace(":", "__", $annot["predicate"]),
-                    "originObject" =>       strtolower($annot["origin"]),
+                    "object" =>             strtolower($annot["objectText"])
                 ]
                 ];
             } else {
