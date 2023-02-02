@@ -73,45 +73,47 @@ SearchFacets = class {
       if (event.target.className === "searchFacetNameMarker") {
         currentNode = event.target.parentNode;
       }
-      const searchfacetaction =
-        currentNode.attributes["searchfacetaction"].value;
-
-      this.mwapi
-        .get({
-          action: "dataspectsapi",
-          querytype: searchfacetaction + "searchfacet",
-          searchfacetname: currentNode.attributes["searchfacetname"].value,
-        })
-        .done((response) => {
-          if (searchfacetaction === "activate") {
-            console.log(
-              "meilisearchHelper: Registering activation of " +
-                response.data.searchfacets[0].name +
-                "..."
-            );
-            this.search.helper.setState(
-              response.data.searchfacets[0].ds0__instantsearchHelper
-                .meilisearchHelper.state
-            );
-            // Update currentContext in localStorage
-            var currentContext = JSON.parse(
-              window.localStorage.getItem("currentContext")
-            );
-            currentContext.searchFacetName = response.data.searchfacets[0].name;
-            window.localStorage.setItem(
-              "currentContext",
-              JSON.stringify(currentContext)
-            );
-            //
-            this.search.helper.search();
-            console.log("Activated " + currentContext.searchFacetName + ".");
-          }
-          $(currentNode).siblings("sup").html(response.data.status);
-        })
-        .fail((response) => {
-          console.error(response);
-        });
+      this.#handleSearchFacet(currentNode);
     });
+  };
+
+  #handleSearchFacet = (currentNode) => {
+    const searchfacetaction = currentNode.attributes["searchfacetaction"].value;
+    this.mwapi
+      .get({
+        action: "dataspectsapi",
+        querytype: searchfacetaction + "searchfacet",
+        searchfacetname: currentNode.attributes["searchfacetname"].value,
+      })
+      .done((response) => {
+        if (searchfacetaction === "activate") {
+          console.log(
+            "meilisearchHelper: Registering activation of " +
+              response.data.searchfacets[0].name +
+              "..."
+          );
+          this.search.helper.setState(
+            response.data.searchfacets[0].ds0__instantsearchHelper
+              .meilisearchHelper.state
+          );
+          // Update currentContext in localStorage
+          var currentContext = JSON.parse(
+            window.localStorage.getItem("currentContext")
+          );
+          currentContext.searchFacetName = response.data.searchfacets[0].name;
+          window.localStorage.setItem(
+            "currentContext",
+            JSON.stringify(currentContext)
+          );
+          //
+          this.search.helper.search();
+          console.log("Activated " + currentContext.searchFacetName + ".");
+        }
+        $(currentNode).siblings("sup").html(response.data.status);
+      })
+      .fail((response) => {
+        console.error(response);
+      });
   };
 };
 
