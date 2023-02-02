@@ -249,7 +249,9 @@ function handleSpecialDataspects() {
       initialPageLoad = false;
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
-      searchFacets.typeahead(helper.state.query);
+      setTimeout(() => {
+        searchFacets.typeahead(helper.state.query);
+      }, 1000);
       currentContext = JSON.parse(
         window.localStorage.getItem("currentContext")
       );

@@ -6,7 +6,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
 
     public function __construct($globalsConfig, $doWrite) {
         parent::__construct($globalsConfig, $doWrite);
-        $this->query = "Extension";
+        $this->query = "Conference";
         $this->filter = [];
 	}
 
