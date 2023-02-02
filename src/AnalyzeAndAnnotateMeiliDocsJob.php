@@ -144,6 +144,10 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         return $hit;
     }
 
+    protected function normalizeFullPredicateNames($value) {
+        return preg_replace('/([A-Za-z0-9]+)(?::)([A-Za-z0-9]+)/', '$1__$2', $value);
+    }
+
     protected function addToArrayField($hit, $field, $newValue) {
         $hit[$field][] = $newValue;
         return $hit;

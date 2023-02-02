@@ -16,7 +16,7 @@ class DataspectsFeed {
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     
-    $this->index = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
+    $this->writeIndex = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
     $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
@@ -241,7 +241,7 @@ class DataspectsFeed {
 
   private function addPageToMeilisearch() {
     wfDebug("### ".json_encode($this->meilisearchDocument));
-    $result = $this->index->addDocuments([$this->meilisearchDocument]);
+    $result = $this->writeIndex->addDocuments([$this->meilisearchDocument]);
     wfDebug("### __>__ Indexing Pipeline: ".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex'].": ADDED: ".$this->meilisearchDocument["eppo0__hasEntityURL"]."\n");
     # $result array keys: taskUid, indexUid, status, type, enqueuedAt
     $this->manualLogEntry('to index "'.$result["indexUid"].'": '.$result["status"]." (".$result["type"].")");

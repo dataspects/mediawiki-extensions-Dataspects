@@ -253,6 +253,7 @@ function handleSpecialDataspects() {
       currentContext = JSON.parse(
         window.localStorage.getItem("currentContext")
       );
+      console.log(JSON.stringify(helper.state, null, 2));
       helper.search();
       // } else {
       //   alert("You have to select one or more source(s).");
@@ -326,7 +327,6 @@ function handleSpecialDataspects() {
       templates: {
         item(item, { html }) {
           const { url, label, count, isRefined } = item;
-          console.log(isRefined);
           const a = '<a href="' + url + '">' + label + " (" + count + ")</a>";
           if (isRefined) {
             return (

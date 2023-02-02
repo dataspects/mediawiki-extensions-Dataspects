@@ -6,7 +6,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
 
     public function __construct($globalsConfig, $doWrite) {
         parent::__construct($globalsConfig, $doWrite);
-        $this->query = "Extension:NetworkAuth";
+        $this->query = "";
         $this->filter = [];
 	}
 
@@ -20,11 +20,12 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
             "ds0__allPredicates.1v10", "ds0__allPredicates.1v11", "ds0__specialAspect.1v11"
         ];
         $this->log(".", static::class."considering fields ".join(", ", $fields)." for hit.name ".$hit["name"]);
-        print_r($hit["annotations"]);
-        $hit = $this->removeAnnotationsByPredicate($hit, "https://github.com/dataspects/SpaCyServer/blob/main/src/ESCAMNLP.py#ds55__notUsing");
         foreach ($fields as $field) {
             if(array_key_exists($field, $hit)) {
                 $hit[$field] = array_unique($hit[$field]);
+            }
+            foreach($hit[$field] as $key => $value) {
+                $hit[$field][$key] = $this->normalizeFullPredicateNames($value);
             }
         }
         return $hit;

@@ -73,7 +73,12 @@ SearchFacets = class {
       if (event.target.className === "searchFacetNameMarker") {
         currentNode = event.target.parentNode;
       }
-      this.#handleSearchFacet(currentNode);
+      const re = new RegExp("[A-Za-z0-9]+__[A-Za-z0-9]+");
+      if (re.test(currentNode.attributes["searchfacetname"].value)) {
+        this.#handlePredicate(currentNode);
+      } else {
+        this.#handleSearchFacet(currentNode);
+      }
     });
   };
 
@@ -114,6 +119,25 @@ SearchFacets = class {
       .fail((response) => {
         console.error(response);
       });
+  };
+
+  #handlePredicate = (currentNode) => {
+    var currentState = this.search.helper.state;
+    currentState.query = "";
+    const value =
+      "All Predicates > " + currentNode.attributes["searchfacetname"].value;
+    if (
+      !currentState.hierarchicalFacetsRefinements[
+        "ds0__allPredicates.1v10"
+      ].includes(value)
+    ) {
+      currentState.hierarchicalFacetsRefinements[
+        "ds0__allPredicates.1v10"
+      ].push(value);
+    }
+    this.search.helper.setState(currentState);
+    console.log(JSON.stringify(this.search.helper.state, null, 2));
+    this.search.helper.search();
   };
 };
 

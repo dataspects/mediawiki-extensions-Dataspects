@@ -349,7 +349,7 @@ MediaWikiMetaPageSearchResult = class extends MediaWikiSearchResult {
 
   ds0__contentText = () => {
     // LEX230108161800
-    this.dsMWAPI.testGraph(this.hit.eppo0__hasEntityURL);
+    // this.dsMWAPI.testGraph(this.hit.eppo0__hasEntityURL);
     return (
       "<div id='" +
       this.hit.eppo0__hasEntityURL +
