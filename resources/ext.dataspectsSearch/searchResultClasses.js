@@ -525,7 +525,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
     this.querytype = "nodeslisttype0";
     this.cypherparams = {
       subMatchesAllTheseLabels: ["MediaWikiPage"],
-      predicate: "ds0:usedInPackageAndOrFarm",
+      predicate: "ds0__usedInPackageAndOrFarm",
       objMatchesAllTheseLabels: ["PackageOrFarm"],
       objName: "canasta",
     };

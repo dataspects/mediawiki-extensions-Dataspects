@@ -288,7 +288,7 @@ SearchResultMatchInfo = class {
             xago +
             ' ago">' +
             xago +
-            "</span>"
+            " ago</span>"
           : '<span class="hitAgo" title="Missing this.hit.release_timestamp">release_timestamp</span>') +
         '<span class="searchResultClassName" title="' +
         m +

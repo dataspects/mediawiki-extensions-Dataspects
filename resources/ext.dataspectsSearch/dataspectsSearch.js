@@ -250,6 +250,7 @@ function handleSpecialDataspects() {
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
       setTimeout(() => {
+        // Craig: how to handle this?
         searchFacets.typeahead(helper.state.query);
       }, 1000);
       currentContext = JSON.parse(
