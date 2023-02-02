@@ -348,7 +348,7 @@ function handleSpecialDataspects() {
       showMoreLimit: 20,
       limit: 1,
       templates: {
-        item: '<a class="{{cssClasses.link}}" href="{{url}}"><span class="ds0__sourceNamespace">{{label}}</span>&nbsp;<span class="badge ms-count">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
+        item: '<b><a class="{{cssClasses.link}}" href="{{url}}"><span class="ds0__sourceNamespace">{{label}}</span></a></b>&nbsp;<span class="badge ms-count">containing {{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}} documents</span>',
       },
       cssClasses: {
         root: "ds0__sourceNamespace-menu",
@@ -361,7 +361,7 @@ function handleSpecialDataspects() {
         "ck0__containsCognitiveKeyword.1v11",
       ],
       templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="ds0__source"><%label%></span></a>&nbsp;<span class="ms-count">across <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%> documents</span>',
       },
       cssClasses: {
         root: "no-root-bullet-in-list",
@@ -372,7 +372,7 @@ function handleSpecialDataspects() {
       container: "#actions-menu",
       attributes: ["ds0__featuresAction.1v10", "ds0__featuresAction.1v11"],
       templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__featuresAction"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__featuresAction"><%label%></span></a>&nbsp;<span class="ms-count">across <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%> documents</span>',
       },
       cssClasses: {
         root: "no-root-bullet-in-list",
@@ -383,7 +383,7 @@ function handleSpecialDataspects() {
       container: "#selected-aspects-menu",
       attributes: ["ds0__specialAspect.1v10", "ds0__specialAspect.1v11"],
       templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__specialAspect"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__specialAspect"><%label%></span></a>&nbsp;<span class="ms-count">across <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%> documents</span>',
       },
       cssClasses: {
         root: "no-root-bullet-in-list",
@@ -398,7 +398,7 @@ function handleSpecialDataspects() {
         "ds0__allPredicates.1v12",
       ],
       templates: {
-        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span>&nbsp;<span class="ms-count"><%#helpers.formatNumber%><%count%><%/helpers.formatNumber%></span></a>',
+        item: '{{=<% %>=}}<a class="<%cssClasses.link%>" href="<%url%>"><span class="badge ds0__allPredicates"><%label%></span></a>&nbsp;<span class="ms-count">across <%#helpers.formatNumber%><%count%><%/helpers.formatNumber%> documents</span>',
       },
       cssClasses: {
         root: "no-root-bullet-in-list",

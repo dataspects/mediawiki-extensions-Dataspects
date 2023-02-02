@@ -354,8 +354,7 @@ class DSNeo4j {
 
   private function addIncomingLinks($meilisearchDocument) {
     $queries = [];
-    if(array_key_exists("ds0__incomingLinks", $meilisearchDocument)) {
-        echo gettype($meilisearchDocument["ds0__incomingLinks"]);
+    if(array_key_exists("ds0__incomingLinks", $meilisearchDocument) && is_array($meilisearchDocument["ds0__incomingLinks"])) {
         foreach ($meilisearchDocument["ds0__incomingLinks"] as $link) {
             $queries[] = [
                 "query" => '

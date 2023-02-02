@@ -128,9 +128,19 @@ class AnalyzeAndAnnotateMeiliDocsJob {
     }
 
     protected function removeAnnotationsByPredicate($hit, $predicate) {
-        $hit["annotations"] = array_filter($hit["annotations"], function($annotation) use($predicate) {
-            return $annotation["predicate"] != $predicate;
-        });
+        if(array_key_exists("annotations", $hit) && is_array($hit["annotations"])) {
+            // Remove predicate from annotations
+            $hit["annotations"] = array_filter($hit["annotations"], function($annotation) use($predicate) {
+                return $annotation["predicate"] != $predicate;
+            });
+            // Remove predicate from ds0__allPredicates.*
+            $hit["ds0__allPredicates.1v11"] = array_filter($hit["ds0__allPredicates.1v11"], function($allPredicates1v11) use($predicate) {
+                return $allPredicates1v11 != "All Predicates > ".$predicate;
+            });
+            $hit["ds0__allPredicates.1v12"] = array_filter($hit["ds0__allPredicates.1v12"], function($allPredicates1v12) use($predicate) {
+                return !str_starts_with($allPredicates1v12, "All Predicates > ".$predicate);
+            });
+        }
         return $hit;
     }
 

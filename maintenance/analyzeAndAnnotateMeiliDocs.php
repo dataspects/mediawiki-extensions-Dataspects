@@ -51,7 +51,7 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
         $job = $this->getOption( 'job', false );
         if($job) {
             $doWrite = $this->getOption( 'doWrite', false );
-            echo "\nRunning '$job' with option 'doWrite=$doWrite'\n";
+            echo "\nRunning '$job' with option 'doWrite=$doWrite' against ".$this->globalsConfig['wgDataspectsSearchURL']."/".$this->globalsConfig['wgDataspectsWriteURL'].":".$this->globalsConfig['wgDataspectsIndex']." and ".$this->globalsConfig['wgDataspectsNeo4jURL']."\n";
             if($job == "pipeline") {
                 /**
                  * Pipeline
