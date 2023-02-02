@@ -6,7 +6,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
 
     public function __construct($globalsConfig, $doWrite) {
         parent::__construct($globalsConfig, $doWrite);
-        $this->query = "";
+        $this->query = "Extension";
         $this->filter = [];
 	}
 
@@ -24,6 +24,7 @@ class RemoveDuplicateFieldValues extends \MediaWiki\Extension\Dataspects\Analyze
             if(array_key_exists($field, $hit)) {
                 $hit[$field] = array_unique($hit[$field]);
             }
+            if(array_key_exists($field, $hit) && is_array($hit[$field]))
             foreach($hit[$field] as $key => $value) {
                 $hit[$field][$key] = $this->normalizeFullPredicateNames($value);
             }

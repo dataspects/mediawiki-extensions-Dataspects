@@ -123,7 +123,10 @@ SearchFacets = class {
 
   #handlePredicate = (currentNode) => {
     var currentState = this.search.helper.state;
+    // Clear state >>
     currentState.query = "";
+    currentState.hierarchicalFacetsRefinements["ds0__allPredicates.1v10"] = [];
+    // << Clear state
     const value =
       "All Predicates > " + currentNode.attributes["searchfacetname"].value;
     if (
