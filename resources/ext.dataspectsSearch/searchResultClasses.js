@@ -561,7 +561,9 @@ DataspectsSpecialDatatables = class extends SearchResult {
   };
 
   script = () => {
-    // $(document).ready(function () {
+    $("#alertUserStage").html(
+      '<div class="pulsate">Loading data&hellip;</div>'
+    );
     const dataTablesOptions = {
       columns: [{ data: "name" }, { data: "eppo0__hasEntityURL" }],
     };
@@ -577,6 +579,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
         if (response.data.status == 0) {
           dataTablesOptions.data = response.data.nodeslist;
           $("#table_id").DataTable(dataTablesOptions);
+          $("#alertUserStage").html("<div></div>"); // FIXME: Syntax error if ""?!
         } else {
           $("#alertUserStage").html(response.data.status);
         }
@@ -585,7 +588,6 @@ DataspectsSpecialDatatables = class extends SearchResult {
         console.error("nodeslist");
         console.error(response);
       });
-    // });
   };
 };
 
