@@ -520,15 +520,19 @@ CodeSearchResult = class extends SearchResult {
 };
 
 DataspectsSpecialDatatables = class extends SearchResult {
-  constructor(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi) {
+  constructor(
+    error,
+    info,
+    hit,
+    currentContext,
+    instantsearch,
+    dsMWAPI,
+    mwapi,
+    cypherparams
+  ) {
     super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
     this.querytype = "nodeslisttype0";
-    this.cypherparams = {
-      subMatchesAllTheseLabels: ["MediaWikiPage"],
-      predicate: "ds0__usedInPackageAndOrFarm",
-      objMatchesAllTheseLabels: ["PackageOrFarm"],
-      objName: "canasta",
-    };
+    this.cypherparams = cypherparams;
   }
 
   eppo0__hasEntityTitle = () => {

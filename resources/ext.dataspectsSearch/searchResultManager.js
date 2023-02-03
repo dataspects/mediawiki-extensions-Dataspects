@@ -82,7 +82,7 @@ SearchResultMatcher = class {
       this.hit.searchResultClass.name +
       "'";
     const searchResultClass = this.#searchResultClassMappings(
-      this.hit.searchResultClass.name
+      this.hit.searchResultClass
     );
     return searchResultClass.searchResult(
       this.hit,
@@ -95,11 +95,11 @@ SearchResultMatcher = class {
     );
   };
 
-  #searchResultClassMappings = (searchResultClassName) => {
+  #searchResultClassMappings = (searchResultClass) => {
     this.error.message = false;
-    switch (searchResultClassName) {
+    switch (searchResultClass.name) {
       case "SearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new SearchResult(
           this.error,
           this.info,
@@ -111,7 +111,7 @@ SearchResultMatcher = class {
         );
         break;
       case "ElementSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new ElementSearchResult(
           this.error,
           this.info,
@@ -123,7 +123,7 @@ SearchResultMatcher = class {
         );
         break;
       case "SMWCindyKateSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new SMWCindyKateSearchResult(
           this.error,
           this.info,
@@ -135,7 +135,7 @@ SearchResultMatcher = class {
         );
         break;
       case "WikiDataspectsResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new WikiDataspectsResult(
           this.error,
           this.info,
@@ -147,7 +147,7 @@ SearchResultMatcher = class {
         );
         break;
       case "SearchFacetSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new SearchFacetSearchResult(
           this.error,
           this.info,
@@ -159,7 +159,7 @@ SearchResultMatcher = class {
         );
         break;
       case "MediaWikiSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new MediaWikiSearchResult(
           this.error,
           this.info,
@@ -171,7 +171,7 @@ SearchResultMatcher = class {
         );
         break;
       case "MediaWikiMetaPageSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new MediaWikiMetaPageSearchResult(
           this.error,
           this.info,
@@ -183,7 +183,7 @@ SearchResultMatcher = class {
         );
         break;
       case "MediaWikiFileSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new MediaWikiFileSearchResult(
           this.error,
           this.info,
@@ -195,7 +195,7 @@ SearchResultMatcher = class {
         );
         break;
       case "CodeSearchResult":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new CodeSearchResult(
           this.error,
           this.info,
@@ -207,7 +207,7 @@ SearchResultMatcher = class {
         );
         break;
       case "DataspectsSpecialDatatables":
-        this.searchResultClassName = searchResultClassName;
+        this.searchResultClassName = searchResultClass.name;
         return new DataspectsSpecialDatatables(
           this.error,
           this.info,
@@ -215,7 +215,8 @@ SearchResultMatcher = class {
           this.currentContext,
           this.instantsearch,
           this.dsMWAPI,
-          this.mwapi
+          this.mwapi,
+          searchResultClass.cypherparams
         );
         break;
       default:
