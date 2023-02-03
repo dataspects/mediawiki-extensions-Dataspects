@@ -216,7 +216,7 @@ SearchResultMatcher = class {
           this.instantsearch,
           this.dsMWAPI,
           this.mwapi,
-          searchResultClass.cypherparams
+          searchResultClass
         );
         break;
       default:

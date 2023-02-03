@@ -1,3 +1,7 @@
+a {
+  font-weight: bold;
+}
+
 .dataspectsFeatureLink {
   background-color: orange;
   border-radius: 2px;
@@ -78,6 +82,7 @@ li.savedSearchFacet a.itemName {
 
 .eppo0__hasEntityBlurb {
   background-color: #f8f8f8;
+  margin: 10px 0px 10px 0px;
 }
 
 .eppo0__category {

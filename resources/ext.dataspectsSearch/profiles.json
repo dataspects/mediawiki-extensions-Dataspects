@@ -106,6 +106,7 @@
     },
     "searchResultClass": {
       "name": "DataspectsSpecialDatatables",
+      "eppo0__hasEntityBlurb": "This table of MediaWiki extensions is populated by analyzing <a href='https://www.mediawiki.org/wiki/Category:Stable_extensions'>mediawiki.org's 'Stable extensions' category</a> for <code>/{{Used by\\|(.*=1)+}}/</code>. It should correspond with the <a href='https://canasta.wiki/documentation/'>extensions listed on canasta.wiki/documentation</a>.",
       "cypherparams": {
         "subMatchesAllTheseLabels": ["MediaWikiPage"],
         "predicate": "ds0__usedInPackageAndOrFarm",

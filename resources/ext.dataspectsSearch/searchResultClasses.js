@@ -161,7 +161,7 @@ SearchResult = class {
   };
 
   resultIcon = () => {
-    return "";
+    return "<span></span>";
   };
 
   annotations = () => {
@@ -528,11 +528,11 @@ DataspectsSpecialDatatables = class extends SearchResult {
     instantsearch,
     dsMWAPI,
     mwapi,
-    cypherparams
+    searchResultClass
   ) {
     super(error, info, hit, currentContext, instantsearch, dsMWAPI, mwapi);
     this.querytype = "nodeslisttype0";
-    this.cypherparams = cypherparams;
+    this.searchResultClass = searchResultClass;
   }
 
   eppo0__hasEntityTitle = () => {
@@ -543,11 +543,19 @@ DataspectsSpecialDatatables = class extends SearchResult {
     );
   };
 
+  eppo0__hasEntityBlurb = () => {
+    return (
+      '<div class="eppo0__hasEntityBlurb">' +
+      this.searchResultClass.eppo0__hasEntityBlurb +
+      "</div>"
+    );
+  };
+
   searchResultBody = () => {
     return (
       "<table id=\"table_id\"></table><div class='dsUnderlyingQueryDiv'><span class='dsUnderlyingQuerySpan' title='" +
       this.querytype +
-      JSON.stringify(this.cypherparams, null, 2) +
+      JSON.stringify(this.searchResultClass.cypherparams, null, 2) +
       "'>See underlying query at hovering</span></div>"
     );
   };
@@ -563,7 +571,7 @@ DataspectsSpecialDatatables = class extends SearchResult {
         action: "dataspectsapi",
         querytype: this.querytype,
         //Craig: This should be safe as they're all params in LEX230201101200
-        cypherparams: JSON.stringify(this.cypherparams),
+        cypherparams: JSON.stringify(this.searchResultClass.cypherparams),
       })
       .done(function (response) {
         if (response.data.status == 0) {
