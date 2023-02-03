@@ -35,9 +35,11 @@ SearchFacets = class {
       .done((response) => {
         $("#searchFacetControls").html(
           response.data.status === 0
-            ? response.data.matches.map((sf) => {
-                return new SearchFacetControl(sf).highlightedHtml();
-              })
+            ? response.data.matches
+                .map((sf) => {
+                  return new SearchFacetControl(sf).highlightedHtml();
+                })
+                .join(" ")
             : response.data.status
         );
         this.#eventHandlers();

@@ -246,8 +246,8 @@ MediaWikiSearchResult = class extends SearchResult {
       "</div>" +
       // this.mw0__attachment(instantsearch) +
       this.annotations() +
-      this.parsedPageTextFieldset() +
-      this.parsedPageText()
+      this.parsedPageTextFieldset()
+      // + this.parsedPageText()
     );
   };
 

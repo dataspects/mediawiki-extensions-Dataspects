@@ -27,12 +27,16 @@
   font-style: italic;
 }
 
+#searchFacetControls {
+  line-height: 35px;
+}
+
 div.searchFacetControl {
   background-color: #e8e8e8;
   padding: 3px;
-  border-radius: 3px;
   display: inline;
-  margin: 10px 10px 0px 0px;
+  border-radius: 3px;
+  padding: 5px;
 }
 a.searchFacetControlName {
   display: inline;
