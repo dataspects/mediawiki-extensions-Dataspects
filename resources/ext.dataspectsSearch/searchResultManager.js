@@ -21,10 +21,10 @@ ProfilesMatcher = class {
   getSearchResultClass = () => {
     for (const key in Object.keys(profiles)) {
       if (this.#profilesMatch(profiles[key])) {
-        return profiles[key].searchResultClassName;
+        return profiles[key].searchResultClass;
       }
     }
-    return "SearchResult";
+    return { name: "SearchResult" };
   };
   #profilesMatch = (profile) => {
     if ("environment" in profile) {
@@ -79,10 +79,10 @@ SearchResultMatcher = class {
       "Item " +
       this.hit.id +
       " is displayed using searchResultClass '" +
-      this.hit.searchResultClassName +
+      this.hit.searchResultClass.name +
       "'";
     const searchResultClass = this.#searchResultClassMappings(
-      this.hit.searchResultClassName
+      this.hit.searchResultClass.name
     );
     return searchResultClass.searchResult(
       this.hit,

@@ -6,73 +6,97 @@
     "environment": {
       "user": "dummy"
     },
-    "searchResultClassName": "dummy"
+    "searchResultClass": {
+      "name": "dummy"
+    }
   },
   {
     "hit": {
       "ds0__sourceNamespace": "Template"
     },
-    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiMetaPageSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__sourceNamespace": "Form"
     },
-    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiMetaPageSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__sourceNamespace": "File"
     },
-    "searchResultClassName": "MediaWikiFileSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiFileSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__sourceNamespace": "Module"
     },
-    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiMetaPageSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__sourceNamespace": "Concept"
     },
-    "searchResultClassName": "MediaWikiMetaPageSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiMetaPageSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "Code"
     },
-    "searchResultClassName": "CodeSearchResult"
+    "searchResultClass": {
+      "name": "CodeSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "https://mwstake.org/mwstake/wiki/"
     },
-    "searchResultClassName": "MediaWikiSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "https://www.mediawiki.org/wiki/"
     },
-    "searchResultClassName": "MediaWikiSearchResult"
+    "searchResultClass": {
+      "name": "MediaWikiSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "https://wiki.dataspects.com/wiki/"
     },
-    "searchResultClassName": "WikiDataspectsResult"
+    "searchResultClass": {
+      "name": "WikiDataspectsResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "https://smw-cindykate.com/wiki/"
     },
-    "searchResultClassName": "SMWCindyKateSearchResult"
+    "searchResultClass": {
+      "name": "SMWCindyKateSearchResult"
+    }
   },
   {
     "hit": {
       "ds0__source": "Element"
     },
-    "searchResultClassName": "ElementSearchResult"
+    "searchResultClass": {
+      "name": "ElementSearchResult"
+    }
   },
   {
     "hit": {
@@ -80,6 +104,14 @@
       "eppo0__hasEntityType": "DataspectsSearchFacet",
       "eppo0__hasEntityTitle": "Extensions included in Canasta"
     },
-    "searchResultClassName": "DataspectsSpecialDatatables"
+    "searchResultClass": {
+      "name": "DataspectsSpecialDatatables",
+      "cypherparams": {
+        "subMatchesAllTheseLabels": ["MediaWikiPage"],
+        "predicate": "ds0__usedInPackageAndOrFarm",
+        "objMatchesAllTheseLabels": ["PackageOrFarm"],
+        "objName": "canasta"
+      }
+    }
   }
 ]

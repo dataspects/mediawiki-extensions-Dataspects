@@ -194,16 +194,16 @@ function handleSpecialDataspects() {
       eppo0__hasEntityType: "DataspectsSearchFacet",
       eppo0__hasEntityTitle: currentContext.searchFacetName,
     };
-    pseudoHit.searchResultClassName = new ProfilesMatcher(
+    pseudoHit.searchResultClass = new ProfilesMatcher(
       pseudoHit,
       currentContext
     ).getSearchResultClass();
     console.log(
-      pseudoHit.searchResultClassName +
+      pseudoHit.searchResultClass.name +
         " for SearchFacetName " +
         currentContext.searchFacetName
     );
-    if (pseudoHit.searchResultClassName != "SearchResult") {
+    if (pseudoHit.searchResultClass.name != "SearchResult") {
       theItems.push(pseudoHit);
     }
   };
@@ -432,7 +432,7 @@ function handleSpecialDataspects() {
              * These are matched against profiles.json in order to load
              * the correct SearchResult subclass or default SearchResult class.
              */
-            hit.searchResultClassName = new ProfilesMatcher(
+            hit.searchResultClass = new ProfilesMatcher(
               hit,
               currentContext
             ).getSearchResultClass();

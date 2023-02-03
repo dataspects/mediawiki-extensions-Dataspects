@@ -5,7 +5,6 @@ SearchFacets = class {
     this.mwapi = mwapi;
     this.search = search;
     this.lastQuery = "";
-    this.lastRequest = false;
     this.lastTimeout = false;
   }
 
@@ -17,8 +16,7 @@ SearchFacets = class {
       $("#searchFacetControls").html(
         '<div class="pulsate">Loading search facets&hellip;</div>'
       );
-      var currentRequest = this.#req(query);
-      this.lastRequest = currentRequest;
+      this.#req(query);
     }, delay);
     this.lastQuery = query;
     this.lastTimeout = currentTimeout;
