@@ -119,7 +119,8 @@ class DSNeo4j {
             AND type(pre) = $predicate
         RETURN  sub.name AS name,
                 sub.eppo0__hasEntityTitle AS eppo0__hasEntityTitle,
-                sub.eppo0__hasEntityURL AS eppo0__hasEntityURL
+                sub.eppo0__hasEntityURL AS eppo0__hasEntityURL,
+                sub.ds66__lastUpdated AS ds66__lastUpdated
         ORDER BY eppo0__hasEntityTitle
       ',
       "params" => $cypherparams // LEX230201101200
@@ -129,7 +130,8 @@ class DSNeo4j {
     foreach ($results as $result) {
       $nodesList[] = [
         name => $result->get("eppo0__hasEntityTitle"),
-        eppo0__hasEntityURL => $result->get("eppo0__hasEntityURL")
+        eppo0__hasEntityURL => $result->get("eppo0__hasEntityURL"),
+        ds66__lastUpdated => $result->get("ds66__lastUpdated")
       ];
     }
     return $nodesList;

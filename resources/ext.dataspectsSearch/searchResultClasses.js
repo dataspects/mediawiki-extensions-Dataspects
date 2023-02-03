@@ -565,7 +565,17 @@ DataspectsSpecialDatatables = class extends SearchResult {
       '<div class="pulsate">Loading data&hellip;</div>'
     );
     const dataTablesOptions = {
-      columns: [{ data: "name" }, { data: "eppo0__hasEntityURL" }],
+      columns: [
+        { title: "Name", data: "name" },
+        {
+          title: "Documentation",
+          data: "eppo0__hasEntityURL",
+          render: function (data, type, row, meta) {
+            return '<a href="' + data + '">' + data + "</a>";
+          },
+        },
+        { title: "Last updated", data: "ds66__lastUpdated" },
+      ],
     };
     const mwapi = new mw.Api();
     mwapi

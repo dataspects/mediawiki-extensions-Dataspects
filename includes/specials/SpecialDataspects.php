@@ -20,7 +20,7 @@ class SpecialDataspects extends SpecialPage {
 		$this->setHeaders();
 		$output->addHTML( '<table class="dataspectsTable">
 			<tr>
-				<td style="width:60%;">
+				<td style="width:70%;">
                     <div id="alertUserStage"></div>
 					<div style="float:right;"><input type="checkbox" id="originalPageContent">Show original page contents&nbsp;<sup class="dataspectsFeatureLink" title="Learn about this feature&hellip;"><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/wiki/Feature-%22Search-facets%22">F</a></sup> <input type="checkbox" id="compactList" value="1">Compact list&nbsp;<sup class="dataspectsFeatureLink" title="Learn about this feature&hellip;"><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/wiki/Feature-%22Search-facets%22">F</a></sup></div>
 					<div id="searchbox"></div>
