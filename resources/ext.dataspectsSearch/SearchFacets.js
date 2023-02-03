@@ -4,13 +4,29 @@ SearchFacets = class {
   constructor(mwapi, search) {
     this.mwapi = mwapi;
     this.search = search;
+    this.lastQuery = "";
+    this.lastRequest = false;
+    this.lastTimeout = false;
   }
 
-  typeahead = (query) => {
-    $("#searchFacetControls").html(
-      '<div class="pulsate">Loading search facets&hellip;</div>'
-    );
-    this.mwapi
+  typeahead = (query, delay) => {
+    if (this.lastTimeout && this.lastQuery != query) {
+      clearTimeout(this.lastTimeout);
+    }
+    var currentTimeout = setTimeout(() => {
+      $("#searchFacetControls").html(
+        '<div class="pulsate">Loading search facets&hellip;</div>'
+      );
+      var currentRequest = this.#req(query);
+      this.lastRequest = currentRequest;
+    }, delay);
+    this.lastQuery = query;
+    this.lastTimeout = currentTimeout;
+  };
+
+  #req = (query) => {
+    console.log("Request " + query);
+    return this.mwapi
       .get({
         action: "dataspectsapi",
         querytype: "typeaheadsearchfacets",

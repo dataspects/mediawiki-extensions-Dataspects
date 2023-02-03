@@ -249,14 +249,17 @@ function handleSpecialDataspects() {
       initialPageLoad = false;
       // if (helper.state.disjunctiveFacetsRefinements.ds0__source.length > 0) {
       // FXIME!
-      setTimeout(() => {
-        // Craig: how to handle this?
-        searchFacets.typeahead(helper.state.query);
-      }, 1000);
+
+      if (helper.state.query) {
+        searchFacets.typeahead(helper.state.query, 1000);
+      } else {
+        $("#searchFacetControls").html("");
+      }
+
       currentContext = JSON.parse(
         window.localStorage.getItem("currentContext")
       );
-      console.log(JSON.stringify(helper.state, null, 2));
+      // console.log(JSON.stringify(helper.state, null, 2));
       helper.search();
       // } else {
       //   alert("You have to select one or more source(s).");

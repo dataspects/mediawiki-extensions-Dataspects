@@ -14,7 +14,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
         $output->enableOOUI();
 		$this->setHeaders();
 		$output->addHTML( '
-            <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects#Features" style="background-color:yellow;">Features</a> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc.html">Doc</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a> | <code>~$ ./mwstakeorg__status.sh</code>
+            <b>&larr; <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Dataspects">Special:Dataspects</a></b> | <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects#Features" style="background-color:yellow;">Features</a> | <a href="https://htmlpreview.github.io/?https://github.com/dataspects/mediawiki-extensions-Dataspects/blob/master/doc/search-facets.cy.js.html">Docs</a> | <a href="'.$GLOBALS['wgServer'].'/wiki/Special:Log?type=dataspects">Log</a> | <code>~$ ./mwstakeorg__status.sh</code>
             <table class="dataspectsTable dataspectsBackstageTable">
                 <tr>
                     <td style="width:20%;"><b>Initialize topic type</b></td>
