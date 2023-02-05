@@ -125,7 +125,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><a href="https://github.com/dataspects/DataspectsSearch">https://github.com/dataspects/DataspectsSearch</a>
+                            <td colspan="2"><a href="https://github.com/dataspects/mediawiki-extensions-Dataspects">https://github.com/dataspects/mediawiki-extensions-Dataspects</a>
                             </td>
                         </tr>
                         <tr>
