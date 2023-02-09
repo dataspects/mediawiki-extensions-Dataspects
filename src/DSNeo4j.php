@@ -11,16 +11,15 @@ use Laudis\Neo4j\Contracts\TransactionInterface;
 
 class DSNeo4j {
 
-  public function __construct($url, $username, $password, $database) {
+  public function __construct($protocol, $url, $username, $password, $database) {
     $this->url = $url;
     $this->database = $database;
     wfDebug("### Backend neo4j loading");
     try {
-      $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
-        'neo4j',
-        $this->url."?database=".$this->database, // FIXME: does ?database= have an effect?
-        Authenticate::basic($username, $password)
-      )->build();
+        $this->neo4jClient = \Laudis\Neo4j\ClientBuilder::create()->withDriver(
+            'neo4j',
+            $protocol."://".$username.":".$password."@".$this->url // FIXME: does ."?database=".$this->database have an effect?
+        )->build();
       wfDebug("### Backend neo4j loaded ");
     } catch (Exception $e) {
       wfDebug("### Backend neo4j ".$e->getMessage());

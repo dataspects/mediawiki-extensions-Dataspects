@@ -39,6 +39,7 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		$this->meiliWriteClient = new \MeiliSearch\Client($this->globalsConfig['wgDataspectsWriteURL'], $this->globalsConfig['wgDataspectsWriteKey'], new HttplugClient());
 
 		$this->neo4jClient = new DSNeo4j(
+            $this->globalsConfig["wgDataspectsNeo4jProtocol"],
 			$this->globalsConfig["wgDataspectsNeo4jURL"],
 			$this->globalsConfig["wgDataspectsNeo4jUsername"],
 			$this->globalsConfig["wgDataspectsNeo4jPassword"],

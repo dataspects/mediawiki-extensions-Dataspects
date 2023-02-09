@@ -25,6 +25,7 @@ class DataspectsIndexJob extends \Job {
 
   public function run() {    
     $dsNeo4j = new DSNeo4j(
+        $GLOBALS["wgDataspectsNeo4jProtocol"],
         $GLOBALS["wgDataspectsNeo4jURL"],
         $GLOBALS["wgDataspectsNeo4jUsername"],
         $GLOBALS["wgDataspectsNeo4jPassword"],

@@ -21,6 +21,7 @@ class DataspectsAPI extends ApiBase {
             $GLOBALS['wgDataspectsIndex']
         );
 		$this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
+            $GLOBALS["wgDataspectsNeo4jProtocol"],
 			$GLOBALS["wgDataspectsNeo4jURL"],
 			$GLOBALS["wgDataspectsNeo4jUsername"],
 			$GLOBALS["wgDataspectsNeo4jPassword"],

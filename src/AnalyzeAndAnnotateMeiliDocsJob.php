@@ -20,6 +20,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         $this->writeIndex = $meiliWriteClient->index($this->globalsConfig['wgDataspectsIndex']);
 
         $this->dsNeo4j = new \MediaWiki\Extension\Dataspects\DSNeo4j(
+            $this->globalsConfig["wgDataspectsNeo4jProtocol"],
 			$this->globalsConfig["wgDataspectsNeo4jURL"],
 			$this->globalsConfig["wgDataspectsNeo4jUsername"],
 			$this->globalsConfig["wgDataspectsNeo4jPassword"],
