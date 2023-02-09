@@ -51,7 +51,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                 <tr>
                     <td><b>Housekeeping</b></td>
                     <td><pre>
-dataspects \
+<a href="https://github.com/dataspects/dataspects">dataspects</a> \
     annotator \
         --index $DS_MEILI_TESTINDEX \
         --key $DS_MEILI_MASTERKEY \
@@ -59,13 +59,14 @@ dataspects \
         --neourl $DS_NEO4J_SERVER \
         --neousername $DS_NEO4J_USERNAME \
         --neopassword $DS_NEO4J_PASSWORD \
-        --job annotateLastUpdate \
+        --job <b style="background: yellow;">JobDefinition</b> \
         --searchrequest \'{
             "query": "remember",
             "limit": 1,
             "offset": 0
         }\'
-                    </pre></table>
+                    </pre>
+                    <p>Contact your dataspects consultant about <b style="background: yellow;">JobDefinitions</b> available for you.</p>
                     </td>
 				</tr>
 			</table>' );
