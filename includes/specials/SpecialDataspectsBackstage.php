@@ -59,14 +59,14 @@ class SpecialDataspectsBackstage extends SpecialPage {
         --neourl $DS_NEO4J_SERVER \
         --neousername $DS_NEO4J_USERNAME \
         --neopassword $DS_NEO4J_PASSWORD \
-        --job <b style="background: yellow;">JobDefinition</b> \
+        --job <b style="background: yellow;"><a href="https://github.com/dataspects/dataspects/blob/main/annotator/jobDefinitions.go">JobDefinition</a></b> \
         --searchrequest \'{
             "query": "remember",
             "limit": 1,
             "offset": 0
         }\'
                     </pre>
-                    <p>Contact your dataspects consultant about <b style="background: yellow;">JobDefinitions</b> available for you.</p>
+                    <p>Contact your dataspects consultant about <b style="background: yellow;"><a href="https://github.com/dataspects/dataspects/blob/main/annotator/jobDefinitions.go">JobDefinitions</a></b> available for you.</p>
                     </td>
 				</tr>
 			</table>' );
