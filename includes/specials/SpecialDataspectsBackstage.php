@@ -48,6 +48,25 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     <td><table id="concludedAnnotationsTable"></table>
                     </td>
 				</tr>
+                <tr>
+                    <td><b>Housekeeping</b></td>
+                    <td><pre>
+dataspects \
+    annotator \
+        --index $DS_MEILI_TESTINDEX \
+        --key $DS_MEILI_MASTERKEY \
+        --url $DS_MEILI_SERVER \
+        --neourl $DS_NEO4J_SERVER \
+        --neousername $DS_NEO4J_USERNAME \
+        --neopassword $DS_NEO4J_PASSWORD \
+        --searchrequest \'{
+            "query": "remember",
+            "limit": 1,
+            "offset": 0
+        }\'
+                    </pre></table>
+                    </td>
+				</tr>
 			</table>' );
 		$output->addJsConfigVars(array(
 			'wgServer' => $GLOBALS['wgServer'],
