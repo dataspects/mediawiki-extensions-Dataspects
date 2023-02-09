@@ -66,7 +66,10 @@ class SpecialDataspectsBackstage extends SpecialPage {
             "offset": 0
         }\'
                     </pre>
-                    <p>Contact your dataspects consultant about <b style="background: yellow;"><a href="https://github.com/dataspects/dataspects/blob/main/annotator/jobDefinitions.go">JobDefinitions</a></b> available for you.</p>
+                    <ul><li>Contact your dataspects consultant about <b style="background: yellow;"><a href="https://github.com/dataspects/dataspects/blob/main/annotator/jobDefinitions.go">JobDefinitions</a></b> available for you.</li>
+                    <li>You can order new jobs in which case you get a new dataspects Go binary with updated job definitions.</li>
+                    <li>Jobs are run by label and, if required, a JSON configuration object.</li>
+                    </ul>
                     </td>
 				</tr>
 			</table>' );
