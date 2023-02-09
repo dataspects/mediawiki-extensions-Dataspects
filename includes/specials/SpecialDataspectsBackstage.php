@@ -59,6 +59,7 @@ dataspects \
         --neourl $DS_NEO4J_SERVER \
         --neousername $DS_NEO4J_USERNAME \
         --neopassword $DS_NEO4J_PASSWORD \
+        --job annotateLastUpdate \
         --searchrequest \'{
             "query": "remember",
             "limit": 1,
