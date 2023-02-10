@@ -103,9 +103,7 @@ class SpecialDataspectsFeed {
     }
   }
 
-  public function getDsSpacyAnnotations() {
-    
-  }
+  
 
   
 

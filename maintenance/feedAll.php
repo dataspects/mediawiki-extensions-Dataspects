@@ -34,8 +34,6 @@ class DMFFeedAll extends \Maintenance {
 				case 102:
 				case 108:
 				case 828:
-					// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
-					// \JobQueueGroup::singleton()->push($job);
 					$job = new DataspectsIndexJob("dataspectsIndexJob", $params);
 					\JobQueueGroup::singleton()->push($job);
 				break;

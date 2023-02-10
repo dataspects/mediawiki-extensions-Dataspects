@@ -24,8 +24,6 @@ class DMFFeedOne extends \Maintenance {
 		wfDebug("### __>__ Indexing Pipeline: REGISTER __>__: ".$params["namespace"].":".$params["title"]);
 		switch($params["namespace"]) {
 			case 0:
-				// $job = new DataspectsSpacyJob("dataspectsSpacyJob", $params);
-				// \JobQueueGroup::singleton()->push($job);
 				$job = new DataspectsIndexJob("dataspectsIndexJob", $params);
 				\JobQueueGroup::singleton()->push($job);
 			break;

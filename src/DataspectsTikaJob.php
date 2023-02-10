@@ -58,8 +58,6 @@ class DataspectsTikaJob extends \Job {
     $tempFileName = $GLOBALS["wgTmpDirectory"]."/".uniqid().".json";
     $this->writeTempFile($tempFileName, $attachments);
     $this->params["tempFileName"] = $tempFileName;
-    // $job = new DataspectsSpacyJob("dataspectsSpacyJob", array_merge($this->params, [ "attachments" => $attachments ]));
-		// \JobQueueGroup::singleton()->push($job);
     $job = new DataspectsIndexJob("dataspectsIndexJob", $this->params);
     \JobQueueGroup::singleton()->push($job);
     wfDebug("### Pushed from TikaJob to IndexJob");

@@ -28,7 +28,6 @@ class AnalyzeAndAnnotateMeiliDocs extends \Maintenance {
             "wgDataspectsNeo4jURL" => $GLOBALS["wgDataspectsNeo4jURL"],
             "wgDataspectsNeo4jUsername" => $GLOBALS["wgDataspectsNeo4jUsername"],
             "wgDataspectsNeo4jPassword" => $GLOBALS["wgDataspectsNeo4jPassword"],
-            "wgDataspectsSpacyURL" => $GLOBALS["wgDataspectsSpacyURL"],
             "wgDataspectsSearchURL" => $GLOBALS["wgDataspectsSearchURL"],
             "wgDataspectsSearchKey" => $GLOBALS['wgDataspectsSearchKey'],
             "wgDataspectsWriteURL" => $GLOBALS["wgDataspectsWriteURL"],

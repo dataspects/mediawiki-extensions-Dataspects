@@ -17,7 +17,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
             "wgDataspectsNeo4jDatabase" => "dataspectstest",
 			"wgDataspectsNeo4jUsername" => "neo4j",
 			"wgDataspectsNeo4jPassword" => "globi2000",
-			"wgDataspectsSpacyURL" => "http://localhost:8051",
 			"wgDataspectsSearchURL" => "http://meili:7700",
 			"wgDataspectsSearchKey" => "masterKey",
 			"wgDataspectsWriteURL" => "http://meili:7700",
@@ -199,18 +198,6 @@ class DataspectsTest extends \MediaWikiUnitTestCase {
 		return $hits;
 	}
 
-	public function testSpaCy() {
-        /**
-         * We use spaCy by sending text and getting back $spaCyInsight.
-         */
-        /**
-         * Which $spaCyEndpoint do I want to use?
-         */
-        $spaCyEndpoint = $this->globalsConfig['wgDataspectsSpacyURL']."/escam-annotations";
-        $job = new AnalyzeJobs\ProcessElementMessages($this->globalsConfig, "false");
-        $spaCyInsight = $job->spaCy("I don't remember.", $spaCyEndpoint);
-        print_r($spaCyInsight);
-		$this->assertEquals(1, 1);
-	}
+	
 
 }

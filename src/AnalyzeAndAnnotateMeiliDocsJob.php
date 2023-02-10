@@ -114,20 +114,7 @@ class AnalyzeAndAnnotateMeiliDocsJob {
         return $hit;
     }
 
-    public function spaCy($text, $url) {
-        $ch = curl_init($url);
-        curl_setopt_array($ch, array(
-            CURLOPT_POST => 1,
-            CURLOPT_POSTFIELDS => json_encode(['text' => $text]),
-            CURLOPT_VERBOSE => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false, // FIXME
-            CURLOPT_SSL_VERIFYHOST => false
-        ));
-        $data = (array) json_decode(curl_exec($ch), true);
-        return $data;
-    }
-
+    
     protected function removeAnnotationsByPredicate($hit, $predicate) {
         if(array_key_exists("annotations", $hit) && is_array($hit["annotations"])) {
             // Remove predicate from annotations

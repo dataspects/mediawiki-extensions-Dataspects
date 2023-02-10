@@ -26,7 +26,7 @@ flowchart BT
 
   subgraph Workstation
     DataspectsCLI("<b><a href='https://github.com/dataspects/dataspects'>dataspects (Go CLI)</a></b>
-    - export MEILI_MASTER_KEY=
+    - export DS_MEILI_MASTERKEY=
     - export INDEX=")
   end
   DataspectsCLI-.-|configure/manage|storage
@@ -94,7 +94,7 @@ Allows per-MediaWiki-namespace indexing
    - Cypress
      - E2E tests
      - Component tests
-   - Services tests (TIKA, spaCy)
+   - Services tests (TIKA)
    - PHP unit tests
 
 ```bash
@@ -128,7 +128,7 @@ Debug API: https://localhost/w/api.php
   - ADVANTAGES:
     - no need to restart the Docker compose stack
     - preserve proper development `.env`
-- OPTION: temprarily change envs in docker-compose.override.yml, e.g. `DS_SPACY_SERVER=http://localhost:8051` to develop https://github.com/dataspects/SpaCyServer
+- OPTION: temporarily change envs in docker-compose.override.yml
 
 ### CONFIGURE: the data storage backends
 

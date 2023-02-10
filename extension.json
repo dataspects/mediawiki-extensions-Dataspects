@@ -64,7 +64,6 @@
   },
   "JobClasses": {
     "dataspectsTikaJob": "MediaWiki\\Extension\\Dataspects\\DataspectsTikaJob",
-    "dataspectsSpacyJob": "MediaWiki\\Extension\\Dataspects\\DataspectsSpacyJob",
     "dataspectsIndexJob": "MediaWiki\\Extension\\Dataspects\\DataspectsIndexJob"
   },
   "LogTypes": ["dataspects"],

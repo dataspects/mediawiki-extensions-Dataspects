@@ -69,7 +69,6 @@ class DataspectsFeed {
         $this->getParse();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->sdf->getMediaWikiPageAnnotations();
-        $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
         break;
@@ -81,7 +80,6 @@ class DataspectsFeed {
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getAttachmentsData();
         $this->sdf->getMediaWikiPageAnnotations();
-        $this->sdf->getDsSpacyAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
 	      break;

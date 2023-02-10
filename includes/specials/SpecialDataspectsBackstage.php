@@ -53,12 +53,13 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     <td><pre>
 <a href="https://github.com/dataspects/dataspects">dataspects</a> \
     annotator \
-        --index $DS_MEILI_TESTINDEX \
+        --index $DS_MEILI_INDEX \
         --key $DS_MEILI_MASTERKEY \
         --url $DS_MEILI_SERVER \
         --neourl $DS_NEO4J_SERVER \
         --neousername $DS_NEO4J_USERNAME \
         --neopassword $DS_NEO4J_PASSWORD \
+        --spacyurl $DS_SPACY_SERVER \
         --job <b style="background: yellow;"><a href="https://github.com/dataspects/dataspects/blob/main/annotator/jobDefinitions.go">JobDefinition</a></b> \
         --searchrequest \'{
             "query": "remember",
@@ -128,12 +129,6 @@ class SpecialDataspectsBackstage extends SpecialPage {
                             <td>wgDataspectsTikaURL
                             </td>
                             <td>'.$GLOBALS['wgDataspectsTikaURL'].'
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>wgDataspectsSpacyURL
-                            </td>
-                            <td>'.$GLOBALS['wgDataspectsSpacyURL'].'
                             </td>
                         </tr>
                         <tr>
