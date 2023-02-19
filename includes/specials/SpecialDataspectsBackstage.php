@@ -45,7 +45,9 @@ class SpecialDataspectsBackstage extends SpecialPage {
 				</tr>
                 <tr><!-- LEX230108165200 -->
                     <td><b><a id="concludedAnnotations">Concluded annotations</a></b><br/>See <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/tree/main/src/jobs">Jobs</a></td>
-                    <td><table id="concludedAnnotationsTable"></table>
+                    <td>
+                        <table id="concludedAnnotationsTable"></table>
+                        <a href="https://github.com/dataspects/mediawiki-extensions-Dataspects/search?q=LEX2302191355" style="text-align:right;display:block;">See underlying query at <code>LEX2302191355</code></a>
                     </td>
 				</tr>
                 <tr>
@@ -53,6 +55,7 @@ class SpecialDataspectsBackstage extends SpecialPage {
                     <td><pre>
 <a href="https://github.com/dataspects/dataspects">dataspects</a> \
     annotator \
+        --mode "dryrun" \
         --index $DS_MEILI_INDEX \
         --key $DS_MEILI_MASTERKEY \
         --url $DS_MEILI_SERVER \
