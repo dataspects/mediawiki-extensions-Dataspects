@@ -851,9 +851,7 @@
           return MeiliSearchTimeOutError;
         }(Error);
 
-        /**
-         * Removes undefined entries from object
-         */
+        /** Removes undefined entries from object */
 
         function removeUndefinedFromObject(obj) {
           return Object.entries(obj).reduce(function (acc, curEntry) {
@@ -891,7 +889,7 @@
           }
           return url;
         }
-        var PACKAGE_VERSION = '0.30.0';
+        var PACKAGE_VERSION = '0.31.1';
         function toQueryParams(parameters) {
           var params = Object.keys(parameters);
           var queryParams = params.reduce(function (acc, key) {
@@ -1146,9 +1144,8 @@
           /**
            * Get one task
            *
-           * @param  {number} uid - unique identifier of the task
-           *
-           * @returns { Promise<Task> }
+           * @param uid - Unique identifier of the task
+           * @returns
            */
 
           TaskClient.prototype.getTask = function (uid) {
@@ -1171,9 +1168,8 @@
           /**
            * Get tasks
            *
-           * @param  {TasksQuery} [parameters={}] - Parameters to browse the tasks
-           *
-           * @returns {Promise<TasksResults>} - Promise containing all tasks
+           * @param parameters - Parameters to browse the tasks
+           * @returns Promise containing all tasks
            */
 
           TaskClient.prototype.getTasks = function (parameters) {
@@ -1203,10 +1199,9 @@
           /**
            * Wait for a task to be processed.
            *
-           * @param {number} taskUid Task identifier
-           * @param {WaitOptions} options Additional configuration options
-           *
-           * @returns {Promise<Task>} Promise returning a task after it has been processed
+           * @param taskUid - Task identifier
+           * @param options - Additional configuration options
+           * @returns Promise returning a task after it has been processed
            */
 
           TaskClient.prototype.waitForTask = function (taskUid, _a) {
@@ -1230,8 +1225,8 @@
                   case 2:
                     response = _e.sent();
                     if (!["enqueued"
-                    /* TASK_ENQUEUED */, "processing"
-                    /* TASK_PROCESSING */].includes(response.status)) return [2
+                    /* TaskStatus.TASK_ENQUEUED */, "processing"
+                    /* TaskStatus.TASK_PROCESSING */].includes(response.status)) return [2
                     /*return*/, response];
                     return [4
                     /*yield*/, sleep(intervalMs)];
@@ -1248,10 +1243,9 @@
           /**
            * Waits for multiple tasks to be processed
            *
-           * @param {number[]} taskUids Tasks identifier list
-           * @param {WaitOptions} options Wait options
-           *
-           * @returns {Promise<Task[]>} Promise returning a list of tasks after they have been processed
+           * @param taskUids - Tasks identifier list
+           * @param options - Wait options
+           * @returns Promise returning a list of tasks after they have been processed
            */
 
           TaskClient.prototype.waitForTasks = function (taskUids, _a) {
@@ -1294,11 +1288,9 @@
           };
           /**
            * Cancel a list of enqueued or processing tasks.
-           * @memberof Tasks
-           * @method cancelTasks
-           * @param {CancelTasksQuery} [parameters={}] - Parameters to filter the tasks.
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * @param parameters - Parameters to filter the tasks.
+           * @returns Promise containing an EnqueuedTask
            */
 
           TaskClient.prototype.cancelTasks = function (parameters) {
@@ -1323,11 +1315,9 @@
           };
           /**
            * Delete a list tasks.
-           * @memberof Tasks
-           * @method deleteTasks
-           * @param {DeleteTasksQuery} [parameters={}] - Parameters to filter the tasks.
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * @param parameters - Parameters to filter the tasks.
+           * @returns Promise containing an EnqueuedTask
            */
 
           TaskClient.prototype.deleteTasks = function (parameters) {
@@ -1363,9 +1353,9 @@
         var Index = /** @class */
         function () {
           /**
-           * @param {Config} config Request configuration options
-           * @param {string} uid UID of the index
-           * @param {string} [primaryKey] Primary Key of the index
+           * @param config - Request configuration options
+           * @param uid - UID of the index
+           * @param primaryKey - Primary Key of the index
            */
           function Index(config, uid, primaryKey) {
             this.uid = uid;
@@ -1378,13 +1368,11 @@
 
           /**
            * Search for documents into an index
-           * @memberof Index
-           * @method search
-           * @template T
-           * @param {string | null} query? Query string
-           * @param {SearchParams} options? Search options
-           * @param {Partial<Request>} config? Additional request configuration options
-           * @returns {Promise<SearchResponse<T>>} Promise containing the search response
+           *
+           * @param query - Query string
+           * @param options - Search options
+           * @param config - Additional request configuration options
+           * @returns Promise containing the search response
            */
 
           Index.prototype.search = function (query, options, config) {
@@ -1407,13 +1395,11 @@
           };
           /**
            * Search for documents into an index using the GET method
-           * @memberof Index
-           * @method search
-           * @template T
-           * @param {string | null} query? Query string
-           * @param {SearchParams} options? Search options
-           * @param {Partial<Request>} config? Additional request configuration options
-           * @returns {Promise<SearchResponse<T>>} Promise containing the search response
+           *
+           * @param query - Query string
+           * @param options - Search options
+           * @param config - Additional request configuration options
+           * @returns Promise containing the search response
            */
 
           Index.prototype.searchGet = function (query, options, config) {
@@ -1451,10 +1437,8 @@
 
           /**
            * Get index information.
-           * @memberof Index
-           * @method getRawInfo
            *
-           * @returns {Promise<IndexObject>} Promise containing index information
+           * @returns Promise containing index information
            */
 
           Index.prototype.getRawInfo = function () {
@@ -1479,9 +1463,8 @@
           };
           /**
            * Fetch and update Index information.
-           * @memberof Index
-           * @method fetchInfo
-           * @returns {Promise<this>} Promise to the current Index object with updated information
+           *
+           * @returns Promise to the current Index object with updated information
            */
 
           Index.prototype.fetchInfo = function () {
@@ -1501,9 +1484,8 @@
           };
           /**
            * Get Primary Key.
-           * @memberof Index
-           * @method fetchPrimaryKey
-           * @returns {Promise<string | undefined>} Promise containing the Primary Key of the index
+           *
+           * @returns Promise containing the Primary Key of the index
            */
 
           Index.prototype.fetchPrimaryKey = function () {
@@ -1525,13 +1507,11 @@
           };
           /**
            * Create an index.
-           * @memberof Index
-           * @method create
-           * @template T
-           * @param {string} uid Unique identifier of the Index
-           * @param {IndexOptions} options Index options
-           * @param {Config} config Request configuration options
-           * @returns {Promise<EnqueuedTask>} Newly created Index object
+           *
+           * @param uid - Unique identifier of the Index
+           * @param options - Index options
+           * @param config - Request configuration options
+           * @returns Newly created Index object
            */
 
           Index.create = function (uid, options, config) {
@@ -1559,10 +1539,9 @@
           };
           /**
            * Update an index.
-           * @memberof Index
-           * @method update
-           * @param {IndexOptions} data Data to update
-           * @returns {Promise<this>} Promise to the current Index object with updated information
+           *
+           * @param data - Data to update
+           * @returns Promise to the current Index object with updated information
            */
 
           Index.prototype.update = function (data) {
@@ -1585,9 +1564,8 @@
           };
           /**
            * Delete an index.
-           * @memberof Index
-           * @method delete
-           * @returns {Promise<void>} Promise which resolves when index is deleted successfully
+           *
+           * @returns Promise which resolves when index is deleted successfully
            */
 
           Index.prototype["delete"] = function () {
@@ -1613,11 +1591,8 @@
           /**
            * Get the list of all the tasks of the index.
            *
-           * @memberof Indexes
-           * @method getTasks
-           * @param {TasksQuery} [parameters={}] - Parameters to browse the tasks
-           *
-           * @returns {Promise<TasksResults>} - Promise containing all tasks
+           * @param parameters - Parameters to browse the tasks
+           * @returns Promise containing all tasks
            */
 
           Index.prototype.getTasks = function (parameters) {
@@ -1642,11 +1617,8 @@
           /**
            * Get one task of the index.
            *
-           * @memberof Indexes
-           * @method getTask
-           * @param {number} taskUid - Task identifier
-           *
-           * @returns {Promise<Task>} - Promise containing a task
+           * @param taskUid - Task identifier
+           * @returns Promise containing a task
            */
 
           Index.prototype.getTask = function (taskUid) {
@@ -1666,12 +1638,9 @@
           /**
            * Wait for multiple tasks to be processed.
            *
-           * @memberof Indexes
-           * @method waitForTasks
-           * @param {number[]} taskUids - Tasks identifier
-           * @param {WaitOptions} waitOptions - Options on timeout and interval
-           *
-           * @returns {Promise<Task[]>} - Promise containing an array of tasks
+           * @param taskUids - Tasks identifier
+           * @param waitOptions - Options on timeout and interval
+           * @returns Promise containing an array of tasks
            */
 
           Index.prototype.waitForTasks = function (taskUids, _a) {
@@ -1699,12 +1668,9 @@
           /**
            * Wait for a task to be processed.
            *
-           * @memberof Indexes
-           * @method waitForTask
-           * @param {number} taskUid - Task identifier
-           * @param {WaitOptions} waitOptions - Options on timeout and interval
-           *
-           * @returns {Promise<Task>} - Promise containing an array of tasks
+           * @param taskUid - Task identifier
+           * @param waitOptions - Options on timeout and interval
+           * @returns Promise containing an array of tasks
            */
 
           Index.prototype.waitForTask = function (taskUid, _a) {
@@ -1733,10 +1699,9 @@
           ///
 
           /**
-           * get stats of an index
-           * @memberof Index
-           * @method getStats
-           * @returns {Promise<IndexStats>} Promise containing object with stats of the index
+           * Get stats of an index
+           *
+           * @returns Promise containing object with stats of the index
            */
 
           Index.prototype.getStats = function () {
@@ -1759,12 +1724,10 @@
           ///
 
           /**
-           * get documents of an index
-           * @memberof Index
-           * @method getDocuments
-           * @template T
-           * @param {DocumentsQuery<T>} [parameters={}] Parameters to browse the documents
-           * @returns {Promise<DocumentsResults<T>>>} Promise containing Document responses
+           * Get documents of an index
+           *
+           * @param parameters - Parameters to browse the documents
+           * @returns Promise containing Document responses
            */
 
           Index.prototype.getDocuments = function (parameters) {
@@ -1797,12 +1760,10 @@
           };
           /**
            * Get one document
-           * @memberof Index
-           * @method getDocument
-           * @template T
-           * @param {string | number} documentId Document ID
-           * @param {DocumentQuery<T>} [parameters={}] Parameters applied on a document
-           * @returns {Promise<Document<T>>} Promise containing Document response
+           *
+           * @param documentId - Document ID
+           * @param parameters - Parameters applied on a document
+           * @returns Promise containing Document response
            */
 
           Index.prototype.getDocument = function (documentId, parameters) {
@@ -1832,13 +1793,10 @@
           };
           /**
            * Add or replace multiples documents to an index
-           * @memberof Index
-           * @method addDocuments
-           * @template T
-           * @param {Array<Document<T>>} documents Array of Document objects to add/replace
-           * @param {DocumentOptions} options? Options on document addition
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * @param documents - Array of Document objects to add/replace
+           * @param options - Options on document addition
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.addDocuments = function (documents, options) {
@@ -1860,13 +1818,11 @@
           };
           /**
            * Add or replace multiples documents to an index in batches
-           * @memberof Index
-           * @method addDocumentsInBatches
-           * @template T
-           * @param {Array<Document<T>>} documents Array of Document objects to add/replace
-           * @param {number} batchSize Size of the batch
-           * @param {DocumentOptions} options? Options on document addition
-           * @returns {Promise<EnqueuedTasks>} Promise containing array of enqueued task objects for each batch
+           *
+           * @param documents - Array of Document objects to add/replace
+           * @param batchSize - Size of the batch
+           * @param options - Options on document addition
+           * @returns Promise containing array of enqueued task objects for each batch
            */
 
           Index.prototype.addDocumentsInBatches = function (documents, batchSize, options) {
@@ -1903,11 +1859,10 @@
           };
           /**
            * Add or update multiples documents to an index
-           * @memberof Index
-           * @method updateDocuments
-           * @param {Array<Document<Partial<T>>>} documents Array of Document objects to add/update
-           * @param {DocumentOptions} options? Options on document update
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param documents - Array of Document objects to add/update
+           * @param options - Options on document update
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateDocuments = function (documents, options) {
@@ -1929,13 +1884,11 @@
           };
           /**
            * Add or update multiples documents to an index in batches
-           * @memberof Index
-           * @method updateDocuments
-           * @template T
-           * @param {Array<Document<T>>} documents Array of Document objects to add/update
-           * @param {number} batchSize Size of the batch
-           * @param {DocumentOptions} options? Options on document update
-           * @returns {Promise<EnqueuedTasks>} Promise containing array of enqueued task objects for each batch
+           *
+           * @param documents - Array of Document objects to add/update
+           * @param batchSize - Size of the batch
+           * @param options - Options on document update
+           * @returns Promise containing array of enqueued task objects for each batch
            */
 
           Index.prototype.updateDocumentsInBatches = function (documents, batchSize, options) {
@@ -1972,10 +1925,9 @@
           };
           /**
            * Delete one document
-           * @memberof Index
-           * @method deleteDocument
-           * @param {string | number} documentId Id of Document to delete
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param documentId - Id of Document to delete
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.deleteDocument = function (documentId) {
@@ -1998,10 +1950,9 @@
           };
           /**
            * Delete multiples documents of an index
-           * @memberof Index
-           * @method deleteDocuments
-           * @param {string[] | number[]} documentsIds Array of Document Ids to delete
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param documentsIds - Array of Document Ids to delete
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.deleteDocuments = function (documentsIds) {
@@ -2023,9 +1974,8 @@
           };
           /**
            * Delete all documents of an index
-           * @memberof Index
-           * @method deleteAllDocuments
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.deleteAllDocuments = function () {
@@ -2051,9 +2001,8 @@
 
           /**
            * Retrieve all settings
-           * @memberof Index
-           * @method getSettings
-           * @returns {Promise<Settings>} Promise containing Settings object
+           *
+           * @returns Promise containing Settings object
            */
 
           Index.prototype.getSettings = function () {
@@ -2073,12 +2022,10 @@
             });
           };
           /**
-           * Update all settings
-           * Any parameters not provided will be left unchanged.
-           * @memberof Index
-           * @method updateSettings
-           * @param {Settings} settings Object containing parameters with their updated values
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * Update all settings Any parameters not provided will be left unchanged.
+           *
+           * @param settings - Object containing parameters with their updated values
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateSettings = function (settings) {
@@ -2101,9 +2048,8 @@
           };
           /**
            * Reset settings.
-           * @memberof Index
-           * @method resetSettings
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetSettings = function () {
@@ -2129,9 +2075,8 @@
 
           /**
            * Get the pagination settings.
-           * @memberof Index
-           * @method getPagination
-           * @returns {Promise<PaginationSetting>} Promise containing object of pagination settings
+           *
+           * @returns Promise containing object of pagination settings
            */
 
           Index.prototype.getPagination = function () {
@@ -2152,10 +2097,9 @@
           };
           /**
            * Update the pagination settings.
-           * @memberof Index
-           * @method updatePagination
-           * @param {PaginationSettings} pagination Pagination object
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param pagination - Pagination object
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updatePagination = function (pagination) {
@@ -2177,9 +2121,8 @@
           };
           /**
            * Reset the pagination settings.
-           * @memberof Index
-           * @method resetPagination
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetPagination = function () {
@@ -2204,9 +2147,8 @@
 
           /**
            * Get the list of all synonyms
-           * @memberof Index
-           * @method getSynonyms
-           * @returns {Promise<object>} Promise containing object of synonym mappings
+           *
+           * @returns Promise containing object of synonym mappings
            */
 
           Index.prototype.getSynonyms = function () {
@@ -2227,10 +2169,9 @@
           };
           /**
            * Update the list of synonyms. Overwrite the old list.
-           * @memberof Index
-           * @method updateSynonyms
-           * @param {Synonyms} synonyms Mapping of synonyms with their associated words
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param synonyms - Mapping of synonyms with their associated words
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateSynonyms = function (synonyms) {
@@ -2252,9 +2193,8 @@
           };
           /**
            * Reset the synonym list to be empty again
-           * @memberof Index
-           * @method resetSynonyms
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetSynonyms = function () {
@@ -2280,9 +2220,8 @@
 
           /**
            * Get the list of all stop-words
-           * @memberof Index
-           * @method getStopWords
-           * @returns {Promise<string[]>} Promise containing array of stop-words
+           *
+           * @returns Promise containing array of stop-words
            */
 
           Index.prototype.getStopWords = function () {
@@ -2303,10 +2242,9 @@
           };
           /**
            * Update the list of stop-words. Overwrite the old list.
-           * @memberof Index
-           * @method updateStopWords
-           * @param {StopWords} stopWords Array of strings that contains the stop-words.
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param stopWords - Array of strings that contains the stop-words.
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateStopWords = function (stopWords) {
@@ -2328,9 +2266,8 @@
           };
           /**
            * Reset the stop-words list to be empty again
-           * @memberof Index
-           * @method resetStopWords
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetStopWords = function () {
@@ -2356,9 +2293,8 @@
 
           /**
            * Get the list of all ranking-rules
-           * @memberof Index
-           * @method getRankingRules
-           * @returns {Promise<string[]>} Promise containing array of ranking-rules
+           *
+           * @returns Promise containing array of ranking-rules
            */
 
           Index.prototype.getRankingRules = function () {
@@ -2379,10 +2315,10 @@
           };
           /**
            * Update the list of ranking-rules. Overwrite the old list.
-           * @memberof Index
-           * @method updateRankingRules
-           * @param {RankingRules} rankingRules Array that contain ranking rules sorted by order of importance.
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param rankingRules - Array that contain ranking rules sorted by order of
+           *   importance.
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateRankingRules = function (rankingRules) {
@@ -2404,9 +2340,8 @@
           };
           /**
            * Reset the ranking rules list to its default value
-           * @memberof Index
-           * @method resetRankingRules
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetRankingRules = function () {
@@ -2432,9 +2367,8 @@
 
           /**
            * Get the distinct-attribute
-           * @memberof Index
-           * @method getDistinctAttribute
-           * @returns {Promise<string | null>} Promise containing the distinct-attribute of the index
+           *
+           * @returns Promise containing the distinct-attribute of the index
            */
 
           Index.prototype.getDistinctAttribute = function () {
@@ -2455,10 +2389,9 @@
           };
           /**
            * Update the distinct-attribute.
-           * @memberof Index
-           * @method updateDistinctAttribute
-           * @param {DistinctAttribute} distinctAttribute Field name of the distinct-attribute
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param distinctAttribute - Field name of the distinct-attribute
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateDistinctAttribute = function (distinctAttribute) {
@@ -2480,9 +2413,8 @@
           };
           /**
            * Reset the distinct-attribute.
-           * @memberof Index
-           * @method resetDistinctAttribute
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetDistinctAttribute = function () {
@@ -2508,9 +2440,8 @@
 
           /**
            * Get the filterable-attributes
-           * @memberof Index
-           * @method getFilterableAttributes
-           * @returns {Promise<string[]>} Promise containing an array of filterable-attributes
+           *
+           * @returns Promise containing an array of filterable-attributes
            */
 
           Index.prototype.getFilterableAttributes = function () {
@@ -2531,10 +2462,10 @@
           };
           /**
            * Update the filterable-attributes.
-           * @memberof Index
-           * @method updateFilterableAttributes
-           * @param {FilterableAttributes} filterableAttributes Array of strings containing the attributes that can be used as filters at query time
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param filterableAttributes - Array of strings containing the attributes
+           *   that can be used as filters at query time
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateFilterableAttributes = function (filterableAttributes) {
@@ -2556,9 +2487,8 @@
           };
           /**
            * Reset the filterable-attributes.
-           * @memberof Index
-           * @method resetFilterableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetFilterableAttributes = function () {
@@ -2584,9 +2514,8 @@
 
           /**
            * Get the sortable-attributes
-           * @memberof Index
-           * @method getSortableAttributes
-           * @returns {Promise<string[]>} Promise containing array of sortable-attributes
+           *
+           * @returns Promise containing array of sortable-attributes
            */
 
           Index.prototype.getSortableAttributes = function () {
@@ -2607,10 +2536,10 @@
           };
           /**
            * Update the sortable-attributes.
-           * @memberof Index
-           * @method updateSortableAttributes
-           * @param {SortableAttributes} sortableAttributes Array of strings containing the attributes that can be used to sort search results at query time
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param sortableAttributes - Array of strings containing the attributes that
+           *   can be used to sort search results at query time
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateSortableAttributes = function (sortableAttributes) {
@@ -2632,9 +2561,8 @@
           };
           /**
            * Reset the sortable-attributes.
-           * @memberof Index
-           * @method resetSortableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetSortableAttributes = function () {
@@ -2660,9 +2588,8 @@
 
           /**
            * Get the searchable-attributes
-           * @memberof Index
-           * @method getSearchableAttributes
-           * @returns {Promise<string[]>} Promise containing array of searchable-attributes
+           *
+           * @returns Promise containing array of searchable-attributes
            */
 
           Index.prototype.getSearchableAttributes = function () {
@@ -2683,10 +2610,10 @@
           };
           /**
            * Update the searchable-attributes.
-           * @memberof Index
-           * @method updateSearchableAttributes
-           * @param {SearchableAttributes} searchableAttributes Array of strings that contains searchable attributes sorted by order of importance(most to least important)
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param searchableAttributes - Array of strings that contains searchable
+           *   attributes sorted by order of importance(most to least important)
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateSearchableAttributes = function (searchableAttributes) {
@@ -2708,9 +2635,8 @@
           };
           /**
            * Reset the searchable-attributes.
-           * @memberof Index
-           * @method resetSearchableAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetSearchableAttributes = function () {
@@ -2736,9 +2662,8 @@
 
           /**
            * Get the displayed-attributes
-           * @memberof Index
-           * @method getDisplayedAttributes
-           * @returns {Promise<string[]>} Promise containing array of displayed-attributes
+           *
+           * @returns Promise containing array of displayed-attributes
            */
 
           Index.prototype.getDisplayedAttributes = function () {
@@ -2759,10 +2684,10 @@
           };
           /**
            * Update the displayed-attributes.
-           * @memberof Index
-           * @method updateDisplayedAttributes
-           * @param {DisplayedAttributes} displayedAttributes Array of strings that contains attributes of an index to display
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param displayedAttributes - Array of strings that contains attributes of
+           *   an index to display
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateDisplayedAttributes = function (displayedAttributes) {
@@ -2784,9 +2709,8 @@
           };
           /**
            * Reset the displayed-attributes.
-           * @memberof Index
-           * @method resetDisplayedAttributes
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetDisplayedAttributes = function () {
@@ -2812,9 +2736,8 @@
 
           /**
            * Get the typo tolerance settings.
-           * @memberof Index
-           * @method getTypoTolerance
-           * @returns {Promise<string[]>} Promise containing the typo tolerance settings.
+           *
+           * @returns Promise containing the typo tolerance settings.
            */
 
           Index.prototype.getTypoTolerance = function () {
@@ -2835,10 +2758,10 @@
           };
           /**
            * Update the typo tolerance settings.
-           * @memberof Index
-           * @method updateTypoTolerance
-           * @param {TypoTolerance} typoTolerance Object containing the custom typo tolerance settings.
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued update
+           *
+           * @param typoTolerance - Object containing the custom typo tolerance
+           *   settings.
+           * @returns Promise containing object of the enqueued update
            */
 
           Index.prototype.updateTypoTolerance = function (typoTolerance) {
@@ -2861,9 +2784,8 @@
           };
           /**
            * Reset the typo tolerance settings.
-           * @memberof Index
-           * @method resetTypoTolerance
-           * @returns {Promise<EnqueuedTask>} Promise containing object of the enqueued update
+           *
+           * @returns Promise containing object of the enqueued update
            */
 
           Index.prototype.resetTypoTolerance = function () {
@@ -2889,9 +2811,8 @@
 
           /**
            * Get the faceting settings.
-           * @memberof Index
-           * @method getFaceting
-           * @returns {Promise<Faceting>} Promise containing object of faceting index settings
+           *
+           * @returns Promise containing object of faceting index settings
            */
 
           Index.prototype.getFaceting = function () {
@@ -2912,10 +2833,9 @@
           };
           /**
            * Update the faceting settings.
-           * @memberof Index
-           * @method updateFaceting
-           * @param {Faceting} faceting Faceting index settings object
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @param faceting - Faceting index settings object
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.updateFaceting = function (faceting) {
@@ -2937,9 +2857,8 @@
           };
           /**
            * Reset the faceting settings.
-           * @memberof Index
-           * @method resetFaceting
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           *
+           * @returns Promise containing an EnqueuedTask
            */
 
           Index.prototype.resetFaceting = function () {
@@ -2973,7 +2892,8 @@
         function () {
           /**
            * Creates new MeiliSearch instance
-           * @param {Config} config Configuration object
+           *
+           * @param config - Configuration object
            */
           function Client(config) {
             this.config = config;
@@ -2982,24 +2902,20 @@
           }
           /**
            * Return an Index instance
-           * @memberof MeiliSearch
-           * @method index
-           * @template T
-           * @param {string} indexUid The index UID
-           * @returns {Index<T>} Instance of Index
+           *
+           * @param indexUid - The index UID
+           * @returns Instance of Index
            */
 
           Client.prototype.index = function (indexUid) {
             return new Index(this.config, indexUid);
           };
           /**
-           * Gather information about an index by calling MeiliSearch and
-           * return an Index instance with the gathered information
-           * @memberof MeiliSearch
-           * @method getIndex
-           * @template T
-           * @param {string} indexUid The index UID
-           * @returns {Promise<Index<T>>} Promise returning Index instance
+           * Gather information about an index by calling MeiliSearch and return an
+           * Index instance with the gathered information
+           *
+           * @param indexUid - The index UID
+           * @returns Promise returning Index instance
            */
 
           Client.prototype.getIndex = function (indexUid) {
@@ -3011,12 +2927,11 @@
             });
           };
           /**
-           * Gather information about an index by calling MeiliSearch and
-           * return the raw JSON response
-           * @memberof MeiliSearch
-           * @method getRawIndex
-           * @param {string} indexUid The index UID
-           * @returns {Promise<IndexObject>} Promise returning index information
+           * Gather information about an index by calling MeiliSearch and return the raw
+           * JSON response
+           *
+           * @param indexUid - The index UID
+           * @returns Promise returning index information
            */
 
           Client.prototype.getRawIndex = function (indexUid) {
@@ -3029,11 +2944,9 @@
           };
           /**
            * Get all the indexes as Index instances.
-           * @memberof MeiliSearch
-           * @method getIndexes
-           * @param {IndexesQuery} [parameters={}] - Parameters to browse the indexes
            *
-           * @returns {Promise<IndexesResults<Index[]>>} Promise returning array of raw index information
+           * @param parameters - Parameters to browse the indexes
+           * @returns Promise returning array of raw index information
            */
 
           Client.prototype.getIndexes = function (parameters) {
@@ -3063,11 +2976,9 @@
           };
           /**
            * Get all the indexes in their raw value (no Index instances).
-           * @memberof MeiliSearch
-           * @method getRawIndexes
-           * @param {IndexesQuery} [parameters={}] - Parameters to browse the indexes
            *
-           * @returns {Promise<IndexesResults<IndexObject[]>>} Promise returning array of raw index information
+           * @param parameters - Parameters to browse the indexes
+           * @returns Promise returning array of raw index information
            */
 
           Client.prototype.getRawIndexes = function (parameters) {
@@ -3091,12 +3002,10 @@
           };
           /**
            * Create a new index
-           * @memberof MeiliSearch
-           * @method createIndex
-           * @template T
-           * @param {string} uid The index UID
-           * @param {IndexOptions} options Index options
-           * @returns {Promise<Index<T>>} Promise returning Index instance
+           *
+           * @param uid - The index UID
+           * @param options - Index options
+           * @returns Promise returning Index instance
            */
 
           Client.prototype.createIndex = function (uid, options) {
@@ -3118,12 +3027,10 @@
           };
           /**
            * Update an index
-           * @memberof MeiliSearch
-           * @method updateIndex
-           * @template T
-           * @param {string} uid The index UID
-           * @param {IndexOptions} options Index options to update
-           * @returns {Promise<Index<T>>} Promise returning Index instance after updating
+           *
+           * @param uid - The index UID
+           * @param options - Index options to update
+           * @returns Promise returning Index instance after updating
            */
 
           Client.prototype.updateIndex = function (uid, options) {
@@ -3145,10 +3052,9 @@
           };
           /**
            * Delete an index
-           * @memberof MeiliSearch
-           * @method deleteIndex
-           * @param {string} uid The index UID
-           * @returns {Promise<void>} Promise which resolves when index is deleted successfully
+           *
+           * @param uid - The index UID
+           * @returns Promise which resolves when index is deleted successfully
            */
 
           Client.prototype.deleteIndex = function (uid) {
@@ -3167,10 +3073,10 @@
           };
           /**
            * Deletes an index if it already exists.
-           * @memberof MeiliSearch
-           * @method deleteIndexIfExists
-           * @param {string} uid The index UID
-           * @returns {Promise<boolean>} Promise which resolves to true when index exists and is deleted successfully, otherwise false if it does not exist
+           *
+           * @param uid - The index UID
+           * @returns Promise which resolves to true when index exists and is deleted
+           *   successfully, otherwise false if it does not exist
            */
 
           Client.prototype.deleteIndexIfExists = function (uid) {
@@ -3189,7 +3095,7 @@
                   case 2:
                     e_1 = _a.sent();
                     if (e_1.code === "index_not_found"
-                    /* INDEX_NOT_FOUND */) {
+                    /* ErrorStatusCode.INDEX_NOT_FOUND */) {
                       return [2
                       /*return*/, false];
                     }
@@ -3204,10 +3110,8 @@
           /**
            * Swaps a list of index tuples.
            *
-           * @memberof MeiliSearch
-           * @method swapIndexes
-           * @param {SwapIndexesParams} params - List of indexes tuples to swap.
-           * @returns {Promise<EnqueuedTask>} - Promise returning object of the enqueued task
+           * @param params - List of indexes tuples to swap.
+           * @returns Promise returning object of the enqueued task
            */
 
           Client.prototype.swapIndexes = function (params) {
@@ -3231,11 +3135,9 @@
 
           /**
            * Get the list of all client tasks
-           * @memberof MeiliSearch
-           * @method getTasks
-           * @param {TasksQuery} [parameters={}] - Parameters to browse the tasks
            *
-           * @returns {Promise<TasksResults>} - Promise returning all tasks
+           * @param parameters - Parameters to browse the tasks
+           * @returns Promise returning all tasks
            */
 
           Client.prototype.getTasks = function (parameters) {
@@ -3257,10 +3159,9 @@
           };
           /**
            * Get one task on the client scope
-           * @memberof MeiliSearch
-           * @method getTask
-           * @param {number} taskUid - Task identifier
-           * @returns {Promise<Task>} - Promise returning a task
+           *
+           * @param taskUid - Task identifier
+           * @returns Promise returning a task
            */
 
           Client.prototype.getTask = function (taskUid) {
@@ -3280,12 +3181,9 @@
           /**
            * Wait for multiple tasks to be finished.
            *
-           * @memberof MeiliSearch
-           * @method waitForTasks
-           * @param {number[]} taskUids - Tasks identifier
-           * @param {WaitOptions} waitOptions - Options on timeout and interval
-           *
-           * @returns {Promise<Task[]>} - Promise returning an array of tasks
+           * @param taskUids - Tasks identifier
+           * @param waitOptions - Options on timeout and interval
+           * @returns Promise returning an array of tasks
            */
 
           Client.prototype.waitForTasks = function (taskUids, _a) {
@@ -3313,13 +3211,9 @@
           /**
            * Wait for a task to be finished.
            *
-           * @memberof MeiliSearch
-           * @method waitForTask
-           *
-           * @param {number} taskUid - Task identifier
-           * @param {WaitOptions} waitOptions - Options on timeout and interval
-           *
-           * @returns {Promise<Task>} - Promise returning an array of tasks
+           * @param taskUid - Task identifier
+           * @param waitOptions - Options on timeout and interval
+           * @returns Promise returning an array of tasks
            */
 
           Client.prototype.waitForTask = function (taskUid, _a) {
@@ -3346,11 +3240,9 @@
           };
           /**
            * Cancel a list of enqueued or processing tasks.
-           * @memberof MeiliSearch
-           * @method cancelTasks
-           * @param {CancelTasksQuery} [parameters={}] - Parameters to filter the tasks.
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * @param parameters - Parameters to filter the tasks.
+           * @returns Promise containing an EnqueuedTask
            */
 
           Client.prototype.cancelTasks = function (parameters) {
@@ -3369,11 +3261,9 @@
           };
           /**
            * Delete a list of tasks.
-           * @memberof MeiliSearch
-           * @method deleteTasks
-           * @param {DeleteTasksQuery} [parameters={}] - Parameters to filter the tasks.
            *
-           * @returns {Promise<EnqueuedTask>} Promise containing an EnqueuedTask
+           * @param parameters - Parameters to filter the tasks.
+           * @returns Promise containing an EnqueuedTask
            */
 
           Client.prototype.deleteTasks = function (parameters) {
@@ -3398,11 +3288,9 @@
 
           /**
            * Get all API keys
-           * @memberof MeiliSearch
-           * @method getKeys
-           * @param {KeysQuery} [parameters={}] - Parameters to browse the indexes
            *
-           * @returns {Promise<KeysResults>} Promise returning an object with keys
+           * @param parameters - Parameters to browse the indexes
+           * @returns Promise returning an object with keys
            */
 
           Client.prototype.getKeys = function (parameters) {
@@ -3433,11 +3321,9 @@
           };
           /**
            * Get one API key
-           * @memberof MeiliSearch
-           * @method getKey
            *
-           * @param {string} keyOrUid - Key or uid of the API key
-           * @returns {Promise<Key>} Promise returning a key
+           * @param keyOrUid - Key or uid of the API key
+           * @returns Promise returning a key
            */
 
           Client.prototype.getKey = function (keyOrUid) {
@@ -3458,11 +3344,9 @@
           };
           /**
            * Create one API key
-           * @memberof MeiliSearch
-           * @method createKey
            *
-           * @param {KeyCreation} options - Key options
-           * @returns {Promise<Key>} Promise returning a key
+           * @param options - Key options
+           * @returns Promise returning a key
            */
 
           Client.prototype.createKey = function (options) {
@@ -3483,12 +3367,10 @@
           };
           /**
            * Update one API key
-           * @memberof MeiliSearch
-           * @method updateKey
            *
-           * @param {string} keyOrUid - Key
-           * @param {KeyUpdate} options - Key options
-           * @returns {Promise<Key>} Promise returning a key
+           * @param keyOrUid - Key
+           * @param options - Key options
+           * @returns Promise returning a key
            */
 
           Client.prototype.updateKey = function (keyOrUid, options) {
@@ -3509,11 +3391,9 @@
           };
           /**
            * Delete one API key
-           * @memberof MeiliSearch
-           * @method deleteKey
            *
-           * @param {string} keyOrUid - Key
-           * @returns {Promise<Void>}
+           * @param keyOrUid - Key
+           * @returns
            */
 
           Client.prototype.deleteKey = function (keyOrUid) {
@@ -3537,9 +3417,8 @@
 
           /**
            * Checks if the server is healthy, otherwise an error will be thrown.
-           * @memberof MeiliSearch
-           * @method health
-           * @returns {Promise<Health>} Promise returning an object with health details
+           *
+           * @returns Promise returning an object with health details
            */
 
           Client.prototype.health = function () {
@@ -3560,9 +3439,8 @@
           };
           /**
            * Checks if the server is healthy, return true or false.
-           * @memberof MeiliSearch
-           * @method isHealthy
-           * @returns {Promise<boolean>} Promise returning a boolean
+           *
+           * @returns Promise returning a boolean
            */
 
           Client.prototype.isHealthy = function () {
@@ -3595,9 +3473,8 @@
 
           /**
            * Get the stats of all the database
-           * @memberof MeiliSearch
-           * @method getStats
-           * @returns {Promise<Stats>} Promise returning object of all the stats
+           *
+           * @returns Promise returning object of all the stats
            */
 
           Client.prototype.getStats = function () {
@@ -3621,9 +3498,8 @@
 
           /**
            * Get the version of MeiliSearch
-           * @memberof MeiliSearch
-           * @method getVersion
-           * @returns {Promise<Version>} Promise returning object with version details
+           *
+           * @returns Promise returning object with version details
            */
 
           Client.prototype.getVersion = function () {
@@ -3647,9 +3523,8 @@
 
           /**
            * Creates a dump
-           * @memberof MeiliSearch
-           * @method createDump
-           * @returns {Promise<EnqueuedTask>} Promise returning object of the enqueued task
+           *
+           * @returns Promise returning object of the enqueued task
            */
 
           Client.prototype.createDump = function () {
@@ -3675,13 +3550,10 @@
           /**
            * Generate a tenant token
            *
-           * @memberof MeiliSearch
-           * @method generateTenantToken
-           * @param {apiKeyUid} apiKeyUid The uid of the api key used as issuer of the token.
-           * @param {SearchRules} searchRules Search rules that are applied to every search.
-           * @param {TokenOptions} options Token options to customize some aspect of the token.
-           *
-           * @returns {String} The token in JWT format.
+           * @param apiKeyUid - The uid of the api key used as issuer of the token.
+           * @param searchRules - Search rules that are applied to every search.
+           * @param options - Token options to customize some aspect of the token.
+           * @returns The token in JWT format.
            */
 
           Client.prototype.generateTenantToken = function (_apiKeyUid, _searchRules, _options) {
@@ -3714,156 +3586,6 @@
       });
     });
 
-    var removeUndefined = function (arr) {
-        return arr.filter(function (x) { return x !== undefined; });
-    };
-
-    /**
-     * @param  {any} str
-     * @returns {boolean}
-     */
-    /**
-     * @param  {string} filter
-     * @returns {string}
-     */
-    function replaceColonByEqualSign(filter) {
-        // will only change first occurence of `:`
-        return filter.replace(/:(.*)/i, '="$1"');
-    }
-    /**
-     * @param  {any[]} arr
-     * @returns {string}
-     */
-    function stringifyArray(arr) {
-        return arr.reduce(function (acc, curr) {
-            return (acc += JSON.stringify(curr));
-        }, '');
-    }
-
-    function isPureObject(data) {
-        return typeof data === 'object' && !Array.isArray(data) && data !== null;
-    }
-
-    /**
-     * apiKey callback definition
-     * @callback apiKeyCallback
-     * @returns {string} - The apiKey to use
-     */
-    /**
-     * Validates host and apiKey parameters, throws if invalid
-     * @param hostUrl
-     * @param apiKey
-     */
-    function validateInstantMeiliSearchParams(hostUrl, apiKey) {
-        // Validate host url
-        if (typeof hostUrl !== 'string') {
-            throw new TypeError('Provided hostUrl value (1st parameter) is not a string, expected string');
-        }
-        // Validate api key
-        if (typeof apiKey !== 'string' && typeof apiKey !== 'function') {
-            throw new TypeError('Provided apiKey value (2nd parameter) is not a string or a function, expected string or function');
-        }
-    }
-
-    /**
-     * @param  {string} filter
-     */
-    var adaptFilterSyntax = function (filter) {
-        var matches = filter.match(/([^=]*)="?([^\\"]*)"?$/);
-        if (matches) {
-            matches[0]; var filterName = matches[1], value = matches[2];
-            return [{ filterName: filterName, value: value }];
-        }
-        return [];
-    };
-    /**
-     * @param  {Filter} filters?
-     * @returns {Array}
-     */
-    function extractFilters(filters) {
-        if (typeof filters === 'string') {
-            return adaptFilterSyntax(filters);
-        }
-        else if (Array.isArray(filters)) {
-            return filters
-                .map(function (nestedFilter) {
-                if (Array.isArray(nestedFilter)) {
-                    return nestedFilter.map(function (filter) { return adaptFilterSyntax(filter); });
-                }
-                return adaptFilterSyntax(nestedFilter);
-            })
-                .flat(2);
-        }
-        return [];
-    }
-    /**
-     * @param  {Filter} filters?
-     * @returns {FacetsCache}
-     */
-    function getFacetsFromFilter(filters) {
-        var extractedFilters = extractFilters(filters);
-        var cleanFilters = removeUndefined(extractedFilters);
-        return cleanFilters.reduce(function (cache, parsedFilter) {
-            var _a;
-            var filterName = parsedFilter.filterName, value = parsedFilter.value;
-            var prevFields = cache[filterName] || [];
-            cache = __assign(__assign({}, cache), (_a = {}, _a[filterName] = __spreadArray(__spreadArray([], prevFields, true), [value], false), _a));
-            return cache;
-        }, {});
-    }
-    function getFacetsFromDefaultDistribution(facetDistribution) {
-        return Object.keys(facetDistribution).reduce(function (cache, facet) {
-            var _a;
-            var facetValues = Object.keys(facetDistribution[facet]);
-            return __assign(__assign({}, cache), (_a = {}, _a[facet] = facetValues, _a));
-        }, {});
-    }
-    /**
-     * @param  {Filter} filters?
-     * @returns {FacetsCache}
-     */
-    function extractFacets(searchContext, searchParams) {
-        if (searchContext.keepZeroFacets) {
-            return getFacetsFromDefaultDistribution(searchContext.defaultFacetDistribution);
-        }
-        else {
-            return getFacetsFromFilter(searchParams === null || searchParams === void 0 ? void 0 : searchParams.filter);
-        }
-    }
-    /**
-     * Assign missing filters to facetDistribution.
-     * All facets passed as filter should appear in the facetDistribution.
-     * If not present, the facet is added with 0 as value.
-     *
-     *
-     * @param  {FacetsCache} cache?
-     * @param  {FacetDistribution} distribution?
-     * @returns {FacetDistribution}
-     */
-    function addMissingFacets(cachedFacets, distribution) {
-        distribution = distribution || {};
-        // If cachedFacets contains something
-        if (cachedFacets && Object.keys(cachedFacets).length > 0) {
-            // for all filters in cached filters
-            for (var cachedFacet in cachedFacets) {
-                // if facet does not exist on returned distribution, add an empty object
-                if (!distribution[cachedFacet])
-                    distribution[cachedFacet] = {};
-                // for all fields in every filter
-                for (var _i = 0, _a = cachedFacets[cachedFacet]; _i < _a.length; _i++) {
-                    var cachedField = _a[_i];
-                    // if the field is not present in the returned distribution
-                    // set it at 0
-                    if (!Object.keys(distribution[cachedFacet]).includes(cachedField)) {
-                        // add 0 value
-                        distribution[cachedFacet][cachedField] = 0;
-                    }
-                }
-            }
-        }
-        return distribution;
-    }
-
     /**
      * @param  {ResponseCacher} cache
      */
@@ -3877,11 +3599,10 @@
              */
             searchResponse: function (searchContext, searchParams) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var placeholderSearch, query, key, cachedResponse, cachedFacets, searchResponse;
+                    var key, cachedResponse, searchResponse;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                placeholderSearch = searchContext.placeholderSearch, query = searchContext.query;
                                 key = cache.formatKey([
                                     searchParams,
                                     searchContext.indexUid,
@@ -3891,22 +3612,16 @@
                                 cachedResponse = cache.getEntry(key);
                                 // Check if specific request is already cached with its associated search response.
                                 if (cachedResponse)
-                                    return [2 /*return*/, cachedResponse];
-                                cachedFacets = extractFacets(searchContext, searchParams);
+                                    return [2 /*return*/, cachedResponse
+                                        // Make search request
+                                    ];
                                 return [4 /*yield*/, client
                                         .index(searchContext.indexUid)
                                         .search(searchContext.query, searchParams)
-                                    // Add missing facets back into facetDistribution
+                                    // Cache response
                                 ];
                             case 1:
                                 searchResponse = _a.sent();
-                                // Add missing facets back into facetDistribution
-                                searchResponse.facetDistribution = addMissingFacets(cachedFacets, searchResponse.facetDistribution);
-                                // query can be: empty string, undefined or null
-                                // all of them are falsy's
-                                if (!placeholderSearch && !query) {
-                                    searchResponse.hits = [];
-                                }
                                 // Cache response
                                 cache.setEntry(key, searchResponse);
                                 return [2 /*return*/, searchResponse];
@@ -4063,6 +3778,53 @@
     }
 
     /**
+     * @param  {any} str
+     * @returns {boolean}
+     */
+    /**
+     * @param  {string} filter
+     * @returns {string}
+     */
+    function replaceColonByEqualSign(filter) {
+        // will only change first occurence of `:`
+        return filter.replace(/:(.*)/i, '="$1"');
+    }
+    /**
+     * @param  {any[]} arr
+     * @returns {string}
+     */
+    function stringifyArray(arr) {
+        return arr.reduce(function (acc, curr) {
+            return (acc += JSON.stringify(curr));
+        }, '');
+    }
+
+    function isPureObject(data) {
+        return typeof data === 'object' && !Array.isArray(data) && data !== null;
+    }
+
+    /**
+     * apiKey callback definition
+     * @callback apiKeyCallback
+     * @returns {string} - The apiKey to use
+     */
+    /**
+     * Validates host and apiKey parameters, throws if invalid
+     * @param hostUrl
+     * @param apiKey
+     */
+    function validateInstantMeiliSearchParams(hostUrl, apiKey) {
+        // Validate host url
+        if (typeof hostUrl !== 'string') {
+            throw new TypeError('Provided hostUrl value (1st parameter) is not a string, expected string');
+        }
+        // Validate api key
+        if (typeof apiKey !== 'string' && typeof apiKey !== 'function') {
+            throw new TypeError('Provided apiKey value (2nd parameter) is not a string or a function, expected string or function');
+        }
+    }
+
+    /**
      * Transform InstantSearch filter to Meilisearch filter.
      * Change sign from `:` to `=` in nested filter object.
      * example: [`genres:comedy`] becomes [`genres=comedy`]
@@ -4142,8 +3904,19 @@
         return mergeFilters(transformedFilter, transformedNumericFilter, filters || '');
     }
 
-    function setScrollPagination(hitsPerPage, page, query, placeholderSearch) {
-        if (!placeholderSearch && query === '') {
+    function isPaginationRequired(filter, query, placeholderSearch) {
+        // To disable pagination:
+        // placeholderSearch must be disabled
+        // The search query must be empty
+        // There must be no filters
+        if (!placeholderSearch && !query && (!filter || filter.length === 0)) {
+            return false;
+        }
+        return true;
+    }
+    function setScrollPagination(pagination, paginationRequired) {
+        var page = pagination.page, hitsPerPage = pagination.hitsPerPage;
+        if (!paginationRequired) {
             return {
                 limit: 0,
                 offset: 0
@@ -4154,8 +3927,9 @@
             offset: page * hitsPerPage
         };
     }
-    function setFinitePagination(hitsPerPage, page, query, placeholderSearch) {
-        if (!placeholderSearch && query === '') {
+    function setFinitePagination(pagination, paginationRequired) {
+        var page = pagination.page, hitsPerPage = pagination.hitsPerPage;
+        if (!paginationRequired) {
             return {
                 hitsPerPage: 0,
                 page: page + 1
@@ -4178,14 +3952,18 @@
      */
     function MeiliParamsCreator(searchContext) {
         var meiliSearchParams = {};
-        var facets = searchContext.facets, attributesToSnippet = searchContext.attributesToSnippet, snippetEllipsisText = searchContext.snippetEllipsisText, attributesToRetrieve = searchContext.attributesToRetrieve, filters = searchContext.filters, numericFilters = searchContext.numericFilters, facetFilters = searchContext.facetFilters, attributesToHighlight = searchContext.attributesToHighlight, highlightPreTag = searchContext.highlightPreTag, highlightPostTag = searchContext.highlightPostTag, placeholderSearch = searchContext.placeholderSearch, query = searchContext.query, sort = searchContext.sort, pagination = searchContext.pagination, matchingStrategy = searchContext.matchingStrategy;
+        var facets = searchContext.facets, attributesToSnippet = searchContext.attributesToSnippet, snippetEllipsisText = searchContext.snippetEllipsisText, attributesToRetrieve = searchContext.attributesToRetrieve, attributesToHighlight = searchContext.attributesToHighlight, highlightPreTag = searchContext.highlightPreTag, highlightPostTag = searchContext.highlightPostTag, placeholderSearch = searchContext.placeholderSearch, query = searchContext.query, sort = searchContext.sort, pagination = searchContext.pagination, matchingStrategy = searchContext.matchingStrategy, filters = searchContext.filters, numericFilters = searchContext.numericFilters, facetFilters = searchContext.facetFilters;
+        var meilisearchFilters = adaptFilters(filters, numericFilters, facetFilters);
         return {
             getParams: function () {
                 return meiliSearchParams;
             },
             addFacets: function () {
-                if (facets === null || facets === void 0 ? void 0 : facets.length) {
+                if (Array.isArray(facets)) {
                     meiliSearchParams.facets = facets;
+                }
+                else if (typeof facets === 'string') {
+                    meiliSearchParams.facets = [facets];
                 }
             },
             addAttributesToCrop: function () {
@@ -4205,9 +3983,8 @@
                 }
             },
             addFilters: function () {
-                var filter = adaptFilters(filters, numericFilters, facetFilters);
-                if (filter.length) {
-                    meiliSearchParams.filter = filter;
+                if (meilisearchFilters.length) {
+                    meiliSearchParams.filter = meilisearchFilters;
                 }
             },
             addAttributesToHighlight: function () {
@@ -4230,13 +4007,14 @@
                 }
             },
             addPagination: function () {
+                var paginationRequired = isPaginationRequired(meilisearchFilters, query, placeholderSearch);
                 if (pagination.finite) {
-                    var _a = setFinitePagination(pagination.hitsPerPage, pagination.page, query, placeholderSearch), hitsPerPage = _a.hitsPerPage, page = _a.page;
+                    var _a = setFinitePagination(pagination, paginationRequired), hitsPerPage = _a.hitsPerPage, page = _a.page;
                     meiliSearchParams.hitsPerPage = hitsPerPage;
                     meiliSearchParams.page = page;
                 }
                 else {
-                    var _b = setScrollPagination(pagination.hitsPerPage, pagination.page, query, placeholderSearch), limit = _b.limit, offset = _b.offset;
+                    var _b = setScrollPagination(pagination, paginationRequired), limit = _b.limit, offset = _b.offset;
                     meiliSearchParams.limit = limit;
                     meiliSearchParams.offset = offset;
                 }
@@ -4444,6 +4222,48 @@
         };
     }
 
+    function getFacetNames(facets) {
+        if (!facets)
+            return [];
+        else if (typeof facets === 'string')
+            return [facets];
+        return facets;
+    }
+    // Fills the missing facetValue in the current facet distribution if `keepZeroFacet` is true
+    // using the initial facet distribution. Ex:
+    //
+    // Initial distribution: { genres: { horror: 10, comedy: 4 } }
+    // Current distribution: { genres: { horror: 3 }}
+    // Returned distribution: { genres: { horror: 3, comedy: 0 }}
+    function fillMissingFacetValues(facets, initialFacetDistribution, facetDistribution) {
+        var facetNames = getFacetNames(facets);
+        var filledDistribution = {};
+        for (var _i = 0, facetNames_1 = facetNames; _i < facetNames_1.length; _i++) {
+            var facet = facetNames_1[_i];
+            for (var facetValue in initialFacetDistribution[facet]) {
+                if (!filledDistribution[facet]) {
+                    // initialize sub object
+                    filledDistribution[facet] = facetDistribution[facet] || {};
+                }
+                if (!filledDistribution[facet][facetValue]) {
+                    filledDistribution[facet][facetValue] = 0;
+                }
+                else {
+                    filledDistribution[facet][facetValue] =
+                        facetDistribution[facet][facetValue];
+                }
+            }
+        }
+        return filledDistribution;
+    }
+    function adaptFacetDistribution(keepZeroFacets, facets, initialFacetDistribution, facetDistribution) {
+        if (keepZeroFacets) {
+            facetDistribution = facetDistribution || {};
+            return fillMissingFacetValues(facets, initialFacetDistribution, facetDistribution);
+        }
+        return facetDistribution;
+    }
+
     /**
      * Adapt search response from Meilisearch
      * to search response compliant with instantsearch.js
@@ -4452,17 +4272,17 @@
      * @param  {SearchContext} searchContext
      * @returns {{ results: Array<AlgoliaSearchResponse<T>> }}
      */
-    function adaptSearchResponse(searchResponse, searchContext) {
+    function adaptSearchResponse(searchResponse, searchContext, initialFacetDistribution) {
         var searchResponseOptionals = {};
-        var processingTimeMs = searchResponse.processingTimeMs, query = searchResponse.query, facets = searchResponse.facetDistribution;
+        var processingTimeMs = searchResponse.processingTimeMs, query = searchResponse.query, responseFacetDistribution = searchResponse.facetDistribution;
+        var keepZeroFacets = searchContext.keepZeroFacets, facets = searchContext.facets;
         var _a = adaptPaginationParameters(searchResponse, searchContext.pagination), hitsPerPage = _a.hitsPerPage, page = _a.page, nbPages = _a.nbPages;
         var hits = adaptHits(searchResponse, searchContext);
         var nbHits = adaptTotalHits(searchResponse);
+        var facetDistribution = adaptFacetDistribution(keepZeroFacets, facets, initialFacetDistribution, responseFacetDistribution);
         // Create response object compliant with InstantSearch
-        var adaptedSearchResponse = __assign({ index: searchContext.indexUid, hitsPerPage: hitsPerPage, page: page, facets: facets, nbPages: nbPages, nbHits: nbHits, processingTimeMS: processingTimeMs, query: query, hits: hits, params: '', exhaustiveNbHits: false }, searchResponseOptionals);
-        return {
-            results: [adaptedSearchResponse]
-        };
+        var adaptedSearchResponse = __assign({ index: searchContext.indexUid, hitsPerPage: hitsPerPage, page: page, facets: facetDistribution, nbPages: nbPages, nbHits: nbHits, processingTimeMS: processingTimeMs, query: query, hits: hits, params: '', exhaustiveNbHits: false }, searchResponseOptionals);
+        return adaptedSearchResponse;
     }
 
     /**
@@ -4486,12 +4306,12 @@
      * @param  {Context} options
      * @returns {SearchContext}
      */
-    function createSearchContext(searchRequest, options, defaultFacetDistribution) {
+    function createSearchContext(searchRequest, options) {
         // Split index name and possible sorting rules
         var _a = searchRequest.indexName.split(':'), indexUid = _a[0], sortByArray = _a.slice(1);
         var instantSearchParams = searchRequest.params;
         var paginationState = createPaginationState(options.finitePagination, instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.hitsPerPage, instantSearchParams === null || instantSearchParams === void 0 ? void 0 : instantSearchParams.page);
-        var searchContext = __assign(__assign(__assign({}, options), instantSearchParams), { sort: sortByArray.join(':') || '', indexUid: indexUid, pagination: paginationState, defaultFacetDistribution: defaultFacetDistribution || {}, placeholderSearch: options.placeholderSearch !== false, keepZeroFacets: !!options.keepZeroFacets });
+        var searchContext = __assign(__assign(__assign({}, options), instantSearchParams), { sort: sortByArray.join(':') || '', indexUid: indexUid, pagination: paginationState, placeholderSearch: options.placeholderSearch !== false, keepZeroFacets: !!options.keepZeroFacets });
         return searchContext;
     }
 
@@ -4526,7 +4346,7 @@
         };
     }
 
-    function cacheFirstFacetDistribution(searchResolver, searchContext) {
+    function getIndexFacetDistribution(searchResolver, searchContext) {
         return __awaiter(this, void 0, void 0, function () {
             var defaultSearchContext, meilisearchParams, searchResponse;
             return __generator(this, function (_a) {
@@ -4548,8 +4368,27 @@
             });
         });
     }
+    function initFacetDistribution(searchResolver, searchContext, initialFacetDistribution) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!!initialFacetDistribution[searchContext.indexUid]) return [3 /*break*/, 2];
+                        _a = initialFacetDistribution;
+                        _b = searchContext.indexUid;
+                        return [4 /*yield*/, getIndexFacetDistribution(searchResolver, searchContext)];
+                    case 1:
+                        _a[_b] =
+                            _c.sent();
+                        _c.label = 2;
+                    case 2: return [2 /*return*/, initialFacetDistribution];
+                }
+            });
+        });
+    }
 
-    var PACKAGE_VERSION = '0.10.1';
+    var PACKAGE_VERSION = '0.11.0';
 
     var constructClientAgents = function (clientAgents) {
         if (clientAgents === void 0) { clientAgents = []; }
@@ -4585,7 +4424,7 @@
         var searchCache = SearchCache();
         // create search resolver with included cache
         var searchResolver = SearchResolver(meilisearchClient, searchCache);
-        var defaultFacetDistribution;
+        var initialFacetDistribution = {};
         return {
             clearCache: function () { return searchCache.clearCache(); },
             /**
@@ -4594,32 +4433,44 @@
              */
             search: function (instantSearchRequests) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var searchRequest, searchContext, adaptedSearchRequest, searchResponse, adaptedSearchResponse, e_1;
+                    var searchResponses, requests, _i, requests_1, searchRequest, searchContext, adaptedSearchRequest, searchResponse, adaptedSearchResponse, e_1;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _a.trys.push([0, 4, , 5]);
-                                searchRequest = instantSearchRequests[0];
-                                searchContext = createSearchContext(searchRequest, instantMeiliSearchOptions, defaultFacetDistribution);
-                                adaptedSearchRequest = adaptSearchParams(searchContext);
-                                if (!(defaultFacetDistribution === undefined)) return [3 /*break*/, 2];
-                                return [4 /*yield*/, cacheFirstFacetDistribution(searchResolver, searchContext)];
+                                _a.trys.push([0, 6, , 7]);
+                                searchResponses = {
+                                    results: []
+                                };
+                                requests = instantSearchRequests;
+                                _i = 0, requests_1 = requests;
+                                _a.label = 1;
                             case 1:
-                                defaultFacetDistribution = _a.sent();
-                                searchContext.defaultFacetDistribution = defaultFacetDistribution;
-                                _a.label = 2;
-                            case 2: return [4 /*yield*/, searchResolver.searchResponse(searchContext, adaptedSearchRequest)
-                                // Adapt the Meilisearch responsne to a compliant instantsearch.js response
-                            ];
+                                if (!(_i < requests_1.length)) return [3 /*break*/, 5];
+                                searchRequest = requests_1[_i];
+                                searchContext = createSearchContext(searchRequest, instantMeiliSearchOptions);
+                                adaptedSearchRequest = adaptSearchParams(searchContext);
+                                return [4 /*yield*/, initFacetDistribution(searchResolver, searchContext, initialFacetDistribution)
+                                    // Search response from Meilisearch
+                                ];
+                            case 2:
+                                initialFacetDistribution = _a.sent();
+                                return [4 /*yield*/, searchResolver.searchResponse(searchContext, adaptedSearchRequest)
+                                    // Adapt the Meilisearch response to a compliant instantsearch.js response
+                                ];
                             case 3:
                                 searchResponse = _a.sent();
-                                adaptedSearchResponse = adaptSearchResponse(searchResponse, searchContext);
-                                return [2 /*return*/, adaptedSearchResponse];
+                                adaptedSearchResponse = adaptSearchResponse(searchResponse, searchContext, initialFacetDistribution[searchRequest.indexName]);
+                                searchResponses.results.push(adaptedSearchResponse);
+                                _a.label = 4;
                             case 4:
+                                _i++;
+                                return [3 /*break*/, 1];
+                            case 5: return [2 /*return*/, searchResponses];
+                            case 6:
                                 e_1 = _a.sent();
                                 console.error(e_1);
                                 throw new Error(e_1);
-                            case 5: return [2 /*return*/];
+                            case 7: return [2 /*return*/];
                         }
                     });
                 });
