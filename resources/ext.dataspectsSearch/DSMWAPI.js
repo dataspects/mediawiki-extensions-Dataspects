@@ -86,7 +86,7 @@ DSMWAPI = class {
       .done(function (data) {
         const ctx = $("#firstXCharacters");
         const myChart = new Chart(ctx, {
-          plugins: [ChartDataLabels],
+          plugins: [],
           type: "bar",
           data: {
             labels: data.data.firstxcharacters.labels,
@@ -123,7 +123,7 @@ DSMWAPI = class {
       .done(function (data) {
         const ctx = $("#releaseTimestampXago");
         const myChart = new Chart(ctx, {
-          plugins: [ChartDataLabels],
+          plugins: [],
           type: "bar",
           data: {
             labels: data.data.releasetimestampxago.labels,

@@ -55,7 +55,6 @@
         "./instantsearch.production.min.js",
         "./vis-network.min.js",
         "./chart.js",
-        "./chartjs-plugin-datalabels.js",
         "./datatables.js",
         "./helpers.js"
       ],

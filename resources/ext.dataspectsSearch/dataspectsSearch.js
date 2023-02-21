@@ -1,6 +1,5 @@
 require("mediawiki.api");
-// require("./chart.js");
-// require("./chartjs-plugin-datalabels.js");
+require("./chart.js");
 
 const instantsearch = require("./instantsearch.production.min.js");
 const { instantMeiliSearch } = require("./instant-meilisearch.umd.js");
