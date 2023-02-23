@@ -13,7 +13,9 @@ DSMWAPI = class {
         querytype: "numberofnodes",
       })
       .done(function (data) {
-        $(name).text(data.data.numberofnodes);
+        $(name).text(
+          data.data.numberofnodes + ": [" + data.data.labels.join(", ") + "]"
+        );
       })
       .fail(function (data) {
         console.error("numberofnodes");

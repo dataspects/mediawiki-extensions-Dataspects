@@ -355,7 +355,7 @@ class DSNeo4j {
                 "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
                 "predicate" =>     "ds0__linksTo",
                 "object" =>        strtolower($link),
-                "objectLabels" =>  ["RELATIONSHIPLEAF"]
+                "objectLabels" =>  ["URL"]
                 ]
             ];
         }
@@ -390,7 +390,7 @@ class DSNeo4j {
                 ',
                 "params" => [
                 "subject" =>       strtolower($link),
-                "subjectLabels" =>  ["RELATIONSHIPLEAF"],
+                "subjectLabels" =>  ["URL"],
                 "predicate" =>     "ds0__linksTo",
                 "object" =>        strtolower($meilisearchDocument["eppo0__hasEntityURL"])
                 ]
@@ -589,7 +589,7 @@ class DSNeo4j {
                 "subject" =>       strtolower($meilisearchDocument["eppo0__hasEntityURL"]),
                 "predicate" =>     "eppo0__hasCategory",
                 "object" =>        strtolower($attachment),
-                "objectLabels" =>  ["RELATIONSHIPLEAF"]
+                "objectLabels" =>  ["ATTACHMENT"]
                 ]
             ];
         }
@@ -601,11 +601,21 @@ class DSNeo4j {
     $results = $this->query([
       "query" => '
         MATCH (n)
-        RETURN count(n) AS count
+        UNWIND  labels(n) AS label
+        RETURN  count(n) AS count,
+                collect(DISTINCT label) AS labels
       ',
       "params" => []
     ]);
-    return $results->first()->get("count");
+    $fr = $results->first();
+    $labels = [];
+    foreach ($fr->get("labels") as $label) {
+        $labels[] = $label;
+    }
+    return array(
+        "numberofnodes" => $fr->get("count"),
+        "labels" => $labels
+    );
   }
 
   public function templateCallsSubgraph($name) {

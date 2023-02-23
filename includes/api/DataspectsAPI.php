@@ -148,7 +148,7 @@ class DataspectsAPI extends ApiBase {
 				try {
 					$this->loadBackends();
 					$non = $this->dsNeo4j->numberOfNodes();
-					$this->getResult()->addValue(null, "data", array( 'numberofnodes' => $non ) );
+					$this->getResult()->addValue(null, "data", $non );
 				} catch (Exception $e) {
 					wfDebug("### DataspectsAPI error: ".$e);
 					$this->getResult()->addValue(null, "data", [ 'result' => $e->getMessage() ] );

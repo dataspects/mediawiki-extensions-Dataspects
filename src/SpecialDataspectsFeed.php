@@ -116,6 +116,7 @@ class SpecialDataspectsFeed {
           if(is_array($object)) {
             $this->annotations[$propertyName] = array(
               'objectText' => $object['item'],
+              // LEX2302230923
               'objectType' => semanticMediaWikiPropertyTypeMappings($object['type'])
             );
           }

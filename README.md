@@ -75,10 +75,10 @@ linkStyle 1,4,5 stroke:#00ff00
 
 - Delete docs from indexes
 
-## Manual indexing
+## Indexing (feed data)
 
-Allows per-MediaWiki-namespace indexing
-`sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/Dataspects/maintenance/feedAll.php'`
+- `sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/Dataspects/maintenance/feedAll.php'`
+- `dataspects__feed-mediawiki-category-to-index.sh`
 
 ## Example: configure dataspects for [Canasta](https://canasta.wiki/)
 
@@ -128,17 +128,18 @@ Debug API: https://localhost/w/api.php
   - ADVANTAGES:
     - no need to restart the Docker compose stack
     - preserve proper development `.env`
+  - STORED-PROCEDURE: `mwstakeorg__localhost__TEST-load-test-data_and_Cypress.php.sh`
 - OPTION: temporarily change envs in docker-compose.override.yml
 
 ### CONFIGURE: the data storage backends
 
 - PREPARE: `source *.config` files (e.g. `localhost.config` and `production.config`) _exporting_ the environment variables
-  - RESET Meilisearch: `meilisearch__reset-INDEX.sh` which applies `src/indexsettings.json`
+  - RESET Meilisearch: `meilisearch__index_reset.sh` which applies `src/indexsettings.json`
 - RESET SQLite:
   1. delete `sqlite/dataspects.sqlite`
   2. run `php extensions/Dataspects/maintenance/manageSQlite3.php --initialize`
 - RESET Neo4j:
-  - `MATCH(n&lt;:label(:s)&gt;) DETACH DELETE n`
+  - `MATCH(n) DETACH DELETE n`
 
 ### Tika
 
