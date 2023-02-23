@@ -2,6 +2,7 @@
 
 use \Symfony\Component\HttpClient\HttplugClient;
 use \MeiliSearch\Client;
+use MediaWiki\MediaWikiServices;
 
 class DataspectsAPI extends ApiBase {
 
@@ -30,12 +31,14 @@ class DataspectsAPI extends ApiBase {
 		$this->sqlite3 = new \MediaWiki\Extension\Dataspects\DataspectsSQLite3(
             $GLOBALS["wgSQLiteDatabase"]
         );
+        wfDebug("### Loaded backends");
 	}
 
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$queryType = $params['querytype'];
 		$user = $this->getUser();
+        $userRights = MediaWikiServices::getInstance()->getPermissionManager()->getUserPermissions( $user );
 		if ( $queryType == null ) {
 			throw new MWException( wfMessage( 'querytypenull' ) );
 		}
@@ -62,7 +65,7 @@ class DataspectsAPI extends ApiBase {
                 }
                 break;
 			case 'putsearchfacet':
-				if(in_array("writeapi", $user->getRights())){
+				if(in_array("writeapi", $userRights)){
 					try {
 						$this->loadBackends();
 						$result = $this->sqlite3->putSearchFacet($params['searchfacetname'], $params['currenthelper']);
@@ -126,8 +129,8 @@ class DataspectsAPI extends ApiBase {
 				break;
 			case 'deletesearchfacet':
 				wfDebug("### $queryType for ".$params['searchfacetname']);
-				if(in_array("writeapi", $user->getRights())){
-					try {
+                if(in_array("writeapi", $userRights)){
+                    try {
 						$this->loadBackends();
 						$result = $this->sqlite3->deleteSearchFacet($params['searchfacetname']);
 						wfDebug("### deleted from SQLite3: ".$params['searchfacetname']);
@@ -176,7 +179,7 @@ class DataspectsAPI extends ApiBase {
 				$this->getResult()->addValue(null, "data", array( 'originalpagecontent' => $this->originalPageContent($params['ds0__sourceParseTextURL'] )) );
 				break;
 			case 'initializetopictype':
-				if(in_array("writeapi", $user->getRights())){
+				if(in_array("writeapi", $userRights)){
 					$this->loadBackends();
 					$topictype_name = $params['topictype_name'];
 					$this->initializeTopicType($topictype_name);
