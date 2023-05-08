@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# DS_MEILI_MASTERKEY= MEILI_SERVER= INDEX= ./meilisearch__reset-index.sh
+# DS_MEILI_MASTERKEY=masterKey DS_MEILI_SERVER=http://localhost:7700 DS_MEILI_INDEX=mwstakeorg ./meilisearch__reset-index.sh
 
-# if [[ -z "$DS_MEILI_MASTERKEY" ]]; then
-#   echo 'DS_MEILI_MASTERKEY missing'
-#   exit
-# fi
-# if [[ -z "$DS_MEILI_SERVER" ]]; then
-#   echo 'MEILI_SERVER missing'
-#   exit
-# fi
-# if [[ -z "$DS_MEILI_INDEX" ]]; then
-#   echo 'INDEX missing'
-#   exit
-# fi
+if [[ -z "$DS_MEILI_MASTERKEY" ]]; then
+  echo 'DS_MEILI_MASTERKEY missing'
+  exit
+fi
+if [[ -z "$DS_MEILI_SERVER" ]]; then
+  echo 'DS_MEILI_SERVER missing'
+  exit
+fi
+if [[ -z "$DS_MEILI_INDEX" ]]; then
+  echo 'DS_MEILI_INDEX missing'
+  exit
+fi
 
 DS_MEILI_MASTERKEY=masterKey
-MEILI_SERVER=http://localhost:7700
-INDEX=mwstakeorg
+DS_MEILI_SERVER=http://localhost:7700
+DS_MEILI_INDEX=mwstakeorg
 
 # Delete
 echo "DELETE? Meili server and index: $DS_MEILI_SERVER and $DS_MEILI_INDEX"

@@ -31,12 +31,12 @@ class DataspectsIndexJob extends \Job {
         $GLOBALS["wgDataspectsNeo4jPassword"],
         $GLOBALS["wgDataspectsNeo4jDatabase"]
     );
-    wfDebug("### __>__ Indexing Pipeline: RUNNING dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."'");
+    wfDebug("### __>__ Indexing Pipeline: RUNNING dataspectsIndexJob ".$this->params["namespace"].":".$this->params["title"]." using temp file '".$this->params["tempFileName"]."' to '".$GLOBALS['wgDataspectsWriteURL'].":".$GLOBALS['wgDataspectsIndex']."' authorized by key '".$GLOBALS['wgDataspectsWriteKey']."'");
     try { # FIXME
       $meiliClient = new \MeiliSearch\Client($GLOBALS['wgDataspectsWriteURL'], $GLOBALS['wgDataspectsWriteKey'], new HttplugClient());
       // https://doc.wikimedia.org/mediawiki-core/master/php/classWikiPage.html
       // https://www.mediawiki.org/wiki/Manual:WikiPage.php
-      $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $this->params);
+      $dmwf = new DataspectsFeed($this->title, \RequestContext::getMain()->getUser(), $dsNeo4j, $meiliClient, $this->params, $GLOBALS['wgDataspectsIndex']);
       $dmwf->sendToDatastore();
 		} catch (\MeiliSearch\Exceptions\ApiException $e) {
 			wfDebug('### Caught exception: ', $e->getMessage(), "\n");

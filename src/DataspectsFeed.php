@@ -9,14 +9,14 @@ use ManualLogEntry;
 
 class DataspectsFeed {
 
-  public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient, $params) {
+  public function __construct(\Title $title, $user, $dsNeo4j, $meiliClient, $params, $index) {
     $this->sdf = new SpecialDataspectsFeed($this, $title, $user);
     
     $this->title = $title;
     $this->user = $user;
 	  $this->fullArticlePath = $GLOBALS['wgServer'].str_replace("$1", "", $GLOBALS['wgArticlePath']);
     
-    $this->writeIndex = $meiliClient->index($GLOBALS['wgDataspectsIndex']);
+    $this->writeIndex = $meiliClient->index($index);
     $this->dsNeo4j = $dsNeo4j;
     
     $this->attachments = [];
@@ -66,8 +66,9 @@ class DataspectsFeed {
       case 0:
         $this->getCategories();
         $this->getWikitext();
-        $this->getParse();
+        $this->getAPIActionParse();
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
+        wfDebug("### LEXLEX");
         $this->sdf->getMediaWikiPageAnnotations();
         $this->getIncomingAndOutgoingLinks();
         $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
@@ -75,7 +76,7 @@ class DataspectsFeed {
       case 6: // File
         $this->getCategories();
         $this->getWikitext();
-        $this->getParse();
+        $this->getAPIActionParse();
         // In case of a file, we merge the File:File.png parsed wikitext and the file's content extracted by TIKA
         $this->parsedWikitext = $this->getParsedWikitext($this->wikitext);
         $this->getAttachmentsData();
@@ -103,7 +104,7 @@ class DataspectsFeed {
       case 828:
         $this->getCategories();
         $this->getWikitext();
-        $this->getParse();
+        $this->getAPIActionParse();
         $this->getIncomingAndOutgoingLinks();
         $this->mw0__templates_by_regex();
         $this->meilisearchDocument = $this->sdf->getMediaWikiPage();
@@ -121,25 +122,20 @@ class DataspectsFeed {
   }
 
   private function getWikitext() {
-    $revision = $this->wikiPage->getRevision();
-    if(empty($revision)) {
-      $this->wikitext = '';
-    } else {
-      $content = $revision->getContent( \Revision::RAW ); // \Revision::RAW = get the text regardless of permissions
-      $this->wikitext = \ContentHandler::getContentText( $content );
-    }
+    $content = $this->wikiPage->getContent( \MediaWiki\Revision\RevisionRecord::RAW );
+    $this->wikitext = \ContentHandler::getContentText( $content );
   }
 
   function getParsedWikitext($wikitext) {
     $parser = MediaWikiServices::getInstance()->getParserFactory()->create();
-    $parserOptions = new \ParserOptions();
+    $parserOptions = new \ParserOptions($this->user);
     $parsedWikitext = $parser->parse($wikitext, $this->title, $parserOptions);
     if($parsedWikitext->mText) {
       return $parsedWikitext->mText;
     }
   }
 
-  private function getParse() {
+  private function getAPIActionParse() {
     $params = new \FauxRequest(
       array(
         'action' => 'parse',

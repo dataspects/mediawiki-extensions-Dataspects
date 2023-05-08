@@ -77,8 +77,9 @@ linkStyle 1,4,5 stroke:#00ff00
 
 ## Indexing (feed data)
 
-- `sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/Dataspects/maintenance/feedAll.php'`
-- `dataspects__feed-mediawiki-category-to-index.sh`
+- COMMAND: `sudo docker exec canasta-dockercompose_web_1 bash -c 'php extensions/Dataspects/maintenance/feedAll.php'`
+- COMMAND: `dataspects__feed-mediawiki-category-to-index.sh`
+- MONITOR: `mwstakeorg__localhost__debug-log.sh`
 
 ## Example: configure dataspects for [Canasta](https://canasta.wiki/)
 
@@ -120,6 +121,7 @@ Debug API: https://localhost/w/api.php
 
 - CHECK: Base images [Meilisearch](https://hub.docker.com/r/getmeili/meilisearch/tags), [Neo4j](https://hub.docker.com/_/neo4j/tags), [Tika](https://hub.docker.com/r/apache/tika/tags)
 - CHECK: Derived images [canasta-dataspects](https://hub.docker.com/r/dataspects/canasta-dataspects/tags), [spacy-dataspects](https://hub.docker.com/r/dataspects/spacy-dataspects/tags)
+  - FIXME: jq to Dockerfile
 - CHECK: Environment variables in `.env` which set `$wgDataspects*` variables in `LocalSettings.php`
 
 ### CONFIGURE: the environment for Extension:Dataspects
